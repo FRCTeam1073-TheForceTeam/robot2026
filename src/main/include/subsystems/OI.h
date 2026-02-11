@@ -14,6 +14,7 @@
 #include <frc/Joystick.h>
 #include <frc/XboxController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/GenericHID.h>
 
 class OI : public frc2::SubsystemBase {
     public:
@@ -38,7 +39,7 @@ class OI : public frc2::SubsystemBase {
             LeftTrigger = 2,
             RightTrigger = 3,
             ViewButton = 6,
-            MenuButton = 7,
+            MenuButton = 7
         };
 
         //TODO: do we want a stick double value to radians
@@ -83,6 +84,8 @@ class OI : public frc2::SubsystemBase {
         bool GetDriverDPadRight();
         bool GetDriverDPadLeft();
         bool GetDriverDPadDown();
+        bool DriverRumble();
+        bool DriverStopRumble();
 
         bool GetOperatorAButton();
         bool GetOperatorBButton();
@@ -92,10 +95,13 @@ class OI : public frc2::SubsystemBase {
         bool GetOperatorViewButton();
         bool GetOperatorLeftBumper();
         bool GetOperatorRightBumper();
+        int GetOperatorDPadAngle();
         bool GetOperatorDPadUp();
         bool GetOperatorDPadRight();
         bool GetOperatorDPadLeft();
         bool GetOperatorDPadDown();
+        bool OperatorRumble();
+        bool OperatorStopRumble();
 
         void ZeroDriverController();
         void ZeroOperatorController();
@@ -110,6 +116,7 @@ class OI : public frc2::SubsystemBase {
         // TODO: make debouncers for indevidual buttons
         // general debouncer for buttons
         frc::Debouncer m_debouncer{50_ms, frc::Debouncer::DebounceType::kBoth};
+
 
         double LEFT_X_ZERO;
         double LEFT_Y_ZERO;

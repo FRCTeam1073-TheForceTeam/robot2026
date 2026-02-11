@@ -26,11 +26,11 @@
  * on other subsystems.
  * 
  */
-class ExampleSubsystem : public frc2::SubsystemBase {
+class Spindexer : public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
-  static constexpr int ExampleMotorId = 8;
+  static constexpr int SpindexerMotorId = 23;
 
   // Mechanism conversion constants for the subsystem:
   static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
@@ -52,7 +52,7 @@ class ExampleSubsystem : public frc2::SubsystemBase {
 
 
   // Constructor for the subsystem.
-  ExampleSubsystem();
+  Spindexer();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -68,8 +68,12 @@ class ExampleSubsystem : public frc2::SubsystemBase {
 
   /// Set the command for the system.
   void SetCommand(Command cmd);
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> GetVelocity();
+  void SetTargetVelocity(units::angular_velocity::turns_per_second_t TargetVelocity);
+  units::angular_velocity::turns_per_second_t GetTargetVelocity();
 
  private:
+
 
   // Helper function for configuring hardware from within the constructor of the subsystem.
   bool ConfigureHardware();
@@ -77,18 +81,18 @@ class ExampleSubsystem : public frc2::SubsystemBase {
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
 
+  units::angular_velocity::turns_per_second_t _targetVelocity;
   // Example TalonFX motor interface.
-  ctre::phoenix6::hardware::TalonFX _exampleMotor;
+  ctre::phoenix6::hardware::TalonFX _spindexerMotor;
 
   // CTRE hardware feedback signals:
-  ctre::phoenix6::StatusSignal<units::angle::turn_t> _examplePositionSig;
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _exampleVelocitySig;
-  ctre::phoenix6::StatusSignal<units::current::ampere_t> _exampleCurrentSig;
+
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _spindexerVelocitySig;
+  ctre::phoenix6::StatusSignal<units::current::ampere_t> _spindexerCurrentSig;
 
 
   // Example velocity and position controls:
   ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;  // Uses Slot0 gains.
-  ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot1 gains.
   
   // Cached feedback:
   Feedback _feedback;
@@ -96,4 +100,7 @@ class ExampleSubsystem : public frc2::SubsystemBase {
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
 
+  //TODO: get gear ratio because EM doesnt have it yet
+  double GearRatio = units::angle::turn_t(1)/units::angle::turn_t(1);
 };
+//hi if your reading this 

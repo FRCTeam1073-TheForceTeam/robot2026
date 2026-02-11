@@ -98,23 +98,27 @@ int OI::GetDriverDPadAngle() {
 }
 
 bool OI::GetDriverDPadUp() {
-    //return _driverController.GetPOV() == 0;
-    return false;
+    return _driverController.GetPOV() == 0;
 }
 
 bool OI::GetDriverDPadRight() {
-    //return _driverController.GetPOV() == 90;
-    return false;
+    return _driverController.GetPOV() == 90;
 }
 
 bool OI::GetDriverDPadLeft() {
-    //return _driverController.GetPOV() == 270;
-    return false;
+    return _driverController.GetPOV() == 270;
 }
 
 bool OI::GetDriverDPadDown() {
-    //return _driverController.GetPOV(180) == 180;
-    return false;
+    return _driverController.GetPOV(180) == 180;
+}
+
+bool OI::DriverRumble() {
+    _driverController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
+}
+
+bool OI::DriverStopRumble() {
+    _driverController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
 }
 
 bool OI::GetOperatorAButton() {
@@ -149,24 +153,32 @@ bool OI::GetOperatorRightBumper() {
     return _operatorController.GetRightBumperButton();
 }
 
+int OI::GetOperatorDPadAngle() {
+    return _operatorController.GetPOV();
+}
+
 bool OI::GetOperatorDPadUp() {
-    //return _driverController.GetPOV() == 0;
-    return false;
+    return _operatorController.GetPOV() == 0;
 }
 
 bool OI::GetOperatorDPadRight() {
-    ///return _driverController.GetPOV() == 90;
-    return false;
+    return _operatorController.GetPOV() == 90;
 }
 
 bool OI::GetOperatorDPadLeft() {
-    /////return _driverController.GetPOV() == 270;
-    return false;
+    return _driverController.GetPOV() == 270;
 }
 
 bool OI::GetOperatorDPadDown() {
-    ////////return _driverController.GetPOV() == 180;
-    return false;
+    return _operatorController.GetPOV() == 180;
+}
+
+bool OI::OperatorRumble() {
+    _operatorController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
+}
+
+bool OI::OperatorStopRumble() {
+    _operatorController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
 }
 
 void OI::ZeroDriverController() {

@@ -24,6 +24,7 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
   void SimulationInit() override;
   void SimulationPeriodic() override;
+  
 
  private:
   // Have it empty by default so that if testing teleop it

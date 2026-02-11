@@ -1,5 +1,7 @@
 #pragma once
 
+#include <frc2/command/SubsystemBase.h>
+
 #include "subsystems/DriveTrain.h"
 #include "subsystems/AprilTagFinder.h"
 #include "subsystems/FieldMap.h"

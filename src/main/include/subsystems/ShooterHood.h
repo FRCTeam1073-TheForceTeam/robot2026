@@ -26,11 +26,11 @@
  * on other subsystems.
  * 
  */
-class ExampleSubsystem : public frc2::SubsystemBase {
+class ShooterHood : public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
-  static constexpr int ExampleMotorId = 8;
+  static constexpr int HoodMotorId = 24;
 
   // Mechanism conversion constants for the subsystem:
   static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
@@ -40,7 +40,6 @@ class ExampleSubsystem : public frc2::SubsystemBase {
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
       units::length::meter_t position;
-      units::velocity::meters_per_second_t velocity;
       units::force::newton_t force;
   };
 
@@ -52,7 +51,7 @@ class ExampleSubsystem : public frc2::SubsystemBase {
 
 
   // Constructor for the subsystem.
-  ExampleSubsystem();
+  ShooterHood();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -69,26 +68,32 @@ class ExampleSubsystem : public frc2::SubsystemBase {
   /// Set the command for the system.
   void SetCommand(Command cmd);
 
+  void SetTargetPosition(units::angle::radian_t position);
+
+  units::angle::radian_t GetPosition();
+
  private:
+
 
   // Helper function for configuring hardware from within the constructor of the subsystem.
   bool ConfigureHardware();
 
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
+  
+  units::angle::radian_t TargetPosition;
+  units::angle::radian_t Position;
 
   // Example TalonFX motor interface.
-  ctre::phoenix6::hardware::TalonFX _exampleMotor;
+  ctre::phoenix6::hardware::TalonFX _hoodMotor;
 
   // CTRE hardware feedback signals:
-  ctre::phoenix6::StatusSignal<units::angle::turn_t> _examplePositionSig;
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _exampleVelocitySig;
-  ctre::phoenix6::StatusSignal<units::current::ampere_t> _exampleCurrentSig;
+  ctre::phoenix6::StatusSignal<units::angle::turn_t> _hoodPositionSig;
+  ctre::phoenix6::StatusSignal<units::current::ampere_t> _hoodCurrentSig;
 
 
   // Example velocity and position controls:
-  ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;  // Uses Slot0 gains.
-  ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot1 gains.
+  ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot0 gains.
   
   // Cached feedback:
   Feedback _feedback;

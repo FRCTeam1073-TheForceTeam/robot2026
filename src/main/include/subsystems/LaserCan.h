@@ -6,10 +6,12 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/force.h>
+#include <grpl/LaserCan.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
@@ -26,15 +28,8 @@
  * on other subsystems.
  * 
  */
-class ExampleSubsystem : public frc2::SubsystemBase {
+class LaserCan : public frc2::SubsystemBase {
  public:
-
-  // CANBusID for the motor.
-  static constexpr int ExampleMotorId = 8;
-
-  // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
-  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
 
   
   // The feedback for this subsystem provided as a struct.
@@ -52,7 +47,7 @@ class ExampleSubsystem : public frc2::SubsystemBase {
 
 
   // Constructor for the subsystem.
-  ExampleSubsystem();
+  LaserCan();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -69,6 +64,8 @@ class ExampleSubsystem : public frc2::SubsystemBase {
   /// Set the command for the system.
   void SetCommand(Command cmd);
 
+  void InitializeLaser();
+
  private:
 
   // Helper function for configuring hardware from within the constructor of the subsystem.
@@ -76,19 +73,6 @@ class ExampleSubsystem : public frc2::SubsystemBase {
 
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
-
-  // Example TalonFX motor interface.
-  ctre::phoenix6::hardware::TalonFX _exampleMotor;
-
-  // CTRE hardware feedback signals:
-  ctre::phoenix6::StatusSignal<units::angle::turn_t> _examplePositionSig;
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _exampleVelocitySig;
-  ctre::phoenix6::StatusSignal<units::current::ampere_t> _exampleCurrentSig;
-
-
-  // Example velocity and position controls:
-  ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;  // Uses Slot0 gains.
-  ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot1 gains.
   
   // Cached feedback:
   Feedback _feedback;
@@ -96,4 +80,8 @@ class ExampleSubsystem : public frc2::SubsystemBase {
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
 
+  grpl::LaserCan laserCAN;
+  
 };
+
+

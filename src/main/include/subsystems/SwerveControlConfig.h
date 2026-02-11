@@ -38,6 +38,7 @@ class SwerveControlConfig {
     // const double wheelDiameterMeters = 0.1016f;
     // const double rotationsPerMeter = gearRatio/(wheelDiameterMeters * 1.06 * M_PI); // 1.06 is the measure correction factor while driving
 
+    //TODO: un-comment this code
 
     // const double radiansPerRotation = (150/7) / (2.0 * M_PI);
     // const double steerCurrentLimit = 20;

@@ -5,8 +5,13 @@
 #include "Robot.h"
 
 #include <frc2/command/CommandScheduler.h>
+#include "grpl/CanBridge.h"
 
-Robot::Robot() {}
+#include "grpl/CanBridge.h"
+
+Robot::Robot() {
+  grpl::start_can_bridge();
+}
 
 /**
  * This function is called every 20 ms, no matter the mode. Use
@@ -34,14 +39,17 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-  // m_autonomousCommand = m_container.GetAutonomousCommand();
-
-  // if (m_autonomousCommand) {
-  //   m_autonomousCommand->Schedule();
-  // }
+  auto command = m_container.GetAutonomousCommand();
+  frc::SmartDashboard::PutBoolean("Robot/Robot has Command", command.get());
+  if(command.get()) {
+    //command.Schedule();
+    frc2::CommandScheduler::GetInstance().Schedule(command);
+  }
 }
 
-void Robot::AutonomousPeriodic() {}
+void Robot::AutonomousPeriodic() {
+
+}
 
 void Robot::TeleopInit() {
   // This makes sure that the autonomous stops running when

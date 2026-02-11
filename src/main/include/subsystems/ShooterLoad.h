@@ -15,32 +15,37 @@
 
 #include <variant>
 
+#include <frc/filter/SlewRateLimiter.h>
 
 /**
- * This example subsystem shows the basic pattern of any mechanism subsystem.
+ * This  subsystem shows the basic pattern of any mechanism subsystem.
  * 
  * If configures some harwdare, provides feedback and accepts (modal) commands
  * for the subsystem. It handles feedback using signals (efficently),
  * and provides latency compensated feedabck. Lots of good practices for
- * a nicely behaved subsystem are included as example code to get started
+ * a nicely behaved subsystem are included as  code to get started
  * on other subsystems.
  * 
  */
-class ExampleSubsystem : public frc2::SubsystemBase {
+class ShooterLoad : public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
-  static constexpr int ExampleMotorId = 8;
+  static constexpr int LoadMotorId = 27; // TODO: Get motor id 
+  static constexpr int laserCANId = 28;
+  
+  const double GearRatio = 1; // TODO: Get gear ratio from EM
+
+  
 
   // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
-  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
+  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0); // TODO: Get turns per meter
+  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
 
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
-      units::length::meter_t position;
-      units::velocity::meters_per_second_t velocity;
+      units::velocity::meters_per_second_t velocity; // TODO: Add other stuff to feedback
       units::force::newton_t force;
   };
 
@@ -52,7 +57,7 @@ class ExampleSubsystem : public frc2::SubsystemBase {
 
 
   // Constructor for the subsystem.
-  ExampleSubsystem();
+  ShooterLoad();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -69,7 +74,14 @@ class ExampleSubsystem : public frc2::SubsystemBase {
   /// Set the command for the system.
   void SetCommand(Command cmd);
 
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> GetLoadVelocity();
+
+  units::angular_velocity::turns_per_second_t GetLoadTargetVelocity();
+
+  void SetTargetLoadVelocity(units::angular_velocity::turns_per_second_t Velocity);
+
  private:
+
 
   // Helper function for configuring hardware from within the constructor of the subsystem.
   bool ConfigureHardware();
@@ -77,18 +89,17 @@ class ExampleSubsystem : public frc2::SubsystemBase {
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
 
-  // Example TalonFX motor interface.
-  ctre::phoenix6::hardware::TalonFX _exampleMotor;
+  //  TalonFX motor interface.
+  ctre::phoenix6::hardware::TalonFX _loadMotor;
+  //TODO: put in lasercan
 
   // CTRE hardware feedback signals:
-  ctre::phoenix6::StatusSignal<units::angle::turn_t> _examplePositionSig;
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _exampleVelocitySig;
-  ctre::phoenix6::StatusSignal<units::current::ampere_t> _exampleCurrentSig;
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _loadVelocitySig;
+  ctre::phoenix6::StatusSignal<units::current::ampere_t> _loadCurrentSig;
 
 
-  // Example velocity and position controls:
+  //  velocity and position controls:
   ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;  // Uses Slot0 gains.
-  ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot1 gains.
   
   // Cached feedback:
   Feedback _feedback;
@@ -96,4 +107,8 @@ class ExampleSubsystem : public frc2::SubsystemBase {
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
 
+  // Set the motors target velocity
+  units::angular_velocity::turns_per_second_t _targetVelocity;
+
+  frc::SlewRateLimiter<units::turns_per_second> limiter{0.5_tps / 1_s};
 };
