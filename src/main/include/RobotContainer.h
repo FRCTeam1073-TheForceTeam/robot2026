@@ -40,17 +40,16 @@
 // #include "subsystems/LaserCan.h"
 // #include "commands/Collect.h"
 // #include "commands/Load.h"
-// #include "subsystems/ShooterLoad.h"
 // #include "subsystems/Intake.h"
 // #include "subsystems/Climber.h"
 // #include "commands/Climb.h"
 // #include "commands/FlywheelTeleop.h"
-// #include "commands/Shoot.h"
+#include "commands/Shoot.h"
 // #include "commands/ClimberTeleop.h"
 // #include "commands/IntakeTeleop.h"
 // #include "commands/HoodTeleop.h"
-// #include "subsystems/ShooterHood.h"
-// #include "subsystems/ShooterLoad.h"
+#include "subsystems/ShooterHood.h"
+#include "subsystems/ShooterLoad.h"
 // #include "commands/LoaderTeleop.h"
 // #include "subsystems/Spindexer.h"
 // #include "commands/SpindexerTeleop.h"
@@ -107,10 +106,10 @@ class RobotContainer {
   // std::shared_ptr<LaserCan> m_Laser;
   // std::shared_ptr<Intake> m_intake;
   // std::shared_ptr<Collect> cmd_collect;
-  // std::shared_ptr<ShooterLoad> m_shooterLoad;
+  std::shared_ptr<ShooterLoad> m_shooterLoad;
   // std::shared_ptr<Flywheel> m_flywheel;
   // std::shared_ptr<Climber> m_climber;
-  // std::shared_ptr<ShooterHood> m_shooterHood;
+  std::shared_ptr<ShooterHood> m_shooterHood;
   // std::shared_ptr<Spindexer> m_spindexer;
   // std::shared_ptr<LaserCan> m_laser;
   // std::shared_ptr<TestAuto> cmd_testAuto;
