@@ -6,10 +6,10 @@
 
 // TestAuto::TestAuto(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Localizer> localizer, std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory)
 // {
-//   TestAuto::path_trajectory = trajectory;
-//   TestAuto::m_drivetrain = drivetrain;
-//   TestAuto::m_localizer = localizer;
-//   AddRequirements({m_drivetrain.get(), m_localizer.get()});
+//   // TestAuto::path_trajectory = trajectory;
+//   // TestAuto::m_drivetrain = drivetrain;
+//   // TestAuto::m_localizer = localizer;
+//   // AddRequirements({m_drivetrain.get(), m_localizer.get()});
 // }
 
 frc2::CommandPtr TestAuto::Create(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Localizer> localizer, std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
