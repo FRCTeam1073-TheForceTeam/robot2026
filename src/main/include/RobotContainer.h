@@ -29,7 +29,7 @@
 #include <frc/smartdashboard/SendableChooser.h>
 // #include "subsystems/ExampleSubsystem.h"
 // #include "subsystems/DriveTrain.h"
-// #include "subsystems/OI.h"
+#include "subsystems/OI.h"
 // #include "subsystems/Flywheel.h"
 // #include "subsystems/Intake.h"
 // #include "commands/TeleopDrive.h"
@@ -42,11 +42,11 @@
 // #include "commands/Load.h"
 // #include "subsystems/ShooterLoad.h"
 // #include "subsystems/Intake.h"
-// #include "subsystems/Climber.h"
-// #include "commands/Climb.h"
+#include "subsystems/Climber.h"
+#include "commands/Climb.h"
 // #include "commands/FlywheelTeleop.h"
 // #include "commands/Shoot.h"
-// #include "commands/ClimberTeleop.h"
+#include "commands/ClimberTeleop.h"
 // #include "commands/IntakeTeleop.h"
 // #include "commands/HoodTeleop.h"
 // #include "subsystems/ShooterHood.h"
@@ -99,7 +99,7 @@ class RobotContainer {
  private:
 
   // std::shared_ptr<Drivetrain> m_drivetrain;
-  // std::shared_ptr<OI> m_OI;
+  std::shared_ptr<OI> m_OI;
   // std::shared_ptr<AprilTagFinder> m_Tags;
   // std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
   // std::shared_ptr<Localizer> m_Localizer;
@@ -109,7 +109,7 @@ class RobotContainer {
   // std::shared_ptr<Collect> cmd_collect;
   // std::shared_ptr<ShooterLoad> m_shooterLoad;
   // std::shared_ptr<Flywheel> m_flywheel;
-  // std::shared_ptr<Climber> m_climber;
+  std::shared_ptr<Climber> m_climber;
   // std::shared_ptr<ShooterHood> m_shooterHood;
   // std::shared_ptr<Spindexer> m_spindexer;
   // std::shared_ptr<LaserCan> m_laser;

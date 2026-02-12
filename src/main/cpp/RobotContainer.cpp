@@ -35,7 +35,7 @@
 
 RobotContainer::RobotContainer() {
   // m_drivetrain = std::make_shared<Drivetrain>();
-  // m_OI = std::make_shared<OI>();
+  m_OI = std::make_shared<OI>();
   // m_Tags = std::make_shared<AprilTagFinder>();
   // m_FieldMap = std::make_shared<FieldMap>();
   // m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
@@ -47,7 +47,8 @@ RobotContainer::RobotContainer() {
   // m_intake = std::make_shared<Intake>();
   // cmd_collect = std::make_shared<Collect>(m_intake);
   // m_shooterLoad = std::make_shared<ShooterLoad>();
-  // m_climber = std::make_shared<Climber>();
+  m_climber = std::make_shared<Climber>();
+  m_climber->SetDefaultCommand(Climb(m_climber));
   // m_laser = std::make_shared<LaserCan>();
 
   // m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
