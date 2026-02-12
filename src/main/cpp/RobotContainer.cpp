@@ -59,7 +59,6 @@ RobotContainer::RobotContainer() {
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  // TODO: un-comment this code
   return TestAuto::Create(m_drivetrain, m_Localizer, trajectory);
 }
 
