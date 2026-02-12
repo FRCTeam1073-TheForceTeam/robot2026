@@ -51,6 +51,7 @@
 // #include "commands/HoodTeleop.h"
 // #include "subsystems/ShooterHood.h"
 // #include "subsystems/ShooterLoad.h"
+#include "subsystems/ShooterRotater.h"
 // #include "commands/LoaderTeleop.h"
 // #include "subsystems/Spindexer.h"
 // #include "commands/SpindexerTeleop.h"
@@ -116,6 +117,7 @@ class RobotContainer {
   // std::shared_ptr<TestAuto> cmd_testAuto;
   // std::shared_ptr<ZoneFinder> m_ZoneFinder;
   // std::shared_ptr<HubFinder> m_HubFinder;
+  std::shared_ptr<ShooterRotater> m_ShooterRotater;
 
 
   // std::shared_ptr<TeleopDrive> cmd_teleopDrive;
