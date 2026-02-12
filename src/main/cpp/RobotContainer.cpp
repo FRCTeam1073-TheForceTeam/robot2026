@@ -34,7 +34,7 @@
 // const std::string RobotContainer::testAuto = "Test Auto";
 
 RobotContainer::RobotContainer() {
-  // m_drivetrain = std::make_shared<Drivetrain>();
+  m_drivetrain = std::make_shared<Drivetrain>();
   // m_OI = std::make_shared<OI>();
   // m_Tags = std::make_shared<AprilTagFinder>();
   // m_FieldMap = std::make_shared<FieldMap>();

@@ -28,7 +28,7 @@
 #include <units/angle.h>
 #include <frc/smartdashboard/SendableChooser.h>
 // #include "subsystems/ExampleSubsystem.h"
-// #include "subsystems/DriveTrain.h"
+#include "subsystems/DriveTrain.h"
 // #include "subsystems/OI.h"
 // #include "subsystems/Flywheel.h"
 // #include "subsystems/Intake.h"
@@ -98,7 +98,7 @@ class RobotContainer {
 
  private:
 
-  // std::shared_ptr<Drivetrain> m_drivetrain;
+  std::shared_ptr<Drivetrain> m_drivetrain;
   // std::shared_ptr<OI> m_OI;
   // std::shared_ptr<AprilTagFinder> m_Tags;
   // std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
