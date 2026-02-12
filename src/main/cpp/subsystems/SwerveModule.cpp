@@ -53,6 +53,10 @@ bool SwerveModule::IsConfigurationValid() const {
 bool SwerveModule::ConfigureHardware() {
     bool configured = true;
 
+    SwerveModule::ConfigureDriveHardware();
+    SwerveModule::ConfigureSteerHardware();    
+
+
     if (!IsConfigurationValid()) {
         std::cerr << "SwerveModule[" << _ids.number << "] failed to configure drive hardware!" << std::endl;
         configured = false;
