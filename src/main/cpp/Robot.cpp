@@ -2,6 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+
+
+//    !!ATTENTION!!     Most of this code is commented out because it was copied directly from weewee 2026 cpp code and 
+//                      might not work. Create working code on the designated branches, and do not un-comment on main until
+//                      the branch throws no errors
+
+
+
+
+
+
+
+
 #include "Robot.h"
 
 #include <frc2/command/CommandScheduler.h>
@@ -46,6 +59,8 @@ void Robot::AutonomousInit() {
     frc2::CommandScheduler::GetInstance().Schedule(command);
   }
 }
+
+// TODO:
 
 void Robot::AutonomousPeriodic() {
 
