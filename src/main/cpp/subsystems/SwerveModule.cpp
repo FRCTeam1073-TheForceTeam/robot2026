@@ -153,12 +153,6 @@ bool SwerveModule::ConfigureDriveHardware() {
     // Slot zero for the normal control loop:
     configs.Slot0 = SwerveControlConfig::GetDriveControlConfig();
 
-    configs.Slot0.kV = 0.12;
-    configs.Slot0.kP = 0.15;
-    configs.Slot0.kI = 0.0;
-    configs.Slot0.kD = 0.01;
-    configs.Slot0.kA = 0.0;
-
     configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
 
     // Set the control configuration for the drive motor:
@@ -220,11 +214,6 @@ bool SwerveModule::ConfigureSteerHardware() {
 
     // Slot zero for the normal control loop.
     configs.Slot0 = SwerveControlConfig::GetSteerControlConfig();
-
-    configs.Slot0.kV = 0.12;
-    configs.Slot0.kP = 0.15;
-    configs.Slot0.kI = 0.0;
-    configs.Slot0.kD = 0.01;
 
     // Set up steering for using remote CANcoder feedback:
     configs.Feedback.WithFeedbackRemoteSensorID(_ids.steerEncoderId);

@@ -1,5 +1,6 @@
 #include "subsystems/SwerveControlConfig.h"
 
+//https://motors.ctr-electronics.com/dyno/dynometer-testing/
 
 ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetDriveControlConfig() {
     ctre::phoenix6::configs::Slot0Configs config;
@@ -13,9 +14,16 @@ ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetDriveControlConfig
     return config;
 }
 
+    // configs.Slot0.kV = 0.12;
+    // configs.Slot0.kP = 0.15;
+    // configs.Slot0.kI = 0.0;
+    // configs.Slot0.kD = 0.01;
+    // configs.Slot0.kA = 0.0;
+
 ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetSteerControlConfig() {
     ctre::phoenix6::configs::Slot0Configs config;
-    config.kV = 0.12;
+    config.kV = 0.153;
+    //kV for X44
     config.kP = 10.0;
     config.kI = 0.1;
     config.kD = 0.0;
@@ -26,26 +34,26 @@ ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetSteerControlConfig
 }
 
 
-    const double gearRatio = 6.75f;
-    const double wheelDiameterMeters = 0.1016f;
-    const double rotationsPerMeter = gearRatio/(wheelDiameterMeters * 1.06 * M_PI); // 1.06 is the measure correction factor while driving
+    // const double gearRatio = 6.75f;
+    // const double wheelDiameterMeters = 0.1016f;
+    // const double rotationsPerMeter = gearRatio/(wheelDiameterMeters * 1.06 * M_PI); // 1.06 is the measure correction factor while driving
 
 
-    const double radiansPerRotation = (150/7) / (2.0 * M_PI);
-    const double steerCurrentLimit = 20;
-    const double driveCurrentLimit = 35;
-    const double steerCurrentThreshold = 12;
-    const double driveCurrentThreshold = 22;
-    const double steerCurrentThresholdTime = 0.1;
-    const double driveCurrentThresholdTime = 0.25;
-    double steerP;
-    double steerI;
-    double steerD;
-    double steerV;
-    double driveP;
-    double driveI;
-    double driveD;
-    double driveV;
-    double driveA;
-    const double driveMaxIntegrator = 400.0;
-    const double steerMaxIntegrator = 400.0;
+    // const double radiansPerRotation = (150/7) / (2.0 * M_PI);
+    // const double steerCurrentLimit = 20;
+    // const double driveCurrentLimit = 35;
+    // const double steerCurrentThreshold = 12;
+    // const double driveCurrentThreshold = 22;
+    // const double steerCurrentThresholdTime = 0.1;
+    // const double driveCurrentThresholdTime = 0.25;
+    // double steerP;
+    // double steerI;
+    // double steerD;
+    // double steerV;
+    // double driveP;
+    // double driveI;
+    // double driveD;
+    // double driveV;
+    // double driveA;
+    // const double driveMaxIntegrator = 400.0;
+    // const double steerMaxIntegrator = 400.0;
