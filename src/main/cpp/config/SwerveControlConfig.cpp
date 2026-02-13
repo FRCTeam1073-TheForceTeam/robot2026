@@ -26,26 +26,26 @@ ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetSteerControlConfig
 }
 
 
-    // const double gearRatio = 6.75f;
-    // const double wheelDiameterMeters = 0.1016f;
-    // const double rotationsPerMeter = gearRatio/(wheelDiameterMeters * 1.06 * M_PI); // 1.06 is the measure correction factor while driving
+    const double gearRatio = 6.75f;
+    const double wheelDiameterMeters = 0.1016f;
+    const double rotationsPerMeter = gearRatio/(wheelDiameterMeters * 1.06 * M_PI); // 1.06 is the measure correction factor while driving
 
 
-    // const double radiansPerRotation = (150/7) / (2.0 * M_PI);
-    // const double steerCurrentLimit = 20;
-    // const double driveCurrentLimit = 35;
-    // const double steerCurrentThreshold = 12;
-    // const double driveCurrentThreshold = 22;
-    // const double steerCurrentThresholdTime = 0.1;
-    // const double driveCurrentThresholdTime = 0.25;
-    // double steerP;
-    // double steerI;
-    // double steerD;
-    // double steerV;
-    // double driveP;
-    // double driveI;
-    // double driveD;
-    // double driveV;
-    // double driveA;
-    // const double driveMaxIntegrator = 400.0;
-    // const double steerMaxIntegrator = 400.0;
+    const double radiansPerRotation = (150/7) / (2.0 * M_PI);
+    const double steerCurrentLimit = 20;
+    const double driveCurrentLimit = 35;
+    const double steerCurrentThreshold = 12;
+    const double driveCurrentThreshold = 22;
+    const double steerCurrentThresholdTime = 0.1;
+    const double driveCurrentThresholdTime = 0.25;
+    double steerP;
+    double steerI;
+    double steerD;
+    double steerV;
+    double driveP;
+    double driveI;
+    double driveD;
+    double driveV;
+    double driveA;
+    const double driveMaxIntegrator = 400.0;
+    const double steerMaxIntegrator = 400.0;

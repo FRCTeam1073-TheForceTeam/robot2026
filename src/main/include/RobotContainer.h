@@ -30,7 +30,7 @@
 
 // #include "subsystems/AprilTagFinder.h"
 // #include "subsystems/Climber.h"
-// #include "subsystems/DriveTrain.h"
+ #include "subsystems/DriveTrain.h"
 // #include "subsystems/ExampleSubsystem.h"
 // #include "subsystems/FieldMap.h"
 // #include "subsystems/FieldMapDisplay.h"
@@ -99,7 +99,7 @@ class RobotContainer {
 
  private:
 
-  // std::shared_ptr<Drivetrain> m_drivetrain;
+   std::shared_ptr<Drivetrain> m_drivetrain;
   // std::shared_ptr<OI> m_OI;
   // std::shared_ptr<AprilTagFinder> m_Tags;
   // std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
