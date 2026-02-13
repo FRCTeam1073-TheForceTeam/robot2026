@@ -32,9 +32,9 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Hood Motor            |    24    |    rio     |
 | Turret Motor          |    25    |    rio     |
 | Turret Encoder        |    26    |    rio     |
-| Kicker Motor         |    27    |    rio     |
+| Kicker Motor          |    27    |    rio     |
 | Indexer LaserCAN      |    28    |    rio     |
-| Climber Motor         |    29    |    rio     |
+| Climber Motor         |    29    |  Canivore  |
 
 
 
