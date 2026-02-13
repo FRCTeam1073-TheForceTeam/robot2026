@@ -48,7 +48,7 @@ RobotContainer::RobotContainer() {
   // cmd_collect = std::make_shared<Collect>(m_intake);
   // m_shooterLoad = std::make_shared<ShooterLoad>();
   m_climber = std::make_shared<Climber>();
-  m_climber->SetDefaultCommand(Climb(m_climber));
+  m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI));
   // m_laser = std::make_shared<LaserCan>();
 
   // m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
