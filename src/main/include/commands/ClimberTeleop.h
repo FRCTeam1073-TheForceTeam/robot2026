@@ -39,6 +39,6 @@ class ClimberTeleop
   std::shared_ptr<OI> m_OI;
 
   double leftY;
-  units::angular_velocity::turns_per_second_t vy;
+  units::velocity::meters_per_second_t vy;
 
 };

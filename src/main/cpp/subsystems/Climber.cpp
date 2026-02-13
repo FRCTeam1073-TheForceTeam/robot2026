@@ -88,7 +88,7 @@ void Climber::Periodic() {
     
     if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
       // Send velocity based command:
-
+      
       // Convert to hardware units:
       // Multiply by conversion to produce commands.
       auto angular_vel = std::get<units::velocity::meters_per_second_t>(_command) * TurnsPerMeter;
