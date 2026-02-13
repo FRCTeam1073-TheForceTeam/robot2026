@@ -16,10 +16,11 @@ void ClimberTeleop::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void ClimberTeleop::Execute() {
   leftY = m_OI->GetDriverLeftY();
-  vy = leftY*0.1_tps;
-  
-  m_climber->SetVelocity(vy);
 
+  vy = leftY*0.1_tps;
+  std::cout << vy.value() << std::endl;
+  m_climber->SetVelocity(vy);
+  
 }
 
 // Called once the command ends or is interrupted.

@@ -8,7 +8,7 @@
  Climber::Climber() :
     _hardwareConfigured(true),
     _climberOn(false),
-    _Motor(MotorId, CANBus("rio")),
+    _Motor(MotorId, CANBus("Canivore")),
     _VelocitySig(_Motor.GetVelocity()),
     _CurrentSig(_Motor.GetTorqueCurrent()),
     _PositionSig(_Motor.GetPosition()),
