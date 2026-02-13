@@ -5,28 +5,28 @@
 
 #include "commands/Load.h"
 
-Load::Load(std::shared_ptr<ShooterLoad> ShooterLoad) :
-  m_shooterload{ShooterLoad} {
+Load::Load(std::shared_ptr<Kicker> Kicker) :
+  m_kicker{Kicker} {
 {
-AddRequirements({m_shooterload.get()});
+AddRequirements({m_kicker.get()});
 }
   // Use addRequirements() here to declare subsystem dependencies.
 }
 
 // Called when the command is initially scheduled.
 void Load::Initialize() {
-  m_shooterload->SetTargetLoadVelocity(1.0_tps);
+  m_kicker->SetTargetLoadVelocity(1.0_tps);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void Load::Execute() {
-  m_shooterload->SetTargetLoadVelocity(1.0_tps);
+  m_kicker->SetTargetLoadVelocity(1.0_tps);
 
 }
 
 // Called once the command ends or is interrupted.
 void Load::End(bool interrupted) {
-    m_shooterload->SetTargetLoadVelocity(0.0_tps);
+    m_kicker->SetTargetLoadVelocity(0.0_tps);
 
 }
 

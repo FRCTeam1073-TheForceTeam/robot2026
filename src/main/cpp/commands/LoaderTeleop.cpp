@@ -4,11 +4,11 @@
 
 #include "commands/LoaderTeleop.h"
 
-LoaderTeleop::LoaderTeleop(std::shared_ptr<ShooterLoad> ShooterLoad) :
+LoaderTeleop::LoaderTeleop(std::shared_ptr<Kicker> Kicker) :
   // Use addRequirements() here to declare subsystem dependencies.
-  m_shooterload{ShooterLoad} {
+  m_kicker{Kicker} {
   {
-  AddRequirements({m_shooterload.get()});
+  AddRequirements({m_kicker.get()});
   }
 }
 // Called when the command is initially scheduled.
@@ -16,11 +16,13 @@ void LoaderTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void LoaderTeleop::Execute() {
-  m_shooterload->SetTargetLoadVelocity(0.0_tps);
+  m_kicker->SetTargetLoadVelocity(0.0_tps);
 }
 
 // Called once the command ends or is interrupted.
-void LoaderTeleop::End(bool interrupted) {}
+void LoaderTeleop::End(bool interrupted) {
+  m_kicker->SetTargetLoadVelocity(0.0_tps);
+}
 
 // Returns true when the command should end.
 bool LoaderTeleop::IsFinished() {

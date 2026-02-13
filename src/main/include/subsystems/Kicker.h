@@ -27,7 +27,7 @@
  * on other subsystems.
  * 
  */
-class ShooterLoad : public frc2::SubsystemBase {
+class Kicker : public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
@@ -57,7 +57,7 @@ class ShooterLoad : public frc2::SubsystemBase {
 
 
   // Constructor for the subsystem.
-  ShooterLoad();
+  Kicker();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

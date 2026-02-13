@@ -6,7 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/ShooterLoad.h"
+#include "subsystems/Kicker.h"
 
 /**
  * An example command.
@@ -21,7 +21,7 @@ class LoaderTeleop
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  LoaderTeleop(std::shared_ptr<ShooterLoad> ShooterLoad);
+  LoaderTeleop(std::shared_ptr<Kicker> Kicekr);
 
   void Initialize() override;
 
@@ -32,5 +32,5 @@ class LoaderTeleop
   bool IsFinished() override;
 
   private:
-   std::shared_ptr<ShooterLoad> m_shooterload;
+   std::shared_ptr<Kicker> m_kicker;
 };
