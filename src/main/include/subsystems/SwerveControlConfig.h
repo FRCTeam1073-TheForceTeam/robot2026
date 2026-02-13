@@ -17,14 +17,14 @@ class SwerveControlConfig {
 
     // Drive Constants:
     static constexpr units::length::meter_t DriveWheelDiameter = 0.1016_m;
-    static constexpr auto DriveGearRatio = units::angle::turn_t(675.0)/ units::angle::turn_t(100.0);
+    static constexpr auto DriveGearRatio = units::angle::turn_t(6.03)/ units::angle::turn_t(1.0);
     static constexpr auto DriveMetersPerMotorTurn = DriveWheelDiameter * units::constants::pi / (units::angle::turn_t(1.0) * DriveGearRatio);
     static constexpr units::current::ampere_t DriveCurrentLimit = 35.0_A;
     static constexpr units::voltage::volt_t DriveVoltageLimit = 8.0_V;
     static constexpr units::velocity::meters_per_second_t MaxModuleSpeed = 3.5_m/1.0_s;
 
     // Steer Constants:
-    static constexpr auto SteerGearRatio = (units::angle::turn_t(150.0)/units::angle::turn_t(7.0));
+    static constexpr auto SteerGearRatio = (units::angle::turn_t(287.0)/units::angle::turn_t(11.0));
     static constexpr units::current::ampere_t SteerCurrentLimit = 20.0_A;
     static constexpr units::voltage::volt_t SteerVoltageLimit = 8.0_V;
 
@@ -33,13 +33,11 @@ class SwerveControlConfig {
     static ctre::phoenix6::configs::Slot0Configs GetSteerControlConfig();
 
     private:
+    //For historical reference only
 
     // const double gearRatio = 6.75f;
     // const double wheelDiameterMeters = 0.1016f;
     // const double rotationsPerMeter = gearRatio/(wheelDiameterMeters * 1.06 * M_PI); // 1.06 is the measure correction factor while driving
-
-    //TODO: un-comment this code
-
     // const double radiansPerRotation = (150/7) / (2.0 * M_PI);
     // const double steerCurrentLimit = 20;
     // const double driveCurrentLimit = 35;
