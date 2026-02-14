@@ -221,7 +221,8 @@ bool SwerveModule::ConfigureSteerHardware() {
     configs.Feedback.WithRotorToSensorRatio(SwerveControlConfig::SteerGearRatio.value());
     configs.Feedback.WithSensorToMechanismRatio(1.0);
 
-    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
+//    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
+    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
     configs.ClosedLoopGeneral.WithContinuousWrap(true);  // Wrapping controls on the steering axis.
 
     // Set the control configuration for the drive motor:

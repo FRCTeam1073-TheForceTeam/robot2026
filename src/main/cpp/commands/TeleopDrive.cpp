@@ -12,8 +12,10 @@
 
 TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<OI> oi, std::shared_ptr<Localizer> localizer) : 
     m_drivetrain{drivetrain}, 
-    m_OI{oi},
-    m_localizer{localizer} {
+    m_OI{oi}
+    //m_localizer{localizer} 
+    {
+    frc::SmartDashboard::PutString("DrivePath/init statement", "Constructs"),
     allianceSign = 1,
     fieldCentric = true,
     lastParkingBreakButton = false,
@@ -26,12 +28,11 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr
     // TODO: chassisspeeds and speeds appear in the java drivetrain; determine if these are necessary for the c++ file
     // TODO: pointAtTarget boolean, localizer, lidar and aprilTagFinder appears in the java drivetrain, but it might be a better idea to put these in the localize file
     // Register that this command requires the subsystem.
-    AddRequirements({m_drivetrain.get(), m_OI.get()});
+    AddRequirements({m_drivetrain.get()});
 }
 
 void TeleopDrive::Initialize() {
     std::cerr << "TeleopDrive Init" << std::endl;
-    Command::Initialize();
     if(frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed) {
         allianceSign = 1;
     }

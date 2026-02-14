@@ -15,10 +15,10 @@ bool debug = false;
 Drivetrain::Drivetrain() :
     _imu(PigeonId, canBus),
     _swerveModules{
-        SwerveModule({ 0,  7, 8, 6}, frc::Translation2d(0.254_m, 0.254_m), canBus), 
-        SwerveModule({ 1,  10, 11, 9}, frc::Translation2d(0.254_m, -0.254_m), canBus), 
-        SwerveModule({ 2,  13, 14, 12}, frc::Translation2d(-0.254_m, 0.254_m), canBus), 
-        SwerveModule({ 3,  16, 17, 15}, frc::Translation2d(-0.254_m, -0.254_m), canBus)},
+        SwerveModule({ 0,  7, 8, 6}, frc::Translation2d(0.276_m, 0.276_m), canBus), 
+        SwerveModule({ 1,  10, 11, 9}, frc::Translation2d(0.276_m, -0.276_m), canBus), 
+        SwerveModule({ 2,  13, 14, 12}, frc::Translation2d(-0.276_m, 0.276_m), canBus), 
+        SwerveModule({ 3,  16, 17, 15}, frc::Translation2d(-0.276_m, -0.276_m), canBus)},
     _swerveModulePositions{_swerveModules[0].GetPosition(),
                 _swerveModules[1].GetPosition(),
                 _swerveModules[2].GetPosition(),
