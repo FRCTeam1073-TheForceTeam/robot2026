@@ -35,7 +35,7 @@
 #include "subsystems/FieldMap.h"// Unfinished
 #include "subsystems/FieldMapDisplay.h"// Unfinished
 #include "subsystems/Flywheel.h"// Unfinished
-#include "subsystems/HubFinder.h"// Unfinished
+#include "subsystems/HubFinder.h"
 #include "subsystems/Intake.h"// Unfinished
 #include "subsystems/LaserCan.h"// Unfinished
 #include "subsystems/Localizer.h"// Unfinished
@@ -103,7 +103,7 @@ class RobotContainer {
    std::shared_ptr<OI> m_OI;
   // std::shared_ptr<AprilTagFinder> m_Tags;
   // std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
-  // std::shared_ptr<Localizer> m_Localizer;
+  std::shared_ptr<Localizer> m_Localizer;
   // std::shared_ptr<FieldMap> m_FieldMap;
   // std::shared_ptr<LaserCan> m_Laser;
   // std::shared_ptr<Intake> m_intake;
@@ -116,7 +116,7 @@ class RobotContainer {
   // std::shared_ptr<LaserCan> m_laser;
   // std::shared_ptr<TestAuto> cmd_testAuto;
   // std::shared_ptr<ZoneFinder> m_ZoneFinder;
-  // std::shared_ptr<HubFinder> m_HubFinder;
+  std::shared_ptr<HubFinder> m_HubFinder;
 
 
   // std::shared_ptr<TeleopDrive> cmd_teleopDrive;
