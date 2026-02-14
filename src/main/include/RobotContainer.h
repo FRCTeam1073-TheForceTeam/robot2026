@@ -56,11 +56,13 @@
 #include "commands/LoaderTeleop.h"
 #include "commands/Shoot.h"
 #include "commands/SpindexerTeleop.h"
+#include "commands/Spindex.h"
 #include "commands/TeleopDrive.h"
 
 #include "commands/Autos/TestAuto.h"
 
 #include <choreo/Choreo.h>
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -112,12 +114,13 @@ class RobotContainer {
   // std::shared_ptr<Flywheel> m_flywheel;
   // std::shared_ptr<Climber> m_climber;
   // std::shared_ptr<ShooterHood> m_shooterHood;
-  // std::shared_ptr<Spindexer> m_spindexer;
+  std::shared_ptr<Spindexer> m_spindexer;
   // std::shared_ptr<LaserCan> m_laser;
   // std::shared_ptr<TestAuto> cmd_testAuto;
   // std::shared_ptr<ZoneFinder> m_ZoneFinder;
   // std::shared_ptr<HubFinder> m_HubFinder;
-
+  std::shared_ptr<Spindex> cmd_zspindex;
+  std::shared_ptr<SpindexerTeleop> cmd_zspindexerTeleop;
 
   // std::shared_ptr<TeleopDrive> cmd_teleopDrive;
 

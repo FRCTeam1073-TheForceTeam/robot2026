@@ -51,6 +51,7 @@ m_OI = std::make_shared<OI>();
 // m_Laser = std::make_shared<LaserCan>();
 // m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
 // m_Laser = std::make_shared<LaserCan>();
+m_spindexer = std::make_shared<Spindexer>();
 
 // m_shooterLoad = std::make_shared<ShooterLoad>();
 // m_Tags = std::make_shared<AprilTagFinder>();
