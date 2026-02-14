@@ -3,10 +3,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/Load.h"
+#include "commands/Kick.h"
 
-Load::Load(std::shared_ptr<Kicker> Kicker) :
-  m_kicker{Kicker} {
+Kick::Kick(std::shared_ptr<Kicker> Kick) :
+  m_kicker{Kick} {
 {
 AddRequirements({m_kicker.get()});
 }
@@ -14,23 +14,23 @@ AddRequirements({m_kicker.get()});
 }
 
 // Called when the command is initially scheduled.
-void Load::Initialize() {
+void Kick::Initialize() {
   m_kicker->SetTargetLoadVelocity(1.0_tps);
 }
 
 // Called repeatedly when this Command is scheduled to run
-void Load::Execute() {
+void Kick::Execute() {
   m_kicker->SetTargetLoadVelocity(1.0_tps);
 
 }
 
 // Called once the command ends or is interrupted.
-void Load::End(bool interrupted) {
+void Kick::End(bool interrupted) {
     m_kicker->SetTargetLoadVelocity(0.0_tps);
 
 }
 
 // Returns true when the command should end.
-bool Load::IsFinished() {
+bool Kick::IsFinished() {
   return false;
 }

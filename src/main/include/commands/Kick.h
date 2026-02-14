@@ -15,8 +15,8 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class Load
-    : public frc2::CommandHelper<frc2::Command, Load> {
+class Kick
+    : public frc2::CommandHelper<frc2::Command, Kick> {
  public:
    /**
    * Creates a new ExampleCommand.
@@ -24,7 +24,7 @@ class Load
    * @param subsystem The subsystem used by this command.
    */
   
-  Load(std::shared_ptr<Kicker> kicker);
+  Kick(std::shared_ptr<Kicker> kicker);
 
   void Initialize() override;
 
