@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/ShooterHood.h"
+#include "subsystems/OI.h"
 
 /**
  * An example command.
@@ -21,7 +22,7 @@ class HoodTeleop
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  HoodTeleop(std::shared_ptr<ShooterHood> ShooterHood);
+  HoodTeleop(std::shared_ptr<ShooterHood> ShooterHood, std::shared_ptr<OI> OI);
 
   void Initialize() override;
 
@@ -33,4 +34,7 @@ class HoodTeleop
   
   private:
    std::shared_ptr<ShooterHood> m_shooterHood;
+   std::shared_ptr<OI> m_OI;
+
+   bool XButton;
 };
