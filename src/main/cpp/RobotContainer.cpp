@@ -47,6 +47,7 @@ m_OI = std::make_shared<OI>();
 // m_flywheel = std::make_shared<Flywheel>();
 // m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
 m_intake = std::make_shared<Intake>();
+m_intake->SetDefaultCommand(Collect(m_intake));
 // m_laser = std::make_shared<LaserCan>();
 // m_Laser = std::make_shared<LaserCan>();
 // m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
