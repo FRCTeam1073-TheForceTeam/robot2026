@@ -17,7 +17,9 @@ void ClimberTeleop::Initialize() {}
 void ClimberTeleop::Execute() {
   leftY = m_OI->GetDriverLeftY();
 
-  vy = leftY*0.1_mps;
+  vy = leftY*-0.4_mps;
+  if(units::math::abs(vy)<0.1_mps)
+    vy = 0_mps;
   std::cout << vy.value() << std::endl;
   m_climber->SetCommand(vy);
 
