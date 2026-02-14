@@ -10,6 +10,7 @@
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/force.h>
+#include <units/angle.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
@@ -60,8 +61,6 @@ class Flywheel : public frc2::SubsystemBase {
  private:
 
   const double GearRatio = units::angle::turn_t(1)/units::angle::turn_t(1); // TODO: Get gear ratio from EM
-
-  
 
   // Mechanism conversion constants for the subsystem:
   static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0); // TODO: Get turns per meter

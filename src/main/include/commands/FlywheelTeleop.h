@@ -9,6 +9,7 @@
 
 #include "subsystems/Flywheel.h"
 #include "subsystems/OI.h"
+#include <units/angular_velocity.h>
 
 /**
  * An example command.
@@ -42,5 +43,7 @@ class FlywheelTeleop
   std::shared_ptr<Flywheel> m_flywheel;
   std::shared_ptr<OI> m_OI;
 
-  bool Adown;
+  bool AButton;
+  
+  units::angular_velocity::radians_per_second_t maxVel;
 };
