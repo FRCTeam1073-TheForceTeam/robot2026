@@ -144,6 +144,7 @@ class RobotContainer {
   std::shared_ptr<ShooterHood> m_shooterHood;
   // std::shared_ptr<Spindexer> m_spindexer;
   std::shared_ptr<LaserCan> m_laser;
+  std::shared_ptr<Kick> m_kick;
   // std::shared_ptr<TestAuto> cmd_testAuto;
   // std::shared_ptr<ZoneFinder> m_ZoneFinder;
   // std::shared_ptr<HubFinder> m_HubFinder;

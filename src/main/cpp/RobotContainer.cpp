@@ -48,6 +48,7 @@ RobotContainer::RobotContainer() {
   // cmd_collect = std::make_shared<Collect>(m_intake);
   m_kicker = std::make_shared<Kicker>();
   m_shooterHood = std::make_shared<ShooterHood>();
+  m_kicker->SetDefaultCommand(Kick(m_kicker));
   // m_climber = std::make_shared<Climber>();
   // m_laser = std::make_shared<LaserCan>();
 // cmd_collect = std::make_shared<Collect>(m_intake);
