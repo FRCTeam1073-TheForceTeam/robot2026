@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/Intake.h"
+#include "subsystems/OI.h"
 /**
  * An example command.
  *
@@ -21,7 +22,7 @@ class IntakeTeleop :
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  IntakeTeleop(std::shared_ptr<Intake> Intake);
+  IntakeTeleop(std::shared_ptr<Intake> Intake, std::shared_ptr<OI> OI);
 
   void Initialize() override;
 
@@ -34,5 +35,21 @@ class IntakeTeleop :
    private:
 
     std::shared_ptr<Intake> m_intake;
+    std::shared_ptr<OI> m_OI;
+    bool XButton; // activate
+    bool YButton; // deactivate
+    
+    units::angular_velocity::radians_per_second_t WheelAngularVel;
+    units::angular_velocity::radians_per_second_t WheelTargetAngularVel;
+
+    units::angular_velocity::radians_per_second_t maximumWheelRotationVelocity = 8.0_rad_per_s;//TODO: get maximum rotation velocity
+
+    units::angular_velocity::radians_per_second_t ArmAngularVel;
+    units::angular_velocity::radians_per_second_t ArmTargetAngularVel;
+
+    units::angle::radian_t ArmTargetPosition;
+    units::angle::radian_t ArmPosition;
+    units::angle::radian_t ArmMaxPosition;
+    units::angle::radian_t ArmMinPosition;
 
 };

@@ -52,8 +52,8 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Right Trigger    | GetDriverRightTrigger |                               |
 | A Button         | GetDriverAButton      |                               |
 | B Button         | GetDriverBButton      |                               |
-| X Button         | GetDriverXButton      |                               |
-| Y Button         | GetDriverYButton      |                               |
+| X Button         | GetDriverXButton      | Intake activate               |
+| Y Button         | GetDriverYButton      | Intake Deactivate             |
 | Menu Button      | GetDriverMenuButton   |                               |
 | View Button      | GetDriverViewButton   |                               |
 | Left Bumper      | GetDriverLeftBumper   |                               |

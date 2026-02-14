@@ -12,6 +12,8 @@ using namespace units;
 
 Intake::Intake(): 
     _hardwareConfigured(true),
+    Velocity(0_rad_per_s),
+    armPosition(0_rad),
     _ActuatorLeadMotor(_ActuatorLeadMotorID, CANBus("rio")),
     _CollectorMotor(_CollectorMotorID, CANBus("rio)")), 
     _ActuatorFollowMotor(_ActuatorFollowMotorID, CANBus("rio")), 
@@ -50,8 +52,20 @@ ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> Intake
   return _ActuatorVelocitySig;
 }
 
+units::angular_velocity::turns_per_second_t Intake::GetIntakeVelocityTurns() {
+  return Velocity;
+}
+
 units::angular_velocity::turns_per_second_t Intake::GetIntakeTargetVelocity() {
   return _TargetVelocity;
+}
+
+units::angle::radian_t Intake::GetArmPosition(){
+  return armPosition;
+}
+
+void Intake::SetArmPosition(units::angle::radian_t newPosiiton){
+  armPosition = newPosiiton;
 }
 
 void Intake::Periodic() {
@@ -62,6 +76,9 @@ void Intake::Periodic() {
     // _feedback.velocity = _CollectorVelocitySig.GetValue() / CollectorTurnPerMeter;
 
     _ActuatorFollowMotor.SetControl(controls::StrictFollower{_ActuatorLeadMotor.GetDeviceID()});
+
+    Velocity = _CollectorVelocitySig.GetValue();
+    armPosition = _PositionSig.GetValue();
 
     if (_voltageSignal.GetValue() > volt_t(5)) { //TODO: Get Value
 

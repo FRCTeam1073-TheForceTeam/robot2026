@@ -8,6 +8,7 @@
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/force.h>
+#include <units/angle.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
 #include <ctre/phoenix6/CANcoder.hpp>
@@ -35,12 +36,16 @@ class Intake : public frc2::SubsystemBase {
     void Periodic() override;
     
     ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> GetIntakeVelocity();
+    units::angular_velocity::turns_per_second_t GetIntakeVelocityTurns();
 
     units::angular_velocity::turns_per_second_t GetIntakeTargetVelocity();
 
     void SetIntakeVelocity(units::angular_velocity::turns_per_second_t Velocity);
 
     void SetCommand(Command cmd);
+
+    units::angle::radian_t GetArmPosition();
+    void SetArmPosition(units::angle::radian_t newPosition);
 
     private:
 
@@ -73,6 +78,10 @@ class Intake : public frc2::SubsystemBase {
     ctre::phoenix6::controls::PositionVoltage _PositionVoltage; //Slot 1
 
     units::angular_velocity::turns_per_second_t _TargetVelocity;
+    units::angular_velocity::turns_per_second_t Velocity;
+
+    units::angle::radian_t armPosition;
+    units::angle::radian_t TargetArmPosition;
 
     frc::SlewRateLimiter<units::turns_per_second> limiter{0.5_tps / 1_s};
 
