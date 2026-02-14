@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "subsystems/ShooterRotater.h"
+#include "subsystems/Turret.h"
 #include <ctre/phoenix6/controls/NeutralOut.hpp>
 
 using namespace ctre::phoenix6;
@@ -12,7 +12,7 @@ using namespace ctre::phoenix6;
 /**
  * You have to use initializer lists to build up the elements of the subsystem in the right order.
  */
-ShooterRotater::ShooterRotater() :
+Turret::Turret() :
 targetAngle(0_rad),
 positionAngle(0_rad),
 targetVelocity(0_rad_per_s),
@@ -36,29 +36,29 @@ _commandPositionVoltage(units::angle::turn_t(0.0)) {
 }
 
   /// Set the command for the system.
-void ShooterRotater::SetCommand(Command cmd) {
+void Turret::SetCommand(Command cmd) {
   // Sometimes you need to do something immediate to the hardware.
   // We can just set our target internal value.
   _command = cmd;
 }
 
-void ShooterRotater::SetTargetAngle(units::angle::radian_t newAngle){
+void Turret::SetTargetAngle(units::angle::radian_t newAngle){
   targetAngle = newAngle;
 }
 
-units::angle::radian_t ShooterRotater::GetAngle(){
+units::angle::radian_t Turret::GetAngle(){
   return positionAngle;
 }
 
-void ShooterRotater::SetTargetVelocity(units::angular_velocity::radians_per_second_t vel){
+void Turret::SetTargetVelocity(units::angular_velocity::radians_per_second_t vel){
   targetVelocity = vel;
 }
 
-units::angular_velocity::radians_per_second_t ShooterRotater::GetVelocity(){
+units::angular_velocity::radians_per_second_t Turret::GetVelocity(){
   return velocity;
 }
 
-void ShooterRotater::Periodic() {
+void Turret::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_rotaterPositionSig, _rotaterCurrentSig);
 
@@ -95,7 +95,7 @@ void ShooterRotater::Periodic() {
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
-bool ShooterRotater::ConfigureHardware() {
+bool Turret::ConfigureHardware() {
 configs::TalonFXConfiguration configs{};
 
     configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
@@ -120,14 +120,14 @@ configs::TalonFXConfiguration configs{};
     auto status = _rotaterMotor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.
 
     if (!status.IsOK()) {
-        std::cerr << "ShooterRotater: Control Failed To Configure!" << std::endl;
+        std::cerr << "Turret: Control Failed To Configure!" << std::endl;
     }
 
     // Set our neutral mode to brake on:
     status = _rotaterMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
 
     if (!status.IsOK()) {
-        std::cerr << "ShooterRotater: Neutral mode brake Failed To Configure!" << std::endl;
+        std::cerr << "Turret: Neutral mode brake Failed To Configure!" << std::endl;
     }
 
 

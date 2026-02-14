@@ -8,8 +8,8 @@
 
 //TODO: finish the command; it is not complete yet
 
-RotateTurret::RotateTurret(std::shared_ptr<ShooterRotater> shooterRotater, std::shared_ptr<OI> oi) :
-  m_shooterRotater {shooterRotater},
+RotateTurret::RotateTurret(std::shared_ptr<Turret> turret, std::shared_ptr<OI> oi) :
+  m_turret {turret},
   m_OI{oi} {
   lastError = 0,
   isAlignedToHub = false,
@@ -19,7 +19,7 @@ RotateTurret::RotateTurret(std::shared_ptr<ShooterRotater> shooterRotater, std::
   position = 0_rad,//zeroed position is touching the hard stop
   minPosition = 0_rad,
   maxPosition = 6_rad,//TODO: get maximum velocity form EM
-  AddRequirements({m_shooterRotater.get(), m_OI.get()});
+  AddRequirements({m_turret.get(), m_OI.get()});
 }
 
 void RotateTurret::Initialize() {
@@ -31,8 +31,8 @@ void RotateTurret::Initialize() {
 void RotateTurret::Execute() {
   //TODO: determine direction that robot must be facing in & use that to automatically set the angle
   leftX = m_OI->GetOperatorLeftX();
-  angularVel = m_shooterRotater->GetVelocity();
-  position = m_shooterRotater->GetAngle();
+  angularVel = m_turret->GetVelocity();
+  position = m_turret->GetAngle();
 
   if (leftX < -0.1 && position > minPosition){
     targetAngularVel = leftX * 1_rad_per_s;//TODO: Change the scale factor that the x value is multiplied by so that the turret moves at a reasonable speed 
@@ -44,7 +44,7 @@ void RotateTurret::Execute() {
     targetAngularVel = 0_rad_per_s;
   }
 
-  m_shooterRotater->SetTargetVelocity(targetAngularVel);
+  m_turret->SetTargetVelocity(targetAngularVel);
 
 
 
@@ -54,7 +54,7 @@ void RotateTurret::Execute() {
   frc::SmartDashboard::PutNumber("RotateTurret/targetPosition", targetPosition.value());
   frc::SmartDashboard::PutNumber("RotateTurret/leftX", leftX);
   frc::SmartDashboard::PutBoolean("TeleopDrive/isAlignedToHub", isAlignedToHub);
-  //m_shooterRotater->SetTargetAngle(targetPosition); // use this line of code once the localizer is added
+  //m_turret->SetTargetAngle(targetPosition); // use this line of code once the localizer is added
 
 }
 

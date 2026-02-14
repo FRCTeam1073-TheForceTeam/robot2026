@@ -7,7 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include <units/angular_velocity.h>
-#include "subsystems/ShooterRotater.h"
+#include "subsystems/Turret.h"
 #include "subsystems/OI.h"
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -31,7 +31,7 @@ class RotateTurret
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
 
-  explicit RotateTurret(std::shared_ptr<ShooterRotater> shooterRotater, std::shared_ptr<OI> oi);
+  explicit RotateTurret(std::shared_ptr<Turret> turret, std::shared_ptr<OI> oi);
 
   void Initialize() override;
   void Execute() override;
@@ -40,7 +40,7 @@ class RotateTurret
 
   private:
   
-    std::shared_ptr<ShooterRotater> m_shooterRotater;
+    std::shared_ptr<Turret> m_turret;
     std::shared_ptr<OI> m_OI;
 
     bool isAlignedToHub;

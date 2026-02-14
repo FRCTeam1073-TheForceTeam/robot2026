@@ -26,7 +26,7 @@
  * on other subsystems.
  * 
  */
-class ShooterRotater : public frc2::SubsystemBase {
+class Turret: public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
@@ -52,7 +52,7 @@ class ShooterRotater : public frc2::SubsystemBase {
 
 
   // Constructor for the subsystem.
-  ShooterRotater();
+  Turret();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

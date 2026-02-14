@@ -42,7 +42,7 @@
 #include "subsystems/OI.h"// Unfinished
 #include "subsystems/ShooterHood.h"// Unfinished
 #include "subsystems/ShooterLoad.h"// Unfinished
-#include "subsystems/ShooterRotater.h"
+#include "subsystems/Turret.h"
 #include "subsystems/Spindexer.h"// Unfinished
 #include "subsystems/ZoneFinder.h"// Unfinished
 
@@ -119,7 +119,7 @@ class RobotContainer {
   // std::shared_ptr<TestAuto> cmd_testAuto;
   // std::shared_ptr<ZoneFinder> m_ZoneFinder;
   // std::shared_ptr<HubFinder> m_HubFinder;
-  std::shared_ptr<ShooterRotater> m_shooterRotater;
+  std::shared_ptr<Turret> m_turret;
   std::shared_ptr<RotateTurret> cmd_rotateTurret;
 
 
