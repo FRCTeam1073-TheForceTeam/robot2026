@@ -109,7 +109,7 @@ class RobotContainer {
   // std::shared_ptr<Intake> m_intake;
   // std::shared_ptr<Collect> cmd_collect;
   // std::shared_ptr<ShooterLoad> m_shooterLoad;
-  // std::shared_ptr<Flywheel> m_flywheel;
+  std::shared_ptr<Flywheel> m_flywheel;
   // std::shared_ptr<Climber> m_climber;
   // std::shared_ptr<ShooterHood> m_shooterHood;
   // std::shared_ptr<Spindexer> m_spindexer;
