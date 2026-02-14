@@ -35,7 +35,7 @@
 
 RobotContainer::RobotContainer() {
   // m_drivetrain = std::make_shared<Drivetrain>();
-  // m_OI = std::make_shared<OI>();
+  m_OI = std::make_shared<OI>();
   // m_Tags = std::make_shared<AprilTagFinder>();
   // m_FieldMap = std::make_shared<FieldMap>();
   // m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
@@ -48,7 +48,7 @@ RobotContainer::RobotContainer() {
   // cmd_collect = std::make_shared<Collect>(m_intake);
   m_kicker = std::make_shared<Kicker>();
   m_shooterHood = std::make_shared<ShooterHood>();
-  m_kicker->SetDefaultCommand(Kick(m_kicker));
+  m_kicker->SetDefaultCommand(Kick(m_kicker, m_OI));
   // m_climber = std::make_shared<Climber>();
   // m_laser = std::make_shared<LaserCan>();
 // cmd_collect = std::make_shared<Collect>(m_intake);

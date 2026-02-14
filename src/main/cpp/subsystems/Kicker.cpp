@@ -48,6 +48,9 @@ void Kicker::SetTargetLoadVelocity(units::angular_velocity::turns_per_second_t V
 ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> Kicker::GetLoadVelocity() {
   return _loadVelocitySig;
 }
+units::angular_velocity::turns_per_second_t Kicker::GetVelocity(){
+  return velocity;
+}
 
 units::angular_velocity::turns_per_second_t Kicker::GetLoadTargetVelocity() {
   return _targetVelocity;
@@ -63,6 +66,8 @@ void Kicker::Periodic() {
   _feedback.velocity = _loadVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
 
   _loadMotor.Set(_targetVelocity.value());
+
+  velocity = _loadVelocitySig.GetValue();
 
 
   _loadMotor.Set(limiter.Calculate(_targetVelocity).value());

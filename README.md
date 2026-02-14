@@ -82,7 +82,7 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | B Button         | GetOperatorBButton      |                               |
 | X Button         | GetOperatorXButton      |                               |
 | Y Button         | GetOperatorYButton      |                               |
-| Menu Button      | GetOperatorMenuButton   |                               |
+| Menu Button      | GetOperatorMenuButton   | Activate Kicker               |
 | View Button      | GetOperatorViewButton   |                               |
 | Left Bumper      | GetOperatorLeftBumper   |                               |
 | Right Bumper     | GetOperatorRightBumper  |                               |

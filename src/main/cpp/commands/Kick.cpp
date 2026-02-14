@@ -5,17 +5,29 @@
 
 #include "commands/Kick.h"
 
-Kick::Kick(std::shared_ptr<Kicker> Kick) :
-  m_kicker{Kick} {
-{
-AddRequirements({m_kicker.get()});
-}
+Kick::Kick(std::shared_ptr<Kicker> Kick, std::shared_ptr<OI> OI) :
+  m_kicker{Kick},
+  m_OI{OI} {
+  targetAngularVel = 0_rad_per_s,
+  angularVel = 0_rad_per_s,
+  MenuButton = false,
+  AddRequirements({m_kicker.get(), m_OI.get()});
   // Use addRequirements() here to declare subsystem dependencies.
 }
 
 // Called when the command is initially scheduled.
 void Kick::Initialize() {
-  m_kicker->SetTargetLoadVelocity(1.0_tps);
+  MenuButton = m_OI->GetOperatorMenuButton();
+  angularVel = m_kicker->GetVelocity();
+
+  if (MenuButton){
+    targetAngularVel = 1_rad_per_s; //TODO: change value after testing
+  }
+  else{
+    targetAngularVel = 0_rad_per_s;
+  }
+
+  m_kicker->SetTargetLoadVelocity(targetAngularVel);
 }
 
 // Called repeatedly when this Command is scheduled to run

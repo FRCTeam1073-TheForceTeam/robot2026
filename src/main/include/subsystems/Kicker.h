@@ -75,6 +75,8 @@ class Kicker : public frc2::SubsystemBase {
   void SetCommand(Command cmd);
 
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> GetLoadVelocity();
+  
+  units::angular_velocity::turns_per_second_t GetVelocity();
 
   units::angular_velocity::turns_per_second_t GetLoadTargetVelocity();
 
@@ -96,6 +98,8 @@ class Kicker : public frc2::SubsystemBase {
   // CTRE hardware feedback signals:
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _loadVelocitySig;
   ctre::phoenix6::StatusSignal<units::current::ampere_t> _loadCurrentSig;
+
+  units::angular_velocity::turns_per_second_t velocity;
 
 
   //  velocity and position controls:
