@@ -15,7 +15,7 @@ void FlywheelTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void FlywheelTeleop::Execute() {
-  m_flywheel->SetVelocity(0.0_tps);
+  m_flywheel->SetCommand(1.0_mps);
 }
 
 // Called once the command ends or is interrupted.

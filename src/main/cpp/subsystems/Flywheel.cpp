@@ -46,6 +46,7 @@ void Flywheel::Periodic() {
     _feedback.velocity = _FlywheelVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
     _feedback.force = _FlywheelCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
 
+    _leadFlywheelMotor.SetControl(_FlywheelVelocityVoltage.WithVelocity(_TargetVelocity));
     //_followFlywheelMotor.Set(_FlywheelVelocitySig.GetValue().value());
 
   if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
