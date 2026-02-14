@@ -29,7 +29,9 @@ void SpindexerTeleop::Execute() {
 }
 
 // Called once the command ends or is interrupted.
-void SpindexerTeleop::End(bool interrupted) {}
+void SpindexerTeleop::End(bool interrupted) {
+  targetAngularVel = 0_rad_per_s;
+}
 
 // Returns true when the command should end.
 bool SpindexerTeleop::IsFinished() {
