@@ -55,7 +55,7 @@ m_OI = std::make_shared<OI>();
 // m_shooterLoad = std::make_shared<ShooterLoad>();
 // m_Tags = std::make_shared<AprilTagFinder>();
   m_shooterHood = std::make_shared<ShooterHood>();
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood));
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI));
   // m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
   // trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");
   // m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
