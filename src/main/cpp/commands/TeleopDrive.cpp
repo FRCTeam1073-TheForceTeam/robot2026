@@ -121,7 +121,8 @@ void TeleopDrive::Execute() {
         auto trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");
         frc::SmartDashboard::PutBoolean("TeleopDrive/A Button", m_OI->GetDriverAButton());
         if(m_OI->GetDriverAButton()) {
-            TestAuto::Create(m_drivetrain, m_localizer, trajectory);
+            std::cerr <<"A button pressed" << std::endl;
+            //TestAuto::Create(m_drivetrain, m_localizer, trajectory);
         }
     }
 
