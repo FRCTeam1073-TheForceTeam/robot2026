@@ -4,9 +4,10 @@
 
 #include "commands/SpindexerTeleop.h"
 
-SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer> spindexer) :
-  m_spindexer{spindexer} {
-  AddRequirements({m_spindexer.get()});
+SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer> spindexer, std::shared_ptr<OI> OI) :
+  m_spindexer{spindexer}, 
+  m_OI{OI} {
+  AddRequirements({m_spindexer.get(), m_OI.get()});
 }
 
 // Called when the command is initially scheduled.
@@ -14,7 +15,17 @@ void SpindexerTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void SpindexerTeleop::Execute() {
-  m_spindexer->SetTargetVelocity(0.0_tps);
+  AButton = m_OI->GetDriverAButton();
+
+  if (AButton){
+    targetAngularVel = 1_rad_per_s;
+  }
+  else{
+    targetAngularVel = 0_rad_per_s;
+  }
+
+  m_spindexer->SetTargetVelocity(targetAngularVel);
+
 }
 
 // Called once the command ends or is interrupted.

@@ -8,6 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 
 #include "subsystems/Spindexer.h"
+#include "subsystems/OI.h"
 
 /**
  * An example command.
@@ -25,7 +26,7 @@ class SpindexerTeleop
    * @param spindexer The subsystem used by this command.
    */
 
-  explicit SpindexerTeleop(std::shared_ptr<Spindexer> spindexer);
+  explicit SpindexerTeleop(std::shared_ptr<Spindexer> spindexer, std::shared_ptr<OI> OI);
 
   void Initialize() override;
 
@@ -37,4 +38,12 @@ class SpindexerTeleop
 
   private:
    std::shared_ptr<Spindexer> m_spindexer;
+   std::shared_ptr<OI> m_OI;
+
+    bool AButton;
+    
+    units::angular_velocity::radians_per_second_t angularVel;
+    units::angular_velocity::radians_per_second_t targetAngularVel;
+
+
 };
