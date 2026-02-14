@@ -56,7 +56,6 @@ bool SwerveModule::ConfigureHardware() {
     SwerveModule::ConfigureDriveHardware();
     SwerveModule::ConfigureSteerHardware();    
 
-
     if (!IsConfigurationValid()) {
         std::cerr << "SwerveModule[" << _ids.number << "] failed to configure drive hardware!" << std::endl;
         configured = false;
@@ -153,7 +152,6 @@ bool SwerveModule::ConfigureDriveHardware() {
 
     // Slot zero for the normal control loop:
     configs.Slot0 = SwerveControlConfig::GetDriveControlConfig();
-
 
     configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
 

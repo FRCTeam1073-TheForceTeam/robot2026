@@ -50,6 +50,24 @@ RobotContainer::RobotContainer() {
   m_shooterHood = std::make_shared<ShooterHood>();
   // m_climber = std::make_shared<Climber>();
   // m_laser = std::make_shared<LaserCan>();
+// cmd_collect = std::make_shared<Collect>(m_intake);
+// m_climber = std::make_shared<Climber>();
+m_drivetrain = std::make_shared<Drivetrain>();
+m_OI = std::make_shared<OI>();
+
+// m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, nullptr));
+// m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer));
+
+// m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
+// m_FieldMap = std::make_shared<FieldMap>();
+// m_flywheel = std::make_shared<Flywheel>();
+// m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
+// m_intake = std::make_shared<Intake>();
+// m_laser->SetDefaultCommand(Laser(m_laser));
+// m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
+
+// m_shooterLoad = std::make_shared<ShooterLoad>();
+// m_Tags = std::make_shared<AprilTagFinder>();
 
   // m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
   // trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");

@@ -106,7 +106,7 @@ void TeleopDrive::Execute() {
                     vx,
                     vy,
                     omega,
-                    //frc::Rotation2d{m_localizer->getPose().Rotation()} TODO:: figure out which one or both work
+                    //frc::Rotation2d{m_localizer->getPose().Rotation()} TODO: put in localizer
                     frc::Rotation2d{m_drivetrain->GetGyroHeadingRadians()}
                 )
             );
@@ -118,11 +118,11 @@ void TeleopDrive::Execute() {
         frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed X", m_drivetrain->GetChassisSpeeds().vx.value());
         frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed Y", m_drivetrain->GetChassisSpeeds().vy.value());
 
-        auto trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");
-        frc::SmartDashboard::PutBoolean("TeleopDrive/A Button", m_OI->GetDriverAButton());
-        if(m_OI->GetDriverAButton()) {
-            TestAuto::Create(m_drivetrain, m_localizer, trajectory);
-        }
+        // auto trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");
+        // frc::SmartDashboard::PutBoolean("TeleopDrive/A Button", m_OI->GetDriverAButton());
+        // if(m_OI->GetDriverAButton()) {
+        //    TestAuto::Create(m_drivetrain, m_localizer, trajectory);
+        // }
     }
 
     if((((int)frc::Timer::GetMatchTime().value() - 30) % 25) == 0) {

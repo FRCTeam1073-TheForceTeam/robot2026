@@ -60,6 +60,39 @@
 // #include "subsystems/ZoneFinder.h"
 // #include "subsystems/HubFinder.h"
 
+#include "subsystems/AprilTagFinder.h"
+#include "subsystems/Climber.h"
+#include "subsystems/DriveTrain.h"
+#include "subsystems/ExampleSubsystem.h"
+#include "subsystems/FieldMap.h"
+#include "subsystems/FieldMapDisplay.h"
+#include "subsystems/Flywheel.h"
+#include "subsystems/HubFinder.h"
+#include "subsystems/Intake.h"
+#include "subsystems/LaserCan.h"
+#include "subsystems/Localizer.h"
+#include "subsystems/OI.h"
+#include "subsystems/ShooterHood.h"
+#include "subsystems/Kicker.h"
+#include "subsystems/Spindexer.h"
+#include "subsystems/ZoneFinder.h"
+
+#include "commands/Climb.h"
+#include "commands/ClimberTeleop.h"
+#include "commands/Collect.h"
+#include "commands/FlywheelTeleop.h"
+#include "commands/HoodTeleop.h"
+#include "commands/IntakeTeleop.h"
+#include "commands/Kick.h"
+#include "commands/LoaderTeleop.h"
+#include "commands/Shoot.h"
+#include "commands/SpindexerTeleop.h"
+#include "commands/TeleopDrive.h"
+
+#include "commands/Autos/TestAuto.h"
+
+#include <choreo/Choreo.h>
+
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -97,13 +130,12 @@ class RobotContainer {
 
  private:
 
-  // std::shared_ptr<Drivetrain> m_drivetrain;
-  // std::shared_ptr<OI> m_OI;
+   std::shared_ptr<Drivetrain> m_drivetrain;
+   std::shared_ptr<OI> m_OI;
   // std::shared_ptr<AprilTagFinder> m_Tags;
   // std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
   // std::shared_ptr<Localizer> m_Localizer;
   // std::shared_ptr<FieldMap> m_FieldMap;
-  // std::shared_ptr<LaserCan> m_Laser;
   // std::shared_ptr<Intake> m_intake;
   // std::shared_ptr<Collect> cmd_collect;
   std::shared_ptr<Kicker> m_kicker;
@@ -111,7 +143,7 @@ class RobotContainer {
   // std::shared_ptr<Climber> m_climber;
   std::shared_ptr<ShooterHood> m_shooterHood;
   // std::shared_ptr<Spindexer> m_spindexer;
-  // std::shared_ptr<LaserCan> m_laser;
+  std::shared_ptr<LaserCan> m_laser;
   // std::shared_ptr<TestAuto> cmd_testAuto;
   // std::shared_ptr<ZoneFinder> m_ZoneFinder;
   // std::shared_ptr<HubFinder> m_HubFinder;

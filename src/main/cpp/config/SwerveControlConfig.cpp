@@ -1,5 +1,6 @@
 #include "subsystems/SwerveControlConfig.h"
 
+//https://motors.ctr-electronics.com/dyno/dynometer-testing/
 
 ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetDriveControlConfig() {
     ctre::phoenix6::configs::Slot0Configs config;
@@ -13,9 +14,16 @@ ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetDriveControlConfig
     return config;
 }
 
+    // configs.Slot0.kV = 0.12;
+    // configs.Slot0.kP = 0.15;
+    // configs.Slot0.kI = 0.0;
+    // configs.Slot0.kD = 0.01;
+    // configs.Slot0.kA = 0.0;
+
 ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetSteerControlConfig() {
     ctre::phoenix6::configs::Slot0Configs config;
-    config.kV = 0.12;
+    config.kV = 0.153;
+    //kV for X44
     config.kP = 10.0;
     config.kI = 0.1;
     config.kD = 0.0;

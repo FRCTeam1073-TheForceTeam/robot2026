@@ -9,7 +9,7 @@
 using namespace ctre::phoenix6;
 using namespace ctre::phoenix;
 
-const CANBus Drivetrain::canBus(CANBus::RoboRIO());
+const CANBus Drivetrain::canBus("Canivore");
 bool debug = false;
 
 Drivetrain::Drivetrain() :
