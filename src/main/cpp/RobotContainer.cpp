@@ -47,10 +47,8 @@ m_OI = std::make_shared<OI>();
 // m_flywheel = std::make_shared<Flywheel>();
 // m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
 // m_intake = std::make_shared<Intake>();
-// m_laser = std::make_shared<LaserCan>();
-// m_Laser = std::make_shared<LaserCan>();
+m_laser = std::make_shared<LaserCan>();
 // m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
-// m_Laser = std::make_shared<LaserCan>();
 
 // m_shooterLoad = std::make_shared<ShooterLoad>();
 // m_Tags = std::make_shared<AprilTagFinder>();

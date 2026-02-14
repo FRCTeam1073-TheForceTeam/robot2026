@@ -105,7 +105,6 @@ class RobotContainer {
   // std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
   // std::shared_ptr<Localizer> m_Localizer;
   // std::shared_ptr<FieldMap> m_FieldMap;
-  // std::shared_ptr<LaserCan> m_Laser;
   // std::shared_ptr<Intake> m_intake;
   // std::shared_ptr<Collect> cmd_collect;
   // std::shared_ptr<ShooterLoad> m_shooterLoad;
@@ -113,7 +112,7 @@ class RobotContainer {
   // std::shared_ptr<Climber> m_climber;
   // std::shared_ptr<ShooterHood> m_shooterHood;
   // std::shared_ptr<Spindexer> m_spindexer;
-  // std::shared_ptr<LaserCan> m_laser;
+  std::shared_ptr<LaserCan> m_laser;
   // std::shared_ptr<TestAuto> cmd_testAuto;
   // std::shared_ptr<ZoneFinder> m_ZoneFinder;
   // std::shared_ptr<HubFinder> m_HubFinder;
