@@ -28,39 +28,39 @@
 #include <units/angle.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
-#include "subsystems/AprilTagFinder.h"
-#include "subsystems/Climber.h"
-#include "subsystems/DriveTrain.h"
-#include "subsystems/ExampleSubsystem.h"
-#include "subsystems/FieldMap.h"
-#include "subsystems/FieldMapDisplay.h"
-#include "subsystems/Flywheel.h"
-#include "subsystems/HubFinder.h"
-#include "subsystems/Intake.h"
-#include "subsystems/LaserCan.h"
-#include "subsystems/Localizer.h"
-#include "subsystems/OI.h"
-#include "subsystems/ShooterHood.h"
-#include "subsystems/ShooterLoad.h"
-#include "subsystems/Spindexer.h"
-#include "subsystems/ZoneFinder.h"
+#include "subsystems/AprilTagFinder.h"  // Unfinished
+#include "subsystems/Climber.h"// Unfinished
+#include "subsystems/DriveTrain.h"// Unfinished
+#include "subsystems/ExampleSubsystem.h"// Unfinished
+#include "subsystems/FieldMap.h"// Unfinished
+#include "subsystems/FieldMapDisplay.h"// Unfinished
+#include "subsystems/Flywheel.h"// Unfinished
+#include "subsystems/HubFinder.h"// Unfinished
+#include "subsystems/Intake.h"// Unfinished
+#include "subsystems/LaserCan.h"// Unfinished
+#include "subsystems/Localizer.h"// Unfinished
+#include "subsystems/OI.h"// Unfinished
+#include "subsystems/ShooterHood.h"// Unfinished
+#include "subsystems/ShooterLoad.h"// Unfinished
+#include "subsystems/Spindexer.h"// Unfinished
+#include "subsystems/ZoneFinder.h"// Unfinished
 
-#include "commands/Climb.h"
-#include "commands/ClimberTeleop.h"
-#include "commands/Collect.h"
-#include "commands/FlywheelTeleop.h"
-#include "commands/HoodTeleop.h"
-#include "commands/IntakeTeleop.h"
-#include "commands/Laser.h"
-#include "commands/Load.h"
-#include "commands/LoaderTeleop.h"
-#include "commands/Shoot.h"
-#include "commands/SpindexerTeleop.h"
-#include "commands/TeleopDrive.h"
+#include "commands/Climb.h"// Unfinished
+#include "commands/ClimberTeleop.h"// Unfinished
+#include "commands/Collect.h"// Unfinished
+#include "commands/FlywheelTeleop.h"// Unfinished
+#include "commands/HoodTeleop.h"// Unfinished
+#include "commands/IntakeTeleop.h"// Unfinished
+#include "commands/Laser.h"// Unfinished
+#include "commands/Load.h"// Unfinished
+#include "commands/LoaderTeleop.h"// Unfinished
+#include "commands/Shoot.h"// Unfinished
+#include "commands/SpindexerTeleop.h"// Unfinished
+#include "commands/TeleopDrive.h"// Unfinished
 
-#include "commands/Autos/TestAuto.h"
+#include "commands/Autos/TestAuto.h"// Unfinished
 
-#include <choreo/Choreo.h>
+#include <choreo/Choreo.h>// Unfinished
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
