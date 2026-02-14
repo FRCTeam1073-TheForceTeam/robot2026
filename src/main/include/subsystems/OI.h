@@ -107,6 +107,7 @@ class OI : public frc2::SubsystemBase {
         void ZeroOperatorController();
 
     private:
+    
         Feedback _feedback;
 
         // create the controller objects

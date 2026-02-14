@@ -26,6 +26,7 @@
 #include "subsystems/LaserCan.h"
 #include "commands/Autos/TestAuto.h"
 
+
 // const std::string RobotContainer::noPosition = "No Position";
 // const std::string RobotContainer::rightPosition = "Right Auto";
 // const std::string RobotContainer::leftPosition = "Left Auto";
@@ -40,7 +41,7 @@ RobotContainer::RobotContainer() {
   m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
   // m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
   // m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
-  // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer));
+  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer));
   // m_Laser = std::make_shared<LaserCan>();
   // m_flywheel = std::make_shared<Flywheel>();
   // m_intake = std::make_shared<Intake>();
@@ -57,8 +58,6 @@ RobotContainer::RobotContainer() {
   ConfigureBindings();
   // blah = new frc2::Trigger(m_OI->GetDriverAButton());
 }
-
-
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   return TestAuto::Create(m_drivetrain, m_Localizer, trajectory);
