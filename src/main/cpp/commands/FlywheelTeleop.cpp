@@ -3,11 +3,16 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/FlywheelTeleop.h"
+#include <frc/DriverStation.h>
+#include <iostream>
 
-FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel> flywheel) :
-  m_flywheel{flywheel} {
+#include <choreo/Choreo.h>
+#include <commands/Autos/TestAuto.h>
 
-  AddRequirements({m_flywheel.get()});
+FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel> flywheel, std::shared_ptr<OI> oi) :
+  m_flywheel{flywheel},
+  m_OI{oi} {
+  AddRequirements({m_flywheel.get(), m_OI.get()});
 }
 
 // Called wh(std::shared_ptr<Drivetrain> drivetrainen the command is initially scheduled.
@@ -15,7 +20,9 @@ void FlywheelTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void FlywheelTeleop::Execute() {
-  m_flywheel->SetCommand(1.0_mps);
+  if (m_OI->GetDriverAButton() == true) {
+    m_flywheel->SetCommand(1.0_mps);
+  }
 }
 
 // Called once the command ends or is interrupted.
