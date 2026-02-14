@@ -35,7 +35,7 @@
 #include "subsystems/FieldMap.h"// Unfinished
 #include "subsystems/FieldMapDisplay.h"// Unfinished
 #include "subsystems/Flywheel.h"// Unfinished
-#include "subsystems/HubFinder.h"// Unfinished
+#include "subsystems/HubFinder.h"
 #include "subsystems/Intake.h"// Unfinished
 #include "subsystems/LaserCan.h"// Unfinished
 #include "subsystems/Localizer.h"// Unfinished
