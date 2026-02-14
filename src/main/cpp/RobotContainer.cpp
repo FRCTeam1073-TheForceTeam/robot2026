@@ -48,7 +48,7 @@ m_OI = std::make_shared<OI>();
 // m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
 // m_intake = std::make_shared<Intake>();
 m_laser = std::make_shared<LaserCan>();
-m_laser->SetDefaultCommand(Laser(m_laser));
+// m_laser->SetDefaultCommand(Laser(m_laser));
 // m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
 
 // m_shooterLoad = std::make_shared<ShooterLoad>();
