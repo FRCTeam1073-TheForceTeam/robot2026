@@ -106,7 +106,7 @@ class RobotContainer {
   // std::shared_ptr<Localizer> m_Localizer;
   // std::shared_ptr<FieldMap> m_FieldMap;
   // std::shared_ptr<LaserCan> m_Laser;
-  // std::shared_ptr<Intake> m_intake;
+  std::shared_ptr<Intake> m_intake;
   // std::shared_ptr<Collect> cmd_collect;
   // std::shared_ptr<ShooterLoad> m_shooterLoad;
   // std::shared_ptr<Flywheel> m_flywheel;
