@@ -20,6 +20,7 @@ HubFinder::HubFinder(std::shared_ptr<Localizer> localizer):_localizer(localizer)
 
 frc::Pose2d HubFinder::getHubPos()
 {
+    // TODO: Need to check alliance every time here, because it is not set on construction.
     frc::Pose2d HubLoc = OurHub.frc::Pose2d::RelativeTo(RoboPos);
     return HubLoc;
 };

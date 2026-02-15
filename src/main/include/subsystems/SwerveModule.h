@@ -90,6 +90,9 @@ class SwerveModule {
   /// Set the drive brake mode:
   void SetDriveBrakeMode(bool brakes = true);
 
+  /// Return the drive motor load / force:
+  units::force::newton_t GetLoad() const;
+
  private:
 
   // Helper function for configuring drive hardware.

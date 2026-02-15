@@ -39,9 +39,11 @@ void TeleopDrive::Initialize() {
     if (alliance) {
         if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed) {
             allianceSign = 1;
+            std::cerr << "RED Alliance" << std::endl;
         }
         else {
             allianceSign = -1;
+            std::cerr << "BLUE Alliance" << std::endl;
         }
     } else {
         std::cerr << "WARNING: Alliance not set." << std::endl;
@@ -70,6 +72,7 @@ void TeleopDrive::Execute() {
     if(parked && !m_drivetrain->GetParkingBrake()) {
         m_drivetrain->SetParkingBrake(true);
     }
+
     if(!parked && m_drivetrain->GetParkingBrake()) {
         m_drivetrain->SetParkingBrake(false);
     }
@@ -84,9 +87,9 @@ void TeleopDrive::Execute() {
         mult2 = 1.0 + (m_OI->GetDriverRightTrigger() * ((std::sqrt(36)) - 1));
 
         //set deadzones
-        if(std::abs(leftY) < JOYSTICK_DEADZONE) {leftY = 0.0;}
-        if(std::abs(leftX) < JOYSTICK_DEADZONE) {leftX = 0.0;}
-        if(std::abs(rightX) < JOYSTICK_DEADZONE) {rightX = 0.0;}
+        if (std::abs(leftY) < JOYSTICK_DEADZONE) {leftY = 0.0;}
+        if (std::abs(leftX) < JOYSTICK_DEADZONE) {leftX = 0.0;}
+        if (std::abs(rightX) < JOYSTICK_DEADZONE) {rightX = 0.0;}
 
         vx = std::clamp((allianceSign * leftY * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
         vy = std::clamp((allianceSign * leftX * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
@@ -107,12 +110,12 @@ void TeleopDrive::Execute() {
         frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Right", driverDPadRight);
 
         // odometry centric drive
-        if(fieldCentric) {
+        if (fieldCentric) {
             frc::Rotation2d rotation;
             if (m_localizer) {
-                rotation = m_drivetrain->GetGyroHeading();
-            } else {
                 rotation = m_localizer->getPose().Rotation();
+            } else {
+                rotation = m_drivetrain->GetGyroHeading();
             }
 
             speeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(vx, vy, omega, rotation);
@@ -127,11 +130,11 @@ void TeleopDrive::Execute() {
     }
 
     // TODO: Put this logic in OI
-    if ((((int)frc::Timer::GetMatchTime().value() - 30) % 25) == 0) {
-        m_OI->DriverRumble();
-    } else {
-        m_OI->DriverStopRumble();
-    }
+    // if ((((int)frc::Timer::GetMatchTime().value() - 30) % 25) == 0) {
+    //     m_OI->DriverRumble();
+    // } else {
+    //     m_OI->DriverStopRumble();
+    // }
 }
 
 void TeleopDrive::End(bool interrupted) {

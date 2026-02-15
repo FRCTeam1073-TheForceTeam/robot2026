@@ -80,24 +80,22 @@ class RobotContainer {
   
   RobotContainer();
   frc2::CommandPtr GetAutonomousCommand();
-  bool haveInitStartPos;
 
-  void autonomousInit();
-
-  // frc2::CommandPtr GetAutonomousCommand();
-
+  // Called from Robot
+  void AutonomousInit();
   void AutonomousPeriodic();
 
+  // Called from Robot
   frc2::Command GetTeleopCommand();
-  frc2::Command GetDisbaledCommand();
 
-  void disblaedInit();
-
-  bool FindStartPos();
-
+  // Called from Robot
+  void DisabledInit();
   bool DisabledPeriodic();
 
+
  private:
+
+  //  bool FindStartPos();
 
    std::shared_ptr<Drivetrain> m_drivetrain;
    std::shared_ptr<OI> m_OI;
@@ -118,9 +116,7 @@ class RobotContainer {
   // std::shared_ptr<ZoneFinder> m_ZoneFinder;
   // std::shared_ptr<HubFinder> m_HubFinder;
 
-
-  // std::shared_ptr<TeleopDrive> cmd_teleopDrive;
-
+  bool haveInitStartPos;
   bool isRed;
 
   const frc::SendableChooser<std::string> m_positionChooser;
@@ -130,6 +126,4 @@ class RobotContainer {
   // std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 
   void ConfigureBindings();
-
-  double GearRatio = units::angle::turn_t(1)/units::angle::turn_t(1);
 };

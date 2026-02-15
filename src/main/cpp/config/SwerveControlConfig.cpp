@@ -1,39 +1,33 @@
 #include "subsystems/SwerveControlConfig.h"
 
-//https://motors.ctr-electronics.com/dyno/dynometer-testing/
+// https://motors.ctr-electronics.com/dyno/dynometer-testing/
 
 ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetDriveControlConfig() {
     ctre::phoenix6::configs::Slot0Configs config;
     config.kV = 0.12;
-    config.kP = 0.5;
+    config.kP = 0.4;
     config.kI = 0.0;
-    config.kD = 0.02;
-    config.kA = 0.01;
+    config.kD = 0.0;
+    config.kA = 0.02;
     config.kS = 0.0;
 
     return config;
 }
 
-    // configs.Slot0.kV = 0.12;
-    // configs.Slot0.kP = 0.15;
-    // configs.Slot0.kI = 0.0;
-    // configs.Slot0.kD = 0.01;
-    // configs.Slot0.kA = 0.0;
-
 ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetSteerControlConfig() {
     ctre::phoenix6::configs::Slot0Configs config;
-    config.kV = 0.153;
-    //kV for X44
+    config.kV = 0.153;     // kV for X44
     config.kP = 10.0;
     config.kI = 0.2;
     config.kD = 0.02;
     config.kA = 0.0;
-    config.kS = 0.0;
+    config.kS = 0.01;
 
     return config;
 }
 
 
+    // Historical reference:
     // const double gearRatio = 6.75f;
     // const double wheelDiameterMeters = 0.1016f;
     // const double rotationsPerMeter = gearRatio/(wheelDiameterMeters * 1.06 * M_PI); // 1.06 is the measure correction factor while driving

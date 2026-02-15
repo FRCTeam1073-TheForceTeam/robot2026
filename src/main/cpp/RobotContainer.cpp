@@ -34,31 +34,42 @@
 // const std::string RobotContainer::testAuto = "Test Auto";
 
 RobotContainer::RobotContainer() {
-// cmd_collect = std::make_shared<Collect>(m_intake);
-// m_climber = std::make_shared<Climber>();
-m_drivetrain = std::make_shared<Drivetrain>();
-m_OI = std::make_shared<OI>();
 
-m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, nullptr));
-// m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer));
+  // Create these subsystems first!
+  m_OI = std::make_shared<OI>();
+  m_drivetrain = std::make_shared<Drivetrain>();
+  std::cerr << "Drivetrain created..." << std::endl;
 
-// m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
-// m_FieldMap = std::make_shared<FieldMap>();
-// m_flywheel = std::make_shared<Flywheel>();
-// m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
-// m_intake = std::make_shared<Intake>();
-// m_laser = std::make_shared<LaserCan>();
-// m_Laser = std::make_shared<LaserCan>();
-// m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
-// m_Laser = std::make_shared<LaserCan>();
-
-// m_shooterLoad = std::make_shared<ShooterLoad>();
-// m_Tags = std::make_shared<AprilTagFinder>();
-
-  // m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
-  // trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");
+  // Next: Localizer and supporting subsystems:
+  // m_FieldMap = std::make_shared<FieldMap>();
+  // m_Tags = std::make_shared<AprilTagFinder>();
+  // m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
+  // m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
+  // m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
   // m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
+  std::cerr << "Map, tags, localization support created..." << std::endl;
 
+  // Nect: Mechanism subsystems:
+  // m_flywheel = std::make_shared<Flywheel>();
+  // m_intake = std::make_shared<Intake>();
+  // m_laser = std::make_shared<LaserCan>();
+  // m_Laser = std::make_shared<LaserCan>();
+  // m_Laser = std::make_shared<LaserCan>();
+  // m_climber = std::make_shared<Climber>();
+  // m_shooterLoad = std::make_shared<ShooterLoad>();
+
+  std::cerr << "Mechanisms created..." << std::endl;
+
+  // TODO: Probably doesn't belong here.
+  // trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");
+
+
+  // Configure detault commands for subsystemns:
+  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, nullptr));
+  // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer));
+
+  std::cerr << "Default commands assigned..." << std::endl;
+  
   // Configure the button bindings
   ConfigureBindings();
   
@@ -69,7 +80,16 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // return TestAuto::Create(m_drivetrain, m_Localizer, trajectory);
 }
 
-void RobotContainer::autonomousInit() {
+// Called from Robot
+void RobotContainer::DisabledInit() {
+
+}
+
+bool RobotContainer::DisabledPeriodic() {
+  return false; // TODO: Fix return value.
+}
+
+void RobotContainer::AutonomousInit() {
 }
 
 void RobotContainer::AutonomousPeriodic() {

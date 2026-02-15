@@ -40,7 +40,7 @@ Drivetrain::Drivetrain() :
     _yawSig(_imu.GetYaw()),
     _pitchSig(_imu.GetPitch()),
     _rollSig(_imu.GetRoll()),
-    _yawRateSig(_imu.GetAngularVelocityZDevice()),
+    _yawRateSig(_imu.GetAngularVelocityZWorld()),
     _hardwareConfigured(false),
     _parkingBrake(false)
 {
@@ -103,7 +103,7 @@ void Drivetrain::Periodic()  {
 
 void Drivetrain::InitSendable(wpi::SendableBuilder& builder) {
     // possibly remove this
-    builder.AddDoubleProperty("Parking Break", [this] {return GetParkingBrake(); }, nullptr);
+    builder.AddDoubleProperty("Parking Brake", [this] {return GetParkingBrake(); }, nullptr);
     builder.AddDoubleProperty("Odo X", [this] {return GetOdometry().X().value(); }, nullptr);
     builder.AddDoubleProperty("Odo Y", [this] {return GetOdometry().Y().value(); }, nullptr);
     builder.AddDoubleProperty("Odo Theta (Radians)", [this] {return GetOdometry().Rotation().Radians().value(); }, nullptr);
@@ -144,7 +144,11 @@ void Drivetrain::SetParkingBrake(bool brakeOn) {
 }
 
 units::force::newton_t Drivetrain::GetAverageLoad() const {
-    return 0.0_N;
+    auto load = 0.0_N;
+    for (size_t ii(0); ii < _swerveModules.size(); ++ii) {
+        load += _swerveModules[ii].GetLoad();
+    }
+    return load / _swerveModules.size();
 }
 
 units::angle::degree_t Drivetrain::GetGyroHeadingDegrees(){
