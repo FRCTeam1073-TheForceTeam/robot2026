@@ -4,12 +4,13 @@ AprilTagFinder::AprilTagFinder()
 {
     std::cout << "Creating April Tag Object" << std::endl;
     _cameras = {
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Back_Left"), frc::Transform3d(frc::Translation3d(-0.2_m, 0.239_m, 0.1_m),frc::Rotation3d(0_deg, -15_deg, -150_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Back_Right"), frc::Transform3d(frc::Translation3d(-0.2_m, -0.239_m, 0.1_m),frc::Rotation3d(0_deg, -15_deg, 150_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Front_Left"), frc::Transform3d(frc::Translation3d(0.2_m, 0.239_m, 0.1_m),frc::Rotation3d(0_deg, -15_deg, -30_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Front_Right"), frc::Transform3d(frc::Translation3d(0.2_m, -0.239_m, 0.1_m),frc::Rotation3d(0_deg, -15_deg, 30_deg)))
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Front"), frc::Transform3d(frc::Translation3d(-9.999553_in, 10.825414_in, 10.597388_in),frc::Rotation3d(0_deg, -9.9536084_deg, 65_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-11.89629_in, 10.235522_in, 12.579398_in),frc::Rotation3d(0_deg, -10.19422_deg, 150_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Front"), frc::Transform3d(frc::Translation3d(-9.999553_in, -10.825414_in, 10.597388_in),frc::Rotation3d(0_deg, -10.3495493_deg, -65_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-11.89629_in, -10.235522_in, 12.579398_in),frc::Rotation3d(0_deg, -10.19422_deg, -150_deg)))
     };
 }
+
 
 frc::Pose3d AprilTagFinder::estimateFieldToRobotAprilTag(frc::Transform3d cameraToTarget, frc::Pose3d fieldRelativeTagPose, frc::Transform3d robotToCamera) {
     return fieldRelativeTagPose+(cameraToTarget.Inverse())+(robotToCamera.Inverse());
