@@ -98,6 +98,7 @@ void Climber::Periodic() {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _Motor.SetControl(controls::NeutralOut());
     }
+    frc::SmartDashboard::PutNumber("Climber/Load", abs(_Motor.GetTorqueCurrent().GetValue().value()));
 }
 
 bool Climber::ConfigureHardware() {
