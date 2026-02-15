@@ -6,7 +6,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/force.h>
@@ -44,14 +44,14 @@ class Flywheel : public frc2::SubsystemBase {
 
   units::angular_velocity::turns_per_second_t GetTargetVelocity();
 
-  void SetVelocity(units::angular_velocity::turns_per_second_t Velocity);
-
   const FlywheelFeedback& GetFlywheelFeedback() const { return _feedback; }
 
   void SetCommand(Command cmd);
 
   // Helper function for configuring hardware from within the constructor of the subsystem.
   bool ConfigureHardware();
+
+  void SetVelocity(units::angular_velocity::turns_per_second_t Velocity);
 
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
@@ -63,7 +63,7 @@ class Flywheel : public frc2::SubsystemBase {
   const double GearRatio = units::angle::turn_t(1)/units::angle::turn_t(1); // TODO: Get gear ratio from EM
 
   // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0); // TODO: Get turns per meter
+  static constexpr auto TurnsPerMeter = units::angle::turn_t(1.0) / units::length::meter_t(3_in*3.14); // TODO: Get turns per meter
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
 
   
@@ -87,7 +87,7 @@ class Flywheel : public frc2::SubsystemBase {
   // Set the motors target velocity
   units::angular_velocity::turns_per_second_t _TargetVelocity;
 
-  frc::SlewRateLimiter<units::turns_per_second> limiter{0.5_tps / 1_s};
+  frc::SlewRateLimiter<units::turns_per_second> limiter;
 
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.

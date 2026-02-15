@@ -6,6 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "subsystems/Flywheel.h"
 #include "subsystems/OI.h"
@@ -45,5 +46,5 @@ class FlywheelTeleop
 
   bool AButton;
   
-  units::angular_velocity::radians_per_second_t maxVel;
+  units::velocity::meters_per_second_t maxVel;
 };

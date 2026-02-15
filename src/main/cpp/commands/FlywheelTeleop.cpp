@@ -12,27 +12,31 @@
 FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel> flywheel, std::shared_ptr<OI> oi) :
   m_flywheel{flywheel},
   m_OI{oi} {
-  maxVel = 2000_rad_per_s; //TODO: test and change this value
+  maxVel = 1000_mps; //TODO: test and change this value
   AddRequirements({m_flywheel.get(), m_OI.get()});
 }
 
 // Called wh(std::shared_ptr<Drivetrain> drivetrainen the command is initially scheduled.
-void FlywheelTeleop::Initialize() {}
+void FlywheelTeleop::Initialize() {
+  frc::SmartDashboard::PutNumber("Flywheel/Velocity", 0.0);
+}
 
 // Called repeatedly when this Command is scheduled to run
 void FlywheelTeleop::Execute() {
   AButton = m_OI->GetDriverAButton();
   if (AButton) {
-    m_flywheel->SetVelocity(maxVel);
+    frc::SmartDashboard::PutNumber("Flywheel/Velocity", maxVel.value());
+    m_flywheel->SetCommand(maxVel);
   }
   else{
-    m_flywheel->SetVelocity(0_rad_per_s);
+    frc::SmartDashboard::PutNumber("Flywheel/Velocity", 0.0);
+    m_flywheel->SetCommand(0_mps);
   }
 }
 
 // Called once the command ends or is interrupted.
 void FlywheelTeleop::End(bool interrupted) {
-  m_flywheel->SetVelocity(0_rad_per_s);
+  m_flywheel->SetCommand(0_mps);
 }
 
 // Returns true when the command should end.

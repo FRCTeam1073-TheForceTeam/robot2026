@@ -36,16 +36,16 @@
 RobotContainer::RobotContainer() {
 // cmd_collect = std::make_shared<Collect>(m_intake);
 // m_climber = std::make_shared<Climber>();
-m_drivetrain = std::make_shared<Drivetrain>();
+//m_drivetrain = std::make_shared<Drivetrain>();
 m_OI = std::make_shared<OI>();
 
 // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, nullptr));
 // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer));
-m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel, m_OI));
 
 // m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
 // m_FieldMap = std::make_shared<FieldMap>();
 m_flywheel = std::make_shared<Flywheel>();
+m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI));
 // m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
 // m_intake = std::make_shared<Intake>();
 // m_laser = std::make_shared<LaserCan>();
