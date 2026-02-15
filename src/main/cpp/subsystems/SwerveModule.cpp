@@ -131,8 +131,7 @@ void SwerveModule::SetCommand(frc::SwerveModuleState cmd, units::force::newton_t
 }
 
 units::force::newton_t SwerveModule::GetLoad() const {
-    // TODO:
-    return 0_N;
+    return _driveCurrentSig.GetValue() / SwerveControlConfig::DriveAmpsPerNewton;
 }
 
 
