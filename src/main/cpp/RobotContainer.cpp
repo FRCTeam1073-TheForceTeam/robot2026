@@ -36,12 +36,11 @@
 RobotContainer::RobotContainer() {
 // cmd_collect = std::make_shared<Collect>(m_intake);
 // m_climber = std::make_shared<Climber>();
-m_drivetrain = std::make_shared<Drivetrain>();
+// m_drivetrain = std::make_shared<Drivetrain>();
 m_OI = std::make_shared<OI>();
 
 // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, nullptr));
 // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer));
-m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI));
 
 // m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
 // m_FieldMap = std::make_shared<FieldMap>();
@@ -53,6 +52,7 @@ m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI));
 // m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
 // m_Laser = std::make_shared<LaserCan>();
 m_spindexer = std::make_shared<Spindexer>();
+m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI));
 
 // m_shooterLoad = std::make_shared<ShooterLoad>();
 // m_Tags = std::make_shared<AprilTagFinder>();

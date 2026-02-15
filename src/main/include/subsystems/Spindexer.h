@@ -13,6 +13,8 @@
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
+#include <frc/filter/SlewRateLimiter.h>
+
 #include <variant>
 
 
@@ -33,7 +35,7 @@ class Spindexer : public frc2::SubsystemBase {
   static constexpr int SpindexerMotorId = 23;
 
   // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
+  static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(0.1524 * std::numbers::pi);
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
 
   
@@ -101,6 +103,7 @@ class Spindexer : public frc2::SubsystemBase {
   Command  _command;
 
   //TODO: get gear ratio because EM doesnt have it yet
-  double GearRatio = units::angle::turn_t(1)/units::angle::turn_t(1);
+  double GearRatio = units::angle::turn_t(3) / units::angle::turn_t(1);
+  frc::SlewRateLimiter<units::turns_per_second> limiter{50_tps / 1_s};
 };
 //hi if your reading this 

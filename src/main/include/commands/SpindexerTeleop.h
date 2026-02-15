@@ -7,6 +7,8 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "subsystems/Spindexer.h"
 #include "subsystems/OI.h"
 
@@ -40,10 +42,10 @@ class SpindexerTeleop
    std::shared_ptr<Spindexer> m_spindexer;
    std::shared_ptr<OI> m_OI;
 
-    bool AButton;
+    bool spin;
     
-    units::angular_velocity::radians_per_second_t angularVel;
-    units::angular_velocity::radians_per_second_t targetAngularVel;
+    units::velocity::meters_per_second_t velocity;
+    units::velocity::meters_per_second_t targetVelocity;
 
 
 };

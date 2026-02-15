@@ -27,7 +27,6 @@ _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
   if (!_hardwareConfigured) {
     std::cerr << "Spindexer: Hardware Failed To Configure!" << std::endl;
   }
-
 }
 
 
@@ -50,9 +49,6 @@ units::angular_velocity::turns_per_second_t Spindexer::GetTargetVelocity() {
   return _targetVelocity;
 }
 
-
-
-
 void Spindexer::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_spindexerVelocitySig, _spindexerCurrentSig);
@@ -72,9 +68,9 @@ void Spindexer::Periodic() {
 
       // Convert to hardware units:
       // Multiply by conversion to produce commands.
-      auto angular_vel = std::get<units::velocity::meters_per_second_t>(_command) * TurnsPerMeter;
+      auto angular_vel = std::get<units::velocity::meters_per_second_t>(_command) * TurnsPerMeter * GearRatio;
       // Send to hardware:
-      _spindexerMotor.SetControl(_commandVelocityVoltage.WithVelocity(angular_vel));
+      _spindexerMotor.SetControl(_commandVelocityVoltage.WithVelocity(limiter.Calculate(angular_vel)));
   } else if (std::holds_alternative<units::length::meter_t>(_command)) {
       // Send position based command:
 
@@ -86,51 +82,52 @@ void Spindexer::Periodic() {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _spindexerMotor.SetControl(controls::NeutralOut());
   }
+
+  
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool Spindexer::ConfigureHardware() {
-configs::TalonFXConfiguration configs{};
+  configs::TalonFXConfiguration configs{};
 
-    configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
-    configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A; 
+  configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
+  configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A; 
 
-    configs.Voltage.PeakForwardVoltage = 8_V; // These are pretty typical values, adjust as needed.
-    configs.Voltage.PeakReverseVoltage = -8_V;
+  configs.Voltage.PeakForwardVoltage = 8_V; // These are pretty typical values, adjust as needed.
+  configs.Voltage.PeakReverseVoltage = -8_V;
 
-    // Slot 0 for the velocity control loop:
-    configs.Slot0.kV = 0.12;
-    configs.Slot0.kP = 0.15;
-    configs.Slot0.kI = 0.0;
-    configs.Slot0.kD = 0.01;
-    configs.Slot0.kA = 0.0;
+  // Slot 0 for the velocity control loop:
+  configs.Slot0.kV = 0.12;
+  configs.Slot0.kP = 0.3;
+  configs.Slot0.kI = 0.0;
+  configs.Slot0.kD = 0.0;
+  configs.Slot0.kA = 0.0;
+  configs.Slot0.kS = 0.02;
 
-    
-    // Set whether motor control direction is inverted or not:
-    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
+  
+  // Set whether motor control direction is inverted or not:
+  configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
 
-    // Set the control configuration for the drive motor:
-    auto status = _spindexerMotor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.
+  // Set the control configuration for the drive motor:
+  auto status = _spindexerMotor.GetConfigurator().Apply(configs, 1_s); // 1 Second configuration timeout.
 
-    if (!status.IsOK()) {
-        std::cerr << "Spindexer: config failed to config!" << std::endl;
-    }
+  if (!status.IsOK()) {
+      std::cerr << "Spindexer: config failed to config!" << std::endl;
+  }
 
-    // Set our neutral mode to brake on:
-    status = _spindexerMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
+  // Set our neutral mode to brake on:
+  status = _spindexerMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
 
-    if (!status.IsOK()) {
-        std::cerr << "Spindexer: neutral mode failed to config :(!" << std::endl;
-    }
+  if (!status.IsOK()) {
+      std::cerr << "Spindexer: neutral mode failed to config :(!" << std::endl;
+  }
 
+  // Depends on mechanism/subsystem design:
+  // Optionally start out at zero after initialization:
+  // _spindexerMotor.SetPosition(units::angle::turn_t(0));
 
-    // Depends on mechanism/subsystem design:
-    // Optionally start out at zero after initialization:
-    _spindexerMotor.SetPosition(units::angle::turn_t(0));
-
-    // Log errors.
-    return false;
-
+  // Log errors.
+  return false;
 }
 
 //yippeee

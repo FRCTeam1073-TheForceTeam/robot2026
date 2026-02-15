@@ -7,30 +7,35 @@
 SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer> spindexer, std::shared_ptr<OI> OI) :
   m_spindexer{spindexer}, 
   m_OI{OI} {
+  spin = false; 
   AddRequirements({m_spindexer.get(), m_OI.get()});
 }
 
 // Called when the command is initially scheduled.
-void SpindexerTeleop::Initialize() {}
+void SpindexerTeleop::Initialize() {
+}
 
 // Called repeatedly when this Command is scheduled to run
-void SpindexerTeleop::Execute() {
-  AButton = m_OI->GetDriverAButton();
+void SpindexerTeleop::Execute() {  
+  // if(m_OI->GetDriverAButton()) {
+  //   spin = !spin;
+  // }
 
-  if (AButton){
-    targetAngularVel = 1_rad_per_s;
+  if (m_OI->GetDriverAButton()){
+    targetVelocity = 1_mps;
   }
   else{
-    targetAngularVel = 0_rad_per_s;
+    targetVelocity = 0_mps;
   }
 
-  m_spindexer->SetTargetVelocity(targetAngularVel);
-
+  m_spindexer->SetCommand(targetVelocity);
+  frc::SmartDashboard::PutBoolean("Spindexer/AButton", m_OI->GetDriverAButton());
+  frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity", targetVelocity.value());
 }
 
 // Called once the command ends or is interrupted.
 void SpindexerTeleop::End(bool interrupted) {
-  targetAngularVel = 0_rad_per_s;
+  targetVelocity = 0_mps;
 }
 
 // Returns true when the command should end.
