@@ -23,7 +23,10 @@ public:
    *
    * @param drivetrain The subsystem used by this command.
    */
-    explicit TeleopDrive(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<OI> oi, std::shared_ptr<Localizer> localizer);
+    explicit TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi, std::shared_ptr<Localizer>& localizer);
+
+    explicit TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi);
+
 
     void Initialize() override;
     void Execute() override;
@@ -31,6 +34,9 @@ public:
     void End(bool interrupted) override;
 
 private:
+
+    void setAlliance();
+
     std::shared_ptr<Drivetrain> m_drivetrain;
     std::shared_ptr<OI> m_OI;
     std::shared_ptr<Localizer> m_localizer;

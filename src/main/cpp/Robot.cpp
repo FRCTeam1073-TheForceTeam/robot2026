@@ -9,11 +9,16 @@
 #include "Robot.h"
 
 #include <frc2/command/CommandScheduler.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "grpl/CanBridge.h"
 
 Robot::Robot() {
   // Required to support laser-can debugging and configuration.
   grpl::start_can_bridge();
+
+  // Scheduler instance debugging:
+  // frc::SmartDashboard::PutData("Scheduler", frc2::CommandScheduler::GetInstance());
 
     // TODO: Integrate CppTrace library to speed up debugging
   try {

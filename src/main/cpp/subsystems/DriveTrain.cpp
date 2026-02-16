@@ -101,19 +101,19 @@ void Drivetrain::Periodic()  {
 
 }
 
-void Drivetrain::InitSendable(wpi::SendableBuilder& builder) {
-    // possibly remove this
-    builder.AddDoubleProperty("Parking Brake", [this] {return GetParkingBrake(); }, nullptr);
-    builder.AddDoubleProperty("Odo X", [this] {return GetOdometry().X().value(); }, nullptr);
-    builder.AddDoubleProperty("Odo Y", [this] {return GetOdometry().Y().value(); }, nullptr);
-    builder.AddDoubleProperty("Odo Theta (Radians)", [this] {return GetOdometry().Rotation().Radians().value(); }, nullptr);
-    builder.AddDoubleProperty("Odo Gyro Heading (Degrees)", [this] {return GetGyroHeadingDegrees().value(); }, nullptr);
-    builder.AddDoubleProperty("Target Vx", _targetSpeeds.vx, nullptr);
-    builder.AddDoubleProperty("Target Vy", _targetSpeeds.vy, nullptr);
-    builder.AddDoubleProperty("Target Omega", _targetSpeeds.omega, nullptr);
-    builder.AddDoubleProperty("Pitch", [this] {return GetPitch().value(); }, nullptr);
-    builder.AddDoubleProperty("Roll", [this] {return GetRoll().value(); }, nullptr);
-}
+// void Drivetrain::InitSendable(wpi::SendableBuilder& builder) {
+//     // possibly remove this
+//     builder.AddDoubleProperty("Parking Brake", [this] {return GetParkingBrake(); }, nullptr);
+//     builder.AddDoubleProperty("Odo X", [this] {return GetOdometry().X().value(); }, nullptr);
+//     builder.AddDoubleProperty("Odo Y", [this] {return GetOdometry().Y().value(); }, nullptr);
+//     builder.AddDoubleProperty("Odo Theta (Radians)", [this] {return GetOdometry().Rotation().Radians().value(); }, nullptr);
+//     builder.AddDoubleProperty("Odo Gyro Heading (Degrees)", [this] {return GetGyroHeadingDegrees().value(); }, nullptr);
+//     builder.AddDoubleProperty("Target Vx", _targetSpeeds.vx, nullptr);
+//     builder.AddDoubleProperty("Target Vy", _targetSpeeds.vy, nullptr);
+//     builder.AddDoubleProperty("Target Omega", _targetSpeeds.omega, nullptr);
+//     builder.AddDoubleProperty("Pitch", [this] {return GetPitch().value(); }, nullptr);
+//     builder.AddDoubleProperty("Roll", [this] {return GetRoll().value(); }, nullptr);
+// }
 
 /// Reset the odometry to a specific pose on the field.
 void Drivetrain::ResetOdometry(const frc::Pose2d pose) {

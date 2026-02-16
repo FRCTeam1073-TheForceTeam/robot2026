@@ -9,23 +9,16 @@
 //                      the branch throws no errors
 
 
-
-
-
-
-
-
 #include "RobotContainer.h"
+#include <frc2/command/Commands.h>
 
 #include <frc2/command/button/Trigger.h>
 
 #include "commands/Autos.h"
-#include "commands/ExampleCommand.h"
 #include "commands/TeleopDrive.h"
 #include "commands/Collect.h"
 #include "subsystems/LaserCan.h"
 
-#include "commands/Autos/TestAuto.h"
 
 // const std::string RobotContainer::noPosition = "No Position";
 // const std::string RobotContainer::rightPosition = "Right Auto";
@@ -65,19 +58,19 @@ RobotContainer::RobotContainer() {
 
 
   // Configure detault commands for subsystemns:
-  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, nullptr));
-  // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer));
+  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI).ToPtr());
+  // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
 
   std::cerr << "Default commands assigned..." << std::endl;
   
   // Configure the button bindings
   ConfigureBindings();
-  
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // TODO: un-comment this code
   // return TestAuto::Create(m_drivetrain, m_Localizer, trajectory);
+  return frc2::cmd::Idle(); // A do-nothing command from the commands factory.
 }
 
 // Called from Robot
