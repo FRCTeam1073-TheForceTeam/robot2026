@@ -56,6 +56,7 @@
 #include "commands/LoaderTeleop.h"// Unfinished
 #include "commands/Shoot.h"// Unfinished
 #include "commands/SpindexerTeleop.h"// Unfinished
+#include "commands/Spindex.h"// Unfinished
 #include "commands/TeleopDrive.h"// Unfinished
 
 #include "commands/Autos/TestAuto.h"// Unfinished
