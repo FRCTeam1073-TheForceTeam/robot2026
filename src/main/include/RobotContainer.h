@@ -62,6 +62,7 @@
 
 #include <choreo/Choreo.h>// Unfinished
 
+
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -110,13 +111,19 @@ class RobotContainer {
   // std::shared_ptr<Flywheel> m_flywheel;
   // std::shared_ptr<Climber> m_climber;
   // std::shared_ptr<ShooterHood> m_shooterHood;
-  // std::shared_ptr<Spindexer> m_spindexer;
+  std::shared_ptr<Spindexer> m_spindexer;
   // std::shared_ptr<LaserCan> m_laser;
   // std::shared_ptr<TestAuto> cmd_testAuto;
   // std::shared_ptr<ZoneFinder> m_ZoneFinder;
   // std::shared_ptr<HubFinder> m_HubFinder;
 
   bool haveInitStartPos;
+
+  std::shared_ptr<Spindex> cmd_zspindex;
+  std::shared_ptr<SpindexerTeleop> cmd_zspindexerTeleop;
+
+  // std::shared_ptr<TeleopDrive> cmd_teleopDrive;
+
   bool isRed;
 
   const frc::SendableChooser<std::string> m_positionChooser;
