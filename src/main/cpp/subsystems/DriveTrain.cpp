@@ -5,6 +5,8 @@
 #include "subsystems/DriveTrain.h"
 #include <iostream>
 #include <frc/kinematics/ChassisSpeeds.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 
 using namespace ctre::phoenix6;
 using namespace ctre::phoenix;
@@ -53,7 +55,10 @@ Drivetrain::Drivetrain() :
 
     if (_hardwareConfigured) {
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
-    }    
+    }
+
+    // TODO: Add viewing of drivetraim.
+    // auto swerve_senable = wpi::SendableBuilder()
 }
 
 void Drivetrain::Periodic()  {
@@ -71,11 +76,7 @@ void Drivetrain::Periodic()  {
         _swerveModules[ii].SampleFeedback(now);
         _swerveModulePositions[ii] = _swerveModules[ii].GetPosition();
         _swerveModuleStates[ii] = _swerveModules[ii].GetState(); // getState() returns SwerveModuleStates
-        // _swerveModuleStates[ii]
-        // std::cerr << "swervemodulestates index " << ii << " speed: " << _swerveModuleStates[ii].speed.value() << std::endl;
-        // std::cerr << "swervemodulestates index " << ii << " speed: " << _swerveModuleStates[ii].angle.Degrees().value() << std::endl;
     }
-
 
 
     // Update odometry and chassis speeds once we've sampled the hardware:
@@ -100,20 +101,6 @@ void Drivetrain::Periodic()  {
     }
 
 }
-
-// void Drivetrain::InitSendable(wpi::SendableBuilder& builder) {
-//     // possibly remove this
-//     builder.AddDoubleProperty("Parking Brake", [this] {return GetParkingBrake(); }, nullptr);
-//     builder.AddDoubleProperty("Odo X", [this] {return GetOdometry().X().value(); }, nullptr);
-//     builder.AddDoubleProperty("Odo Y", [this] {return GetOdometry().Y().value(); }, nullptr);
-//     builder.AddDoubleProperty("Odo Theta (Radians)", [this] {return GetOdometry().Rotation().Radians().value(); }, nullptr);
-//     builder.AddDoubleProperty("Odo Gyro Heading (Degrees)", [this] {return GetGyroHeadingDegrees().value(); }, nullptr);
-//     builder.AddDoubleProperty("Target Vx", _targetSpeeds.vx, nullptr);
-//     builder.AddDoubleProperty("Target Vy", _targetSpeeds.vy, nullptr);
-//     builder.AddDoubleProperty("Target Omega", _targetSpeeds.omega, nullptr);
-//     builder.AddDoubleProperty("Pitch", [this] {return GetPitch().value(); }, nullptr);
-//     builder.AddDoubleProperty("Roll", [this] {return GetRoll().value(); }, nullptr);
-// }
 
 /// Reset the odometry to a specific pose on the field.
 void Drivetrain::ResetOdometry(const frc::Pose2d pose) {
