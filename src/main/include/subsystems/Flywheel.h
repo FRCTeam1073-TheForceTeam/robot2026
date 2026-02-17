@@ -11,7 +11,7 @@
 #include <units/velocity.h>
 #include <units/force.h>
 #include <units/angle.h>
-
+#include <units/constants.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 
 #include <variant>
@@ -42,7 +42,7 @@ class Flywheel : public frc2::SubsystemBase {
 
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> GetVelocity();
 
-  units::angular_velocity::turns_per_second_t GetTargetVelocity();
+  units::velocity::meters_per_second_t GetTargetVelocity();
 
   const FlywheelFeedback& GetFlywheelFeedback() const { return _feedback; }
 
@@ -51,7 +51,7 @@ class Flywheel : public frc2::SubsystemBase {
   // Helper function for configuring hardware from within the constructor of the subsystem.
   bool ConfigureHardware();
 
-  void SetVelocity(units::angular_velocity::turns_per_second_t Velocity);
+  void SetVelocity(units::velocity::meters_per_second_t Velocity);
 
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
@@ -63,7 +63,8 @@ class Flywheel : public frc2::SubsystemBase {
   const double GearRatio = units::angle::turn_t(1)/units::angle::turn_t(1); // TODO: Get gear ratio from EM
 
   // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(1.0) / units::length::meter_t(3_in*3.14); // TODO: Get turns per meter
+  static constexpr units::meter_t wheelDiameter = units::inch_t(6.0);
+  static constexpr auto TurnsPerMeter = units::turn_t(1) / (wheelDiameter * units::constants::pi); // TODO: Get turns per meter
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
 
   
@@ -85,7 +86,7 @@ class Flywheel : public frc2::SubsystemBase {
   Command  _command;
 
   // Set the motors target velocity
-  units::angular_velocity::turns_per_second_t _TargetVelocity;
+  units::velocity::meters_per_second_t _TargetVelocity;
 
   frc::SlewRateLimiter<units::turns_per_second> limiter;
 

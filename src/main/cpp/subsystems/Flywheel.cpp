@@ -14,7 +14,7 @@ Flywheel::Flywheel():
     _followFlywheelMotor(FollowMotorId, "rio"),
     _FlywheelVelocitySig(_leadFlywheelMotor.GetVelocity()),
     _FlywheelCurrentSig(_leadFlywheelMotor.GetTorqueCurrent()),
-    limiter(500_tps / 1_s),
+    limiter(250_tps / 1_s),
     _FlywheelVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
 
     _FlywheelVelocityVoltage.WithSlot(0);
@@ -29,7 +29,7 @@ Flywheel::Flywheel():
 ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> Flywheel::GetVelocity() {
     return _FlywheelVelocitySig;
 }
-units::angular_velocity::turns_per_second_t Flywheel::GetTargetVelocity() {
+units::velocity::meters_per_second_t Flywheel::GetTargetVelocity() {
     return _TargetVelocity;
 }
 
@@ -37,7 +37,7 @@ void Flywheel::SetCommand(Command cmd){
     _command = cmd;
 }
 
-void Flywheel::SetVelocity(units::angular_velocity::turns_per_second_t Velocity) {
+void Flywheel::SetVelocity(units::velocity::meters_per_second_t Velocity) {
     _TargetVelocity = Velocity;
 }
 
@@ -47,26 +47,13 @@ void Flywheel::Periodic() {
 
     _feedback.velocity = _FlywheelVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
     _feedback.force = _FlywheelCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
+    auto angular_vel = _TargetVelocity * TurnsPerMeter;
+    frc::SmartDashboard::PutNumber("Flywheel/AngularVelocity (RPM)",(60_s*angular_vel).value());
 
-    _leadFlywheelMotor.SetControl(_FlywheelVelocityVoltage.WithVelocity(_TargetVelocity));
-    //_followFlywheelMotor.Set(_FlywheelVelocitySig.GetValue().value());
-  if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
-      // Send velocity based command:
-
-      // Convert to hardware units:
-      // Multiply by conversion to produce commands.
-      auto angular_vel = std::get<units::velocity::meters_per_second_t>(_command) * TurnsPerMeter;
-      // Send to hardware:
-      auto test_angular = limiter.Calculate(angular_vel);
-      frc::SmartDashboard::PutNumber("Flywheel/RateLimitedVelocity", test_angular.value());
-      _leadFlywheelMotor.SetControl(_FlywheelVelocityVoltage.WithVelocity(test_angular));
-  } else {
-      // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
-    _leadFlywheelMotor.SetControl(controls::NeutralOut());
-  }
-
-     _followFlywheelMotor.SetControl(controls::StrictFollower{_leadFlywheelMotor.GetDeviceID()});
-
+    auto test_angular = limiter.Calculate(angular_vel);
+    frc::SmartDashboard::PutNumber("Flywheel/RateLimitedVelocity", (60_s*test_angular).value());
+    _leadFlywheelMotor.SetControl(_FlywheelVelocityVoltage.WithVelocity(test_angular));
+    _followFlywheelMotor.SetControl(controls::StrictFollower{_leadFlywheelMotor.GetDeviceID()});
 }
 
 bool Flywheel::ConfigureHardware() {
@@ -80,10 +67,11 @@ configs::TalonFXConfiguration configs{};
 
     // Slot 0 for the velocity control loop:
     configs.Slot0.kV = 0.12;
-    configs.Slot0.kP = 0.15;
+    configs.Slot0.kP = 0.2;
     configs.Slot0.kI = 0.0;
     configs.Slot0.kD = 0.01;
     configs.Slot0.kA = 0.0;
+    configs.Slot0.kS = 0.2;
 
     // Set whether motor control direction is inverted or not:
     configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
