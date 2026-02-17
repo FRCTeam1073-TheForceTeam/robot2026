@@ -10,7 +10,7 @@
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/force.h>
-
+#include <units/constants.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 
 #include <variant>
@@ -80,9 +80,11 @@ class ShooterLoad : public frc2::SubsystemBase {
 
   void SetTargetLoadVelocity(units::angular_velocity::turns_per_second_t Velocity);
 
+  void SetTargetLoadVelocity(units::velocity::meters_per_second_t Velocity);
  private:
 
-
+  static constexpr units::meter_t diameter = units::inch_t(2);
+  //static constexpr auto TurnsPerMeter = units::turn_t(1) / (diameter * units::constants::pi);
   // Helper function for configuring hardware from within the constructor of the subsystem.
   bool ConfigureHardware();
 

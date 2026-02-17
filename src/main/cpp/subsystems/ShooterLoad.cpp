@@ -41,8 +41,12 @@ void ShooterLoad::SetCommand(Command cmd) {
   _command = cmd;
 }
 
-void ShooterLoad::SetTargetLoadVelocity(units::angular_velocity::turns_per_second_t Velocity) {
+void ShooterLoad::SetTargetLoadVelocity(units::velocity::meters_per_second_t Velocity) {
   _targetVelocity = Velocity;
+}
+
+void ShooterLoad::SetTargetLoadVelocity(units::angular_velocity::turns_per_second_t Velocity) {
+  _targetVelocity = Velocity;//*TurnsPerMeter;
 }
 
 ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> ShooterLoad::GetLoadVelocity() {
