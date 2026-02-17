@@ -30,7 +30,7 @@ RobotContainer::RobotContainer() {
 
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
-  m_drivetrain = std::make_shared<Drivetrain>();
+  //m_drivetrain = std::make_shared<Drivetrain>();
   std::cerr << "Drivetrain created..." << std::endl;
 
   // Next: Localizer and supporting subsystems:
@@ -49,7 +49,8 @@ RobotContainer::RobotContainer() {
   // m_Laser = std::make_shared<LaserCan>();
   // m_Laser = std::make_shared<LaserCan>();
   // m_climber = std::make_shared<Climber>();
-  // m_shooterLoad = std::make_shared<ShooterLoad>();
+  m_shooterLoad = std::make_shared<ShooterLoad>();
+  m_shooterLoad->SetDefaultCommand(LoaderTeleop(m_shooterLoad,m_OI));
 
   std::cerr << "Mechanisms created..." << std::endl;
 
@@ -58,7 +59,7 @@ RobotContainer::RobotContainer() {
 
 
   // Configure detault commands for subsystemns:
-  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI).ToPtr());
+  //m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI).ToPtr());
   // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
 
   std::cerr << "Default commands assigned..." << std::endl;
