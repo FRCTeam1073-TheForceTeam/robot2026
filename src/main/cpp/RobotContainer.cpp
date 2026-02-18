@@ -24,7 +24,7 @@ RobotContainer::RobotContainer() {
   m_drivetrain = std::make_shared<Drivetrain>();
   std::cerr << "Drivetrain created..." << std::endl;
 
-  m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
+  //m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
   m_FieldMap = std::make_shared<FieldMap>();
   m_Tags = std::make_shared<AprilTagFinder>();
   m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
