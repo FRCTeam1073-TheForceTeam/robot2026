@@ -10,15 +10,6 @@
 
 
 #include "RobotContainer.h"
-#include <frc2/command/Commands.h>
-
-#include <frc2/command/button/Trigger.h>
-
-#include "commands/Autos.h"
-#include "commands/TeleopDrive.h"
-#include "commands/Collect.h"
-#include "subsystems/LaserCan.h"
-
 
 // const std::string RobotContainer::noPosition = "No Position";
 // const std::string RobotContainer::rightPosition = "Right Auto";

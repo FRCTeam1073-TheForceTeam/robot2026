@@ -23,6 +23,9 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc2/command/Commands.h>
+#include <frc2/command/button/Trigger.h>
+
 
 #include "Constants.h"
 #include <units/angle.h>
@@ -58,6 +61,8 @@
 #include "commands/SpindexerTeleop.h"// Unfinished
 #include "commands/Spindex.h"// Unfinished
 #include "commands/TeleopDrive.h"// Unfinished
+#include "commands/Autos.h"
+
 
 #include "commands/Autos/TestAuto.h"// Unfinished
 
