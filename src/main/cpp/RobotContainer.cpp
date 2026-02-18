@@ -33,24 +33,23 @@ RobotContainer::RobotContainer() {
   m_drivetrain = std::make_shared<Drivetrain>();
   std::cerr << "Drivetrain created..." << std::endl;
 
-  // m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
-  // m_FieldMap = std::make_shared<FieldMap>();
+  m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
+  m_FieldMap = std::make_shared<FieldMap>();
+  m_Tags = std::make_shared<AprilTagFinder>();
+  m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
+  m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
+  m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
+  m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
+
+  
   // m_flywheel = std::make_shared<Flywheel>();
-  // m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
   // m_intake = std::make_shared<Intake>();
-  // m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
   // m_Laser = std::make_shared<LaserCan>();
   m_spindexer = std::make_shared<Spindexer>();
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI));
-
   // m_shooterLoad = std::make_shared<ShooterLoad>();
-  // m_Tags = std::make_shared<AprilTagFinder>();
-
-  // m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
   // trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");
-  // m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
   // std::cerr << "Map, tags, localization support created..." << std::endl;
-
   // m_climber = std::make_shared<Climber>();
   // m_shooterLoad = std::make_shared<ShooterLoad>();
 
