@@ -24,6 +24,9 @@ void SpindexerTeleop::Execute() {
   if (m_OI->GetDriverAButton()){
     targetVelocity = 1_mps;
   }
+  else if (m_OI->GetDriverBButton()) {
+    targetVelocity = -1_mps;
+  }
   else{
     targetVelocity = 0_mps;
   }
