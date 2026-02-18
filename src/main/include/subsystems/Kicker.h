@@ -10,6 +10,7 @@
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/force.h>
+#include <units/angle.h>
 #include <units/constants.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 
@@ -27,7 +28,7 @@
  * on other subsystems.
  * 
  */
-class ShooterLoad : public frc2::SubsystemBase {
+class Kicker : public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
@@ -39,7 +40,8 @@ class ShooterLoad : public frc2::SubsystemBase {
   
 
   // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0); // TODO: Get turns per meter
+  static constexpr units::meter_t diameter = units::inch_t(2.0);
+  static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(diameter * units::constants::pi);
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
 
   
@@ -57,7 +59,7 @@ class ShooterLoad : public frc2::SubsystemBase {
 
 
   // Constructor for the subsystem.
-  ShooterLoad();
+  Kicker();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -83,8 +85,6 @@ class ShooterLoad : public frc2::SubsystemBase {
   void SetTargetLoadVelocity(units::velocity::meters_per_second_t Velocity);
  private:
 
-  static constexpr units::meter_t diameter = units::inch_t(2);
-  //static constexpr auto TurnsPerMeter = units::turn_t(1) / (diameter * units::constants::pi);
   // Helper function for configuring hardware from within the constructor of the subsystem.
   bool ConfigureHardware();
 

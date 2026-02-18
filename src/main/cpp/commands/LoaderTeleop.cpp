@@ -4,7 +4,7 @@
 
 #include "commands/LoaderTeleop.h"
 
-LoaderTeleop::LoaderTeleop(std::shared_ptr<ShooterLoad> ShooterLoad, std::shared_ptr<OI> oi) :
+LoaderTeleop::LoaderTeleop(std::shared_ptr<Kicker> ShooterLoad, std::shared_ptr<OI> oi) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_shooterload{ShooterLoad},
   m_OI{oi} {
@@ -19,11 +19,11 @@ void LoaderTeleop::Initialize() {}
 void LoaderTeleop::Execute() {
   AButton = m_OI->GetDriverAButton();
   if(AButton) {
-    m_shooterload->SetTargetLoadVelocity(1.0_tps);
+    m_shooterload->SetTargetLoadVelocity(0.25_mps);
   }
   else
   {
-    m_shooterload->SetTargetLoadVelocity(0.0_tps);
+    m_shooterload->SetTargetLoadVelocity(0.0_mps);
   }
 }
 

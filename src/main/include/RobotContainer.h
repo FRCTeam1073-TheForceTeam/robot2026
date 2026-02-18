@@ -41,7 +41,7 @@
 #include "subsystems/Localizer.h"// Unfinished
 #include "subsystems/OI.h"// Unfinished
 #include "subsystems/ShooterHood.h"// Unfinished
-#include "subsystems/ShooterLoad.h"// Unfinished
+#include "subsystems/Kicker.h"// Unfinished
 #include "subsystems/Spindexer.h"// Unfinished
 #include "subsystems/ZoneFinder.h"// Unfinished
 
@@ -106,7 +106,7 @@ class RobotContainer {
   // std::shared_ptr<LaserCan> m_Laser;
   // std::shared_ptr<Intake> m_intake;
   // std::shared_ptr<Collect> cmd_collect;
-  std::shared_ptr<ShooterLoad> m_shooterLoad;
+  std::shared_ptr<Kicker> m_shooterLoad;
   // std::shared_ptr<Flywheel> m_flywheel;
   // std::shared_ptr<Climber> m_climber;
   // std::shared_ptr<ShooterHood> m_shooterHood;

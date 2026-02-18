@@ -49,7 +49,7 @@ RobotContainer::RobotContainer() {
   // m_Laser = std::make_shared<LaserCan>();
   // m_Laser = std::make_shared<LaserCan>();
   // m_climber = std::make_shared<Climber>();
-  m_shooterLoad = std::make_shared<ShooterLoad>();
+  m_shooterLoad = std::make_shared<Kicker>();
   m_shooterLoad->SetDefaultCommand(LoaderTeleop(m_shooterLoad,m_OI));
 
   std::cerr << "Mechanisms created..." << std::endl;
