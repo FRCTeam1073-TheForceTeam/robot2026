@@ -55,7 +55,7 @@
 #include "commands/Laser.h"// Unfinished
 #include "commands/Load.h"// Unfinished
 #include "commands/LoaderTeleop.h"// Unfinished
-#include "commands/RotateTurret.h"
+#include "commands/TurretTeleop.h"
 #include "commands/Shoot.h"// Unfinished
 #include "commands/SpindexerTeleop.h"// Unfinished
 #include "commands/TeleopDrive.h"// Unfinished
@@ -120,8 +120,6 @@ class RobotContainer {
   // std::shared_ptr<ZoneFinder> m_ZoneFinder;
   // std::shared_ptr<HubFinder> m_HubFinder;
   std::shared_ptr<Turret> m_turret;
-  std::shared_ptr<RotateTurret> cmd_rotateTurret;
-
 
   // std::shared_ptr<TeleopDrive> cmd_teleopDrive;
 

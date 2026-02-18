@@ -24,14 +24,14 @@
 
 //TODO: finish the command; it is not complete yet
 
-class RotateTurret
-    : public frc2::CommandHelper<frc2::Command, RotateTurret> {
+class TurretTeleop
+    : public frc2::CommandHelper<frc2::Command, TurretTeleop> {
  public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
 
-  explicit RotateTurret(std::shared_ptr<Turret> turret, std::shared_ptr<OI> oi);
+  explicit TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>& oi);
 
   void Initialize() override;
   void Execute() override;
@@ -52,7 +52,7 @@ class RotateTurret
     static constexpr units::angular_velocity::radians_per_second_t maximumRotationVelocity = 1.0_rad_per_s;//TODO: get maximum rotation velocity
     
     units::angular_velocity::radians_per_second_t angularVel;
-    units::angular_velocity::radians_per_second_t targetAngularVel;
+    units::angle::radian_t targetAngle;
 
     units::angle::radian_t targetPosition;
     units::angle::radian_t position;//zeroed position is up against the hard stop

@@ -34,7 +34,9 @@ class Turret: public frc2::SubsystemBase {
   static constexpr int encoderMotorId = 26;
 
   // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
+
+  //
+  static constexpr double TurretToMotorTurns = (50.0 / 14.0) * (82.0 / 14.0);
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
 
   
@@ -48,7 +50,7 @@ class Turret: public frc2::SubsystemBase {
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
+  using Command = std::variant<std::monostate, units::angular_velocity::radians_per_second_t, units::angle::radian_t>;
 
 
   // Constructor for the subsystem.
@@ -68,11 +70,6 @@ class Turret: public frc2::SubsystemBase {
 
   /// Set the command for the system.
   void SetCommand(Command cmd);
-  units::angle::radian_t GetAngle();
-  void SetTargetAngle(units::angle::radian_t newAngle);
-  units::angular_velocity::radians_per_second_t GetVelocity();
-  void SetTargetVelocity(units::angular_velocity::radians_per_second_t vel);
-
 
  private:
 
@@ -86,11 +83,9 @@ class Turret: public frc2::SubsystemBase {
   // Example TalonFX motor interface.
   ctre::phoenix6::hardware::TalonFX _rotaterMotor;
 
-  units::angle::radian_t targetAngle;
   units::angle::radian_t positionAngle;
 
   units::angular_velocity::radians_per_second_t velocity;
-  units::angular_velocity::radians_per_second_t targetVelocity;
 
   // CTRE hardware feedback signals:
   ctre::phoenix6::StatusSignal<units::angle::turn_t> _rotaterPositionSig;
@@ -99,7 +94,8 @@ class Turret: public frc2::SubsystemBase {
 
   // Example velocity and position controls:
   ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot0 gains.
-  
+  ctre::phoenix6::controls::VelocityVoltage   _commandVelocityVoltage;
+
   // Cached feedback:
   Feedback _feedback;
 

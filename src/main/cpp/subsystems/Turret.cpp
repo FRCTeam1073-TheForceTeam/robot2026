@@ -13,19 +13,19 @@ using namespace ctre::phoenix6;
  * You have to use initializer lists to build up the elements of the subsystem in the right order.
  */
 Turret::Turret() :
-targetAngle(0_rad),
 positionAngle(0_rad),
-targetVelocity(0_rad_per_s),
 velocity(0_rad_per_s),
 _hardwareConfigured(true),
 _rotaterMotor(RotaterMotorId, CANBus("rio")),
 _rotaterPositionSig(_rotaterMotor.GetPosition()),
 _rotaterCurrentSig(_rotaterMotor.GetTorqueCurrent()),
-_commandPositionVoltage(units::angle::turn_t(0.0)) {
+_commandPositionVoltage(units::angle::turn_t(0.0)),
+_commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
   // Extra implementation of subsystem constructor goes here.
 
   // Assign gain slots for the commands to use:
   _commandPositionVoltage.WithSlot(0);  // Position control loop uses these gains.
+  _commandVelocityVoltage.WithSlot(1);
 
   // Do hardware configuration and track if it succeeds:
   _hardwareConfigured = ConfigureHardware();
@@ -40,22 +40,6 @@ void Turret::SetCommand(Command cmd) {
   // Sometimes you need to do something immediate to the hardware.
   // We can just set our target internal value.
   _command = cmd;
-}
-
-void Turret::SetTargetAngle(units::angle::radian_t newAngle){
-  targetAngle = newAngle;
-}
-
-units::angle::radian_t Turret::GetAngle(){
-  return positionAngle;
-}
-
-void Turret::SetTargetVelocity(units::angular_velocity::radians_per_second_t vel){
-  targetVelocity = vel;
-}
-
-units::angular_velocity::radians_per_second_t Turret::GetVelocity(){
-  return velocity;
 }
 
 void Turret::Periodic() {
@@ -80,14 +64,19 @@ void Turret::Periodic() {
   //     auto angular_vel = std::get<units::velocity::meters_per_second_t>(_command) * TurnsPerMeter;
   //     // Send to hardware:
   //     _exampleMotor.SetControl(_commandVelocityVoltage.WithVelocity(angular_vel));
-  if (std::holds_alternative<units::length::meter_t>(_command)) {
+  if (std::holds_alternative<units::radians_per_second_t>(_command)) {
+    auto motorVelocity = std::get<units::radians_per_second_t>(_command) * TurretToMotorTurns;
+
+    _rotaterMotor.SetControl(_commandPositionVoltage.WithVelocity(motorVelocity));
+  }
+  if (std::holds_alternative<units::radian_t>(_command)) {
       // Send position based command:
 
       // Convert to hardware units:
-      positionAngle = std::get<units::length::meter_t>(_command) * TurnsPerMeter;
+      auto motorAngle = std::get<units::radian_t>(_command) * TurretToMotorTurns;
 
       // Send to hardware:
-      _rotaterMotor.SetControl(_commandPositionVoltage.WithPosition(positionAngle));
+      _rotaterMotor.SetControl(_commandPositionVoltage.WithPosition(motorAngle));
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _rotaterMotor.SetControl(controls::NeutralOut());
@@ -107,11 +96,18 @@ configs::TalonFXConfiguration configs{};
   
 
     // Slot 0 for position control mode:
-    configs.Slot0.kV = 0.12; // Motor constant.
+    configs.Slot0.kV = 0.153; // Motor constant.
     configs.Slot0.kP = 0.1;
     configs.Slot0.kI = 0.01;
     configs.Slot0.kD = 0.0;
     configs.Slot0.kA = 0.0;
+
+    // Slot 1 is velocity
+    configs.Slot1.kV = 0.153;
+    configs.Slot1.kP = 0.1;
+    configs.Slot1.kI = 0.0;
+    configs.Slot1.kD = 0.0;
+    configs.Slot1.kA = 0.0;
 
     // Set whether motor control direction is inverted or not:
     configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
@@ -133,7 +129,7 @@ configs::TalonFXConfiguration configs{};
 
     // Depends on mechanism/subsystem design:
     // Optionally start out at zero after initialization:
-    _rotaterMotor.SetPosition(units::angle::turn_t(0));
+    _rotaterMotor.SetPosition(units::angle::degree_t(95.0));
 
     // Log errors.
     return false;
