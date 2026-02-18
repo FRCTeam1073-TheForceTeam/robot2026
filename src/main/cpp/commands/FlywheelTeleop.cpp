@@ -18,13 +18,14 @@ FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel> flywheel, std::shared_p
 
 // Called wh(std::shared_ptr<Drivetrain> drivetrainen the command is initially scheduled.
 void FlywheelTeleop::Initialize() {
+  frc::SmartDashboard::PutBoolean("Flywheel/Button", m_OI->GetDriverXButton());
   frc::SmartDashboard::PutNumber("Flywheel/Velocity", 0.0);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void FlywheelTeleop::Execute() {
-  AButton = m_OI->GetDriverAButton();
-  if (AButton) {
+  FlywheelButton = m_OI->GetDriverXButton();
+  if (FlywheelButton) {
     frc::SmartDashboard::PutNumber("Flywheel/Velocity", maxVel.value());
     m_flywheel->SetVelocity(maxVel);
   }

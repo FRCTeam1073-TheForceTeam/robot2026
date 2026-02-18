@@ -44,7 +44,7 @@ class FlywheelTeleop
   std::shared_ptr<Flywheel> m_flywheel;
   std::shared_ptr<OI> m_OI;
 
-  bool AButton;
+  bool FlywheelButton;
   
   units::velocity::meters_per_second_t maxVel;
 };
