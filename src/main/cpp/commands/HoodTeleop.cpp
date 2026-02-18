@@ -22,16 +22,16 @@ void HoodTeleop::Execute() {
   XButton = m_OI->GetDriverXButton();
 
   if (XButton) {
-    m_shooterHood.get()->SetTargetPosition(units::angle::radian_t{frc::SmartDashboard::GetNumber("Hood Position", 0)});
+    m_shooterHood.get()->SetCommand(units::angle::radian_t{frc::SmartDashboard::GetNumber("Hood Position", 0)});
   }
   else {
-    m_shooterHood.get()->SetTargetPosition(units::angle::radian_t{0});
+    m_shooterHood.get()->SetCommand(units::angle::radian_t{0});
   }
 }
 
 // Called once the command ends or is interrupted.
 void HoodTeleop::End(bool interrupted) {
-  m_shooterHood.get()->SetTargetPosition(units::angle::radian_t{0});
+  m_shooterHood.get()->SetCommand(units::angle::radian_t{0});
 }
 
 // Returns true when the command should end.
