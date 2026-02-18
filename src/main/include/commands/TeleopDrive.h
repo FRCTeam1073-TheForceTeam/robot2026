@@ -15,12 +15,18 @@
 class TeleopDrive
     : public frc2::CommandHelper<frc2::Command, TeleopDrive> {
 public:
+
+    static constexpr double JOYSTICK_DEADZONE = 0.15;
+
   /**
    * Creates a new ExampleCommand.
    *
    * @param drivetrain The subsystem used by this command.
    */
-    explicit TeleopDrive(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<OI> oi, std::shared_ptr<Localizer> localizer);
+    explicit TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi, std::shared_ptr<Localizer>& localizer);
+
+    explicit TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi);
+
 
     void Initialize() override;
     void Execute() override;
@@ -28,10 +34,14 @@ public:
     void End(bool interrupted) override;
 
 private:
+
+    void setAlliance();
+
     std::shared_ptr<Drivetrain> m_drivetrain;
     std::shared_ptr<OI> m_OI;
     std::shared_ptr<Localizer> m_localizer;
 
+   // The commands we're going to send.
     frc::ChassisSpeeds speeds;
 
     units::angle::radian_t angle_tolerance;
@@ -62,6 +72,7 @@ private:
     units::velocity::meters_per_second_t vy;
     units::angular_velocity::radians_per_second_t omega;
 
+    // Used to flip the sign based on which alliance we are set for:
     int allianceSign;
 
     units::force::newton_t frontLeftTorque;

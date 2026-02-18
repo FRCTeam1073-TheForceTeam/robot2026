@@ -6,6 +6,10 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <units/math.h>
+#include <units/constants.h>
+
+#include <cmath>
 
 #include "subsystems/Spindexer.h"
 

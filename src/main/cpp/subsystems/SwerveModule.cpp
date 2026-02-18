@@ -53,9 +53,6 @@ bool SwerveModule::IsConfigurationValid() const {
 bool SwerveModule::ConfigureHardware() {
     bool configured = true;
 
-    SwerveModule::ConfigureDriveHardware();
-    SwerveModule::ConfigureSteerHardware();    
-
     if (!IsConfigurationValid()) {
         std::cerr << "SwerveModule[" << _ids.number << "] failed to configure drive hardware!" << std::endl;
         configured = false;
@@ -69,8 +66,6 @@ bool SwerveModule::ConfigureHardware() {
         std::cerr << "SwerveModule[" << _ids.number << "] failed to configure steer hardware!" << std::endl;
         configured = false;
     }
-
-
 
     // Sample the hardware state once we're configured.
     SampleFeedback(frc::Timer::GetFPGATimestamp());
@@ -117,8 +112,7 @@ const SwerveModule::Feedback& SwerveModule::SampleFeedback(units::time::second_t
 
 void SwerveModule::SetCommand(frc::SwerveModuleState cmd, units::force::newton_t feedForward) {
 
-    if (!_hardwareConfigured) return; // No controls if configure failed
-    
+    if (!_hardwareConfigured) return; // No controls if configure failed    
     // Cache command for reference later.
     _targetState = cmd;
 
@@ -128,10 +122,15 @@ void SwerveModule::SetCommand(frc::SwerveModuleState cmd, units::force::newton_t
     
     // Controller commands.
     // std::cerr << "Swerve Module [" << _ids.number << "] command " << drive_motor_velocity.value() << ", " << steering_angle.value() << std::endl;
-    //TODO: figure out feedForward conversion
-    _driveMotor.SetControl(_driveVelocityVoltage.WithSlot(0).WithVelocity(drive_motor_velocity).WithFeedForward(0_V));
+    // TODO: figure out feedForward conversion
+    _driveMotor.SetControl(_driveVelocityVoltage.WithSlot(0).WithVelocity(drive_motor_velocity));
     _steerMotor.SetControl(_steerPositionVoltage.WithSlot(0).WithPosition(steering_angle));
 }
+
+units::force::newton_t SwerveModule::GetLoad() const {
+    return _driveCurrentSig.GetValue() / SwerveControlConfig::DriveAmpsPerNewton;
+}
+
 
   void SwerveModule::SetDriveBrakeMode(bool brake) {
     if (brake)
@@ -141,7 +140,9 @@ void SwerveModule::SetCommand(frc::SwerveModuleState cmd, units::force::newton_t
   }
 
 bool SwerveModule::ConfigureDriveHardware() {
-    configs::TalonFXConfiguration configs{};
+    configs::TalonFXConfiguration configs;
+
+    configs.FutureProofConfigs = true;
 
     configs.TorqueCurrent.PeakForwardTorqueCurrent = SwerveControlConfig::DriveCurrentLimit;
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -SwerveControlConfig::DriveCurrentLimit;
@@ -159,7 +160,7 @@ bool SwerveModule::ConfigureDriveHardware() {
     auto status = _driveMotor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.
 
     if (!status.IsOK()) {
-        std::cerr << "Config DriveTrain Hardware Configurator Application Error: SwerveModule[" << _ids.number << "]" << std::endl;
+        std::cerr << "DriveTrain Hardware Configurator Application Error: SwerveModule[" << _ids.number << "]" << std::endl;
         return false;
     }
 
@@ -167,7 +168,7 @@ bool SwerveModule::ConfigureDriveHardware() {
     status = _driveMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
 
     if (!status.IsOK()) {
-        std::cerr << "Config DriveTrain Hardware Neutral Mode Error: SwerveModule[" << _ids.number << "]" << std::endl;
+        std::cerr << "DriveTrain Hardware Neutral Mode Error: SwerveModule[" << _ids.number << "]" << std::endl;
         return false;
     }
 
@@ -177,24 +178,15 @@ bool SwerveModule::ConfigureDriveHardware() {
 
     // Log errors.
     return true;
-
 }
 
 bool SwerveModule::ConfigureSteerHardware() {
-
-    // Default encoder configuration:
-    // configs::CANcoderConfiguration  encoder_configs;
-    // auto status = _steerEncoder.GetConfigurator().Apply(encoder_configs, 1_s);
-    // if (!status.IsOK()) {
-    //     std::cerr << "Config Steer Encoder Error: SwerveModule[" << _ids.number << "]" << std::endl;
-    //     return false;
-    // }
 
     // Read back the magnet sensor config for this module.
     configs::MagnetSensorConfigs magSenseConfig;
     auto status = _steerEncoder.GetConfigurator().Refresh(magSenseConfig, 1_s);
     if (!status.IsOK()) {
-        std::cerr << "Config Steer Hardware Refresh Error: SwerveModule[" << _ids.number << "]" << std::endl;
+        std::cerr << "Steer Hardware Refresh Error: SwerveModule[" << _ids.number << "]" << std::endl;
         return false;
     }
 
@@ -204,7 +196,7 @@ bool SwerveModule::ConfigureSteerHardware() {
     BaseStatusSignal::SetUpdateFrequencyForAll(100_Hz, _steerPositionSig, _steerVelocitySig);
 
     // Steering motor configuration:
-    configs::TalonFXConfiguration configs{};
+    configs::TalonFXConfiguration configs;
 
     configs.TorqueCurrent.PeakForwardTorqueCurrent = SwerveControlConfig::SteerCurrentLimit;
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -SwerveControlConfig::SteerCurrentLimit;
@@ -221,14 +213,15 @@ bool SwerveModule::ConfigureSteerHardware() {
     configs.Feedback.WithRotorToSensorRatio(SwerveControlConfig::SteerGearRatio.value());
     configs.Feedback.WithSensorToMechanismRatio(1.0);
 
-    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
+//    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
+    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
     configs.ClosedLoopGeneral.WithContinuousWrap(true);  // Wrapping controls on the steering axis.
 
     // Set the control configuration for the drive motor:
     status = _steerMotor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.
 
     if (!status.IsOK()) {
-        std::cerr << "Config Steer Hardware Configurator Apply Error: SwerveModule[" << _ids.number << "]" << std::endl;
+        std::cerr << "Steer Hardware Configurator Apply Error: SwerveModule[" << _ids.number << "]" << std::endl;
         return false;
     }
 
@@ -236,7 +229,7 @@ bool SwerveModule::ConfigureSteerHardware() {
     status = _driveMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
 
     if (!status.IsOK()) {
-        std::cerr << "Config Steer Hardware Neutral Mode Error: SwerveModule[" << _ids.number << "]" << std::endl;
+        std::cerr << "Steer Hardware Neutral Mode Error: SwerveModule[" << _ids.number << "]" << std::endl;
         return false;
     }
 

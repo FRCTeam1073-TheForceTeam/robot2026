@@ -2,28 +2,33 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
-
 //    !!ATTENTION!!     Most of this code is commented out because it was copied directly from weewee 2026 cpp code and 
 //                      might not work. Create working code on the designated branches, and do not un-comment on main until
 //                      the branch throws no errors
 
-
-
-
-
-
-
-
 #include "Robot.h"
 
 #include <frc2/command/CommandScheduler.h>
-#include "grpl/CanBridge.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "grpl/CanBridge.h"
 
 Robot::Robot() {
+  // Required to support laser-can debugging and configuration.
   grpl::start_can_bridge();
+
+  // Scheduler instance debugging:
+  // frc::SmartDashboard::PutData("Scheduler", frc2::CommandScheduler::GetInstance());
+
+    // TODO: Integrate CppTrace library to speed up debugging
+  try {
+    m_container = std::make_unique<RobotContainer>(); // Actually create robot container here so we can capture errors for debugging.
+  } catch(std::exception& e) {
+    std::cerr << "CREATION OF ROBOT CONTAINER THREW AN EXCEPTION!: " << e.what() << std::endl;
+  } catch(...) {
+    std::cerr << "UNKONWN EXCEPTION CREATING ROBOT CONTAINER!" << std::endl;
+  }
+
 }
 
 /**
@@ -35,7 +40,14 @@ Robot::Robot() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
-  frc2::CommandScheduler::GetInstance().Run();
+  // TODO: Integrate CppTrace library to speed up debugging
+  try {
+    frc2::CommandScheduler::GetInstance().Run();
+  } catch (std::exception& e) {
+    std::cerr << "SCHEDULER RUN THREW EXCEPTION!: " << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "SCHEDULER RUN THREW UNKNOWN EXCEPTION!" << std::endl;
+  }
 }
 
 /**
@@ -43,30 +55,59 @@ void Robot::RobotPeriodic() {
  * can use it to reset any subsystem information you want to clear when the
  * robot is disabled.
  */
-void Robot::DisabledInit() {}
+void Robot::DisabledInit() {
+  std::cerr << "Disabled Init..." << std::endl;
+    // TODO: Integrate CppTrace library to speed up debugging
+  try {
+    // Delegate to container function:
+    m_container->DisabledInit();
+  } catch (std::exception& e) {
+    std::cerr << "CONTAINER DISABLEDINIT THREW EXCEPTION!: " << e.what() << std::endl;
+  }
+}
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() {
+    // TODO: Integrate CppTrace library to speed up debugging
+  try {
+    // Delegate to container function:
+    m_container->DisabledPeriodic();
+  } catch (std::exception& e) {
+    std::cerr << "CONTAINER DISABLEDPERIODIC THREW EXCEPTION!: " << e.what() << std::endl;
+  }
+}
 
 /**
  * This autonomous runs the autonomous command selected by your {@link
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-  auto command = m_container.GetAutonomousCommand();
-  frc::SmartDashboard::PutBoolean("Robot/Robot has Command", command.get());
-  if(command.get()) {
-    //command.Schedule();
-    frc2::CommandScheduler::GetInstance().Schedule(command);
+  std::cerr << "Autonomous Init..." << std::endl;
+
+  try {
+    auto command = m_container->GetAutonomousCommand();
+    if (command.get()) {
+      //command.Schedule();
+      frc2::CommandScheduler::GetInstance().Schedule(command);
+    }
+  } catch (std::exception& e) { 
+    std::cerr << "AUTONOMOUS INIT THREW EXCEPTION!: " << e.what() << std::endl;
   }
 }
 
 // TODO:
 
 void Robot::AutonomousPeriodic() {
-
+  try {
+    // Delegate to container function:
+    m_container->AutonomousPeriodic();
+  } catch (std::exception& e) {
+    std::cerr << "CONTAINER AUTONOMOUS PERIOPDIC THREW EXCEPTION!: " << e.what() << std::endl;
+  }
 }
 
 void Robot::TeleopInit() {
+  std::cerr << "TeleopInit..." << std::endl;
+  
   // This makes sure that the autonomous stops running when
   // teleop starts running. If you want the autonomous to
   // continue until interrupted by another command, remove
@@ -79,22 +120,30 @@ void Robot::TeleopInit() {
 /**
  * This function is called periodically during operator control.
  */
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() {
+
+}
 
 /**
  * This function is called periodically during test mode.
  */
-void Robot::TestPeriodic() {}
+void Robot::TestPeriodic() {
+
+}
 
 /**
  * This function is called once when the robot is first started up.
  */
-void Robot::SimulationInit() {}
+void Robot::SimulationInit() {
+
+}
 
 /**
  * This function is called periodically whilst in simulation.
  */
-void Robot::SimulationPeriodic() {}
+void Robot::SimulationPeriodic() {
+
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {
