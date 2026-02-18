@@ -8,7 +8,7 @@
  Climber::Climber() :
     _hardwareConfigured(true),
     _climberOn(false),
-    _Motor(MotorId, CANBus("rio")),
+    _Motor(MotorId, CANBus("Canivore")),
     _VelocitySig(_Motor.GetVelocity()),
     _CurrentSig(_Motor.GetTorqueCurrent()),
     _PositionSig(_Motor.GetPosition()),
@@ -88,7 +88,7 @@ void Climber::Periodic() {
     
     if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
       // Send velocity based command:
-
+      
       // Convert to hardware units:
       // Multiply by conversion to produce commands.
       auto angular_vel = std::get<units::velocity::meters_per_second_t>(_command) * TurnsPerMeter;
@@ -98,6 +98,7 @@ void Climber::Periodic() {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _Motor.SetControl(controls::NeutralOut());
     }
+    frc::SmartDashboard::PutNumber("Climber/Load", abs(_Motor.GetTorqueCurrent().GetValue().value()));
 }
 
 bool Climber::ConfigureHardware() {

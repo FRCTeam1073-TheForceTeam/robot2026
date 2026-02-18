@@ -23,7 +23,6 @@ void Climb::Execute() {
     m_climber->StopMotor();
 
   }
-
   if (!m_climber->IsHooked()) {
     
     m_climber->SetVelocity(-1.0_tps);
