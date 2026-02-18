@@ -40,7 +40,7 @@
 #include "subsystems/LaserCan.h"// Unfinished
 #include "subsystems/Localizer.h"// Unfinished
 #include "subsystems/OI.h"// Unfinished
-#include "subsystems/ShooterHood.h"// Unfinished
+#include "subsystems/ShooterHood.h"
 #include "subsystems/ShooterLoad.h"// Unfinished
 #include "subsystems/Spindexer.h"// Unfinished
 #include "subsystems/ZoneFinder.h"// Unfinished
@@ -49,7 +49,7 @@
 #include "commands/ClimberTeleop.h"// Unfinished
 #include "commands/Collect.h"// Unfinished
 #include "commands/FlywheelTeleop.h"// Unfinished
-#include "commands/HoodTeleop.h"// Unfinished
+#include "commands/HoodTeleop.h"
 #include "commands/IntakeTeleop.h"// Unfinished
 #include "commands/Laser.h"// Unfinished
 #include "commands/Load.h"// Unfinished
