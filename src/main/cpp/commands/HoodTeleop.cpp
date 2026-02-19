@@ -8,6 +8,7 @@ HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood> ShooterHood, std::shared_ptr
   // Use addRequirements() here to declare subsystem dependencies.
   m_shooterHood{ShooterHood},
   m_OI{OI} {
+  level = 0,
   frc::SmartDashboard::PutNumber("Hood Position", 0);
   AddRequirements({m_shooterHood.get()});
   }
@@ -19,14 +20,18 @@ void HoodTeleop::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void HoodTeleop::Execute() {
   
-  XButton = m_OI->GetDriverXButton();
+  LeftBumper = m_OI->GetOperatorLeftBumper();
+  RightBumper = m_OI->GetOperatorRightBumper();
 
-  if (XButton) {
-    m_shooterHood.get()->SetCommand(units::angle::radian_t{frc::SmartDashboard::GetNumber("Hood Position", 0)});
+  if (RightBumper && level < maxLevel) {
+    level += 1;
   }
-  else {
-    m_shooterHood.get()->SetCommand(units::angle::radian_t{0});
+  else if(LeftBumper && level > 0){
+    level -= 1;
   }
+  m_shooterHood->SetCommand(level * ScaleFactor);
+  frc::SmartDashboard::PutNumber("hood level", level);
+  frc::SmartDashboard::PutNumber("hood position", level * ScaleFactor.value());
 }
 
 // Called once the command ends or is interrupted.
@@ -37,7 +42,7 @@ void HoodTeleop::End(bool interrupted) {
 // Returns true when the command should end.
 bool HoodTeleop::IsFinished() {
   
-  if (!XButton) {
+  if (!LeftBumper && !RightBumper && (m_shooterHood->GetFeedback().position - level * ScaleFactor).value() <= 0.08 && (m_shooterHood->GetFeedback().position - level * ScaleFactor).value() >= -0.08) { //TODO: change how precise the it is  
     return true;
   }
 

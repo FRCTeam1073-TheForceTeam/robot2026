@@ -114,7 +114,7 @@ configs::TalonFXConfiguration configs{};
 
     // Slot 0 for position control mode:
     configs.Slot1.kV = 0.153; // Motor constant.
-    configs.Slot1.kP = 0.1;
+    configs.Slot1.kP = 0.11;
     configs.Slot1.kI = 0.02;
     configs.Slot1.kD = 0.0;
     configs.Slot1.kA = 0.0;
