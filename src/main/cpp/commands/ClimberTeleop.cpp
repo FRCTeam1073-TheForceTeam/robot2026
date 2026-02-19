@@ -4,8 +4,9 @@
 
 #include "commands/ClimberTeleop.h"
 
-ClimberTeleop::ClimberTeleop(std::shared_ptr<Climber> climber) :
-  m_climber{climber} {
+ClimberTeleop::ClimberTeleop(std::shared_ptr<Climber> climber, std::shared_ptr<OI> oi) :
+  m_climber{climber},
+  m_OI{oi} {
   AddRequirements({m_climber.get()});
 }
 
@@ -14,7 +15,11 @@ void ClimberTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ClimberTeleop::Execute() {
-  m_climber->SetVelocity(0.0_tps);
+  leftY = m_OI->GetDriverLeftY();
+  if(abs(leftY)<0.1)
+    leftY = 0.0;
+  vy = leftY*-0.4_mps;
+  m_climber->SetCommand(vy);
 }
 
 // Called once the command ends or is interrupted.

@@ -2,6 +2,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <units/length.h>
 #include <units/velocity.h>
@@ -108,7 +109,7 @@ class Climber : public frc2::SubsystemBase {
   units::angle::turn_t RotationPosition;
   units::angle::turn_t TargetRotationPosition;
 
-  frc::SlewRateLimiter<units::turns_per_second> limiter{0.5_tps / 1_s};
+  frc::SlewRateLimiter<units::turns_per_second> limiter{64_tps / 1_s};
 
   frc::DigitalInput m_ClimberOnInput{0};
 

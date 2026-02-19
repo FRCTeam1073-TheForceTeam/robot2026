@@ -50,8 +50,8 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Right Joystick Y | GetDriverRightY       |                               |
 | Left Trigger     | GetDriverLeftTrigger  |                               |
 | Right Trigger    | GetDriverRightTrigger |                               |
-| A Button         | GetDriverAButton      | Spindexer                     |
-| B Button         | GetDriverBButton      |                               |
+| A Button         | GetDriverAButton      | Intake In/Out                 |
+| B Button         | GetDriverBButton      | Intake Start/Stop Spin        |
 | X Button         | GetDriverXButton      |                               |
 | Y Button         | GetDriverYButton      |                               |
 | Menu Button      | GetDriverMenuButton   |                               |
@@ -75,21 +75,21 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Left Joystick X  | GetOperatorLeftX        | Move Turret Left/Right        |
 | Left Joystick Y  | GetOperatorLeftY        |                               |
 | Right Joystick X | GetOperatorRightX       |                               |
-| Right Joystick Y | GetOperatorRightY       |                               |
+| Right Joystick Y | GetOperatorRightY       | Climber up/down               |
 | Left Trigger     | GetOperatorLeftTrigger  |                               |
 | Right Trigger    | GetOperatorRightTrigger |                               |
-| A Button         | GetOperatorAButton      |                               |
-| B Button         | GetOperatorBButton      |                               |
-| X Button         | GetOperatorXButton      |                               |
-| Y Button         | GetOperatorYButton      |                               |
-| Menu Button      | GetOperatorMenuButton   |                               |
-| View Button      | GetOperatorViewButton   |                               |
-| Left Bumper      | GetOperatorLeftBumper   |                               |
-| Right Bumper     | GetOperatorRightBumper  |                               |
-| D-Pad Up         | GetOperatorDPadUp       |                               |
-| D-Pad Right      | GetOperatorDPadRight    |                               |
-| D-Pad Left       | GetOperatorDPadLeft     |                               |
-| D-Pad Down       | GetOperatorDPadDown     |                               |
+| A Button         | GetOperatorAButton      | Spindexer Forward             |
+| B Button         | GetOperatorBButton      | Spindexer Backwards           |
+| X Button         | GetOperatorXButton      | Start/Stop Flywheel           |
+| Y Button         | GetOperatorYButton      | Climber L1                    |
+| Menu Button      | GetOperatorMenuButton   | Climber L2                    |
+| View Button      | GetOperatorViewButton   | Climber L3                    |
+| Left Bumper      | GetOperatorLeftBumper   | Decrease Hood Angle           |
+| Right Bumper     | GetOperatorRightBumper  | Increase Hood Angle           |
+| D-Pad Up         | GetOperatorDPadUp       | Flywheel Increase Speed       |
+| D-Pad Right      | GetOperatorDPadRight    | Start/Stop Kicker Forward     |
+| D-Pad Left       | GetOperatorDPadLeft     | Start/Stop Kikcer Backward    |
+| D-Pad Down       | GetOperatorDPadDown     | Flywheel Reduce Speed         |
 | Zero Controller  | ZeroOperatorController  |                               |
 
 
