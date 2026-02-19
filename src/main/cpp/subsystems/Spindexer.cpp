@@ -83,7 +83,7 @@ void Spindexer::Periodic() {
     _spindexerMotor.SetControl(controls::NeutralOut());
   }
 
-  
+  frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity", _targetVelocity.value());  
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
