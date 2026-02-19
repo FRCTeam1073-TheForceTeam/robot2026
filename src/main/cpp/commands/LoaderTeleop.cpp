@@ -17,12 +17,14 @@ void LoaderTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void LoaderTeleop::Execute() {
-  AButton = m_OI->GetDriverAButton();
+  AButton = m_OI->GetOperatorAButton();
   if(AButton) {
-    m_shooterload->SetTargetLoadVelocity(0.25_mps);
+    frc::SmartDashboard::PutBoolean("Kicker/IsSettingVelocity",true);
+    m_shooterload->SetTargetLoadVelocity(1.65_mps);
   }
   else
   {
+    frc::SmartDashboard::PutBoolean("Kicker/IsSettingVelocity",false);
     m_shooterload->SetTargetLoadVelocity(0.0_mps);
   }
 }

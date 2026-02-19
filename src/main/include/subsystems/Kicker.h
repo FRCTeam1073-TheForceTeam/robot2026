@@ -6,7 +6,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/force.h>
@@ -35,7 +35,7 @@ class Kicker : public frc2::SubsystemBase {
   static constexpr int LoadMotorId = 27; // TODO: Get motor id 
   static constexpr int laserCANId = 28;
   
-  const double GearRatio = 1; // TODO: Get gear ratio from EM
+  const double GearRatio = 3; // TODO: Get gear ratio from EM
 
   
 
@@ -112,5 +112,5 @@ class Kicker : public frc2::SubsystemBase {
   // Set the motors target velocity
   units::angular_velocity::turns_per_second_t _targetVelocity;
 
-  frc::SlewRateLimiter<units::turns_per_second> limiter{0.5_tps / 1_s};
+  frc::SlewRateLimiter<units::turns_per_second> limiter{4.0_tps / 1_s};
 };
