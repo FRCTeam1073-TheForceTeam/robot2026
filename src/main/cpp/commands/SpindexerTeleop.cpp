@@ -13,7 +13,7 @@ SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer> spindexer, std::shar
 
 // Called when the command is initially scheduled.
 void SpindexerTeleop::Initialize() {
-
+  isMoving = false;
 
 }
 
@@ -25,22 +25,27 @@ void SpindexerTeleop::Execute() {
 
   if (m_OI->GetOperatorAButton()){
     targetVelocity = 1.5_mps;
+    isMoving = true;
   }
   else if (m_OI->GetOperatorBButton()) {
     targetVelocity = -1.5_mps;
+    isMoving = true;  
   }
   else{
     targetVelocity = 0_mps;
+    isMoving = false;
   }
 
   m_spindexer->SetCommand(targetVelocity);
   frc::SmartDashboard::PutBoolean("Spindexer/AButton", m_OI->GetOperatorAButton());
+  frc::SmartDashboard::PutBoolean("Spindexer/Is Moving", isMoving);
   
 }
 
 // Called once the command ends or is interrupted.
 void SpindexerTeleop::End(bool interrupted) {
   targetVelocity = 0_mps;
+  isMoving = false;
 }
 
 // Returns true when the command should end.
