@@ -5,7 +5,7 @@
 
 #include "commands/Load.h"
 
-Load::Load(std::shared_ptr<ShooterLoad> ShooterLoad) :
+Load::Load(std::shared_ptr<Kicker> ShooterLoad) :
   m_shooterload{ShooterLoad} {
 {
 AddRequirements({m_shooterload.get()});

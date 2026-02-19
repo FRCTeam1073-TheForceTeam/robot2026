@@ -6,7 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/ShooterLoad.h"
+#include "subsystems/Kicker.h"
 
 /**
  * An example command.
@@ -24,7 +24,7 @@ class Load
    * @param subsystem The subsystem used by this command.
    */
   
-  Load(std::shared_ptr<ShooterLoad> ShooterLoad);
+  Load(std::shared_ptr<Kicker> ShooterLoad);
 
   void Initialize() override;
 
@@ -38,5 +38,5 @@ class Load
 
 
   private:
-   std::shared_ptr<ShooterLoad> m_shooterload;
+   std::shared_ptr<Kicker> m_shooterload;
 };

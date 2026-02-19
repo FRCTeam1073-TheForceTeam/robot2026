@@ -14,6 +14,8 @@
 #include <ctre/phoenix6/TalonFX.hpp>
 
 #include <frc/filter/SlewRateLimiter.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 
 #include <variant>
 

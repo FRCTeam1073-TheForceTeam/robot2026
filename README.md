@@ -78,8 +78,8 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Right Joystick Y | GetOperatorRightY       | Climber up/down               |
 | Left Trigger     | GetOperatorLeftTrigger  |                               |
 | Right Trigger    | GetOperatorRightTrigger |                               |
-| A Button         | GetOperatorAButton      | Spindexer Forward             |
-| B Button         | GetOperatorBButton      | Spindexer Backwards           |
+| A Button         | GetOperatorAButton      | Spindexer + Kicker Forward    |
+| B Button         | GetOperatorBButton      | Kicker Backwards              |
 | X Button         | GetOperatorXButton      | Start/Stop Flywheel           |
 | Y Button         | GetOperatorYButton      | Climber L1                    |
 | Menu Button      | GetOperatorMenuButton   | Climber L2                    |
@@ -87,8 +87,8 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Left Bumper      | GetOperatorLeftBumper   | Decrease Hood Angle           |
 | Right Bumper     | GetOperatorRightBumper  | Increase Hood Angle           |
 | D-Pad Up         | GetOperatorDPadUp       | Flywheel Increase Speed       |
-| D-Pad Right      | GetOperatorDPadRight    | Start/Stop Kicker Forward     |
-| D-Pad Left       | GetOperatorDPadLeft     | Start/Stop Kikcer Backward    |
+| D-Pad Right      | GetOperatorDPadRight    |                               |
+| D-Pad Left       | GetOperatorDPadLeft     |                               |
 | D-Pad Down       | GetOperatorDPadDown     | Flywheel Reduce Speed         |
 | Zero Controller  | ZeroOperatorController  |                               |
 

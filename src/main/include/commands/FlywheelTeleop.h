@@ -27,7 +27,7 @@ class FlywheelTeleop
    *
    * @param flywheel The subsystem used by this command.
    */
-  FlywheelTeleop(std::shared_ptr<Flywheel> flywheel, std::shared_ptr<OI> oi);
+  explicit FlywheelTeleop(std::shared_ptr<Flywheel> flywheel, std::shared_ptr<OI> oi);
 
   void Initialize() override;
 

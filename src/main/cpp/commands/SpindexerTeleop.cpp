@@ -8,11 +8,13 @@ SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer> spindexer, std::shar
   m_spindexer{spindexer}, 
   m_OI{OI} {
   spin = false; 
-  AddRequirements({m_spindexer.get(), m_OI.get()});
+  AddRequirements(m_spindexer.get());
 }
 
 // Called when the command is initially scheduled.
 void SpindexerTeleop::Initialize() {
+
+
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -21,10 +23,10 @@ void SpindexerTeleop::Execute() {
   //   spin = !spin;
   // }
 
-  if (m_OI->GetDriverAButton()){
+  if (m_OI->GetOperatorAButton()){
     targetVelocity = 1_mps;
   }
-  else if (m_OI->GetDriverBButton()) {
+  else if (m_OI->GetOperatorBButton()) {
     targetVelocity = -1_mps;
   }
   else{
@@ -32,8 +34,8 @@ void SpindexerTeleop::Execute() {
   }
 
   m_spindexer->SetCommand(targetVelocity);
-  frc::SmartDashboard::PutBoolean("Spindexer/AButton", m_OI->GetDriverAButton());
-  frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity", targetVelocity.value());
+  frc::SmartDashboard::PutBoolean("Spindexer/AButton", m_OI->GetOperatorAButton());
+  
 }
 
 // Called once the command ends or is interrupted.
