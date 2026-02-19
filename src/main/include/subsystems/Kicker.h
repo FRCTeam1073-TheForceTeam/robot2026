@@ -112,5 +112,5 @@ class Kicker : public frc2::SubsystemBase {
   // Set the motors target velocity
   units::angular_velocity::turns_per_second_t _targetVelocity;
 
-  frc::SlewRateLimiter<units::turns_per_second> limiter{4.0_tps / 1_s};
+  frc::SlewRateLimiter<units::turns_per_second> limiter{12.0_tps / 1_s};
 };
