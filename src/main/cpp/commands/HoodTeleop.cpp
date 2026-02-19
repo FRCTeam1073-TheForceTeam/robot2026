@@ -9,6 +9,8 @@ HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood> ShooterHood, std::shared_ptr
   m_shooterHood{ShooterHood},
   m_OI{OI} {
   level = 0,
+  RightBumperPastState = false,
+  LeftBumperPastState = false,
   frc::SmartDashboard::PutNumber("Hood Position", 0);
   AddRequirements({m_shooterHood.get()});
   }
@@ -23,12 +25,24 @@ void HoodTeleop::Execute() {
   LeftBumper = m_OI->GetOperatorLeftBumper();
   RightBumper = m_OI->GetOperatorRightBumper();
 
-  if (RightBumper && level < maxLevel) {
+  if (RightBumper && level < maxLevel && !RightBumperPastState) {
     level += 1;
+    RightBumperPastState = true;
   }
-  else if(LeftBumper && level > 0){
+  else if(LeftBumper && level > 0 && !LeftBumperPastState){
     level -= 1;
+    LeftBumperPastState = true;
   }
+  else{
+    if(!RightBumper){
+      RightBumperPastState = false;
+    }
+    if(!LeftBumper){
+      LeftBumperPastState = false;
+    }
+  }
+  
+
   m_shooterHood->SetCommand(level * ScaleFactor);
   frc::SmartDashboard::PutNumber("hood level", level);
   frc::SmartDashboard::PutNumber("hood position", level * ScaleFactor.value());
