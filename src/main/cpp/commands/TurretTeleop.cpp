@@ -19,7 +19,7 @@ TurretTeleop::TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>&
   position = 0_rad,//zeroed position is touching the hard stop
   minPosition = 0_rad,
   maxPosition = 6_rad,//TODO: get maximum velocity form EM
-  AddRequirements({m_turret.get(), m_OI.get()});
+  AddRequirements(m_turret.get());
 }
 
 void TurretTeleop::Initialize() {
@@ -31,13 +31,10 @@ void TurretTeleop::Execute() {
   //TODO: determine direction that robot must be facing in & use that to automatically set the angle
   leftX = m_OI->GetOperatorLeftX();
 
-  if (leftX < -0.1 && position > minPosition){
-    targetAngle = leftX * 1_rad;//TODO: Change the scale factor that the x value is multiplied by so that the turret moves at a reasonable speed 
+  if (leftX < -0.1 && position > minPosition && position < maxPosition){
+    targetAngle += leftX * 1_rad;//TODO: Change the scale factor that the x value is multiplied by so that the turret moves at a reasonable speed 
   }
-  else if (leftX > 0.1 && position < maxPosition){
-    targetAngle = leftX * 1_rad;//TODO: Change the scale factor that the x value is multiplied by so that the turret moves at a reasonable speed 
-  }
-  else{
+  else if (m_OI->GetOperatorDPadRight()) {
     targetAngle = 0_rad;
   }
   
