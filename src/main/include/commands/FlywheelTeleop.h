@@ -27,7 +27,7 @@ class FlywheelTeleop
    *
    * @param flywheel The subsystem used by this command.
    */
-  explicit FlywheelTeleop(std::shared_ptr<Flywheel> flywheel, std::shared_ptr<OI> oi);
+  FlywheelTeleop(std::shared_ptr<Flywheel> flywheel, std::shared_ptr<OI> oi);
 
   void Initialize() override;
 
@@ -44,7 +44,7 @@ class FlywheelTeleop
   std::shared_ptr<Flywheel> m_flywheel;
   std::shared_ptr<OI> m_OI;
 
-  bool AButton;
+  bool XButton;
   
   units::velocity::meters_per_second_t maxVel;
 };

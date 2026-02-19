@@ -15,10 +15,10 @@ void ClimberTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ClimberTeleop::Execute() {
-  leftY = m_OI->GetDriverLeftY();
-  if(abs(leftY)<0.1)
-    leftY = 0.0;
-  vy = leftY*-0.4_mps;
+  rightY = m_OI->GetOperatorRightY();
+  if(abs(rightY)<0.1)
+    rightY = 0.0;
+  vy = rightY*-0.4_mps;
   m_climber->SetCommand(vy);
 }
 
