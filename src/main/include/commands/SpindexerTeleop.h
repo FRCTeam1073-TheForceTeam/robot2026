@@ -7,7 +7,10 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "subsystems/Spindexer.h"
+#include "subsystems/OI.h"
 
 /**
  * An example command.
@@ -25,7 +28,7 @@ class SpindexerTeleop
    * @param spindexer The subsystem used by this command.
    */
 
-  explicit SpindexerTeleop(std::shared_ptr<Spindexer> spindexer);
+  explicit SpindexerTeleop(std::shared_ptr<Spindexer> spindexer, std::shared_ptr<OI> OI);
 
   void Initialize() override;
 
@@ -37,4 +40,12 @@ class SpindexerTeleop
 
   private:
    std::shared_ptr<Spindexer> m_spindexer;
+   std::shared_ptr<OI> m_OI;
+
+    bool spin;
+    
+    units::velocity::meters_per_second_t velocity;
+    units::velocity::meters_per_second_t targetVelocity;
+
+
 };

@@ -21,12 +21,12 @@ void Shoot::Initialize() {
 }
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() {  
-  m_flywheel->SetVelocity(6.7_tps);//TODO: change number into one that catually makes sense
+  m_flywheel->SetVelocity(6.7_mps);//TODO: change number into one that catually makes sense
   }
 
 // Called once the command ends or is interrupted.
 void Shoot::End(bool interrupted) {
-  m_flywheel->SetVelocity(0.0_tps);
+  m_flywheel->SetVelocity(0.0_mps);
 }
 
 // Returns true when the command should end.

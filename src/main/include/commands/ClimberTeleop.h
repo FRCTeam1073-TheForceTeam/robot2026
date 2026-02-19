@@ -6,9 +6,9 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-
+#include "subsystems/OI.h"
 #include "subsystems/Climber.h"
-
+#include <iostream>
 /**
  * An example command.
  *
@@ -25,7 +25,7 @@ class ClimberTeleop
    * @param climber The subsystem used by this command.
    */
 
-  explicit ClimberTeleop(std::shared_ptr<Climber> climber);
+  explicit ClimberTeleop(std::shared_ptr<Climber> climber,  std::shared_ptr<OI> oi);
 
   void Initialize() override;
 
@@ -36,4 +36,9 @@ class ClimberTeleop
   bool IsFinished() override;
 
   std::shared_ptr<Climber> m_climber;
+  std::shared_ptr<OI> m_OI;
+
+  double rightY;
+  units::velocity::meters_per_second_t vy;
+
 };
