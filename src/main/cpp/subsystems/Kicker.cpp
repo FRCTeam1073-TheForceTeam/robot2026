@@ -42,7 +42,7 @@ void Kicker::SetCommand(Command cmd) {
 }
 
 void Kicker::SetTargetLoadVelocity(units::velocity::meters_per_second_t Velocity) {
-  _targetVelocity = Velocity*TurnsPerMeter;
+  _targetVelocity = Velocity*TurnsPerMeter*GearRatio;
 }
 
 void Kicker::SetTargetLoadVelocity(units::angular_velocity::turns_per_second_t Velocity) {
@@ -66,10 +66,9 @@ void Kicker::Periodic() {
   _feedback.force = _loadCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
   _feedback.velocity = _loadVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
 
-  _loadMotor.Set(_targetVelocity.value());
-
-
-  _loadMotor.Set(limiter.Calculate(_targetVelocity).value());
+  auto limitedVelocity = limiter.Calculate(_targetVelocity);
+  frc::SmartDashboard::PutNumber("Kicker/LimitedVelocity",limitedVelocity.value());
+  _loadMotor.SetControl(_commandVelocityVoltage.WithVelocity(limitedVelocity));
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.

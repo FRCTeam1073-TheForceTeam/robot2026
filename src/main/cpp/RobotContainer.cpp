@@ -62,7 +62,7 @@ RobotContainer::RobotContainer() {
 
   // Configure detault commands for subsystemns:
   //m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI).ToPtr());
-  // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
+  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
 
   std::cerr << "Default commands assigned..." << std::endl;
   

@@ -26,8 +26,6 @@ class ZoneFinder
     static const frc::Rectangle2d BUMP_C;
     static const frc::Rectangle2d BUMP_D;
 
-    static const frc::Rectangle2d UNKNOWN;
-    //unknown zone coordinates will just be the entire field
 
     ZoneFinder(std::shared_ptr<Localizer> _localizer);
 
