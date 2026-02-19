@@ -12,6 +12,7 @@
 #include <units/force.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <variant>
 
@@ -82,8 +83,6 @@ class Turret: public frc2::SubsystemBase {
 
   // Example TalonFX motor interface.
   ctre::phoenix6::hardware::TalonFX _rotaterMotor;
-
-  units::angle::radian_t positionAngle;
 
   units::angular_velocity::radians_per_second_t velocity;
 

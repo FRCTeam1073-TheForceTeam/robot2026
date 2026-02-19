@@ -40,7 +40,7 @@ void TurretTeleop::Execute() {
   else{
     targetAngle = 0_rad;
   }
-
+  
   m_turret->SetCommand(targetAngle);
 
   frc::SmartDashboard::PutNumber("Turret/angularVel", angularVel.value());

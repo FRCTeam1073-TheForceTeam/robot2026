@@ -13,7 +13,6 @@ using namespace ctre::phoenix6;
  * You have to use initializer lists to build up the elements of the subsystem in the right order.
  */
 Turret::Turret() :
-positionAngle(0_rad),
 velocity(0_rad_per_s),
 _hardwareConfigured(true),
 _rotaterMotor(RotaterMotorId, CANBus("rio")),
@@ -81,6 +80,8 @@ void Turret::Periodic() {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _rotaterMotor.SetControl(controls::NeutralOut());
   }
+  frc::SmartDashboard::PutNumber("Turret/Position Rad", _rotaterMotor.GetPosition().GetValue().value() / TurretToMotorTurns * 2 * std::numbers::pi);
+  frc::SmartDashboard::PutNumber("Turret/Position Deg", _rotaterMotor.GetPosition().GetValue().value() / TurretToMotorTurns * 360);
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
@@ -98,7 +99,7 @@ configs::TalonFXConfiguration configs{};
     // Slot 0 for position control mode:
     configs.Slot0.kV = 0.153; // Motor constant.
     configs.Slot0.kP = 0.1;
-    configs.Slot0.kI = 0.01;
+    configs.Slot0.kI = 0.0;
     configs.Slot0.kD = 0.0;
     configs.Slot0.kA = 0.0;
 
@@ -129,7 +130,7 @@ configs::TalonFXConfiguration configs{};
 
     // Depends on mechanism/subsystem design:
     // Optionally start out at zero after initialization:
-    _rotaterMotor.SetPosition(units::angle::degree_t(95.0));
+    _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
 
     // Log errors.
     return false;
