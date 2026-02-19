@@ -107,5 +107,6 @@ class Spindexer : public frc2::SubsystemBase {
   //TODO: get gear ratio because EM doesnt have it yet
   double GearRatio = units::angle::turn_t(3) / units::angle::turn_t(1);
   frc::SlewRateLimiter<units::turns_per_second> limiter{50_tps / 1_s};
+
 };
 //hi if your reading this 
