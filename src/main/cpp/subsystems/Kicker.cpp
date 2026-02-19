@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "subsystems/ShooterLoad.h"
+#include "subsystems/Kicker.h"
 #include <ctre/phoenix6/controls/NeutralOut.hpp>
 
 using namespace ctre::phoenix6;
@@ -12,7 +12,7 @@ using namespace ctre::phoenix6;
 /**
  * You have to use initializer lists to build up the elements of the subsystem in the right order.
  */
-ShooterLoad::ShooterLoad() :
+Kicker::Kicker() :
 _hardwareConfigured(true),
 _loadMotor(LoadMotorId, CANBus("rio")),
 _loadVelocitySig(_loadMotor.GetVelocity()),
@@ -35,26 +35,30 @@ _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
 
 
   /// Set the command for the system.
-void ShooterLoad::SetCommand(Command cmd) {
+void Kicker::SetCommand(Command cmd) {
   // Sometimes you need to do something immediate to the hardware.
   // We can just set our target internal value.
   _command = cmd;
 }
 
-void ShooterLoad::SetTargetLoadVelocity(units::angular_velocity::turns_per_second_t Velocity) {
+void Kicker::SetTargetLoadVelocity(units::velocity::meters_per_second_t Velocity) {
+  _targetVelocity = Velocity*TurnsPerMeter;
+}
+
+void Kicker::SetTargetLoadVelocity(units::angular_velocity::turns_per_second_t Velocity) {
   _targetVelocity = Velocity;
 }
 
-ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> ShooterLoad::GetLoadVelocity() {
+ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> Kicker::GetLoadVelocity() {
   return _loadVelocitySig;
 }
 
-units::angular_velocity::turns_per_second_t ShooterLoad::GetLoadTargetVelocity() {
+units::angular_velocity::turns_per_second_t Kicker::GetLoadTargetVelocity() {
   return _targetVelocity;
 }
 
 
-void ShooterLoad::Periodic() {
+void Kicker::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_loadVelocitySig, _loadCurrentSig);
 
@@ -69,7 +73,7 @@ void ShooterLoad::Periodic() {
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
-bool ShooterLoad::ConfigureHardware() {
+bool Kicker::ConfigureHardware() {
 configs::TalonFXConfiguration configs{};
 
     configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
