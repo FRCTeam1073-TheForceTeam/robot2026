@@ -41,13 +41,13 @@ std::cerr << "Drivetrain created..." << std::endl;
   // m_intake = std::make_shared<Intake>();
   // m_Laser = std::make_shared<LaserCan>();
   m_spindexer = std::make_shared<Spindexer>();
-  m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI));
+  m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
   m_flywheel = std::make_shared<Flywheel>();
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI));
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI).ToPtr());
 
   // m_shooterLoad = std::make_shared<ShooterLoad>();
   m_climber = std::make_shared<Climber>();
-  m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI));
+  m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
 
   // m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
   // trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");

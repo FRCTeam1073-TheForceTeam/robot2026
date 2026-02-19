@@ -13,24 +13,26 @@ FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel> flywheel, std::shared_p
   m_flywheel{flywheel},
   m_OI{oi} {
   maxVel = 20_mps; //TODO: test and change this value
-  AddRequirements({m_flywheel.get(), m_OI.get()});
+  AddRequirements({m_flywheel.get()});
 }
 
 // Called wh(std::shared_ptr<Drivetrain> drivetrainen the command is initially scheduled.
 void FlywheelTeleop::Initialize() {
   m_flywheel->SetVelocity(0_mps);
+  frc::SmartDashboard::PutBoolean("FlywheelTeleop/Running",false);
   frc::SmartDashboard::PutNumber("Flywheel/CommandedVelocity", 0.0);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void FlywheelTeleop::Execute() {
   XButton = m_OI->GetOperatorXButton();
+  frc::SmartDashboard::PutBoolean("FlywheelTeleop/Running",true);
   if (XButton) {
-    frc::SmartDashboard::PutNumber("Flywheel/CommandedVelocity", maxVel.value());
+    frc::SmartDashboard::PutNumber("FlywheelTeleop/CommandedVelocity", maxVel.value());
     m_flywheel->SetVelocity(maxVel);
   }
   else{
-    frc::SmartDashboard::PutNumber("Flywheel/CommandedVelocity", 0.0);
+    frc::SmartDashboard::PutNumber("FlywheelTeleop/CommandedVelocity", 0.0);
     m_flywheel->SetVelocity(0_mps);
   }
 }
