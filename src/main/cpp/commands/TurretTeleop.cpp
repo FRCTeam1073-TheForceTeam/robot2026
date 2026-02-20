@@ -31,10 +31,9 @@ void TurretTeleop::Execute() {
   //TODO: determine direction that robot must be facing in & use that to automatically set the angle
   leftX = m_OI->GetOperatorLeftX();
 
-  if (leftX < -0.1 && position > minPosition && position < maxPosition){
-    targetAngle += leftX * 1_rad;//TODO: Change the scale factor that the x value is multiplied by so that the turret moves at a reasonable speed 
-  }
-  else if (m_OI->GetOperatorDPadRight()) {
+  if (std::abs(leftX) > 0.1) {
+    targetAngle = 1.5 * leftX * 1_rad;
+  } else {
     targetAngle = 0_rad;
   }
   
@@ -52,10 +51,10 @@ void TurretTeleop::Execute() {
 
 // Called once the command ends or is interrupted.
 void TurretTeleop::End(bool interrupted) {
-  if(interrupted) {
+  if (interrupted) {
         std::cerr << "RotateTurret: Interrupted!" << std::endl;
     }
-    Command::End(interrupted);
+    m_turret->SetCommand(std::monostate());
   }
 
 // Returns true when the command should end.
