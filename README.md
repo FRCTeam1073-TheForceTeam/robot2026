@@ -87,7 +87,7 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Left Bumper      | GetOperatorLeftBumper   | Decrease Hood Angle           |
 | Right Bumper     | GetOperatorRightBumper  | Increase Hood Angle           |
 | D-Pad Up         | GetOperatorDPadUp       | Flywheel Increase Speed       |
-| D-Pad Right      | GetOperatorDPadRight    |                               |
+| D-Pad Right      | GetOperatorDPadRight    | Zero Climber                  |
 | D-Pad Left       | GetOperatorDPadLeft     |                               |
 | D-Pad Down       | GetOperatorDPadDown     | Flywheel Reduce Speed         |
 | Zero Controller  | ZeroOperatorController  |                               |
