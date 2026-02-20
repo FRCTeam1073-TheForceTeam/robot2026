@@ -43,7 +43,10 @@ RobotContainer::RobotContainer() {
   m_flywheel = std::make_shared<Flywheel>();
   m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI).ToPtr());
 
-  // m_shooterLoad = std::make_shared<ShooterLoad>();
+// m_shooterLoad = std::make_shared<ShooterLoad>();
+// m_Tags = std::make_shared<AprilTagFinder>();
+  m_shooterHood = std::make_shared<ShooterHood>();
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI));
   m_climber = std::make_shared<Climber>();
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
 

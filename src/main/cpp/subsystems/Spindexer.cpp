@@ -16,7 +16,8 @@ _hardwareConfigured(false),
 _spindexerMotor(SpindexerMotorId, CANBus("rio")),
 _spindexerVelocitySig(_spindexerMotor.GetVelocity()),
 _spindexerCurrentSig(_spindexerMotor.GetTorqueCurrent()),
-_commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
+_commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
+_targetVelocity(0.0_tps) {
   // Extra implementation of subsystem constructor goes here.
 
   // Assign gain slots for the commands to use:

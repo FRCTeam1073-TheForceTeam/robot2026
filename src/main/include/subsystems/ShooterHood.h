@@ -10,6 +10,7 @@
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/force.h>
+#include <units/current.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
@@ -33,21 +34,24 @@ class ShooterHood : public frc2::SubsystemBase {
   static constexpr int HoodMotorId = 24;
 
   // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
-  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
+  //static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
+  //static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
+  static constexpr double HoodToMotorGearRatio = (52.0 / 12.0) * (33.0 / 15.0) * (160.0 / 10.0);
 
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
-      units::length::meter_t position;
-      units::force::newton_t force;
+      units::angle::radian_t position;
+      units::current::ampere_t current;
   };
+
+  
 
 
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
+  using Command = std::variant<std::monostate, units::angular_velocity::radians_per_second_t, units::angle::radian_t>;
 
 
   // Constructor for the subsystem.
@@ -67,10 +71,6 @@ class ShooterHood : public frc2::SubsystemBase {
 
   /// Set the command for the system.
   void SetCommand(Command cmd);
-
-  void SetTargetPosition(units::angle::radian_t position);
-
-  units::angle::radian_t GetPosition();
 
  private:
 
@@ -94,6 +94,7 @@ class ShooterHood : public frc2::SubsystemBase {
 
   // Example velocity and position controls:
   ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot0 gains.
+  ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;
   
   // Cached feedback:
   Feedback _feedback;
