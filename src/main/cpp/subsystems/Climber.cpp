@@ -56,6 +56,10 @@ units::volt_t Climber::GetVoltage() {
 void Climber::StopMotor() {
     _Motor.StopMotor();
 }
+void Climber::ZeroPosition() {
+  ZeroError = -(_PositionSig.GetValue() / TurnsPerMeter);
+  Position = 0.0_m;
+}
   
 
 

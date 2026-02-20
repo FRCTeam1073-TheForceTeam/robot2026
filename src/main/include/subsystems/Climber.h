@@ -62,6 +62,8 @@ class Climber : public frc2::SubsystemBase {
 
   units::volt_t GetVoltage();
 
+  void ZeroPosition();
+
   void StopMotor();
 
 
@@ -79,6 +81,8 @@ class Climber : public frc2::SubsystemBase {
   bool _climberUp;
 
   bool _climberOn;
+
+  
 
   // Example TalonFX motor interface.
   ctre::phoenix6::hardware::TalonFX _Motor;
@@ -112,5 +116,7 @@ class Climber : public frc2::SubsystemBase {
   frc::SlewRateLimiter<units::turns_per_second> limiter{64_tps / 1_s};
 
   frc::DigitalInput m_ClimberOnInput{0};
+
+  units::unit_t<units::length::meter, double, units::linear_scale> ZeroError;
 
 };
