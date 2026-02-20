@@ -20,11 +20,17 @@
 RobotContainer::RobotContainer() {
 // cmd_collect = std::make_shared<Collect>(m_intake);
 // m_climber = std::make_shared<Climber>();
-
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
   m_drivetrain = std::make_shared<Drivetrain>();
   std::cerr << "Drivetrain created..." << std::endl;
+
+// m_drivetrain = std::make_shared<Drivetrain>();
+
+// m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, nullptr));
+// m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer));
+  m_turret = std::make_shared<Turret>();
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI));
 
   //m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
   m_FieldMap = std::make_shared<FieldMap>();
