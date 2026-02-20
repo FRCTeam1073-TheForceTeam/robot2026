@@ -40,7 +40,7 @@ class HoodTeleop
 
    short level; // level that the hood is at (when multiplied by scale factor)
    const short maxLevel = 5; //TODO: change value after testing it
-   const units::angle::radian_t ScaleFactor = 0.1_rad; //TODO: change and test this value
+   const units::angle::radian_t ScaleFactor = -0.1_rad; //TODO: change and test this value
 
    bool LeftBumper;
    bool RightBumper;

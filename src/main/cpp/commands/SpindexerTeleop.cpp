@@ -14,7 +14,7 @@ SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer> spindexer, std::shar
 // Called when the command is initially scheduled.
 void SpindexerTeleop::Initialize() {
   isMoving = false;
-
+  targetVelocity = 0_mps;
 }
 
 // Called repeatedly when this Command is scheduled to run

@@ -89,7 +89,7 @@ void ShooterHood::Periodic() {
     _hoodMotor.SetControl(controls::NeutralOut());
   }
 
-  frc::SmartDashboard::PutNumber("Hood Angle Position", Position.value() / HoodToMotorGearRatio);
+  frc::SmartDashboard::PutNumber("Hood/Hood Angle Position", Position.value() / HoodToMotorGearRatio);
 
 }
 
@@ -114,8 +114,8 @@ configs::TalonFXConfiguration configs{};
 
     // Slot 0 for position control mode:
     configs.Slot1.kV = 0.153; // Motor constant.
-    configs.Slot1.kP = 0.11;
-    configs.Slot1.kI = 0.02;
+    configs.Slot1.kP = 0.5;
+    configs.Slot1.kI = 0.04;
     configs.Slot1.kD = 0.0;
     configs.Slot1.kA = 0.0;
 
