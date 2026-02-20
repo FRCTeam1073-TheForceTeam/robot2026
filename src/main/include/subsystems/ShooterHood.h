@@ -36,7 +36,7 @@ class ShooterHood : public frc2::SubsystemBase {
   // Mechanism conversion constants for the subsystem:
   //static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
   //static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
-  static constexpr double HoodToMotorGearRatio = (52.0 / 12.0) * (33.0 / 15.0) * (160.0 / 10.0); // TODO: get gear ratio
+  static constexpr double HoodToMotorGearRatio = (52.0 / 12.0) * (33.0 / 15.0) * (160.0 / 10.0);
 
   
   // The feedback for this subsystem provided as a struct.
@@ -44,6 +44,8 @@ class ShooterHood : public frc2::SubsystemBase {
       units::angle::radian_t position;
       units::current::ampere_t current;
   };
+
+  
 
 
   // Commands may be modal (different command modes):
