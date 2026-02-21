@@ -131,8 +131,8 @@ configs::TalonFXConfiguration configs{};
 
     // Depends on mechanism/subsystem design:
     // Optionally start out at zero after initialization:
-    _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
-
+    // _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
+    _rotaterMotor.SetPosition(0_deg);
     // Log errors.
     return false;
 
