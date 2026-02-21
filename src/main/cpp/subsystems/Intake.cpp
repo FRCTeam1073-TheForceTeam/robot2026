@@ -12,19 +12,15 @@ using namespace units;
 
 Intake::Intake(): 
     _hardwareConfigured(true),
-    _ActuatorLeadMotor(_ActuatorLeadMotorID, CANBus("rio")),
-    _CollectorMotor(_CollectorMotorID, CANBus("rio)")), 
+    _ActuatorLeadMotor(_ActuatorLeadMotorID, CANBus("rio")), 
     _ActuatorFollowMotor(_ActuatorFollowMotorID, CANBus("rio")), 
     _PositionSig(_ActuatorLeadMotor.GetPosition()),
     _ActuatorVelocitySig(_ActuatorLeadMotor.GetVelocity()),
-    _CollectorVelocitySig(_CollectorMotor.GetVelocity()),
     _CurrentSig(_ActuatorLeadMotor.GetTorqueCurrent()),
     _ActuatorVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)), //TODO: Get Velocity
-    _CollectorVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)), //TODO: Get Velocity
     _PositionVoltage(units::angle::turn_t(0.0)) //TODO: Get Velocity
 {
     _ActuatorVelocityVoltage.WithSlot(0);
-    _CollectorVelocityVoltage.WithSlot(0);
     _PositionVoltage.WithSlot(1);
 
     _hardwareConfigured = ConfigureHardware();
@@ -56,32 +52,20 @@ units::angular_velocity::turns_per_second_t Intake::GetIntakeTargetVelocity() {
 
 void Intake::Periodic() {
     
-    BaseStatusSignal::RefreshAll(_PositionSig, _ActuatorVelocitySig, _CollectorVelocitySig, _CurrentSig);
+    BaseStatusSignal::RefreshAll(_PositionSig, _ActuatorVelocitySig, _CurrentSig);
 
-    // _feedback.velocity = _ActuatorVelocitySig.GetValue() /ActuatorTurnsPerMeter;
-    // _feedback.velocity = _CollectorVelocitySig.GetValue() / CollectorTurnPerMeter;
+    _feedback.velocity = _ActuatorVelocitySig.GetValue() /ActuatorTurnsPerMeter;
 
     _ActuatorFollowMotor.SetControl(controls::StrictFollower{_ActuatorLeadMotor.GetDeviceID()});
 
-    if (_voltageSignal.GetValue() > volt_t(5)) { //TODO: Get Value
-
-      _ActuatorLeadMotor.SetVoltage(volt_t(0));
-      _ActuatorLeadMotor.StopMotor();
-
-    } 
-
   if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
   
-    auto angular_vel = std::get<units::velocity::meters_per_second_t>(_command) * CollectorTurnPerMeter;
-    _CollectorMotor.SetControl(_CollectorVelocityVoltage.WithVelocity(angular_vel));
+    // TODO:
 
   } else {
 
-    _CollectorMotor.SetControl(controls::NeutralOut());
-
+    // TODO:
   }
-
-  _CollectorMotor.Set(limiter.Calculate(_TargetVelocity).value());
 
 }
 
@@ -109,13 +93,9 @@ bool Intake::ConfigureHardware() {
     configs.Slot1.kA = 0.0;
 
     auto status = _ActuatorLeadMotor.GetConfigurator().Apply(configs, 1_s);
-    // auto status = _CollectorMotor.GetConfigurator().Apply(configs, 1_s);
 
     configs::TalonFXConfiguration followerConfigs{};
     followerConfigs.MotorOutput.WithInverted(signals::InvertedValue::CounterClockwise_Positive);
-
-    _ActuatorLeadMotor.SetVoltage(volt_t(0));
-    _CollectorMotor.SetVoltage(volt_t(0));
     
     if (!status.IsOK()) {
         std::cerr << "Intake is not working" << std::endl;

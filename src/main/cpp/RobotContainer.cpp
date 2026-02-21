@@ -51,6 +51,10 @@ RobotContainer::RobotContainer() {
   m_climber = std::make_shared<Climber>();
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
 
+  // TODO: Turn on this and teleop for collector.
+  // m_collector = std::make_shared<Collector>();
+  // m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI).ToPtr());
+
   // m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
   // trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");
   // std::cerr << "Map, tags, localization support created..." << std::endl;

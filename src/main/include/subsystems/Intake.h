@@ -44,12 +44,11 @@ class Intake : public frc2::SubsystemBase {
 
     private:
 
-    static constexpr int _ActuatorLeadMotorID = 18; 
-    static constexpr int _CollectorMotorID = 20; 
-    static constexpr int _ActuatorFollowMotorID = 19;
+    static constexpr int _ActuatorLeadMotorID = 18;
+    static constexpr int _ActuatorFollowMotorID = 19; 
+
 
     static constexpr auto ActuatorTurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0); //TODO: Ratio
-    static constexpr auto CollectorTurnPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0); //TODO: Ratio
     static constexpr auto ActuatorAmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); //TODO: Ratio
     static constexpr auto CollectorAmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); //TODO: Ratio
 
@@ -59,17 +58,12 @@ class Intake : public frc2::SubsystemBase {
 
     ctre::phoenix6::hardware::TalonFX _ActuatorLeadMotor;
     ctre::phoenix6::hardware::TalonFX _ActuatorFollowMotor;
-    ctre::phoenix6::hardware::TalonFX _CollectorMotor;
 
     ctre::phoenix6::StatusSignal<units::angle::turn_t> _PositionSig;
     ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _ActuatorVelocitySig;
-    ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _CollectorVelocitySig;
     ctre::phoenix6::StatusSignal<units::current::ampere_t> _CurrentSig;
 
-    ctre::phoenix6::StatusSignal<units::volt_t> _voltageSignal = _ActuatorLeadMotor.GetMotorVoltage();
-
     ctre::phoenix6::controls::VelocityVoltage _ActuatorVelocityVoltage; //Slot 0
-    ctre::phoenix6::controls::VelocityVoltage _CollectorVelocityVoltage; //Slot 0
     ctre::phoenix6::controls::PositionVoltage _PositionVoltage; //Slot 1
 
     units::angular_velocity::turns_per_second_t _TargetVelocity;

@@ -38,6 +38,7 @@
 #include "subsystems/FieldMapDisplay.h"
 #include "subsystems/Flywheel.h" 
 #include "subsystems/HubFinder.h"
+#include "subsystems/Collector.h"
 #include "subsystems/Intake.h"  
 #include "subsystems/LaserCan.h" 
 #include "subsystems/Localizer.h" 
@@ -50,6 +51,7 @@
 #include "commands/Collect.h" 
 #include "commands/FlywheelTeleop.h"
 #include "commands/HoodTeleop.h"
+#include "commands/CollectorTeleop.h"
 #include "commands/IntakeTeleop.h" 
 #include "commands/Laser.h" 
 #include "commands/KickerTeleop.h"
@@ -121,6 +123,7 @@ class RobotContainer {
   std::shared_ptr<ShooterHood> m_shooterHood;
   std::shared_ptr<Spindexer> m_spindexer;
   std::shared_ptr<Turret> m_turret;
+  std::shared_ptr<Collector> m_collector;
   // std::shared_ptr<LaserCan> m_laser;
   
   bool haveInitStartPos;
