@@ -41,11 +41,12 @@ class Intake : public frc2::SubsystemBase {
     units::angular_velocity::turns_per_second_t GetIntakeTargetVelocity();
 
     void SetIntakeVelocity(units::angular_velocity::turns_per_second_t Velocity);
+    void SetIntakeVelocity(units::velocity::meters_per_second_t Velocity);
 
     void SetCommand(Command cmd);
 
     units::angle::radian_t GetArmPosition();
-    void SetArmPosition(units::angle::radian_t newPosition);
+    void SetTargetArmPosition(units::angle::radian_t newPosition);
 
     private:
 
@@ -73,7 +74,7 @@ class Intake : public frc2::SubsystemBase {
 
     ctre::phoenix6::StatusSignal<units::volt_t> _voltageSignal = _ActuatorLeadMotor.GetMotorVoltage();
 
-    ctre::phoenix6::controls::VelocityVoltage _ActuatorVelocityVoltage; //Slot 0
+    ctre::phoenix6::controls::PositionVoltage _ActuatorPositionVoltage; //Slot 0
     ctre::phoenix6::controls::VelocityVoltage _CollectorVelocityVoltage; //Slot 0
     ctre::phoenix6::controls::PositionVoltage _PositionVoltage; //Slot 1
 
@@ -83,7 +84,7 @@ class Intake : public frc2::SubsystemBase {
     units::angle::radian_t armPosition;
     units::angle::radian_t TargetArmPosition;
 
-    frc::SlewRateLimiter<units::turns_per_second> limiter{0.5_tps / 1_s};
+    frc::SlewRateLimiter<units::turns_per_second> limiter{8.0_tps / 1_s};
 
     Feedback _feedback;
 

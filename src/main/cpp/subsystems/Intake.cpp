@@ -21,11 +21,12 @@ Intake::Intake():
     _ActuatorVelocitySig(_ActuatorLeadMotor.GetVelocity()),
     _CollectorVelocitySig(_CollectorMotor.GetVelocity()),
     _CurrentSig(_ActuatorLeadMotor.GetTorqueCurrent()),
-    _ActuatorVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)), //TODO: Get Velocity
+    _ActuatorPositionVoltage(units::angle::turn_t(0.0)), //TODO: Get Velocity
     _CollectorVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)), //TODO: Get Velocity
-    _PositionVoltage(units::angle::turn_t(0.0)) //TODO: Get Velocity
+    _PositionVoltage(units::angle::turn_t(0.0)), //TODO: Get Velocity
+    _TargetVelocity(0.0_tps)
 {
-    _ActuatorVelocityVoltage.WithSlot(0);
+    _ActuatorPositionVoltage.WithSlot(0);
     _CollectorVelocityVoltage.WithSlot(0);
     _PositionVoltage.WithSlot(1);
 
@@ -47,6 +48,9 @@ void Intake::SetCommand(Command cmd) {
 void Intake::SetIntakeVelocity(units::angular_velocity::turns_per_second_t Velocity) {
   _TargetVelocity = Velocity;
 }
+void Intake::SetIntakeVelocity(units::velocity::meters_per_second_t Velocity) {
+  _TargetVelocity = Velocity*CollectorTurnPerMeter;
+}
 
 ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> Intake::GetIntakeVelocity() {
   return _ActuatorVelocitySig;
@@ -64,8 +68,8 @@ units::angle::radian_t Intake::GetArmPosition(){
   return armPosition;
 }
 
-void Intake::SetArmPosition(units::angle::radian_t newPosiiton){
-  armPosition = newPosiiton;
+void Intake::SetTargetArmPosition(units::angle::radian_t newPosiiton){
+  TargetArmPosition = newPosiiton;
 }
 
 void Intake::Periodic() {
@@ -80,25 +84,14 @@ void Intake::Periodic() {
     Velocity = _CollectorVelocitySig.GetValue();
     armPosition = _PositionSig.GetValue();
 
+    _ActuatorLeadMotor.SetControl(_ActuatorPositionVoltage.WithPosition(TargetArmPosition));
     if (_voltageSignal.GetValue() > volt_t(5)) { //TODO: Get Value
 
       _ActuatorLeadMotor.SetVoltage(volt_t(0));
       _ActuatorLeadMotor.StopMotor();
+    }
 
-    } 
-
-  if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
-  
-    auto angular_vel = std::get<units::velocity::meters_per_second_t>(_command) * CollectorTurnPerMeter;
-    _CollectorMotor.SetControl(_CollectorVelocityVoltage.WithVelocity(angular_vel));
-
-  } else {
-
-    _CollectorMotor.SetControl(controls::NeutralOut());
-
-  }
-
-  _CollectorMotor.Set(limiter.Calculate(_TargetVelocity).value());
+  _CollectorMotor.SetControl(_CollectorVelocityVoltage.WithVelocity(limiter.Calculate(_TargetVelocity)));
 
 }
 

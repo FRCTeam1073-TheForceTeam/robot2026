@@ -36,8 +36,10 @@ class IntakeTeleop :
 
     std::shared_ptr<Intake> m_intake;
     std::shared_ptr<OI> m_OI;
-    bool XButton; // activate
-    bool YButton; // deactivate
+    bool AButton; // activate
+    bool BButton; // deactivate
+    bool down;
+    bool spinning;
     
     units::angular_velocity::radians_per_second_t WheelAngularVel;
     units::angular_velocity::radians_per_second_t WheelTargetAngularVel;

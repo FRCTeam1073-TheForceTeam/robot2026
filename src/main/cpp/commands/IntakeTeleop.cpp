@@ -26,20 +26,22 @@ void IntakeTeleop::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void IntakeTeleop::Execute() {
-  XButton = m_OI->GetDriverXButton();//activate
-  YButton = m_OI->GetDriverYButton();//deactivate
+  if(!AButton==m_OI->GetDriverAButton())
+    down=!down;
+  AButton = m_OI->GetDriverBButton();
+  if(!BButton==m_OI->GetDriverBButton())
+    spinning=!spinning;
+  BButton = m_OI->GetDriverBButton();
   WheelAngularVel = m_intake->GetIntakeVelocityTurns();
   ArmPosition = m_intake->GetArmPosition();
-
-  if (XButton) {
-    m_intake->SetIntakeVelocity(8.0_rad_per_s);//TODO: get intake velocity
-    m_intake->SetArmPosition(ArmMaxPosition);
-  }
-  else if (YButton) {
-    m_intake->SetIntakeVelocity(0_rad_per_s);//TODO: get intake velocity
-    m_intake->SetArmPosition(ArmMinPosition);
-  }
-
+  if(down)
+    m_intake->SetTargetArmPosition(ArmMaxPosition);
+  else
+    m_intake->SetTargetArmPosition(ArmMinPosition);
+  if(spinning)
+    m_intake->SetIntakeVelocity(8.0_rad_per_s);
+  else
+    m_intake->SetIntakeVelocity(0.0_rad_per_s);
 }
 
 // Called once the command ends or is interrupted.
