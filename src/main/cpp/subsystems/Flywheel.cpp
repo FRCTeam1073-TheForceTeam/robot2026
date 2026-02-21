@@ -14,7 +14,7 @@ Flywheel::Flywheel():
     _followFlywheelMotor(FollowMotorId, CANBus::RoboRIO()),
     _FlywheelVelocitySig(_leadFlywheelMotor.GetVelocity()),
     _FlywheelCurrentSig(_leadFlywheelMotor.GetTorqueCurrent()),
-    limiter(250_tps / 1_s),
+    limiter(200_tps / 1_s),
     _TargetVelocity(0_mps),
     _FlywheelVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
         
