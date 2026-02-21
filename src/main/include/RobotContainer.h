@@ -31,44 +31,40 @@
 #include <units/angle.h>
 #include <frc/smartdashboard/SendableChooser.h>
 
-#include "subsystems/AprilTagFinder.h"  // Unfinished
-#include "subsystems/DriveTrain.h"// Unfinished
-#include "subsystems/ExampleSubsystem.h"// Unfinished
-#include "subsystems/FieldMap.h"// Unfinished
-#include "subsystems/FieldMapDisplay.h"// Unfinished
-#include "subsystems/Flywheel.h"// Unfinished
+#include "subsystems/AprilTagFinder.h"
+#include "subsystems/DriveTrain.h"
+#include "subsystems/ExampleSubsystem.h"
+#include "subsystems/FieldMap.h" 
+#include "subsystems/FieldMapDisplay.h"
+#include "subsystems/Flywheel.h" 
 #include "subsystems/HubFinder.h"
-#include "subsystems/Intake.h"// Unfinished
-#include "subsystems/LaserCan.h"// Unfinished
-#include "subsystems/Localizer.h"// Unfinished
-#include "subsystems/OI.h"// Unfinished
-#include "subsystems/ShooterHood.h"// Unfinished
-// #include "subsystems/ShooterLoad.h"// Unfinished
+#include "subsystems/Intake.h"  
+#include "subsystems/LaserCan.h" 
+#include "subsystems/Localizer.h" 
+#include "subsystems/OI.h" 
+#include "subsystems/ShooterHood.h" 
 #include "subsystems/Turret.h"
-#include "subsystems/Spindexer.h"// Unfinished
-#include "subsystems/ZoneFinder.h"// Unfinished
+#include "subsystems/Spindexer.h" 
+#include "subsystems/ZoneFinder.h" 
 
-#include "commands/Collect.h"// Unfinished
-#include "commands/FlywheelTeleop.h"// Unfinished
+#include "commands/Collect.h" 
+#include "commands/FlywheelTeleop.h"
 #include "commands/HoodTeleop.h"
-#include "commands/IntakeTeleop.h"// Unfinished
-#include "commands/Laser.h"// Unfinished
-#include "commands/Load.h"// Unfinished
-#include "commands/LoaderTeleop.h"// Unfinished
+#include "commands/IntakeTeleop.h" 
+#include "commands/Laser.h" 
+#include "commands/KickerTeleop.h"
 #include "commands/TurretTeleop.h"
-#include "commands/Shoot.h"// Unfinished
-#include "commands/SpindexerTeleop.h"// Unfinished
-#include "commands/Spindex.h"// Unfinished
-#include "commands/TeleopDrive.h"// Unfinished
+#include "commands/Shoot.h"
+#include "commands/SpindexerTeleop.h"
+#include "commands/TeleopDrive.h"
 #include "commands/Autos.h"
 
 
-#include "commands/Autos/TestAuto.h"// Unfinished
+#include "commands/Autos/TestAuto.h"
 
-#include <choreo/Choreo.h>// Unfinished
+#include <choreo/Choreo.h>
 
 #include "subsystems/Climber.h"
-#include "commands/Climb.h"
 #include "commands/ClimberTeleop.h"
 
 
@@ -117,37 +113,22 @@ class RobotContainer {
   std::shared_ptr<HubFinder> m_HubFinder;
   std::shared_ptr<ZoneFinder> m_ZoneFinder;
 
-
-  // std::shared_ptr<LaserCan> m_Laser;
   // std::shared_ptr<Intake> m_intake;
   // std::shared_ptr<Collect> cmd_collect;
-  std::shared_ptr<Kicker> m_shooterLoad;
-  // std::shared_ptr<Flywheel> m_flywheel;
+  std::shared_ptr<Kicker> m_kicker;
   std::shared_ptr<Climber> m_climber;
   std::shared_ptr<Flywheel> m_flywheel;
   std::shared_ptr<ShooterHood> m_shooterHood;
   std::shared_ptr<Spindexer> m_spindexer;
-  // std::shared_ptr<LaserCan> m_laser;
-  // std::shared_ptr<TestAuto> cmd_testAuto;
-  
-
-  bool haveInitStartPos;
-
-  std::shared_ptr<Spindex> cmd_zspindex;
-  std::shared_ptr<SpindexerTeleop> cmd_zspindexerTeleop;
-  // std::shared_ptr<ZoneFinder> m_ZoneFinder;
-  // std::shared_ptr<HubFinder> m_HubFinder;
   std::shared_ptr<Turret> m_turret;
-
-  // std::shared_ptr<TeleopDrive> cmd_teleopDrive;
+  // std::shared_ptr<LaserCan> m_laser;
+  
+  bool haveInitStartPos;
 
   bool isRed;
 
   const frc::SendableChooser<std::string> m_positionChooser;
-
   const frc::SendableChooser<std::string> m_levelChooser;
-
-  // std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 
   void ConfigureBindings();
 };

@@ -17,7 +17,8 @@ _spindexerMotor(SpindexerMotorId, CANBus("rio")),
 _spindexerVelocitySig(_spindexerMotor.GetVelocity()),
 _spindexerCurrentSig(_spindexerMotor.GetTorqueCurrent()),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
-_targetVelocity(0.0_tps) {
+_command(0.0_mps),
+_limiter(10.0_mps/1.0_s) {
   // Extra implementation of subsystem constructor goes here.
 
   // Assign gain slots for the commands to use:
@@ -30,25 +31,13 @@ _targetVelocity(0.0_tps) {
   }
 }
 
-
-  /// Set the command for the system.
+// Set the command for the system.
 void Spindexer::SetCommand(Command cmd) {
   // Sometimes you need to do something immediate to the hardware.
   // We can just set our target internal value.
   _command = cmd;
 }
 
-void Spindexer::SetTargetVelocity(units::angular_velocity::turns_per_second_t Velocity) {
-  _targetVelocity = Velocity;
-}
-
-ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> Spindexer::GetVelocity() {
-  return _spindexerVelocitySig;
-}
-
-units::angular_velocity::turns_per_second_t Spindexer::GetTargetVelocity() {
-  return _targetVelocity;
-}
 
 void Spindexer::Periodic() {
   // Sample the hardware:
@@ -59,32 +48,24 @@ void Spindexer::Periodic() {
 
   // Populate feedback cache:
   _feedback.force = _spindexerCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
-  _feedback.velocity = _spindexerVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
-
-  _spindexerMotor.Set(_targetVelocity.value());
+  _feedback.velocity = _spindexerVelocitySig.GetValue() / (TurnsPerMeter * GearRatio); // Convert from hardare units to subsystem units.
 
   // // Process command:
   if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
       // Send velocity based command:
+      auto limitedVel = _limiter.Calculate(std::get<units::velocity::meters_per_second_t>(_command) );
+      auto motorVel = limitedVel * TurnsPerMeter * GearRatio;
 
-      // Convert to hardware units:
-      // Multiply by conversion to produce commands.
-      auto angular_vel = std::get<units::velocity::meters_per_second_t>(_command) * TurnsPerMeter * GearRatio;
       // Send to hardware:
-      _spindexerMotor.SetControl(_commandVelocityVoltage.WithVelocity(limiter.Calculate(angular_vel)));
-  } else if (std::holds_alternative<units::length::meter_t>(_command)) {
-      // Send position based command:
+      _spindexerMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorVel));
 
-      // Convert to hardware units:
-      auto angle = std::get<units::length::meter_t>(_command) * TurnsPerMeter;
-
-      
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _spindexerMotor.SetControl(controls::NeutralOut());
+    _limiter.Reset(0.0_mps);
   }
 
-  frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity", _targetVelocity.value());  
+  frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity", _feedback.velocity.value());  
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.

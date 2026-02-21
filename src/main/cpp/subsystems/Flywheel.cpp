@@ -10,8 +10,8 @@ using namespace ctre::phoenix6;
 
 Flywheel::Flywheel(): 
     _hardwareConfigured(true), 
-    _leadFlywheelMotor(LeadMotorId, "rio"),
-    _followFlywheelMotor(FollowMotorId, "rio"),
+    _leadFlywheelMotor(LeadMotorId, CANBus::RoboRIO()),
+    _followFlywheelMotor(FollowMotorId, CANBus::RoboRIO()),
     _FlywheelVelocitySig(_leadFlywheelMotor.GetVelocity()),
     _FlywheelCurrentSig(_leadFlywheelMotor.GetTorqueCurrent()),
     limiter(250_tps / 1_s),

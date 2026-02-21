@@ -31,8 +31,8 @@ class Climber : public frc2::SubsystemBase {
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
       units::velocity::meters_per_second_t velocity;
-      units::force::newton_t force;
       units::length::meter_t position;
+      units::force::newton_t force;
   };
 
   using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
@@ -41,29 +41,11 @@ class Climber : public frc2::SubsystemBase {
 
   void Periodic() override;
 
-
   /// Access the latest feedback from the system. 
   const Feedback& GetFeedback() const { return _feedback; }
 
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> GetVelocity();
-
-  units::angular_velocity::turns_per_second_t GetTargetVelocity();
-
-  void SetVelocity(units::angular_velocity::turns_per_second_t Velocity);
-
-  void SetPosition(units::length::meter_t pos);
-
-  units::length::meter_t GetPosition();
-
   units::length::meter_t GetTargetPosition();
   bool IsHooked();
-
-  void SetVoltage(units::volt_t Voltage);
-
-  units::volt_t GetVoltage();
-
-  void StopMotor();
-
 
   /// Set the command for the system.
   void SetCommand(Command cmd);
@@ -87,13 +69,12 @@ class Climber : public frc2::SubsystemBase {
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _VelocitySig;
   ctre::phoenix6::StatusSignal<units::current::ampere_t> _CurrentSig;
   ctre::phoenix6::StatusSignal<units::angle::turn_t> _PositionSig;
-  ctre::phoenix6::StatusSignal<units::volt_t> _voltageSignal = _Motor.GetMotorVoltage();
+  // ctre::phoenix6::StatusSignal<units::volt_t> _voltageSignal = _Motor.GetMotorVoltage();
 
 
   // Example velocity and position controls:
   ctre::phoenix6::controls::VelocityVoltage _VelocityVoltage;  // Uses Slot0 gains.
-
-   ctre::phoenix6::controls::PositionVoltage _PositionVoltage;
+  ctre::phoenix6::controls::PositionVoltage _PositionVoltage;
   
   // Cached feedback:
   Feedback _feedback;
@@ -101,9 +82,6 @@ class Climber : public frc2::SubsystemBase {
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
 
-  units::angular_velocity::turns_per_second_t _TargetVelocity;
-
-  units::length::meter_t TargetPosition;
   units::length::meter_t Position;
 
   units::angle::turn_t RotationPosition;

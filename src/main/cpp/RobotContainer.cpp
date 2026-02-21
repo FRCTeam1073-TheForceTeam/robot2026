@@ -18,19 +18,13 @@
 // const std::string RobotContainer::testAuto = "Test Auto";
 
 RobotContainer::RobotContainer() {
-// cmd_collect = std::make_shared<Collect>(m_intake);
-// m_climber = std::make_shared<Climber>();
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
   m_drivetrain = std::make_shared<Drivetrain>();
   std::cerr << "Drivetrain created..." << std::endl;
 
-// m_drivetrain = std::make_shared<Drivetrain>();
-
-// m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, nullptr));
-// m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer));
   m_turret = std::make_shared<Turret>();
-  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI));
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI).ToPtr());
 
   //m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
   m_FieldMap = std::make_shared<FieldMap>();
@@ -40,8 +34,9 @@ RobotContainer::RobotContainer() {
   m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
   m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
 
-  
-  // m_flywheel = std::make_shared<Flywheel>();
+  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
+
+
   // m_intake = std::make_shared<Intake>();
   // m_Laser = std::make_shared<LaserCan>();
   m_spindexer = std::make_shared<Spindexer>();
@@ -52,7 +47,7 @@ RobotContainer::RobotContainer() {
 // m_shooterLoad = std::make_shared<ShooterLoad>();
 // m_Tags = std::make_shared<AprilTagFinder>();
   m_shooterHood = std::make_shared<ShooterHood>();
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI));
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI).ToPtr());
   m_climber = std::make_shared<Climber>();
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
 
@@ -60,15 +55,15 @@ RobotContainer::RobotContainer() {
   // trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>("Test_Auto");
   // std::cerr << "Map, tags, localization support created..." << std::endl;
   // m_climber = std::make_shared<Climber>();
-  m_shooterLoad = std::make_shared<Kicker>();
-  m_shooterLoad->SetDefaultCommand(LoaderTeleop(m_shooterLoad,m_OI));
+  m_kicker = std::make_shared<Kicker>();
+  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker,m_OI).ToPtr());
 
   std::cerr << "Mechanisms created..." << std::endl;
 
 
   // Configure detault commands for subsystemns:
   //m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI).ToPtr());
-  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
+
 
   std::cerr << "Default commands assigned..." << std::endl;
   

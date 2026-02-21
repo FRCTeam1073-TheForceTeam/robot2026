@@ -47,5 +47,4 @@ class SpindexerTeleop
     units::velocity::meters_per_second_t velocity;
     units::velocity::meters_per_second_t targetVelocity;
 
-
 };

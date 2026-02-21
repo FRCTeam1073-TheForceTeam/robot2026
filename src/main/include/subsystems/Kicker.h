@@ -55,7 +55,7 @@ class Kicker : public frc2::SubsystemBase {
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
+  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t>;
 
 
   // Constructor for the subsystem.
@@ -76,13 +76,6 @@ class Kicker : public frc2::SubsystemBase {
   /// Set the command for the system.
   void SetCommand(Command cmd);
 
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> GetLoadVelocity();
-
-  units::angular_velocity::turns_per_second_t GetLoadTargetVelocity();
-
-  void SetTargetLoadVelocity(units::angular_velocity::turns_per_second_t Velocity);
-
-  void SetTargetLoadVelocity(units::velocity::meters_per_second_t Velocity);
  private:
 
   // Helper function for configuring hardware from within the constructor of the subsystem.
@@ -91,13 +84,13 @@ class Kicker : public frc2::SubsystemBase {
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
 
-  //  TalonFX motor interface.
-  ctre::phoenix6::hardware::TalonFX _loadMotor;
-  //TODO: put in lasercan
+  // TalonFX motor interface.
+  ctre::phoenix6::hardware::TalonFX _kickerMotor;
+  // TODO: put in lasercan
 
   // CTRE hardware feedback signals:
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _loadVelocitySig;
-  ctre::phoenix6::StatusSignal<units::current::ampere_t> _loadCurrentSig;
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _kickerVelocitySig;
+  ctre::phoenix6::StatusSignal<units::current::ampere_t> _kickerCurrentSig;
 
 
   //  velocity and position controls:
@@ -110,7 +103,7 @@ class Kicker : public frc2::SubsystemBase {
   Command  _command;
 
   // Set the motors target velocity
-  units::angular_velocity::turns_per_second_t _targetVelocity;
+  // units::angular_velocity::turns_per_second_t _targetVelocity;
 
-  frc::SlewRateLimiter<units::turns_per_second> limiter{12.0_tps / 1_s};
+  frc::SlewRateLimiter<units::meters_per_second> _limiter;
 };

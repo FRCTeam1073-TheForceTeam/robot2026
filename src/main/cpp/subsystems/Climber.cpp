@@ -13,7 +13,8 @@
     _CurrentSig(_Motor.GetTorqueCurrent()),
     _PositionSig(_Motor.GetPosition()),
     _VelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
-    _PositionVoltage(units::angle::turn_t(0.0)) {
+    _PositionVoltage(units::angle::turn_t(0.0)),
+    _command(0.0_mps) {
     _VelocityVoltage.WithSlot(0);
  
     _hardwareConfigured = ConfigureHardware();
@@ -29,42 +30,7 @@ void Climber::SetCommand(Command cmd) {
   _command = cmd;
 }
 
-void Climber::SetVelocity(units::angular_velocity::turns_per_second_t Velocity) {
-    _TargetVelocity = Velocity;
-}
-void Climber::SetPosition(units::length::meter_t pos){
-  TargetPosition = pos;
-}
-ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> Climber::GetVelocity() {
-    return _VelocitySig;
-}
-units::angular_velocity::turns_per_second_t Climber::GetTargetVelocity() {
-    return _TargetVelocity;
-}
-units::length::meter_t Climber::GetPosition() {
-  return Position;
-}
-units::length::meter_t Climber::GetTargetPosition() {
-  return TargetPosition;
-}
-void Climber::SetVoltage(units::volt_t Voltage) {
-    _Motor.SetVoltage(Voltage);
-}
-units::volt_t Climber::GetVoltage() {
-    return _voltageSignal.GetValue();
-}
-void Climber::StopMotor() {
-    _Motor.StopMotor();
-}
-  
-
-
 bool Climber::IsHooked() {
-  if (m_ClimberOnInput.Get()) {
-      _climberOn = true; // these may be swapped depending on the digitalinput default is //
-    } else {
-      _climberOn = false;
-    }
   return _climberOn;
 }
 
@@ -98,7 +64,9 @@ void Climber::Periodic() {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _Motor.SetControl(controls::NeutralOut());
     }
-    frc::SmartDashboard::PutNumber("Climber/Load", abs(_Motor.GetTorqueCurrent().GetValue().value()));
+
+    frc::SmartDashboard::PutNumber("Climber/Vel(mps)", _feedback.velocity.value());
+    frc::SmartDashboard::PutNumber("Climber/Load(A)", std::abs(_feedback.force.value()));
 }
 
 bool Climber::ConfigureHardware() {
@@ -116,6 +84,7 @@ configs::TalonFXConfiguration configs{};
     configs.Slot0.kI = 0.0;
     configs.Slot0.kD = 0.01;
     configs.Slot0.kA = 0.0;
+    configs.Slot0.kS = 0.0;
 
     // Set whether motor control direction is inverted or not:
     configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
