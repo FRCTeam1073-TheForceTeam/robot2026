@@ -49,7 +49,7 @@ Drivetrain::Drivetrain() :
     _targetSpeeds.vx = 0_mps;
     _targetSpeeds.vy = 0_mps;
     _targetSpeeds.omega = 0_rad_per_s;
-    _hardwareConfigured &= ConfigureHardware();
+    _hardwareConfigured = ConfigureHardware();
 
     for (size_t ii(0); ii < _swerveModules.size(); ++ii) {
         _hardwareConfigured &= _swerveModules[ii].HardwareConfigured();
@@ -59,7 +59,7 @@ Drivetrain::Drivetrain() :
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
     }
 
-    frc::SmartDashboard::PutNumber("Drivetrain/hardware_configured", _hardwareConfigured);
+    frc::SmartDashboard::PutBoolean("Drivetrain/Drivetrain - hardware_configured", _hardwareConfigured);
 }
 
 void Drivetrain::Periodic()  {

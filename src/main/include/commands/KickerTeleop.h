@@ -34,4 +34,5 @@ class KickerTeleop
    std::shared_ptr<Kicker> m_kicker;
    std::shared_ptr<OI> m_OI;
    bool AButton;
+   bool BButton;
 };

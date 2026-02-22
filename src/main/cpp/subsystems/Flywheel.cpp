@@ -25,7 +25,7 @@ Flywheel::Flywheel():
         std::cerr << "hardware failed to conifgure in shooter" << std::endl;
     }
 
-    frc::SmartDashboard::PutNumber("Flywheel/hardware_configured", _hardwareConfigured);
+    frc::SmartDashboard::PutBoolean("Flywheel/Flywheel - hardware_configured", _hardwareConfigured);
 }
 
 

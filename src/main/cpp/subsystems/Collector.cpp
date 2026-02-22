@@ -30,7 +30,7 @@ _limiter(10.0_mps/1.0_s) {
     std::cerr << "Collector: Hardware Failed To Configure!" << std::endl;
   }
 
-  frc::SmartDashboard::PutNumber("Collector/hardware_configured", _hardwareConfigured);
+  frc::SmartDashboard::PutBoolean("Collector/Collector - hardware_configured", _hardwareConfigured);
 }
 
 // Set the command for the system.
@@ -68,7 +68,7 @@ void Collector::Periodic() {
   }
 
   frc::SmartDashboard::PutNumber("Collector/Velocity(mps)", _feedback.velocity.value());
-  frc::SmartDashboard::PutNumber("Collecter/TargetVelocity(mps)", _limiter.LastValue().value());
+  frc::SmartDashboard::PutNumber("Collector/TargetVelocity(mps)", _limiter.LastValue().value());
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
@@ -98,6 +98,7 @@ bool Collector::ConfigureHardware() {
 
   if (!status.IsOK()) {
       std::cerr << "Spindexer: config failed to config!" << std::endl;
+    return false;
   }
 
   // Set our neutral mode to brake on:
@@ -108,7 +109,7 @@ bool Collector::ConfigureHardware() {
       return false;
   }
   // Log errors.
-  return false;
+  return true;
 }
 
 //yippeee

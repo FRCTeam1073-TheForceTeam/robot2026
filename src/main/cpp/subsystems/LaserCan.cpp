@@ -24,7 +24,7 @@ _laserCAN(28)
     std::cerr << "LaserCAN: Hardware Failed To Configure!" << std::endl;
   }
 
-  frc::SmartDashboard::PutNumber("LaserCan/hardware_configured", _hardwareConfigured);
+  frc::SmartDashboard::PutBoolean("LaserCan/LaserCAN - hardware_configured", _hardwareConfigured);
 }
 
 

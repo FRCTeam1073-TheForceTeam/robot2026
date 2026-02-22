@@ -23,7 +23,7 @@
         std::cerr << "ExampleSubsystem: Hardware Failed To Configure!" << std::endl;
     }
 
-    frc::SmartDashboard::PutNumber("Climber/hardware_configured", _hardwareConfigured);
+    frc::SmartDashboard::PutBoolean("Climber/Climber - hardware_configured", _hardwareConfigured);
 };
 
 void Climber::SetCommand(Command cmd) {

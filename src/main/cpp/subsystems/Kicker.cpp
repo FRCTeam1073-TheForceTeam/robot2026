@@ -33,7 +33,7 @@ _hardwareConfigured(true) {
     std::cerr << "ShooterLoad: Hardware Failed To Configure!" << std::endl;
   }
 
-  frc::SmartDashboard::PutNumber("Kicker/hardware_configured", _hardwareConfigured);
+  frc::SmartDashboard::PutBoolean("Kicker/Kicker - hardware_configured", _hardwareConfigured);
 }
 
 void Kicker::SetCommand(Command cmd) {

@@ -34,7 +34,7 @@ _commandVelocityVoltage(units::angular_velocity::radians_per_second_t(0.0)) {
     std::cerr << "ExampleSubsystem: Hardware Failed To Configure!" << std::endl;
   }
 
-  frc::SmartDashboard::PutNumber("ShooterHood/hardware_configured", _hardwareConfigured);
+  frc::SmartDashboard::PutBoolean("Hood/Hood - hardware_configured", _hardwareConfigured);
 }
 
 
@@ -121,17 +121,19 @@ bool ShooterHood::ConfigureHardware() {
       return false;
   }
 
+  _hoodMotor.SetPosition(units::angle::turn_t(0));
+
   // Set our neutral mode to brake on:
   status = _hoodMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
 
   if (!status.IsOK()) {
       std::cerr << "ShooterHood: Neutral mode brake Failed To Configure!" << std::endl;
+    return false;
   }
 
 
   // Depends on mechanism/subsystem design:
   // Optionally start out at zero after initialization:
-  _hoodMotor.SetPosition(units::angle::turn_t(0));
 
   // Log errors.
   return true;

@@ -18,8 +18,13 @@ void KickerTeleop::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void KickerTeleop::Execute() {
   AButton = m_OI->GetOperatorAButton();
+  BButton = m_OI->GetOperatorBButton();
+
   if(AButton) {
-    m_kicker->SetCommand(1.65_mps);
+    m_kicker->SetCommand(2.0_mps);
+  }
+  else if (BButton) {
+    m_kicker->SetCommand(-1.65_mps);
   }
   else
   {

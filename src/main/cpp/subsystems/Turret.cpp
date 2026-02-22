@@ -36,7 +36,7 @@ _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
     std::cerr << "ExampleSubsystem: Hardware Failed To Configure!" << std::endl;
   }
 
-  frc::SmartDashboard::PutNumber("Turret/hardware_configured", _hardwareConfigured);
+  frc::SmartDashboard::PutBoolean("Turret/Turret - hardware_configured", _hardwareConfigured);
 }
 
   /// Set the command for the system.

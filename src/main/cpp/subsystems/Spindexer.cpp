@@ -30,7 +30,7 @@ _limiter(10.0_mps/1.0_s) {
     std::cerr << "Spindexer: Hardware Failed To Configure!" << std::endl;
   }
 
-  frc::SmartDashboard::PutNumber("Spindexer/hardware_configured", _hardwareConfigured);
+  frc::SmartDashboard::PutBoolean("Spindexer/Spindexer - hardware_configured", _hardwareConfigured);
 }
 
 // Set the command for the system.
