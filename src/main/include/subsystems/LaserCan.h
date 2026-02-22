@@ -34,17 +34,9 @@ class LaserCan : public frc2::SubsystemBase {
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
-      units::length::meter_t position;
-      units::velocity::meters_per_second_t velocity;
-      units::force::newton_t force;
+    bool is_valid;
+    units::length::meter_t range;
   };
-
-
-  // Commands may be modal (different command modes):
-  // std::monostate is the "empty" command or "no command given".
-  // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
-
 
   // Constructor for the subsystem.
   LaserCan();
@@ -61,11 +53,6 @@ class LaserCan : public frc2::SubsystemBase {
   /// Access the latest feedback from the system. 
   const Feedback& GetFeedback() const { return _feedback; }
 
-  /// Set the command for the system.
-  void SetCommand(Command cmd);
-
-  void InitializeLaser();
-
  private:
 
   // Helper function for configuring hardware from within the constructor of the subsystem.
@@ -77,11 +64,7 @@ class LaserCan : public frc2::SubsystemBase {
   // Cached feedback:
   Feedback _feedback;
 
-  // Cached command: Variant of possible different kinds of commands.
-  Command  _command;
-
-  grpl::LaserCan laserCAN;
-  
+  grpl::LaserCan _laserCAN;
 };
 
 

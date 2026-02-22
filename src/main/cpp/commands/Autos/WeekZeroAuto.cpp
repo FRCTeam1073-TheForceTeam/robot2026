@@ -13,7 +13,7 @@ frc2::CommandPtr WeekZeroAuto::Create(
 
       // return frc2::SequentialCommandGroup(
       //   frc2::PrintCommand("Inside Sequence"),
-      //   frc2::InstantCommand([Flywheel] {Flywheel->SetVelocity(20_mps);}, {Flywheel.get()}),
+      //   frc2::InstantCommand([Flywheel] {Flywheel->SetCommand(20_mps);}, {Flywheel.get()}),
       //   frc2::InstantCommand([ShooterHood] {ShooterHood->SetCommand(0.1_rad * 3);}, {ShooterHood.get()}), //TODO: find value of scale factor * level
       //   frc2::InstantCommand([Turret] {Turret->SetCommand(0_deg);}, {Turret.get()}),
       //   frc2::WaitCommand(5_s),
@@ -22,7 +22,7 @@ frc2::CommandPtr WeekZeroAuto::Create(
       //   frc2::InstantCommand([Kicker] {Kicker->SetCommand(1.65_mps);}, {Kicker.get()}),
       //   frc2::WaitCommand(12_s),
       //   frc2::PrintCommand("Post Wait 2"),
-      //   frc2::InstantCommand([Flywheel] {Flywheel->SetVelocity(0_mps);}, {Flywheel.get()}),
+      //   frc2::InstantCommand([Flywheel] {Flywheel->SetCommand(0_mps);}, {Flywheel.get()}),
       //   frc2::InstantCommand([Spindexer] {Spindexer->SetCommand(0_mps);}, {Spindexer.get()}),
       //   frc2::InstantCommand([Kicker] {Kicker->SetCommand(0_mps);}, {Kicker.get()}),
       //   frc2::PrintCommand("end of command")

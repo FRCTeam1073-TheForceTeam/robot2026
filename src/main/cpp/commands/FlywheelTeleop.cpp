@@ -18,28 +18,25 @@ FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel> flywheel, std::shared_p
 
 // Called wh(std::shared_ptr<Drivetrain> drivetrainen the command is initially scheduled.
 void FlywheelTeleop::Initialize() {
-  m_flywheel->SetVelocity(0_mps);
-  frc::SmartDashboard::PutBoolean("FlywheelTeleop/Running",false);
-  frc::SmartDashboard::PutNumber("Flywheel/CommandedVelocity", 0.0);
+  m_flywheel->SetCommand(0_mps);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void FlywheelTeleop::Execute() {
   XButton = m_OI->GetOperatorXButton();
-  frc::SmartDashboard::PutBoolean("FlywheelTeleop/Running",true);
   if (XButton) {
     frc::SmartDashboard::PutNumber("FlywheelTeleop/CommandedVelocity", maxVel.value());
-    m_flywheel->SetVelocity(maxVel);
+    m_flywheel->SetCommand(maxVel);
   }
   else{
     frc::SmartDashboard::PutNumber("FlywheelTeleop/CommandedVelocity", 0.0);
-    m_flywheel->SetVelocity(0_mps);
+    m_flywheel->SetCommand(0_mps);
   }
 }
 
 // Called once the command ends or is interrupted.
 void FlywheelTeleop::End(bool interrupted) {
-  m_flywheel->SetVelocity(0_mps);
+  m_flywheel->SetCommand(std::monostate()); // Coast/no-command.
 }
 
 // Returns true when the command should end.

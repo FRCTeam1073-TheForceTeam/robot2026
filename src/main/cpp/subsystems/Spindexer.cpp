@@ -29,6 +29,8 @@ _limiter(10.0_mps/1.0_s) {
   if (!_hardwareConfigured) {
     std::cerr << "Spindexer: Hardware Failed To Configure!" << std::endl;
   }
+
+  frc::SmartDashboard::PutNumber("Spindexer/hardware_configured", _hardwareConfigured);
 }
 
 // Set the command for the system.
@@ -42,9 +44,6 @@ void Spindexer::SetCommand(Command cmd) {
 void Spindexer::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_spindexerVelocitySig, _spindexerCurrentSig);
- 
-  // Latency compensate the feedback when you sample a value and its rate:
-  // auto compensatedPos = BaseStatusSignal::GetLatencyCompensatedValue(_spindexerPositionSig, _spindexerVelocitySig);
 
   // Populate feedback cache:
   _feedback.force = _spindexerCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
@@ -65,7 +64,8 @@ void Spindexer::Periodic() {
     _limiter.Reset(0.0_mps);
   }
 
-  frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity", _feedback.velocity.value());  
+  frc::SmartDashboard::PutNumber("Spindexer/Velocity(mps)", _feedback.velocity.value());  
+  frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity(mps)", _limiter.LastValue().value());  
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
@@ -95,21 +95,19 @@ bool Spindexer::ConfigureHardware() {
 
   if (!status.IsOK()) {
       std::cerr << "Spindexer: config failed to config!" << std::endl;
+      return false;
   }
 
   // Set our neutral mode to brake on:
-  status = _spindexerMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
+  status = _spindexerMotor.SetNeutralMode(signals::NeutralModeValue::Coast, 1_s);
 
   if (!status.IsOK()) {
       std::cerr << "Spindexer: neutral mode failed to config :(!" << std::endl;
+      return false;
   }
 
-  // Depends on mechanism/subsystem design:
-  // Optionally start out at zero after initialization:
-  // _spindexerMotor.SetPosition(units::angle::turn_t(0));
-
   // Log errors.
-  return false;
+  return true;
 }
 
 //yippeee

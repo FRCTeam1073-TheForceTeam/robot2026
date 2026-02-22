@@ -72,7 +72,8 @@ RobotContainer::RobotContainer() {
   m_turret = std::make_shared<Turret>();
   m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI).ToPtr());
 
-
+  m_laser = std::make_shared<LaserCan>();
+  
   std::cerr << "Mechanisms created..." << std::endl;
 
 
