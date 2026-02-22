@@ -62,9 +62,9 @@ void TeleopDrive::Execute() {
 
     if (allianceSign == 0) setAlliance(); // Try to figure it out if not already set.
 
-    leftY = m_OI->GetDriverLeftY();
-    leftX = m_OI->GetDriverLeftX();
-    rightX =  m_OI->GetDriverRightX();
+    double leftY = m_OI->GetDriverLeftY();
+    double leftX = m_OI->GetDriverLeftX();
+    double rightX =  m_OI->GetDriverRightX();
     avgTorque = m_drivetrain->GetAverageLoad();
     currentTime = frc::Timer::GetMatchTime();
 
@@ -94,17 +94,17 @@ void TeleopDrive::Execute() {
         bool driverDPadRight = m_OI->GetDriverDPadRight();
         int driverDPadAngle = m_OI->GetDriverDPadAngle();
 
-        mult1 = 1.0 + (m_OI->GetDriverLeftTrigger() * ((std::sqrt(36)) - 1));
-        mult2 = 1.0 + (m_OI->GetDriverRightTrigger() * ((std::sqrt(36)) - 1));
+        double mult1 = 1.0 + (m_OI->GetDriverLeftTrigger() * ((std::sqrt(36)) - 1));
+        double mult2 = 1.0 + (m_OI->GetDriverRightTrigger() * ((std::sqrt(36)) - 1));
 
         //set deadzones
         if (std::abs(leftY) < JOYSTICK_DEADZONE) {leftY = 0.0;}
         if (std::abs(leftX) < JOYSTICK_DEADZONE) {leftX = 0.0;}
         if (std::abs(rightX) < JOYSTICK_DEADZONE) {rightX = 0.0;}
 
-        vx = std::clamp((allianceSign * leftY * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
-        vy = std::clamp((allianceSign * leftX * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
-        omega = std::clamp((rightX * maximumRotationVelocity / 25) * mult1 * mult2, -maximumRotationVelocity, maximumRotationVelocity);
+        auto vx = std::clamp((allianceSign * leftY * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
+        auto vy = std::clamp((allianceSign * leftX * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
+        auto omega = std::clamp((rightX * maximumRotationVelocity / 25) * mult1 * mult2, -maximumRotationVelocity, maximumRotationVelocity);
 
         frc::SmartDashboard::PutNumber("TeleopDrive/vx", vx.value());
         frc::SmartDashboard::PutNumber("TeleopDrive/vy", vy.value());

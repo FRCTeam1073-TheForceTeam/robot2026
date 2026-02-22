@@ -5,20 +5,26 @@
 #pragma once
 
 #include <frc2/command/Command.h>
+#include <frc2/command/Commands.h>
 #include <frc2/command/CommandHelper.h>
 
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/FunctionalCommand.h>
+#include <frc2/command/RunCommand.h>
 
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/InstantCommand.h>
+#include <frc2/command/PrintCommand.h>
 #include <subsystems/Flywheel.h>
 #include <subsystems/Spindexer.h>
 #include <subsystems/ShooterHood.h>
 #include <subsystems/Kicker.h>
 #include <subsystems/Turret.h>
 
+#include <frc2/command/Commands.h>
+
+#include <iostream>
 /**
  * An example command.
  *
@@ -26,8 +32,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class WeekZeroAuto {
-    public:
+class WeekZeroAuto
+    : public frc2::CommandHelper<frc2::SequentialCommandGroup, WeekZeroAuto> {
+
+public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */

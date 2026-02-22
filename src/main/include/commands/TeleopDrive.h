@@ -58,19 +58,8 @@ private:
 
     static constexpr units::velocity::meters_per_second_t maximumLinearVelocity = 3.5_mps;
     static constexpr units::angular_velocity::radians_per_second_t maximumRotationVelocity = 4.0_rad_per_s;
-
-    double mult1;
-    double mult2;
-
-    double leftX;
-    double leftY;
-    double rightX;
     
     units::time::second_t currentTime;
-
-    units::velocity::meters_per_second_t vx;
-    units::velocity::meters_per_second_t vy;
-    units::angular_velocity::radians_per_second_t omega;
 
     // Used to flip the sign based on which alliance we are set for:
     int allianceSign;

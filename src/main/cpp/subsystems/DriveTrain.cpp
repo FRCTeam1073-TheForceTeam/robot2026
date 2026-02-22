@@ -46,7 +46,9 @@ Drivetrain::Drivetrain() :
     _hardwareConfigured(false),
     _parkingBrake(false)
 {
-
+    _targetSpeeds.vx = 0_mps;
+    _targetSpeeds.vy = 0_mps;
+    _targetSpeeds.omega = 0_rad_per_s;
     _hardwareConfigured &= ConfigureHardware();
 
     for (size_t ii(0); ii < _swerveModules.size(); ++ii) {

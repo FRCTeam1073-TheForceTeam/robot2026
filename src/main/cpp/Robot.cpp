@@ -89,6 +89,9 @@ void Robot::AutonomousInit() {
       //command.Schedule();
       frc2::CommandScheduler::GetInstance().Schedule(command);
     }
+    else {
+      std::cerr << "Empty Command" << std::endl;
+    }
   } catch (std::exception& e) { 
     std::cerr << "AUTONOMOUS INIT THREW EXCEPTION!: " << e.what() << std::endl;
   }

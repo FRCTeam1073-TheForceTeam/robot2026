@@ -63,6 +63,7 @@
 
 
 #include "commands/Autos/TestAuto.h"
+#include "commands/Autos/WeekZeroAuto.h"
 
 #include <choreo/Choreo.h>
 

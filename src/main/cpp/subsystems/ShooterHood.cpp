@@ -120,7 +120,7 @@ configs::TalonFXConfiguration configs{};
     configs.Slot1.kA = 0.0;
 
     // Set whether motor control direction is inverted or not:
-    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
+    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
 
     // Set the control configuration for the drive motor:
     auto status = _hoodMotor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.

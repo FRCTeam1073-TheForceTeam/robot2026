@@ -18,10 +18,10 @@ ctre::phoenix6::configs::Slot0Configs SwerveControlConfig::GetSteerControlConfig
     ctre::phoenix6::configs::Slot0Configs config;
     config.kV = 0.153;     // kV for X44
     config.kP = 10.0;
-    config.kI = 0.2;
+    config.kI = 0.4;
     config.kD = 0.02;
     config.kA = 0.0;
-    config.kS = 0.01;
+    config.kS = 0.05;
 
     return config;
 }
