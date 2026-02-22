@@ -27,8 +27,10 @@ _limiter(10.0_mps/1.0_s) {
   // Do hardware configuration and track if it succeeds:
   _hardwareConfigured = ConfigureHardware();
   if (!_hardwareConfigured) {
-    std::cerr << "Spindexer: Hardware Failed To Configure!" << std::endl;
+    std::cerr << "Collector: Hardware Failed To Configure!" << std::endl;
   }
+
+  frc::SmartDashboard::PutNumber("Collector/hardware_configured", _hardwareConfigured);
 }
 
 // Set the command for the system.
@@ -65,7 +67,8 @@ void Collector::Periodic() {
     _limiter.Reset(0.0_mps);
   }
 
-  frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity", _feedback.velocity.value());  
+  frc::SmartDashboard::PutNumber("Collector/Velocity(mps)", _feedback.velocity.value());
+  frc::SmartDashboard::PutNumber("Collecter/TargetVelocity(mps)", _limiter.LastValue().value());
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
@@ -102,11 +105,8 @@ bool Collector::ConfigureHardware() {
 
   if (!status.IsOK()) {
       std::cerr << "Spindexer: neutral mode failed to config :(!" << std::endl;
+      return false;
   }
-
-  // Start out at zero after initialization:
-  _motor.SetPosition(units::angle::turn_t(0));
-
   // Log errors.
   return false;
 }
