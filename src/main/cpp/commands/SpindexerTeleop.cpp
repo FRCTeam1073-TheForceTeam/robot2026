@@ -21,7 +21,7 @@ void SpindexerTeleop::Initialize() {
 void SpindexerTeleop::Execute() {  
 
   if (m_OI->GetOperatorAButton()){
-    targetVelocity = 1.5_mps;
+    targetVelocity = 4.2_mps;
     isMoving = true;
   }
   else{

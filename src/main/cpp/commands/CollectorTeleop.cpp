@@ -21,11 +21,11 @@ void CollectorTeleop::Initialize() {
 void CollectorTeleop::Execute() {  
   
   if (m_OI->GetDriverBButton()){
-    targetVelocity = -4.0_mps;
+    targetVelocity = 3.5_mps;
     isMoving = true;
   }
   else if (m_OI->GetDriverXButton()) { //for testing purposes?
-    targetVelocity = 4.0_mps;
+    targetVelocity = -3.5_mps;
     isMoving = true;  
   }
   else{

@@ -76,10 +76,11 @@ configs::TalonFXConfiguration configs{};
 
     // Slot 0 for the velocity control loop:
     configs.Slot0.kV = 0.12;
-    configs.Slot0.kP = 0.15;
+    configs.Slot0.kP = 0.3;
     configs.Slot0.kI = 0.0;
     configs.Slot0.kD = 0.01;
     configs.Slot0.kA = 0.0;
+    configs.Slot0.kS = 0.05;
   
 
     // Set whether motor control direction is inverted or not:

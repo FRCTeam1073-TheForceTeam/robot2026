@@ -21,7 +21,7 @@ void KickerTeleop::Execute() {
   BButton = m_OI->GetOperatorBButton();
 
   if(AButton) {
-    m_kicker->SetCommand(2.0_mps);
+    m_kicker->SetCommand(4.5_mps);
   }
   else if (BButton) {
     m_kicker->SetCommand(-1.65_mps);

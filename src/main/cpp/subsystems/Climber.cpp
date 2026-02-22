@@ -68,6 +68,7 @@ void Climber::Periodic() {
     }
 
     frc::SmartDashboard::PutNumber("Climber/Vel(mps)", _feedback.velocity.value());
+    frc::SmartDashboard::PutNumber("Climber/TargetVel(mps)", limiter.LastValue().value());
     frc::SmartDashboard::PutNumber("Climber/Load(A)", std::abs(_feedback.force.value()));
 }
 

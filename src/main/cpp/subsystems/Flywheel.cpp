@@ -84,9 +84,9 @@ bool Flywheel::ConfigureHardware() {
 
     // Slot 0 for the velocity control loop:
     configs.Slot0.kV = 0.12;
-    configs.Slot0.kP = 0.2;
+    configs.Slot0.kP = 0.25;
     configs.Slot0.kI = 0.0;
-    configs.Slot0.kD = 0.01;
+    configs.Slot0.kD = 0.025;
     configs.Slot0.kA = 0.0;
     configs.Slot0.kS = 0.2;
 

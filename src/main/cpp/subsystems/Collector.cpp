@@ -83,7 +83,7 @@ bool Collector::ConfigureHardware() {
 
   // Slot 0 for the velocity control loop:
   configs.Slot0.kV = 0.12;
-  configs.Slot0.kP = 0.2;
+  configs.Slot0.kP = 0.25;
   configs.Slot0.kI = 0.0;
   configs.Slot0.kD = 0.0;
   configs.Slot0.kA = 0.0;
@@ -91,7 +91,7 @@ bool Collector::ConfigureHardware() {
 
   
   // Set whether motor control direction is inverted or not:
-  configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
+  configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
 
   // Set the control configuration for the drive motor:
   auto status = _motor.GetConfigurator().Apply(configs, 1_s); // 1 Second configuration timeout.
