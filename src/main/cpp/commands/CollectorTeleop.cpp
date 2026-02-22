@@ -19,23 +19,21 @@ void CollectorTeleop::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void CollectorTeleop::Execute() {  
+  
+  if (m_OI->GetDriverBButton()){
+    targetVelocity = 1.5_mps;
+    isMoving = true;
+  }
+  else if (m_OI->GetDriverXButton()) { //for testing purposes?
+    targetVelocity = -1.5_mps;
+    isMoving = true;  
+  }
+  else{
+    targetVelocity = 0_mps;
+    isMoving = false;
+  }
 
-  // TODO: Button mappings.
-  //
-  // if (m_OI->GetOperatorAButton()){
-  //   targetVelocity = 1.5_mps;
-  //   isMoving = true;
-  // }
-  // else if (m_OI->GetOperatorBButton()) {
-  //   targetVelocity = -1.5_mps;
-  //   isMoving = true;  
-  // }
-  // else{
-  //   targetVelocity = 0_mps;
-  //   isMoving = false;
-  // }
-
-  // m_collector->SetCommand(targetVelocity);
+  m_collector->SetCommand(targetVelocity);
   frc::SmartDashboard::PutBoolean("CollectorTeleop/AButton", m_OI->GetOperatorAButton());
   frc::SmartDashboard::PutBoolean("CollectorTeleop/Is Moving", isMoving);
 }
