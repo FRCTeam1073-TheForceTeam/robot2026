@@ -36,8 +36,9 @@ class Collector : public frc2::SubsystemBase {
 
   // Mechanism conversion constants for the subsystem:
   // Gear Ratio:
-  static constexpr auto GearRatio = units::angle::turn_t(3) / units::angle::turn_t(1);
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(0.1524 * std::numbers::pi);
+  static constexpr units::meter_t wheelDiameter = units::inch_t(1.25);
+  static constexpr auto GearRatio = units::angle::turn_t(2) / units::angle::turn_t(1);
+  static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / (wheelDiameter * std::numbers::pi);
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
 
   
