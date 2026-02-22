@@ -59,8 +59,7 @@ Drivetrain::Drivetrain() :
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
     }
 
-    // TODO: Add viewing of drivetraim.
-    // auto swerve_senable = wpi::SendableBuilder()
+    frc::SmartDashboard::PutNumber("Drivetrain/hardware_configured", _hardwareConfigured);
 }
 
 void Drivetrain::Periodic()  {

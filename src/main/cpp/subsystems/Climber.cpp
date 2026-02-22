@@ -22,6 +22,8 @@
     if (!_hardwareConfigured) {
         std::cerr << "ExampleSubsystem: Hardware Failed To Configure!" << std::endl;
     }
+
+    frc::SmartDashboard::PutNumber("Climber/hardware_configured", _hardwareConfigured);
 };
 
 void Climber::SetCommand(Command cmd) {
@@ -92,14 +94,20 @@ configs::TalonFXConfiguration configs{};
     // Set the control configuration for the drive motor:
     auto status = _Motor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.
 
+    if (!status.IsOK()) {
+        std::cerr << "Climber: Hardware Failed To Configure!" << std::endl;
+        return false;
+    }
+
     // Set our neutral mode to brake on:
     status = _Motor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
 
     if (!status.IsOK()) {
-        std::cerr << "ExampleSubsystem: Hardware Failed To Configure!" << std::endl;
+        std::cerr << "Climber: Hardware Failed To Configure!" << std::endl;
+        return false;
     }
 
     // Log errors.
-    return false;
+    return true;
 }
     

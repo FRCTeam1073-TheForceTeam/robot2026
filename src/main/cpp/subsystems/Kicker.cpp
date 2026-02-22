@@ -13,13 +13,13 @@ using namespace ctre::phoenix6;
  * You have to use initializer lists to build up the elements of the subsystem in the right order.
  */
 Kicker::Kicker() :
-_hardwareConfigured(true),
 _kickerMotor(LoadMotorId, CANBus("rio")),
 _kickerVelocitySig(_kickerMotor.GetVelocity()),
 _kickerCurrentSig(_kickerMotor.GetTorqueCurrent()),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
 _command(0.0_mps),
-_limiter(10.0_mps/1.0_s) {
+_limiter(10.0_mps/1.0_s),
+_hardwareConfigured(true) {
   // Extra implementation of subsystem constructor goes here.
 
   // Assign gain slots for the commands to use:
@@ -33,6 +33,7 @@ _limiter(10.0_mps/1.0_s) {
     std::cerr << "ShooterLoad: Hardware Failed To Configure!" << std::endl;
   }
 
+  frc::SmartDashboard::PutNumber("Kicker/hardware_configured", _hardwareConfigured);
 }
 
 void Kicker::SetCommand(Command cmd) {
@@ -60,6 +61,7 @@ void Kicker::Periodic() {
   }
 
   frc::SmartDashboard::PutNumber("Kicker/Velocity(mps)", _feedback.velocity.value());
+  frc::SmartDashboard::PutNumber("Kicker/TargetVelocity(mps)", _limiter.LastValue().value());
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
@@ -88,21 +90,21 @@ configs::TalonFXConfiguration configs{};
 
     if (!status.IsOK()) {
         std::cerr << "ShooterLoad: Configuration went wrong" << std::endl;
+        return false;
     }
 
     // Set our neutral mode to brake on:
-    status = _kickerMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
+    status = _kickerMotor.SetNeutralMode(signals::NeutralModeValue::Coast, 1_s);
 
     if (!status.IsOK()) {
         std::cerr << "ShooterLoad: Neutral brake went wrong" << std::endl;
+        return false;
     }
-    //TODO: change error messages if they are incorrect which they probably are
 
     // Depends on mechanism/subsystem design:
     // Optionally start out at zero after initialization:
     _kickerMotor.SetPosition(units::angle::turn_t(0));
 
     // Log errors.
-    return false;
-
+    return true;
 }

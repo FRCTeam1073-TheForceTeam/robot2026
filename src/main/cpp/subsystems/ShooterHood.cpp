@@ -34,6 +34,7 @@ _commandVelocityVoltage(units::angular_velocity::radians_per_second_t(0.0)) {
     std::cerr << "ExampleSubsystem: Hardware Failed To Configure!" << std::endl;
   }
 
+  frc::SmartDashboard::PutNumber("ShooterHood/hardware_configured", _hardwareConfigured);
 }
 
 
@@ -52,20 +53,12 @@ void ShooterHood::Periodic() {
   //auto compensatedPos = BaseStatusSignal::GetLatencyCompensatedValue(_hoodPositionSig, _hoodVelocitySig);
 
   // Populate feedback cache:
-  _feedback.current = _hoodCurrentSig.GetValue(); // Convert from hardware units to subsystem units.
+  _feedback.current = _hoodCurrentSig.GetValue(); // Convert from hardware units to subsystem units.4
   //_feedback.position = compensatedPos / TurnsPerMeter; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
   //_feedback.velocity = _exampleVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
 
 
-  // // Process command:
-  // if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
-  //     // Send velocity based command:
-
-  //     // Convert to hardware units:
-  //     // Multiply by conversion to produce commands.
-  //     auto angular_vel = std::get<units::velocity::meters_per_second_t>(_command) * TurnsPerMeter;
-  //     // Send to hardware:
-  //     _exampleMotor.SetControl(_commandVelocityVoltage.WithVelocity(angular_vel));
+  // Process command:
   if (std::holds_alternative<units::angular_velocity::radians_per_second_t>(_command)) {
       // Send position based command:
 
@@ -89,60 +82,57 @@ void ShooterHood::Periodic() {
     _hoodMotor.SetControl(controls::NeutralOut());
   }
 
-  frc::SmartDashboard::PutNumber("Hood/Hood Angle Position", Position.value() / HoodToMotorGearRatio);
+  frc::SmartDashboard::PutNumber("Hood/Hood Angle", Position.value() / HoodToMotorGearRatio);
 
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool ShooterHood::ConfigureHardware() {
-configs::TalonFXConfiguration configs{};
+  configs::TalonFXConfiguration configs{};
 
-    configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
-    configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A; 
+  configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
+  configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A; 
 
-    configs.Voltage.PeakForwardVoltage = 8_V; // These are pretty typical values, adjust as needed.
-    configs.Voltage.PeakReverseVoltage = -8_V;
+  configs.Voltage.PeakForwardVoltage = 8_V; // These are pretty typical values, adjust as needed.
+  configs.Voltage.PeakReverseVoltage = -8_V;
 
-    
+  // Slot 0 for velocity control mode:
+  configs.Slot0.kV = 0.153; // Motor constant.
+  configs.Slot0.kP = 0.15;
+  configs.Slot0.kI = 0.0;
+  configs.Slot0.kD = 0.01;
+  configs.Slot0.kA = 0.0;
 
-    // Slot 0 for velocity control mode:
-    configs.Slot0.kV = 0.153; // Motor constant.
-    configs.Slot0.kP = 0.15;
-    configs.Slot0.kI = 0.0;
-    configs.Slot0.kD = 0.01;
-    configs.Slot0.kA = 0.0;
+  // Slot 0 for position control mode:
+  configs.Slot1.kV = 0.153; // Motor constant.
+  configs.Slot1.kP = 0.5;
+  configs.Slot1.kI = 0.04;
+  configs.Slot1.kD = 0.0;
+  configs.Slot1.kA = 0.0;
 
-    // Slot 0 for position control mode:
-    configs.Slot1.kV = 0.153; // Motor constant.
-    configs.Slot1.kP = 0.5;
-    configs.Slot1.kI = 0.04;
-    configs.Slot1.kD = 0.0;
-    configs.Slot1.kA = 0.0;
+  // Set whether motor control direction is inverted or not:
+  configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
 
-    // Set whether motor control direction is inverted or not:
-    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
+  // Set the control configuration for the drive motor:
+  auto status = _hoodMotor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.
 
-    // Set the control configuration for the drive motor:
-    auto status = _hoodMotor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.
+  if (!status.IsOK()) {
+      std::cerr << "ShooterHood: Control Failed To Configure!" << std::endl;
+      return false;
+  }
 
-    if (!status.IsOK()) {
-        std::cerr << "ShooterHood: Control Failed To Configure!" << std::endl;
+  // Set our neutral mode to brake on:
+  status = _hoodMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
 
-    }
-
-    // Set our neutral mode to brake on:
-    status = _hoodMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
-
-    if (!status.IsOK()) {
-        std::cerr << "ShooterHood: Neutral mode brake Failed To Configure!" << std::endl;
-    }
+  if (!status.IsOK()) {
+      std::cerr << "ShooterHood: Neutral mode brake Failed To Configure!" << std::endl;
+  }
 
 
-    // Depends on mechanism/subsystem design:
-    // Optionally start out at zero after initialization:
-    _hoodMotor.SetPosition(units::angle::turn_t(0));
+  // Depends on mechanism/subsystem design:
+  // Optionally start out at zero after initialization:
+  _hoodMotor.SetPosition(units::angle::turn_t(0));
 
-    // Log errors.
-    return false;
-
+  // Log errors.
+  return true;
 }

@@ -9,56 +9,72 @@
 using namespace ctre::phoenix6;
 
 Flywheel::Flywheel(): 
-    _hardwareConfigured(true), 
+
     _leadFlywheelMotor(LeadMotorId, CANBus::RoboRIO()),
     _followFlywheelMotor(FollowMotorId, CANBus::RoboRIO()),
-    _FlywheelVelocitySig(_leadFlywheelMotor.GetVelocity()),
-    _FlywheelCurrentSig(_leadFlywheelMotor.GetTorqueCurrent()),
-    limiter(200_tps / 1_s),
-    _TargetVelocity(0_mps),
-    _FlywheelVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
+    _flywheelVelocitySig(_leadFlywheelMotor.GetVelocity()),
+    _flywheelCurrentSig(_leadFlywheelMotor.GetTorqueCurrent()),
+    _limiter(20_mps / 1_s),
+    _flywheelVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
+    _hardwareConfigured(false) {
         
-    _FlywheelVelocityVoltage.WithSlot(0);
+    _flywheelVelocityVoltage.WithSlot(0);
 
     _hardwareConfigured = ConfigureHardware();
     if(!_hardwareConfigured) {
         std::cerr << "hardware failed to conifgure in shooter" << std::endl;
     }
+
+    frc::SmartDashboard::PutNumber("Flywheel/hardware_configured", _hardwareConfigured);
 }
 
 
-ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> Flywheel::GetVelocity() {
-    return _FlywheelVelocitySig;
-}
 units::velocity::meters_per_second_t Flywheel::GetTargetVelocity() {
-    return _TargetVelocity;
+    if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
+        return std::get<units::velocity::meters_per_second_t>(_command);
+    } else {
+        return 0.0_mps;
+    }
 }
 
 void Flywheel::SetCommand(Command cmd){
     _command = cmd;
 }
 
-void Flywheel::SetVelocity(units::velocity::meters_per_second_t Velocity) {
-    _TargetVelocity = Velocity;
-}
-
 // This method will be called once per scheduler run
 void Flywheel::Periodic() {
-    BaseStatusSignal::RefreshAll(_FlywheelVelocitySig, _FlywheelCurrentSig);
+    BaseStatusSignal::RefreshAll(_flywheelVelocitySig, _flywheelCurrentSig);
 
-    _feedback.velocity = _FlywheelVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
-    _feedback.force = _FlywheelCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
-    auto angular_vel = _TargetVelocity * TurnsPerMeter;
-    frc::SmartDashboard::PutNumber("Flywheel/AngularVelocity (RPM)",(60_s*angular_vel).value());
+    _feedback.velocity = _flywheelVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
+    _feedback.force = _flywheelCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
 
-    auto test_angular = limiter.Calculate(angular_vel);
-    frc::SmartDashboard::PutNumber("Flywheel/RateLimitedVelocity", (60_s*test_angular).value());
-    _leadFlywheelMotor.SetControl(_FlywheelVelocityVoltage.WithVelocity(test_angular));
-    _followFlywheelMotor.SetControl(controls::StrictFollower{_leadFlywheelMotor.GetDeviceID()});
+    if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
+
+        // Compute a rate-limited velocity:
+        auto limited_velocity = _limiter.Calculate(std::get<units::velocity::meters_per_second_t>(_command)); 
+        auto motor_velocity = limited_velocity * TurnsPerMeter;
+
+        // Send commands to motors:
+        _leadFlywheelMotor.SetControl(_flywheelVelocityVoltage.WithVelocity(motor_velocity));
+        _followFlywheelMotor.SetControl(controls::StrictFollower{_leadFlywheelMotor.GetDeviceID()});
+
+    } else {
+        // Send commands to motors:
+        _leadFlywheelMotor.SetControl(controls::NeutralOut());
+        _followFlywheelMotor.SetControl(controls::NeutralOut());
+        // Reset the limiter:
+        _limiter.Reset(0.0_mps);
+    }
+
+
+    frc::SmartDashboard::PutNumber("Flywheel/AngularVelocity (RPM)", (60.0_s*_flywheelVelocitySig.GetValue()).value());
+    frc::SmartDashboard::PutNumber("Flywheel/TargetVelocity (mps)", _limiter.LastValue().value());
+    frc::SmartDashboard::PutNumber("Flywheel/Velocity (mps)", _feedback.velocity.value());
+
 }
 
 bool Flywheel::ConfigureHardware() {
-configs::TalonFXConfiguration configs{};
+    configs::TalonFXConfiguration configs{};
 
     configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A; 
@@ -79,15 +95,21 @@ configs::TalonFXConfiguration configs{};
 
     // Set the control configuration for the drive motor:
     auto status = _leadFlywheelMotor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.
-    _leadFlywheelMotor.SetNeutralMode(signals::NeutralModeValue::Coast, 1_s);
-    configs::TalonFXConfiguration FollowerConfigs{};
-    FollowerConfigs.MotorOutput.WithInverted(signals::InvertedValue::CounterClockwise_Positive); //change this if directions are the same.
 
     if (!status.IsOK()) {
-        std::cerr << "Flywheel is not working" << std::endl;
+        std::cerr << "Flywheel lead motor configfuration failed." << std::endl;
+        return false;
     }
-    
+    _leadFlywheelMotor.SetNeutralMode(signals::NeutralModeValue::Coast, 1_s);
+
+    configs::TalonFXConfiguration followerConfigs{};
+    followerConfigs.MotorOutput.WithInverted(signals::InvertedValue::CounterClockwise_Positive); //change this if directions are the same.
+    status = _followFlywheelMotor.GetConfigurator().Apply(followerConfigs, 1_s ); // 1 Second configuration timeout.
+
+    if (!status.IsOK()) {
+        std::cerr << "Flywheel follower motor configfuration failed." << std::endl;
+        return false;
+    }
 
     return true;
-
 }

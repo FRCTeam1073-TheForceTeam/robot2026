@@ -21,12 +21,21 @@
 class Flywheel : public frc2::SubsystemBase {
  public:
 
- struct FlywheelFeedback {
+  static constexpr int LeadMotorId = 21; 
+  static constexpr int FollowMotorId = 22;
+
+  static constexpr double GearRatio = units::angle::turn_t(1)/units::angle::turn_t(1);
+  // Mechanism conversion constants for the subsystem:
+  static constexpr units::meter_t wheelDiameter = units::inch_t(6.0);
+  static constexpr auto TurnsPerMeter = units::turn_t(1) / (wheelDiameter * units::constants::pi); 
+  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
+
+ struct Feedback {
       units::velocity::meters_per_second_t velocity; // TODO: Add other stuff to feedback
       units::force::newton_t force;
   };
 
-  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
+  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t>;
 
   Flywheel();
 
@@ -34,38 +43,19 @@ class Flywheel : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
 
-
-  static constexpr int LeadMotorId = 21; // TODO: Get motor id 
-  static constexpr int FollowMotorId = 22;
-
   void Periodic() override;
-
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> GetVelocity();
 
   units::velocity::meters_per_second_t GetTargetVelocity();
 
-  const FlywheelFeedback& GetFlywheelFeedback() const { return _feedback; }
+  const Feedback& GetFeedback() const { return _feedback; }
 
   void SetCommand(Command cmd);
-
-  // Helper function for configuring hardware from within the constructor of the subsystem.
-  bool ConfigureHardware();
-
-  void SetVelocity(units::velocity::meters_per_second_t Velocity);
-
-  // Did we successfully configure the hardware?
-  bool _hardwareConfigured;
-
 
 
  private:
 
-  const double GearRatio = units::angle::turn_t(1)/units::angle::turn_t(1); // TODO: Get gear ratio from EM
-
-  // Mechanism conversion constants for the subsystem:
-  static constexpr units::meter_t wheelDiameter = units::inch_t(6.0);
-  static constexpr auto TurnsPerMeter = units::turn_t(1) / (wheelDiameter * units::constants::pi); // TODO: Get turns per meter
-  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
+   // Helper function for configuring hardware from within the constructor of the subsystem.
+  bool ConfigureHardware();
 
   
   //  TalonFX motor interface.
@@ -73,23 +63,20 @@ class Flywheel : public frc2::SubsystemBase {
   ctre::phoenix6::hardware::TalonFX _followFlywheelMotor;
 
   // CTRE hardware feedback signals:
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _FlywheelVelocitySig;
-  ctre::phoenix6::StatusSignal<units::current::ampere_t> _FlywheelCurrentSig;
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _flywheelVelocitySig;
+  ctre::phoenix6::StatusSignal<units::current::ampere_t> _flywheelCurrentSig;
 
   //  velocity and position controls:
-  ctre::phoenix6::controls::VelocityVoltage _FlywheelVelocityVoltage;  // Uses Slot0 gains.
+  ctre::phoenix6::controls::VelocityVoltage _flywheelVelocityVoltage;  // Uses Slot0 gains.
   
   // Cached feedback:
-  FlywheelFeedback _feedback;
+  Feedback _feedback;
 
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
 
-  // Set the motors target velocity
-  units::velocity::meters_per_second_t _TargetVelocity;
+  frc::SlewRateLimiter<units::meters_per_second> _limiter;
 
-  frc::SlewRateLimiter<units::turns_per_second> limiter;
-
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
+    // Did we successfully configure the hardware?
+  bool _hardwareConfigured;
 };
