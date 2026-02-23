@@ -72,21 +72,17 @@ class RobotContainer {
   // static const std::string testAuto;
   
   RobotContainer();
+
   frc2::CommandPtr GetAutonomousCommand();
-
-  // Called from Robot
-  void AutonomousInit();
-  void AutonomousPeriodic();
-
-  // Called from Robot
-  frc2::Command GetTeleopCommand();
 
   // Called from Robot
   void DisabledInit();
   bool DisabledPeriodic();
 
-
  private:
+
+ 
+  void ConfigureBindings();
 
   //  bool FindStartPos();
 
@@ -118,5 +114,4 @@ class RobotContainer {
   const frc::SendableChooser<std::string> m_positionChooser;
   const frc::SendableChooser<std::string> m_levelChooser;
 
-  void ConfigureBindings();
 };

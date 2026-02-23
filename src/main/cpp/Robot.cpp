@@ -102,12 +102,6 @@ void Robot::AutonomousInit() {
 // TODO:
 
 void Robot::AutonomousPeriodic() {
-  try {
-    // Delegate to container function:
-    m_container->AutonomousPeriodic();
-  } catch (std::exception& e) {
-    std::cerr << "CONTAINER AUTONOMOUS PERIOPDIC THREW EXCEPTION!: " << e.what() << std::endl;
-  }
 }
 
 void Robot::TeleopInit() {

@@ -107,14 +107,6 @@ bool RobotContainer::DisabledPeriodic() {
   return false; // TODO: Fix return value.
 }
 
-void RobotContainer::AutonomousInit() {
-  
-}
-
-void RobotContainer::AutonomousPeriodic() {
-
-}
-
 void RobotContainer::ConfigureBindings() {
 
 }
