@@ -28,7 +28,7 @@ class CollectorTeleop
    * @param spindexer The subsystem used by this command.
    */
 
-  explicit CollectorTeleop(std::shared_ptr<Collector> collector, std::shared_ptr<OI> OI);
+  explicit CollectorTeleop(std::shared_ptr<Collector>& collector, std::shared_ptr<OI>& OI);
 
   void Initialize() override;
 
@@ -42,8 +42,6 @@ class CollectorTeleop
    std::shared_ptr<Collector> m_collector;
    std::shared_ptr<OI> m_OI;
 
-    bool spin;
-    bool isMoving;
     units::velocity::meters_per_second_t velocity;
     units::velocity::meters_per_second_t targetVelocity;
 

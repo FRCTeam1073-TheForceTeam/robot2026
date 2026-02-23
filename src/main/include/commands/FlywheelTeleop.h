@@ -13,11 +13,7 @@
 #include <units/angular_velocity.h>
 
 /**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
+ * Flywheel Teleop command.
  */
 class FlywheelTeleop
     : public frc2::CommandHelper<frc2::Command, FlywheelTeleop> {
@@ -27,7 +23,7 @@ class FlywheelTeleop
    *
    * @param flywheel The subsystem used by this command.
    */
-  explicit FlywheelTeleop(std::shared_ptr<Flywheel> flywheel, std::shared_ptr<OI> oi);
+  explicit FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi);
 
   void Initialize() override;
 

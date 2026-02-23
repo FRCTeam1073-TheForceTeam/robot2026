@@ -84,16 +84,18 @@ void Robot::AutonomousInit() {
   std::cerr << "Autonomous Init..." << std::endl;
 
   try {
-    auto command = m_container->GetAutonomousCommand();
-    if (command.get()) {
-      //command.Schedule();
-      frc2::CommandScheduler::GetInstance().Schedule(command);
+    m_autonomousCommand = m_container->GetAutonomousCommand();
+
+    if (m_autonomousCommand) {
+      frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value().get());
+    } else {
+      std::cerr << "UNEXPLAINED MISSING AUTONOMOUS COMMAND!" << std::endl;
     }
-    else {
-      std::cerr << "Empty Command" << std::endl;
-    }
+
   } catch (std::exception& e) { 
     std::cerr << "AUTONOMOUS INIT THREW EXCEPTION!: " << e.what() << std::endl;
+  } catch (...) {
+    std::cerr << "AUTONOMOUS INIT THREW UNKNOWN EXCEPTION!" << std::endl;
   }
 }
 
@@ -116,7 +118,7 @@ void Robot::TeleopInit() {
   // continue until interrupted by another command, remove
   // this line or comment it out.
   if (m_autonomousCommand) {
-    m_autonomousCommand->Cancel();
+    m_autonomousCommand.value().Cancel();
   }
 }
 

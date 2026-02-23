@@ -12,7 +12,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 /**
- * An example command.
+ * HoodTeleop command.
  *
  * <p>Note that this extends CommandHelper, rather extending Command
  * directly; this is crucially important, or else the decorator functions in
@@ -21,10 +21,8 @@
 class HoodTeleop
     : public frc2::CommandHelper<frc2::Command, HoodTeleop> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
-  HoodTeleop(std::shared_ptr<ShooterHood> ShooterHood, std::shared_ptr<OI> OI);
+
+  HoodTeleop(std::shared_ptr<ShooterHood>& ShooterHood, std::shared_ptr<OI>& OI);
 
   void Initialize() override;
 

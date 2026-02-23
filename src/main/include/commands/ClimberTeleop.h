@@ -25,7 +25,7 @@ class ClimberTeleop
    * @param climber The subsystem used by this command.
    */
 
-  explicit ClimberTeleop(std::shared_ptr<Climber> climber,  std::shared_ptr<OI> oi);
+  explicit ClimberTeleop(std::shared_ptr<Climber>& climber,  std::shared_ptr<OI>& oi);
 
   void Initialize() override;
 

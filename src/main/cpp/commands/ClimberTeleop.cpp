@@ -4,7 +4,7 @@
 
 #include "commands/ClimberTeleop.h"
 
-ClimberTeleop::ClimberTeleop(std::shared_ptr<Climber> climber, std::shared_ptr<OI> oi) :
+ClimberTeleop::ClimberTeleop(std::shared_ptr<Climber>& climber, std::shared_ptr<OI>& oi) :
   m_climber(climber),
   m_OI(oi) {
 

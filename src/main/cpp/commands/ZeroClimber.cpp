@@ -26,7 +26,7 @@ void ZeroClimber::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool ZeroClimber::IsFinished() {
-  if(m_climber->GetFeedback().force > 9_A) {
+  if(m_climber->GetFeedback().force > 9_N) {
     return true;
   }
   return false;

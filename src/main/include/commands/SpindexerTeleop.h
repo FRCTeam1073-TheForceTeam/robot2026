@@ -28,7 +28,7 @@ class SpindexerTeleop
    * @param spindexer The subsystem used by this command.
    */
 
-  explicit SpindexerTeleop(std::shared_ptr<Spindexer> spindexer, std::shared_ptr<OI> OI);
+  explicit SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<OI>& OI);
 
   void Initialize() override;
 
@@ -42,8 +42,6 @@ class SpindexerTeleop
    std::shared_ptr<Spindexer> m_spindexer;
    std::shared_ptr<OI> m_OI;
 
-    bool spin;
-    bool isMoving;
     units::velocity::meters_per_second_t velocity;
     units::velocity::meters_per_second_t targetVelocity;
 

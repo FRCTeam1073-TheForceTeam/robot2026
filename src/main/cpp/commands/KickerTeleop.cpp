@@ -4,21 +4,20 @@
 
 #include "commands/KickerTeleop.h"
 
-KickerTeleop::KickerTeleop(std::shared_ptr<Kicker> kicker, std::shared_ptr<OI> oi) :
+KickerTeleop::KickerTeleop(std::shared_ptr<Kicker>& kicker, std::shared_ptr<OI>& oi) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_kicker(kicker),
   m_OI(oi) {
-  {
+
   AddRequirements({m_kicker.get()});
-  }
 }
 // Called when the command is initially scheduled.
 void KickerTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void KickerTeleop::Execute() {
-  AButton = m_OI->GetOperatorAButton();
-  BButton = m_OI->GetOperatorBButton();
+  auto AButton = m_OI->GetOperatorAButton();
+  auto BButton = m_OI->GetOperatorBButton();
 
   if(AButton) {
     m_kicker->SetCommand(4.5_mps);

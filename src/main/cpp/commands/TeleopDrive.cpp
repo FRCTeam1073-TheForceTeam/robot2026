@@ -34,8 +34,8 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
 
 TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi) : 
     m_drivetrain(drivetrain), 
-    m_OI(oi)
-    {
+    m_OI(oi) {
+        
     allianceSign = 0;
     fieldCentric = true;
     lastParkingBreakButton = false;
@@ -54,7 +54,7 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
 
 void TeleopDrive::Initialize() {
     std::cerr << "TeleopDrive Init" << std::endl;
-    setAlliance();
+    setAlliance();  // Set the alliance sign.
 }
 
 
@@ -135,9 +135,10 @@ void TeleopDrive::Execute() {
         else { // robot centric drive
             m_drivetrain->SetChassisSpeeds(frc::ChassisSpeeds{allianceSign * -vx, allianceSign * -vy, omega});
         }
-        frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed Omega", m_drivetrain->GetChassisSpeeds().omega.value());
-        frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed X", m_drivetrain->GetChassisSpeeds().vx.value());
-        frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed Y", m_drivetrain->GetChassisSpeeds().vy.value());
+        // Drivetrain should put out this information, not the command:
+        // frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed Omega", m_drivetrain->GetChassisSpeeds().omega.value());
+        // frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed X", m_drivetrain->GetChassisSpeeds().vx.value());
+        // frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed Y", m_drivetrain->GetChassisSpeeds().vy.value());
     }
 
     // TODO: Put this logic in OI
@@ -161,7 +162,7 @@ bool TeleopDrive::IsFinished() {
 void TeleopDrive::setAlliance() {
     auto alliance = frc::DriverStation::GetAlliance();
 
-    if (alliance) {
+    if (alliance.has_value()) {
         if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed) {
             allianceSign = 1;
             std::cerr << "TeleopDrive:: RED Alliance" << std::endl;

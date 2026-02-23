@@ -20,7 +20,7 @@ class KickerTeleop
     : public frc2::CommandHelper<frc2::Command, KickerTeleop> {
  public:
 
-  KickerTeleop(std::shared_ptr<Kicker> kicker, std::shared_ptr<OI> oi);
+  KickerTeleop(std::shared_ptr<Kicker>& kicker, std::shared_ptr<OI>& oi);
 
   void Initialize() override;
 
@@ -33,6 +33,4 @@ class KickerTeleop
   private:
    std::shared_ptr<Kicker> m_kicker;
    std::shared_ptr<OI> m_OI;
-   bool AButton;
-   bool BButton;
 };

@@ -108,10 +108,13 @@ bool RobotContainer::DisabledPeriodic() {
 }
 
 void RobotContainer::AutonomousInit() {
+  
 }
 
 void RobotContainer::AutonomousPeriodic() {
+
 }
 
 void RobotContainer::ConfigureBindings() {
+
 }

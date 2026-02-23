@@ -4,16 +4,15 @@
 
 #include "commands/CollectorTeleop.h"
 
-CollectorTeleop::CollectorTeleop(std::shared_ptr<Collector> collector, std::shared_ptr<OI> OI) :
+CollectorTeleop::CollectorTeleop(std::shared_ptr<Collector>& collector, std::shared_ptr<OI>& OI) :
   m_collector(collector), 
   m_OI(OI) {
-  spin = false; 
   AddRequirements(m_collector.get());
 }
 
 // Called when the command is initially scheduled.
 void CollectorTeleop::Initialize() {
-  isMoving = false;
+
   targetVelocity = 0_mps;
 }
 
@@ -22,26 +21,21 @@ void CollectorTeleop::Execute() {
   
   if (m_OI->GetDriverBButton()){
     targetVelocity = 3.5_mps;
-    isMoving = true;
   }
   else if (m_OI->GetDriverXButton()) { //for testing purposes?
     targetVelocity = -3.5_mps;
-    isMoving = true;  
   }
   else{
     targetVelocity = 0_mps;
-    isMoving = false;
   }
 
   m_collector->SetCommand(targetVelocity);
   frc::SmartDashboard::PutBoolean("CollectorTeleop/AButton", m_OI->GetOperatorAButton());
-  frc::SmartDashboard::PutBoolean("CollectorTeleop/Is Moving", isMoving);
 }
 
 // Called once the command ends or is interrupted.
 void CollectorTeleop::End(bool interrupted) {
   targetVelocity = 0_mps;
-  isMoving = false;
   m_collector->SetCommand(std::monostate()); // Default no-command state.
 }
 
