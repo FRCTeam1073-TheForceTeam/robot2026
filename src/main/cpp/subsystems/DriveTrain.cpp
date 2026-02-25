@@ -5,6 +5,8 @@
 #include "subsystems/DriveTrain.h"
 #include <iostream>
 #include <frc/kinematics/ChassisSpeeds.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 
 using namespace ctre::phoenix6;
 using namespace ctre::phoenix;
@@ -15,10 +17,10 @@ bool debug = false;
 Drivetrain::Drivetrain() :
     _imu(PigeonId, canBus),
     _swerveModules{
-        SwerveModule({ 0,  7, 8, 6}, frc::Translation2d(0.254_m, 0.254_m), canBus), 
-        SwerveModule({ 1,  10, 11, 9}, frc::Translation2d(0.254_m, -0.254_m), canBus), 
-        SwerveModule({ 2,  13, 14, 12}, frc::Translation2d(-0.254_m, 0.254_m), canBus), 
-        SwerveModule({ 3,  16, 17, 15}, frc::Translation2d(-0.254_m, -0.254_m), canBus)},
+        SwerveModule({ 0,  7, 8, 6}, frc::Translation2d(0.276_m, 0.276_m), canBus), 
+        SwerveModule({ 1,  10, 11, 9}, frc::Translation2d(0.276_m, -0.276_m), canBus), 
+        SwerveModule({ 2,  13, 14, 12}, frc::Translation2d(-0.276_m, 0.276_m), canBus), 
+        SwerveModule({ 3,  16, 17, 15}, frc::Translation2d(-0.276_m, -0.276_m), canBus)},
     _swerveModulePositions{_swerveModules[0].GetPosition(),
                 _swerveModules[1].GetPosition(),
                 _swerveModules[2].GetPosition(),
@@ -40,12 +42,14 @@ Drivetrain::Drivetrain() :
     _yawSig(_imu.GetYaw()),
     _pitchSig(_imu.GetPitch()),
     _rollSig(_imu.GetRoll()),
-    _yawRateSig(_imu.GetAngularVelocityZDevice()),
+    _yawRateSig(_imu.GetAngularVelocityZWorld()),
     _hardwareConfigured(false),
     _parkingBrake(false)
 {
-
-    _hardwareConfigured &= ConfigureHardware();
+    _targetSpeeds.vx = 0_mps;
+    _targetSpeeds.vy = 0_mps;
+    _targetSpeeds.omega = 0_rad_per_s;
+    _hardwareConfigured = ConfigureHardware();
 
     for (size_t ii(0); ii < _swerveModules.size(); ++ii) {
         _hardwareConfigured &= _swerveModules[ii].HardwareConfigured();
@@ -53,7 +57,9 @@ Drivetrain::Drivetrain() :
 
     if (_hardwareConfigured) {
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
-    }    
+    }
+
+    frc::SmartDashboard::PutBoolean("Drivetrain/Drivetrain - hardware_configured", _hardwareConfigured);
 }
 
 void Drivetrain::Periodic()  {
@@ -71,11 +77,7 @@ void Drivetrain::Periodic()  {
         _swerveModules[ii].SampleFeedback(now);
         _swerveModulePositions[ii] = _swerveModules[ii].GetPosition();
         _swerveModuleStates[ii] = _swerveModules[ii].GetState(); // getState() returns SwerveModuleStates
-        // _swerveModuleStates[ii]
-        // std::cerr << "swervemodulestates index " << ii << " speed: " << _swerveModuleStates[ii].speed.value() << std::endl;
-        // std::cerr << "swervemodulestates index " << ii << " speed: " << _swerveModuleStates[ii].angle.Degrees().value() << std::endl;
     }
-
 
 
     // Update odometry and chassis speeds once we've sampled the hardware:
@@ -99,20 +101,6 @@ void Drivetrain::Periodic()  {
         }
     }
 
-}
-
-void Drivetrain::InitSendable(wpi::SendableBuilder& builder) {
-    // possibly remove this
-    builder.AddDoubleProperty("Parking Break", [this] {return GetParkingBrake(); }, nullptr);
-    builder.AddDoubleProperty("Odo X", [this] {return GetOdometry().X().value(); }, nullptr);
-    builder.AddDoubleProperty("Odo Y", [this] {return GetOdometry().Y().value(); }, nullptr);
-    builder.AddDoubleProperty("Odo Theta (Radians)", [this] {return GetOdometry().Rotation().Radians().value(); }, nullptr);
-    builder.AddDoubleProperty("Odo Gyro Heading (Degrees)", [this] {return GetGyroHeadingDegrees().value(); }, nullptr);
-    builder.AddDoubleProperty("Target Vx", _targetSpeeds.vx, nullptr);
-    builder.AddDoubleProperty("Target Vy", _targetSpeeds.vy, nullptr);
-    builder.AddDoubleProperty("Target Omega", _targetSpeeds.omega, nullptr);
-    builder.AddDoubleProperty("Pitch", [this] {return GetPitch().value(); }, nullptr);
-    builder.AddDoubleProperty("Roll", [this] {return GetRoll().value(); }, nullptr);
 }
 
 /// Reset the odometry to a specific pose on the field.
@@ -144,7 +132,11 @@ void Drivetrain::SetParkingBrake(bool brakeOn) {
 }
 
 units::force::newton_t Drivetrain::GetAverageLoad() const {
-    return 0.0_N;
+    auto load = 0.0_N;
+    for (size_t ii(0); ii < _swerveModules.size(); ++ii) {
+        load += _swerveModules[ii].GetLoad();
+    }
+    return load / _swerveModules.size();
 }
 
 units::angle::degree_t Drivetrain::GetGyroHeadingDegrees(){

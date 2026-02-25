@@ -12,21 +12,16 @@ Shoot::Shoot(std::shared_ptr<Flywheel> flywheel) :
 
 // Called when the command is initially scheduled.
 void Shoot::Initialize() {
-  // frc::Timer().frc::Timer::Start();
-  // while(!frc::Timer().frc::Timer::HasElapsed(units::second_t(1.0))) {
-  //   return(true);
-  // }
-  sleep(4.1); //TODO: replace this with the amount of time needed for motor to start up
   
 }
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() {  
-  m_flywheel->SetVelocity(6.7_tps);//TODO: change number into one that catually makes sense
+  m_flywheel->SetCommand(6.7_mps);//TODO: change number into one that catually makes sense
   }
 
 // Called once the command ends or is interrupted.
 void Shoot::End(bool interrupted) {
-  m_flywheel->SetVelocity(0.0_tps);
+  m_flywheel->SetCommand(0.0_mps);
 }
 
 // Returns true when the command should end.

@@ -6,7 +6,11 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/ShooterHood.h"
+
+#include <frc/smartdashboard/SmartDashboard.h>
+
+#include "subsystems/Collector.h"
+#include "subsystems/OI.h"
 
 /**
  * An example command.
@@ -15,13 +19,16 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class Hood
-    : public frc2::CommandHelper<frc2::Command, Hood> {
+class CollectorTeleop
+    : public frc2::CommandHelper<frc2::Command, CollectorTeleop> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
+ /**
+   * Creates a new ExampleCommand.
+   *
+   * @param spindexer The subsystem used by this command.
    */
-  Hood(std::shared_ptr<ShooterHood> ShooterHood);
+
+  explicit CollectorTeleop(std::shared_ptr<Collector>& collector, std::shared_ptr<OI>& OI);
 
   void Initialize() override;
 
@@ -32,5 +39,10 @@ class Hood
   bool IsFinished() override;
 
   private:
-   std::shared_ptr<ShooterHood> m_shooterHood;
+   std::shared_ptr<Collector> m_collector;
+   std::shared_ptr<OI> m_OI;
+
+    units::velocity::meters_per_second_t velocity;
+    units::velocity::meters_per_second_t targetVelocity;
+
 };

@@ -4,21 +4,36 @@
 
 #include "commands/SpindexerTeleop.h"
 
-SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer> spindexer) :
-  m_spindexer{spindexer} {
-  AddRequirements({m_spindexer.get()});
+SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<OI>& OI) :
+  m_spindexer(spindexer), 
+  m_OI(OI) {
+  AddRequirements(m_spindexer.get());
 }
 
 // Called when the command is initially scheduled.
-void SpindexerTeleop::Initialize() {}
+void SpindexerTeleop::Initialize() {
+  targetVelocity = 0_mps;
+}
 
 // Called repeatedly when this Command is scheduled to run
-void SpindexerTeleop::Execute() {
-  m_spindexer->SetTargetVelocity(0.0_tps);
+void SpindexerTeleop::Execute() {  
+
+  if (m_OI->GetOperatorAButton()){
+    targetVelocity = 4.2_mps;
+  }
+  else{
+    targetVelocity = 0_mps;
+  }
+
+  m_spindexer->SetCommand(targetVelocity);
+  frc::SmartDashboard::PutBoolean("Spindexer/AButton", m_OI->GetOperatorAButton());
 }
 
 // Called once the command ends or is interrupted.
-void SpindexerTeleop::End(bool interrupted) {}
+void SpindexerTeleop::End(bool interrupted) {
+  targetVelocity = 0_mps;
+  m_spindexer->SetCommand(std::monostate()); // Default no-command state.
+}
 
 // Returns true when the command should end.
 bool SpindexerTeleop::IsFinished() {

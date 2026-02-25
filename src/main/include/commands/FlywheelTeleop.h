@@ -6,14 +6,14 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "subsystems/Flywheel.h"
+#include "subsystems/OI.h"
+#include <units/angular_velocity.h>
+
 /**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
+ * Flywheel Teleop command.
  */
 class FlywheelTeleop
     : public frc2::CommandHelper<frc2::Command, FlywheelTeleop> {
@@ -23,7 +23,7 @@ class FlywheelTeleop
    *
    * @param flywheel The subsystem used by this command.
    */
-  explicit FlywheelTeleop(std::shared_ptr<Flywheel> flywheel);
+  explicit FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi);
 
   void Initialize() override;
 
@@ -38,4 +38,9 @@ class FlywheelTeleop
   
  private:
   std::shared_ptr<Flywheel> m_flywheel;
+  std::shared_ptr<OI> m_OI;
+
+  bool XButton;
+  
+  units::velocity::meters_per_second_t maxVel;
 };

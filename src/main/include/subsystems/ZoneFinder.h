@@ -15,14 +15,21 @@ class ZoneFinder
     static const frc::Rectangle2d REDZONE;
     static const frc::Rectangle2d BLUEZONE;
     static const frc::Rectangle2d NEUTRALZONE;
-    static const frc::Rectangle2d TRAVELZONE;
-    //still figuring how to add 4 rectangle coordiantes(the bump+trench on each alliance) to the same name
-    static const frc::Rectangle2d UNKNOWN;
-    //unknown zone coordinates will just be the entire field
+    
+    static const frc::Rectangle2d TRENCH_A;
+    static const frc::Rectangle2d TRENCH_B;
+    static const frc::Rectangle2d TRENCH_C;
+    static const frc::Rectangle2d TRENCH_D;
+    
+    static const frc::Rectangle2d BUMP_A;
+    static const frc::Rectangle2d BUMP_B;
+    static const frc::Rectangle2d BUMP_C;
+    static const frc::Rectangle2d BUMP_D;
+
 
     ZoneFinder(std::shared_ptr<Localizer> _localizer);
 
-    frc::Rectangle2d GetZone();
+    std::string GetZone();
     //checks what zone robot is in based on localizer and returns Rectangle2d of the zone (Eva)
 
 
