@@ -16,15 +16,17 @@ void ClimberTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ClimberTeleop::Execute() {
-  rightY = m_OI->GetOperatorRightY();
+  //TODO: Change this to be position based instead of velocity based or add velocity to climber subsystem
 
-  if(abs(rightY) < 0.1) rightY = 0.0;
+  // rightY = m_OI->GetOperatorRightY();
 
-  vy = rightY*-0.67_mps;
-  m_climber->SetCommand(vy);
+  // if(abs(rightY) < 0.1) rightY = 0.0;
 
-  //9 amps at bottom
-  //10 when lift (but have switch)
+  // vy = rightY*-0.67_mps;
+  // m_climber->SetCommand(vy);
+
+  // //9 amps at bottom
+  // //10 when lift (but have switch)
 }
 
 // Called once the command ends or is interrupted.
