@@ -32,9 +32,4 @@ public:
   static frc2::CommandPtr Create(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Localizer> localizer, std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
   TestAuto(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Localizer> localizer, std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 
-private:
-      std::shared_ptr<Drivetrain> m_drivetrain;
-      std::shared_ptr<Localizer> m_localizer;
-      std::optional<choreo::Trajectory<choreo::SwerveSample>> path_trajectory;
-
 };
