@@ -15,9 +15,8 @@ void ZeroClimber::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ZeroClimber::Execute() {
-  //TODO: change this to be position based or add velocity to climber subsystem
-  // auto velocity = 0.67_mps;
-  // m_climber->SetCommand(velocity);
+  auto velocity = 0.67_mps;
+  m_climber->SetCommand(velocity);
 }
 
 // Called once the command ends or is interrupted.

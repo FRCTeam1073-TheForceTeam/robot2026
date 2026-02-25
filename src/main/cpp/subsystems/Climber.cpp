@@ -14,15 +14,15 @@ using namespace ctre::phoenix6;
 Climber::Climber() :
 _hardwareConfigured(false),
 _climberMotor(ClimberMotorId, CANBus("rio")),
-_climberPositionSig(_climberMotor.GetPosition()),
+_climberVelocitySig(_climberMotor.GetVelocity()),
 _climberCurrentSig(_climberMotor.GetTorqueCurrent()),
-_commandPositionVoltage(units::angle::turn_t(0.0)),
-_command(0.0_m),
+_commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
+_command(0.0_mps),
 _limiter(10.0_mps/1.0_s) {
   // Extra implementation of subsystem constructor goes here.
 
   // Assign gain slots for the commands to use:
-  _commandPositionVoltage.WithSlot(0);  // Velocity control loop uses these gains.
+  _commandVelocityVoltage.WithSlot(0);  // Velocity control loop uses these gains.
 
   // Do hardware configuration and track if it succeeds:
   _hardwareConfigured = ConfigureHardware();
@@ -47,18 +47,19 @@ bool Climber::IsHooked() {
 
 void Climber::Periodic() {
   // Sample the hardware:
-  BaseStatusSignal::RefreshAll(_climberPositionSig, _climberCurrentSig);
+  BaseStatusSignal::RefreshAll(_climberVelocitySig, _climberCurrentSig);
 
   // Populate feedback cache:
   _feedback.force = _climberCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
-  _feedback.position = _climberPositionSig.GetValue() / TurnsPerMeter; // Convert from hardware units to subsystem units. 
+  _feedback.velocity = _climberVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardware units to subsystem units. 
 
   // // Process command:
-  if (std::holds_alternative<units::length::meter_t>(_command)) {
+  if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
       // Send position based command:
-      auto MotorPosition = std::get<units::length::meter_t>(_command) * TurnsPerMeter;
+      auto limitedVel = _limiter.Calculate(std::get<units::velocity::meters_per_second_t>(_command) );
+      auto motorVel = limitedVel * TurnsPerMeter * GearRatio;
       // Send to hardware:
-      _climberMotor.SetControl(_commandPositionVoltage.WithPosition(MotorPosition));
+      _climberMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorVel));
 
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:

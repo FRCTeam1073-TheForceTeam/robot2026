@@ -54,7 +54,7 @@ class Climber : public frc2::SubsystemBase {
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::length::meter_t>;
+  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t>;
 
 
   // Constructor for the subsystem.
@@ -90,12 +90,12 @@ class Climber : public frc2::SubsystemBase {
   ctre::phoenix6::hardware::TalonFX _climberMotor;
 
   // CTRE hardware feedback signals:
-  ctre::phoenix6::StatusSignal<units::angle::turn_t> _climberPositionSig;
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _climberVelocitySig;
   ctre::phoenix6::StatusSignal<units::current::ampere_t> _climberCurrentSig;
 
 
   // Example velocity and position controls:
-  ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot0 gains.
+  ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;  // Uses Slot0 gains.
   
   // Cached feedback:
   Feedback _feedback;
