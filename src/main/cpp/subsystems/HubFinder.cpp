@@ -10,17 +10,16 @@ const frc::Pose2d HubFinder::BLUEHUB = frc::Pose2d(182.11_in, 158.84_in, frc::Ro
 const frc::Pose2d HubFinder::REDHUB = frc::Pose2d(469.11_in, 158.84_in, frc::Rotation2d());
 */
 
-const frc::Pose2d HubFinder::REDHUB = frc::Pose2d(486.57_in, 90_in, frc::Rotation2d());
-const frc::Pose2d HubFinder::BLUEHUB = frc::Pose2d(223.67_in, 90_in, frc::Rotation2d());
 const frc::Transform2d HubFinder::ROBOTOTURRET = frc::Transform2d(4.902_in, -5.375_in, frc::Rotation2d());
 
-HubFinder::HubFinder(std::shared_ptr<Localizer> localizer):_localizer(localizer){
-  
-}
+
+
+
+HubFinder::HubFinder(std::shared_ptr<Localizer> localizer):_localizer(localizer){}
+
 
 frc::Pose2d HubFinder::getHubPos()
 {
-    // TODO: Need to check alliance every time here, because it is not set on construction.
     frc::Pose2d HubLoc = OurHub.frc::Pose2d::RelativeTo(RoboPos);
     return HubLoc;
 }

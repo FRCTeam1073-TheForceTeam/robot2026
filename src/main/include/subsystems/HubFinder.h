@@ -23,7 +23,6 @@ class HubFinder  : public frc2::SubsystemBase {
     void Periodic() override;
 
     frc::Pose2d getHubPos();
-    units::angle::radian_t position;
     units::angle::radian_t getTurretToHubAngle();
 
     private:
