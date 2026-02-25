@@ -73,6 +73,10 @@ void Flywheel::Periodic() {
 
 }
 
+frc2::CommandPtr Flywheel::SpinToSpeed(units::meters_per_second_t velocity) {
+    return RunOnce([this, velocity] {SetCommand(velocity);});
+}
+
 bool Flywheel::ConfigureHardware() {
     configs::TalonFXConfiguration configs{};
 

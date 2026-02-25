@@ -64,6 +64,10 @@ void Kicker::Periodic() {
   frc::SmartDashboard::PutNumber("Kicker/TargetVelocity(mps)", _limiter.LastValue().value());
 }
 
+frc2::CommandPtr Kicker::SpinToSpeed(units::meters_per_second_t velocity) {
+  return RunOnce([this, velocity] {SetCommand(velocity);});
+}
+
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool Kicker::ConfigureHardware() {
 configs::TalonFXConfiguration configs{};

@@ -12,10 +12,10 @@
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/FunctionalCommand.h>
 #include <frc2/command/RunCommand.h>
-
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/PrintCommand.h>
+
 #include <subsystems/Flywheel.h>
 #include <subsystems/Spindexer.h>
 #include <subsystems/ShooterHood.h>

@@ -68,6 +68,10 @@ void Spindexer::Periodic() {
   frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity(mps)", _limiter.LastValue().value());  
 }
 
+frc2::CommandPtr Spindexer::SpinToSpeed(units::meters_per_second_t velocity) {
+  return RunOnce([this, velocity] {SetCommand(velocity);});
+}
+
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool Spindexer::ConfigureHardware() {
   configs::TalonFXConfiguration configs{};

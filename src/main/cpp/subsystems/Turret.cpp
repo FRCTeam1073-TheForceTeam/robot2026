@@ -80,6 +80,10 @@ void Turret::Periodic() {
   frc::SmartDashboard::PutNumber("Turret/Velocity (Rad/s))", _feedback.velocity.value());
 }
 
+frc2::CommandPtr Turret::RotateToPos(units::radian_t pos) {
+  return RunOnce([this, pos] {SetCommand(pos);});
+}
+
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool Turret::ConfigureHardware() {
 configs::TalonFXConfiguration configs{};

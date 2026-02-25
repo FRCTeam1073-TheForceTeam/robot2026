@@ -71,6 +71,8 @@ class Turret: public frc2::SubsystemBase {
   /// Set the command for the system.
   void SetCommand(Command cmd);
 
+  frc2::CommandPtr RotateToPos(units::radian_t pos);
+
  private:
 
 

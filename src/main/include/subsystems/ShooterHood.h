@@ -72,6 +72,8 @@ class ShooterHood : public frc2::SubsystemBase {
   /// Set the command for the system.
   void SetCommand(Command cmd);
 
+  frc2::CommandPtr SetHoodLevel(int level);
+
  private:
 
 
