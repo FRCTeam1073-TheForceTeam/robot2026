@@ -6,7 +6,8 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/ShooterLoad.h"
+
+#include "subsystems/Climber.h"
 
 /**
  * An example command.
@@ -15,16 +16,20 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class Load
-    : public frc2::CommandHelper<frc2::Command, Load> {
+class ZeroClimber
+    : public frc2::CommandHelper<frc2::Command, ZeroClimber> {
  public:
-   /**
+  /* You should consider using the more terse Command factories API instead
+   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
+   */
+
+  /**
    * Creates a new ExampleCommand.
    *
-   * @param subsystem The subsystem used by this command.
+   * @param climber The subsystem used by this command.
    */
-  
-  Load(std::shared_ptr<ShooterLoad> ShooterLoad);
+
+  explicit ZeroClimber(std::shared_ptr<Climber> climber);
 
   void Initialize() override;
 
@@ -34,9 +39,6 @@ class Load
 
   bool IsFinished() override;
 
-
-
-
   private:
-   std::shared_ptr<ShooterLoad> m_shooterload;
+    std::shared_ptr<Climber> m_climber;
 };

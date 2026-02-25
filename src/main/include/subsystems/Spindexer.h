@@ -13,8 +13,10 @@
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
-#include <variant>
+#include <frc/filter/SlewRateLimiter.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
+#include <variant>
 
 /**
  * This example subsystem shows the basic pattern of any mechanism subsystem.
@@ -33,7 +35,9 @@ class Spindexer : public frc2::SubsystemBase {
   static constexpr int SpindexerMotorId = 23;
 
   // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
+  // Gear Ratio:
+  static constexpr auto GearRatio = units::angle::turn_t(3) / units::angle::turn_t(1);
+  static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(0.1524 * std::numbers::pi);
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
 
   
@@ -48,7 +52,7 @@ class Spindexer : public frc2::SubsystemBase {
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
+  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t>;
 
 
   // Constructor for the subsystem.
@@ -68,9 +72,6 @@ class Spindexer : public frc2::SubsystemBase {
 
   /// Set the command for the system.
   void SetCommand(Command cmd);
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> GetVelocity();
-  void SetTargetVelocity(units::angular_velocity::turns_per_second_t TargetVelocity);
-  units::angular_velocity::turns_per_second_t GetTargetVelocity();
 
  private:
 
@@ -81,12 +82,10 @@ class Spindexer : public frc2::SubsystemBase {
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
 
-  units::angular_velocity::turns_per_second_t _targetVelocity;
   // Example TalonFX motor interface.
   ctre::phoenix6::hardware::TalonFX _spindexerMotor;
 
   // CTRE hardware feedback signals:
-
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _spindexerVelocitySig;
   ctre::phoenix6::StatusSignal<units::current::ampere_t> _spindexerCurrentSig;
 
@@ -100,7 +99,7 @@ class Spindexer : public frc2::SubsystemBase {
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
 
-  //TODO: get gear ratio because EM doesnt have it yet
-  double GearRatio = units::angle::turn_t(1)/units::angle::turn_t(1);
+  frc::SlewRateLimiter<units::meters_per_second> _limiter;
+
 };
 //hi if your reading this 

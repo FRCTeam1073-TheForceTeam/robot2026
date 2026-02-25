@@ -10,12 +10,13 @@
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/force.h>
-#include <units/current.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
-#include <variant>
+#include <frc/filter/SlewRateLimiter.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
+#include <variant>
 
 /**
  * This example subsystem shows the basic pattern of any mechanism subsystem.
@@ -27,35 +28,35 @@
  * on other subsystems.
  * 
  */
-class ShooterHood : public frc2::SubsystemBase {
+class Collector : public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
-  static constexpr int HoodMotorId = 24;
+  static constexpr int MotorId = 20;
 
   // Mechanism conversion constants for the subsystem:
-  //static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
-  //static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
-  static constexpr double HoodToMotorGearRatio = (52.0 / 12.0) * (33.0 / 15.0) * (160.0 / 10.0);
+  // Gear Ratio:
+  static constexpr units::meter_t wheelDiameter = units::inch_t(1.25);
+  static constexpr auto GearRatio = units::angle::turn_t(2) / units::angle::turn_t(1);
+  static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / (wheelDiameter * std::numbers::pi);
+  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
 
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
-      units::angle::radian_t position;
-      units::current::ampere_t current;
+      units::velocity::meters_per_second_t velocity;
+      units::force::newton_t force;
   };
-
-  
 
 
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::angular_velocity::radians_per_second_t, units::angle::radian_t>;
+  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t>;
 
 
   // Constructor for the subsystem.
-  ShooterHood();
+  Collector();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -80,26 +81,24 @@ class ShooterHood : public frc2::SubsystemBase {
 
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
-  
-  units::angle::radian_t TargetPosition;
-  units::angle::radian_t Position;
 
   // Example TalonFX motor interface.
-  ctre::phoenix6::hardware::TalonFX _hoodMotor;
+  ctre::phoenix6::hardware::TalonFX _motor;
 
   // CTRE hardware feedback signals:
-  ctre::phoenix6::StatusSignal<units::angle::turn_t> _hoodPositionSig;
-  ctre::phoenix6::StatusSignal<units::current::ampere_t> _hoodCurrentSig;
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _velocitySig;
+  ctre::phoenix6::StatusSignal<units::current::ampere_t> _currentSig;
 
 
   // Example velocity and position controls:
-  ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot0 gains.
-  ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;
+  ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;  // Uses Slot0 gains.
   
   // Cached feedback:
   Feedback _feedback;
 
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
+
+  frc::SlewRateLimiter<units::meters_per_second> _limiter;
 
 };

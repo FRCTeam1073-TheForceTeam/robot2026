@@ -4,8 +4,10 @@
 
 #include "commands/ClimberTeleop.h"
 
-ClimberTeleop::ClimberTeleop(std::shared_ptr<Climber> climber) :
-  m_climber{climber} {
+ClimberTeleop::ClimberTeleop(std::shared_ptr<Climber>& climber, std::shared_ptr<OI>& oi) :
+  m_climber(climber),
+  m_OI(oi) {
+
   AddRequirements({m_climber.get()});
 }
 
@@ -14,11 +16,21 @@ void ClimberTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ClimberTeleop::Execute() {
-  m_climber->SetVelocity(0.0_tps);
+  rightY = m_OI->GetOperatorRightY();
+
+  if(abs(rightY) < 0.1) rightY = 0.0;
+
+  vy = rightY*-0.67_mps;
+  m_climber->SetCommand(vy);
+
+  //9 amps at bottom
+  //10 when lift (but have switch)
 }
 
 // Called once the command ends or is interrupted.
-void ClimberTeleop::End(bool interrupted) {}
+void ClimberTeleop::End(bool interrupted) {
+  m_climber->SetCommand(std::monostate());
+}
 
 // Returns true when the command should end.
 bool ClimberTeleop::IsFinished() {

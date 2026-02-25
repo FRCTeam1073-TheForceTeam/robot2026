@@ -13,57 +13,43 @@ using namespace ctre::phoenix6;
  */
 LaserCan::LaserCan() :
 _hardwareConfigured(true), 
-laserCAN(28)
+_laserCAN(28)
 {
+  _feedback.is_valid = false;
+  _feedback.range = 0.0_m;
+
   // Do hardware configuration and track if it succeeds:
   _hardwareConfigured = ConfigureHardware();
   if (!_hardwareConfigured) {
-    std::cerr << "ExampleSubsystem: Hardware Failed To Configure!" << std::endl;
+    std::cerr << "LaserCAN: Hardware Failed To Configure!" << std::endl;
   }
 
+  frc::SmartDashboard::PutBoolean("LaserCan/LaserCAN - hardware_configured", _hardwareConfigured);
 }
 
-
-  /// Set the command for the system.
-void LaserCan::SetCommand(Command cmd) {
-  // Sometimes you need to do something immediate to the hardware.
-  // We can just set our target internal value.
-  _command = cmd;
-}
-
-void LaserCan::InitializeLaser(){
-  laserCAN.set_ranging_mode(grpl::LaserCanRangingMode::Long);//TODO: set ranging mode
-  laserCAN.set_timing_budget(grpl::LaserCanTimingBudget::TB100ms);//TODO: set timing budget
-  laserCAN.set_roi(grpl::LaserCanROI{8, 8, 16, 16});//TODO: change values
-}
 
 void LaserCan::Periodic() {
-   std::optional<grpl::LaserCanMeasurement> measurementData = laserCAN.get_measurement();
-  if (measurementData.has_value() && measurementData.value().status == grpl::LASERCAN_STATUS_VALID_MEASUREMENT){
-    std::cout << "Distance from target:: " << measurementData.value().distance_mm << "millimeters" << std::endl;
+  auto measurementData = _laserCAN.get_measurement();
+  if (measurementData.has_value() && measurementData.value().status == grpl::LASERCAN_STATUS_VALID_MEASUREMENT) {
+    _feedback.is_valid = true;
+    _feedback.range = units::length::millimeter_t(measurementData.value().distance_mm);
   }
   else {
-    std::cout << "Error: LaserCAN target is out of range or the measurment has an error" << std::endl;
+    _feedback.is_valid = false;
+    _feedback.range = 0.0_m;
   }
 
-  frc::SmartDashboard::PutNumber("LaserCan/measurementData", measurementData.value().distance_mm);
-  
+  frc::SmartDashboard::PutNumber("LaserCan/is_valid", _feedback.is_valid);
+  frc::SmartDashboard::PutNumber("LaserCan/distance(m)", _feedback.range.value());
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool LaserCan::ConfigureHardware() {
-configs::TalonFXConfiguration configs{};
 
+  _laserCAN.set_ranging_mode(grpl::LaserCanRangingMode::Long);//TODO: set ranging mode
+  _laserCAN.set_timing_budget(grpl::LaserCanTimingBudget::TB100ms);//TODO: set timing budget
+  _laserCAN.set_roi(grpl::LaserCanROI{8, 8, 16, 16});//TODO: change values
 
-
-//    if (!status.IsOK()) {
-        // Log errors.
-    //}
-
-
-
-    // Log errors.
-    return true;
-
+  return true;
 }
 

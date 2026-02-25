@@ -12,52 +12,49 @@
 #include <units/force.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <variant>
 
-#include <frc/filter/SlewRateLimiter.h>
 
 /**
- * This  subsystem shows the basic pattern of any mechanism subsystem.
+ * This example subsystem shows the basic pattern of any mechanism subsystem.
  * 
  * If configures some harwdare, provides feedback and accepts (modal) commands
  * for the subsystem. It handles feedback using signals (efficently),
  * and provides latency compensated feedabck. Lots of good practices for
- * a nicely behaved subsystem are included as  code to get started
+ * a nicely behaved subsystem are included as example code to get started
  * on other subsystems.
  * 
  */
-class ShooterLoad : public frc2::SubsystemBase {
+class Turret: public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
-  static constexpr int LoadMotorId = 27; // TODO: Get motor id 
-  static constexpr int laserCANId = 28;
-  
-  const double GearRatio = 1; // TODO: Get gear ratio from EM
-
-  
+  static constexpr int RotaterMotorId = 25;
+  static constexpr int encoderMotorId = 26;
 
   // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0); // TODO: Get turns per meter
-  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
+  static constexpr double TurretToMotorTurns = (50.0 / 14.0) * (82.0 / 14.0); // Gear ratio.
+  static constexpr auto AmpsPerNewtonMeter = units::current::ampere_t(10.0) / 1.0_Nm;
 
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
-      units::velocity::meters_per_second_t velocity; // TODO: Add other stuff to feedback
-      units::force::newton_t force;
+      units::angle::radian_t position;
+      units::angular_velocity::radians_per_second_t velocity;
+      units::torque::newton_meter_t torque;
   };
 
 
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
+  using Command = std::variant<std::monostate, units::angular_velocity::radians_per_second_t, units::angle::radian_t>;
 
 
   // Constructor for the subsystem.
-  ShooterLoad();
+  Turret();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -74,12 +71,6 @@ class ShooterLoad : public frc2::SubsystemBase {
   /// Set the command for the system.
   void SetCommand(Command cmd);
 
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> GetLoadVelocity();
-
-  units::angular_velocity::turns_per_second_t GetLoadTargetVelocity();
-
-  void SetTargetLoadVelocity(units::angular_velocity::turns_per_second_t Velocity);
-
  private:
 
 
@@ -89,26 +80,23 @@ class ShooterLoad : public frc2::SubsystemBase {
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
 
-  //  TalonFX motor interface.
-  ctre::phoenix6::hardware::TalonFX _loadMotor;
-  //TODO: put in lasercan
+  // Example TalonFX motor interface.
+  ctre::phoenix6::hardware::TalonFX _rotaterMotor;
 
   // CTRE hardware feedback signals:
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _loadVelocitySig;
-  ctre::phoenix6::StatusSignal<units::current::ampere_t> _loadCurrentSig;
+  ctre::phoenix6::StatusSignal<units::angle::turn_t> _rotaterPositionSig;
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _rotaterVelocitySig;
+  ctre::phoenix6::StatusSignal<units::current::ampere_t> _rotaterCurrentSig;
 
 
-  //  velocity and position controls:
-  ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;  // Uses Slot0 gains.
-  
+  // Example velocity and position controls:
+  ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot0 gains.
+  ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;
+
   // Cached feedback:
   Feedback _feedback;
 
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
 
-  // Set the motors target velocity
-  units::angular_velocity::turns_per_second_t _targetVelocity;
-
-  frc::SlewRateLimiter<units::turns_per_second> limiter{0.5_tps / 1_s};
 };

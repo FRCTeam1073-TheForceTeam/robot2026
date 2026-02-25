@@ -37,9 +37,9 @@ class Drivetrain : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
-  void InitSendable(wpi::SendableBuilder& builder) override;
+  // void InitSendable(wpi::SendableBuilder& builder) override;
 
-    /// Set the debug mode
+  /// Set the debug mode
   void SetDebugMode(bool removeBug);
 
   units::angle::degree_t GetGyroHeadingDegrees();
@@ -117,7 +117,6 @@ class Drivetrain : public frc2::SubsystemBase {
 
   // Was hardware configured correctly?
   bool _hardwareConfigured;
-
 
   // Overrides all control and forces the drivetrain into a locked "parking brake" condition.
   bool _parkingBrake;

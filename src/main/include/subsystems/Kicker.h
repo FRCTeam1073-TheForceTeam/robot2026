@@ -6,41 +6,48 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/force.h>
-
+#include <units/angle.h>
+#include <units/constants.h>
 #include <ctre/phoenix6/TalonFX.hpp>
 
 #include <variant>
 
+#include <frc/filter/SlewRateLimiter.h>
 
 /**
- * This example subsystem shows the basic pattern of any mechanism subsystem.
+ * This  subsystem shows the basic pattern of any mechanism subsystem.
  * 
  * If configures some harwdare, provides feedback and accepts (modal) commands
  * for the subsystem. It handles feedback using signals (efficently),
  * and provides latency compensated feedabck. Lots of good practices for
- * a nicely behaved subsystem are included as example code to get started
+ * a nicely behaved subsystem are included as  code to get started
  * on other subsystems.
  * 
  */
-class ShooterRotater : public frc2::SubsystemBase {
+class Kicker : public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
-  static constexpr int RotaterMotorId = 25;
-  static constexpr int encoderMotorId = 26;
+  static constexpr int LoadMotorId = 27; // TODO: Get motor id 
+  static constexpr int laserCANId = 28;
+  
+  const double GearRatio = 3; // TODO: Get gear ratio from EM
+
+  
 
   // Mechanism conversion constants for the subsystem:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
-  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
+  static constexpr units::meter_t diameter = units::inch_t(2.0);
+  static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(diameter * units::constants::pi);
+  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
 
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
-      units::length::meter_t position;
+      units::velocity::meters_per_second_t velocity; // TODO: Add other stuff to feedback
       units::force::newton_t force;
   };
 
@@ -48,11 +55,11 @@ class ShooterRotater : public frc2::SubsystemBase {
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
+  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t>;
 
 
   // Constructor for the subsystem.
-  ShooterRotater();
+  Kicker();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -68,14 +75,8 @@ class ShooterRotater : public frc2::SubsystemBase {
 
   /// Set the command for the system.
   void SetCommand(Command cmd);
-  units::angle::radian_t GetAngle();
-  void SetTargetAngle(units::angle::radian_t newAngle);
-  units::angular_velocity::radians_per_second_t GetVelocity();
-  void SetTargetVelocity(units::angular_velocity::radians_per_second_t vel);
-
 
  private:
-
 
   // Helper function for configuring hardware from within the constructor of the subsystem.
   bool ConfigureHardware();
@@ -83,22 +84,17 @@ class ShooterRotater : public frc2::SubsystemBase {
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
 
-  // Example TalonFX motor interface.
-  ctre::phoenix6::hardware::TalonFX _rotaterMotor;
-
-  units::angle::radian_t targetAngle;
-  units::angle::radian_t positionAngle;
-
-  units::angular_velocity::radians_per_second_t velocity;
-  units::angular_velocity::radians_per_second_t targetVelocity;
+  // TalonFX motor interface.
+  ctre::phoenix6::hardware::TalonFX _kickerMotor;
+  // TODO: put in lasercan
 
   // CTRE hardware feedback signals:
-  ctre::phoenix6::StatusSignal<units::angle::turn_t> _rotaterPositionSig;
-  ctre::phoenix6::StatusSignal<units::current::ampere_t> _rotaterCurrentSig;
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _kickerVelocitySig;
+  ctre::phoenix6::StatusSignal<units::current::ampere_t> _kickerCurrentSig;
 
 
-  // Example velocity and position controls:
-  ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot0 gains.
+  //  velocity and position controls:
+  ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;  // Uses Slot0 gains.
   
   // Cached feedback:
   Feedback _feedback;
@@ -106,4 +102,8 @@ class ShooterRotater : public frc2::SubsystemBase {
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
 
+  // Set the motors target velocity
+  // units::angular_velocity::turns_per_second_t _targetVelocity;
+
+  frc::SlewRateLimiter<units::meters_per_second> _limiter;
 };
