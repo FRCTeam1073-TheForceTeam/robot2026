@@ -22,7 +22,7 @@ _limiter(10.0_mps/1.0_s) {
   // Extra implementation of subsystem constructor goes here.
 
   // Assign gain slots for the commands to use:
-  _commandPositionVoltage.WithSlot(0);  // Velocity control loop uses these gains.
+  _commandPositionVoltage.WithSlot(1);  // Position control loop uses these gains.
 
   // Do hardware configuration and track if it succeeds:
   _hardwareConfigured = ConfigureHardware();
@@ -76,13 +76,13 @@ bool Intake::ConfigureHardware() {
   configs.Voltage.PeakForwardVoltage = 8_V; // These are pretty typical values, adjust as needed.
   configs.Voltage.PeakReverseVoltage = -8_V;
 
-  // Slot 0 for the velocity control loop:
-  configs.Slot0.kV = 0.12;
-  configs.Slot0.kP = 0.35;
-  configs.Slot0.kI = 0.0;
-  configs.Slot0.kD = 0.0;
-  configs.Slot0.kA = 0.0;
-  configs.Slot0.kS = 0.04;
+  // Slot 1 for the position control loop:
+  configs.Slot1.kV = 0.12;
+  configs.Slot1.kP = 0.35;
+  configs.Slot1.kI = 0.0;
+  configs.Slot1.kD = 0.0;
+  configs.Slot1.kA = 0.0;
+  configs.Slot1.kS = 0.04;
 
   
   // Set whether motor control direction is inverted or not:
@@ -107,3 +107,4 @@ bool Intake::ConfigureHardware() {
   // Log errors.
   return true;
 }
+//yay

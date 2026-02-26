@@ -67,8 +67,9 @@ void Climber::Periodic() {
     _limiter.Reset(0.0_mps);
   }
 
-  frc::SmartDashboard::PutNumber("Climber/Position(mps)", _feedback.velocity.value());  
-  frc::SmartDashboard::PutNumber("Climber/TargetPosition(mps)", _limiter.LastValue().value());  
+  frc::SmartDashboard::PutNumber("Climber/Velocity(mps)", _feedback.velocity.value());  
+  frc::SmartDashboard::PutNumber("Climber/TargetVelocity(mps)", _limiter.LastValue().value());  
+  frc::SmartDashboard::PutNumber("Climber/Load(A)", std::abs(_feedback.force.value()));
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
@@ -83,11 +84,11 @@ bool Climber::ConfigureHardware() {
 
   // Slot 0 for the velocity control loop:
   configs.Slot0.kV = 0.12;
-  configs.Slot0.kP = 0.35;
+  configs.Slot0.kP = 0.15;
   configs.Slot0.kI = 0.0;
-  configs.Slot0.kD = 0.0;
+  configs.Slot0.kD = 0.01;
   configs.Slot0.kA = 0.0;
-  configs.Slot0.kS = 0.04;
+  configs.Slot0.kS = 0.0;
 
   
   // Set whether motor control direction is inverted or not:
