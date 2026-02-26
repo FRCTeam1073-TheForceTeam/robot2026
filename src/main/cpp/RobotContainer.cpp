@@ -101,7 +101,10 @@ RobotContainer::RobotContainer() {
   m_levelChooser.SetDefaultOption("No Level", noLevelAuto);
   m_levelChooser.AddOption("Week Zero Auto", weekZeroAuto);
   m_levelChooser.AddOption("Test Auto", testAuto);
-  
+
+  frc::SmartDashboard::PutData("Position Chooser", &m_positionChooser);
+  frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
+
   // Configure the button bindings
   ConfigureBindings();
 }

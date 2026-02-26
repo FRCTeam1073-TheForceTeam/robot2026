@@ -30,13 +30,14 @@ frc2::CommandPtr WeekZeroAuto::Create(
 
   return frc2::cmd::Sequence(
     frc2::cmd::Print("Begining Sequence"),
-    Flywheel->SpinToSpeed(20_mps),
-    ShooterHood->SetHoodLevel(3),
+    Flywheel->SpinToSpeed(14_mps),
+    ShooterHood->SetHoodLevel(1),
     Turret->RotateToPos(0_rad),
-    frc2::cmd::Wait(5_s),
+    frc2::cmd::Wait(3_s),
     Kicker->SpinToSpeed(4.5_mps),
     Spindexer->SpinToSpeed(4.2_mps),
-    frc2::cmd::Wait(12_s),
+    frc2::cmd::Wait(8_s),
+    ShooterHood->SetHoodLevel(0),
     Spindexer->SpinToSpeed(0_mps),
     Kicker->SpinToSpeed(0_mps),
     Flywheel->SpinToSpeed(0_mps),
