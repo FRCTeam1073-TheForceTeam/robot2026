@@ -48,11 +48,11 @@ void Kicker::Periodic() {
 
   // Populate feedback cache:
   _feedback.force = _kickerCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
-  _feedback.velocity = _kickerVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
+  _feedback.velocity = _kickerVelocitySig.GetValue() / (TurnsPerMeter * GearRatio); // Convert from hardare units to subsystem units.
 
   if (std::holds_alternative<units::meters_per_second_t>(_command)) {
     auto limitedVelocity = _limiter.Calculate(std::get<units::meters_per_second_t>(_command));
-    auto motorVelocity = limitedVelocity * TurnsPerMeter;
+    auto motorVelocity = limitedVelocity * TurnsPerMeter * GearRatio;
     
     _kickerMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorVelocity));
   } else {
