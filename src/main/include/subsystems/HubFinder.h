@@ -4,10 +4,10 @@
 #include <frc/geometry/Translation2d.h>
 #include <frc/geometry/Rotation2d.h>
 #include <units/length.h>
-#include <frc/geometry/Rotation2d.h>
-
 
 #include "subsystems/Localizer.h"
+
+
 
 
 
@@ -16,24 +16,23 @@ class HubFinder  : public frc2::SubsystemBase {
     static const frc::Pose2d REDHUB;
     static const frc::Pose2d BLUEHUB;
     static const frc::Transform2d ROBOTOTURRET;
-    
-    std::shared_ptr<Localizer> _localizer;
-    HubFinder(std::shared_ptr<Localizer> localizer);
 
-    void Periodic() override;
+    HubFinder(std::shared_ptr<Localizer> localizer);
+    std::shared_ptr<Localizer> _localizer;
 
     frc::Pose2d getHubPos();
+    frc::Pose2d HubLoc;
+    
     units::angle::radian_t getTurretToHubAngle();
 
-    private:
-    void UpdateAlliance();
+    void Periodic();
     
-    std::optional<frc::DriverStation::Alliance> _alliance;
 
-    frc::Pose2d HubLoc;
-    frc::Pose2d TurretLoc;
+    private:
     frc::Pose2d OurHub;
     frc::Pose2d RoboPos;
-    frc::Rotation2d RoboRotation;
+
+    void UpdateAlliance();
+    std::optional<frc::DriverStation::Alliance> _alliance;
 
 };
