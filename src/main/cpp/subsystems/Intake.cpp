@@ -1,106 +1,110 @@
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
-#include "subsystems/Intake.h"
+// the WPILib BSD license file in the root directory of this project
 #include <iostream>
 
-using namespace ctre::phoenix6::hardware;
+#include "subsystems/Intake.h"
+#include <ctre/phoenix6/controls/NeutralOut.hpp>
+
 using namespace ctre::phoenix6;
-using namespace units;
 
+/**
+ * You have to use initializer lists to build up the elements of the subsystem in the right order.
+ */
+Intake::Intake() :
+_hardwareConfigured(false),
+_intakeMotor(IntakeMotorId, CANBus("rio")),
+_intakePositionSig(_intakeMotor.GetPosition()),
+_intakeCurrentSig(_intakeMotor.GetTorqueCurrent()),
+_commandPositionVoltage(units::angle::turn_t(0.0)),
+_command(0.0_m),
+_limiter(10.0_mps/1.0_s) {
+  // Extra implementation of subsystem constructor goes here.
 
-Intake::Intake(): 
-    _hardwareConfigured(true),
-    _ActuatorLeadMotor(_ActuatorLeadMotorID, CANBus("rio")), 
-    _ActuatorFollowMotor(_ActuatorFollowMotorID, CANBus("rio")), 
-    _PositionSig(_ActuatorLeadMotor.GetPosition()),
-    _ActuatorVelocitySig(_ActuatorLeadMotor.GetVelocity()),
-    _CurrentSig(_ActuatorLeadMotor.GetTorqueCurrent()),
-    _ActuatorVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)), //TODO: Get Velocity
-    _PositionVoltage(units::angle::turn_t(0.0)) //TODO: Get Velocity
-{
-    _ActuatorVelocityVoltage.WithSlot(0);
-    _PositionVoltage.WithSlot(1);
+  // Assign gain slots for the commands to use:
+  _commandPositionVoltage.WithSlot(1);  // Position control loop uses these gains.
 
-    _hardwareConfigured = ConfigureHardware();
-    if (!_hardwareConfigured) {
-        std::cerr << "Intake: Hardware Failed To Configure!" << std::endl;
-    }
+  // Do hardware configuration and track if it succeeds:
+  _hardwareConfigured = ConfigureHardware();
+  if (!_hardwareConfigured) {
+    std::cerr << "Spindexer: Hardware Failed To Configure!" << std::endl;
+  }
 
-    _command = std::monostate();
+  frc::SmartDashboard::PutBoolean("Spindexer/Spindexer - hardware_configured", _hardwareConfigured);
+}
 
-} 
-
+// Set the command for the system.
 void Intake::SetCommand(Command cmd) {
   // Sometimes you need to do something immediate to the hardware.
   // We can just set our target internal value.
   _command = cmd;
 }
 
-void Intake::SetIntakeVelocity(units::angular_velocity::turns_per_second_t Velocity) {
-  _TargetVelocity = Velocity;
-}
-
-ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> Intake::GetIntakeVelocity() {
-  return _ActuatorVelocitySig;
-}
-
-units::angular_velocity::turns_per_second_t Intake::GetIntakeTargetVelocity() {
-  return _TargetVelocity;
-}
 
 void Intake::Periodic() {
-    
-    BaseStatusSignal::RefreshAll(_PositionSig, _ActuatorVelocitySig, _CurrentSig);
+  // Sample the hardware:
+  BaseStatusSignal::RefreshAll(_intakePositionSig, _intakeCurrentSig);
 
-    _feedback.velocity = _ActuatorVelocitySig.GetValue() /ActuatorTurnsPerMeter;
+  // Populate feedback cache:
+  _feedback.force = _intakeCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
+  _feedback.position = _intakePositionSig.GetValue() / TurnsPerMeter; // Convert from hardware units to subsystem units. 
 
-    _ActuatorFollowMotor.SetControl(controls::StrictFollower{_ActuatorLeadMotor.GetDeviceID()});
-
-  if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
-  
-    // TODO:
+  // // Process command:
+  if (std::holds_alternative<units::length::meter_t>(_command)) {
+      // Send position based command:
+      auto MotorPosition = std::get<units::length::meter_t>(_command) * TurnsPerMeter;
+      // Send to hardware:
+      _intakeMotor.SetControl(_commandPositionVoltage.WithPosition(MotorPosition));
 
   } else {
-
-    // TODO:
+      // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
+    _intakeMotor.SetControl(controls::NeutralOut());
+    _limiter.Reset(0.0_mps);
   }
 
+  frc::SmartDashboard::PutNumber("Intake/Position(mps)", _feedback.velocity.value());  
+  frc::SmartDashboard::PutNumber("Intake/TargetPosition(mps)", _limiter.LastValue().value());  
 }
 
+// Helper function for configuring hardware from within the constructor of the subsystem.
 bool Intake::ConfigureHardware() {
-    configs::TalonFXConfiguration configs{};
+  configs::TalonFXConfiguration configs{};
 
-    configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; //TODO: Get Peak
-    configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A; //TODO: Get Peak
+  configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
+  configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A; 
 
-    configs.Voltage.PeakForwardVoltage = 8_V; //TODO: Get Peak
-    configs.Voltage.PeakReverseVoltage = -8_V; //TODO: Geat Peak
+  configs.Voltage.PeakForwardVoltage = 8_V; // These are pretty typical values, adjust as needed.
+  configs.Voltage.PeakReverseVoltage = -8_V;
 
-    // Slot 0, TODO: Get Numbers
-    configs.Slot0.kV = 0.12;
-    configs.Slot0.kP = 0.35;
-    configs.Slot0.kI = 0.0;
-    configs.Slot0.kD = 0.03;
-    configs.Slot0.kA = 0.0;
+  // Slot 1 for the position control loop:
+  configs.Slot1.kV = 0.12;
+  configs.Slot1.kP = 0.35;
+  configs.Slot1.kI = 0.0;
+  configs.Slot1.kD = 0.0;
+  configs.Slot1.kA = 0.0;
+  configs.Slot1.kS = 0.04;
 
-    // Slot 1, TODO: Get Numbers
-    configs.Slot1.kV = 0.12;
-    configs.Slot1.kP = 0.1;
-    configs.Slot1.kI = 0.01;
-    configs.Slot1.kD = 0.0;
-    configs.Slot1.kA = 0.0;
+  
+  // Set whether motor control direction is inverted or not:
+  configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
 
-    auto status = _ActuatorLeadMotor.GetConfigurator().Apply(configs, 1_s);
+  // Set the control configuration for the drive motor:
+  auto status = _intakeMotor.GetConfigurator().Apply(configs, 1_s); // 1 Second configuration timeout.
 
-    configs::TalonFXConfiguration followerConfigs{};
-    followerConfigs.MotorOutput.WithInverted(signals::InvertedValue::CounterClockwise_Positive);
-    
-    if (!status.IsOK()) {
-        std::cerr << "Intake is not working" << std::endl;
-    }
+  if (!status.IsOK()) {
+      std::cerr << "Intake: config failed to config!" << std::endl;
+      return false;
+  }
 
-    return true;
+  // Set our neutral mode to brake on:
+  status = _intakeMotor.SetNeutralMode(signals::NeutralModeValue::Coast, 1_s);
 
+  if (!status.IsOK()) {
+      std::cerr << "Intake: neutral mode failed to config :(!" << std::endl;
+      return false;
+  }
+
+  // Log errors.
+  return true;
 }
+//yay

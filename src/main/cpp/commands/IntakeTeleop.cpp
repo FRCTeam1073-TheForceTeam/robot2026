@@ -14,7 +14,7 @@ void IntakeTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void IntakeTeleop::Execute() {
-  m_intake->SetIntakeVelocity(0.0_tps);
+  m_intake->SetCommand(0.0_m);
 }
 
 // Called once the command ends or is interrupted.

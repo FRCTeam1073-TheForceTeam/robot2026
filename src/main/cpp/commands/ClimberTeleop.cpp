@@ -16,6 +16,7 @@ void ClimberTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ClimberTeleop::Execute() {
+
   rightY = m_OI->GetOperatorRightY();
 
   if(abs(rightY) < 0.1) rightY = 0.0;
