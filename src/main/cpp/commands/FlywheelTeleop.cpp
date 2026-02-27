@@ -13,7 +13,7 @@ FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_
   m_flywheel(flywheel),
   m_OI(oi) {
   maxVel = 10_mps;
-  scale = 0.75;
+  scale = 1.0;
   LastDPadUpState = false;
   LastDPadDownState = false;
   AddRequirements({m_flywheel.get()});
