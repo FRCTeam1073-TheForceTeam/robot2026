@@ -88,11 +88,11 @@ bool Flywheel::ConfigureHardware() {
 
     // Slot 0 for the velocity control loop:
     configs.Slot0.kV = 0.12;
-    configs.Slot0.kP = 0.55;
-    configs.Slot0.kI = 0.2;
-    configs.Slot0.kD = 0.0;
+    configs.Slot0.kP = 0.25;
+    configs.Slot0.kI = 0.0;
+    configs.Slot0.kD = 0.015;
     configs.Slot0.kA = 0.0;
-    configs.Slot0.kS = 0.2;
+    configs.Slot0.kS = 0.02;
 
     // Set whether motor control direction is inverted or not:
     configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);

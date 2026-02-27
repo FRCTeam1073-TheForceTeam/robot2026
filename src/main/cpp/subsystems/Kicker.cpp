@@ -48,11 +48,11 @@ void Kicker::Periodic() {
 
   // Populate feedback cache:
   _feedback.force = _kickerCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
-  _feedback.velocity = _kickerVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
+  _feedback.velocity = _kickerVelocitySig.GetValue() / (TurnsPerMeter * GearRatio); // Convert from hardare units to subsystem units.
 
   if (std::holds_alternative<units::meters_per_second_t>(_command)) {
     auto limitedVelocity = _limiter.Calculate(std::get<units::meters_per_second_t>(_command));
-    auto motorVelocity = limitedVelocity * TurnsPerMeter;
+    auto motorVelocity = limitedVelocity * TurnsPerMeter * GearRatio;
     
     _kickerMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorVelocity));
   } else {
@@ -80,11 +80,11 @@ configs::TalonFXConfiguration configs{};
 
     // Slot 0 for the velocity control loop:
     configs.Slot0.kV = 0.12;
-    configs.Slot0.kP = 0.3;
+    configs.Slot0.kP = 0.25;
     configs.Slot0.kI = 0.0;
-    configs.Slot0.kD = 0.01;
+    configs.Slot0.kD = 0.0;
     configs.Slot0.kA = 0.0;
-    configs.Slot0.kS = 0.05;
+    configs.Slot0.kS = 0.04;
   
 
     // Set whether motor control direction is inverted or not:

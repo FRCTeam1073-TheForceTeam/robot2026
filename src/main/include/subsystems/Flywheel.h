@@ -27,7 +27,7 @@ class Flywheel : public frc2::SubsystemBase {
   static constexpr double GearRatio = units::angle::turn_t(1)/units::angle::turn_t(1);
   // Mechanism conversion constants for the subsystem:
   static constexpr units::meter_t wheelDiameter = units::inch_t(3.0);
-  static constexpr auto TurnsPerMeter = units::turn_t(1) / units::length::meter_t(wheelDiameter * units::constants::pi); 
+  static constexpr auto TurnsPerMeter = units::turn_t(1) / (wheelDiameter * units::constants::pi); 
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
 
  struct Feedback {

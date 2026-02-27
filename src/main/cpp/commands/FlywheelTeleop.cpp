@@ -12,7 +12,7 @@
 FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi) :
   m_flywheel(flywheel),
   m_OI(oi) {
-  maxVel = 15_mps; //TODO: test and change this value
+  maxVel = 10_mps;
   scale = 0.75;
   LastDPadUpState = false;
   LastDPadDownState = false;
