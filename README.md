@@ -60,7 +60,7 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Right Bumper     | GetDriverRightBumper  |                               |
 | D-Pad Up         | GetDriverDPadUp       |                               |
 | D-Pad Right      | GetDriverDPadRight    |                               |
-| D-Pad Left       | GetDriverDPadLeft     |                               |
+| D-Pad Left       | GetDriverDPadLeft     | Turret to Hub Angle           |
 | D-Pad Down       | GetDriverDPadDown     |                               |
 | Zero Controller  | ZeroDriverController  |                               |
 
