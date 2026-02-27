@@ -34,12 +34,11 @@ class Climber : public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
-  static constexpr int ClimberMotorId = 23;
+  static constexpr int ClimberMotorId = 29;
 
   // Mechanism conversion constants for the subsystem:
   // Gear Ratio:
-  static constexpr auto GearRatio = units::angle::turn_t(3) / units::angle::turn_t(1); // TODO: get the correct values, these are just copied from spindexer
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(0.1524 * std::numbers::pi);
+  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
 
   

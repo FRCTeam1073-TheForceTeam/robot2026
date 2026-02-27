@@ -13,7 +13,7 @@ using namespace ctre::phoenix6;
  */
 Climber::Climber() :
 _hardwareConfigured(false),
-_climberMotor(ClimberMotorId, CANBus("rio")),
+_climberMotor(ClimberMotorId, CANBus("Canivore")),
 _climberVelocitySig(_climberMotor.GetVelocity()),
 _climberCurrentSig(_climberMotor.GetTorqueCurrent()),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
@@ -27,10 +27,10 @@ _limiter(10.0_mps/1.0_s) {
   // Do hardware configuration and track if it succeeds:
   _hardwareConfigured = ConfigureHardware();
   if (!_hardwareConfigured) {
-    std::cerr << "Spindexer: Hardware Failed To Configure!" << std::endl;
+    std::cerr << "Climber: Hardware Failed To Configure!" << std::endl;
   }
 
-  frc::SmartDashboard::PutBoolean("Spindexer/Spindexer - hardware_configured", _hardwareConfigured);
+  frc::SmartDashboard::PutBoolean("Climber/Climber - hardware_configured", _hardwareConfigured);
 }
 
 // Set the command for the system.
@@ -57,7 +57,7 @@ void Climber::Periodic() {
   if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
       // Send position based command:
       auto limitedVel = _limiter.Calculate(std::get<units::velocity::meters_per_second_t>(_command) );
-      auto motorVel = limitedVel * TurnsPerMeter * GearRatio;
+      auto motorVel = limitedVel * TurnsPerMeter;
       // Send to hardware:
       _climberMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorVel));
 
