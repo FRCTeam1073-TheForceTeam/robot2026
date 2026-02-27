@@ -30,7 +30,6 @@ units::angle::radian_t HubFinder::getTurretToHubAngle()
     frc::Pose2d TurretLoc = getHubPos().TransformBy(ROBOTOTURRET);
     auto RelativeHubPos = TurretLoc.Translation();
     auto Angle = units::math::atan2(RelativeHubPos.Y(), RelativeHubPos.X());
-    frc::SmartDashboard::PutNumber("Turret Angle", Angle.value());
     return units::angle::radian_t (Angle);
 
 }
@@ -39,6 +38,7 @@ units::angle::radian_t HubFinder::getTurretToHubAngle()
 void HubFinder::Periodic(){
     UpdateAlliance();
     RoboPos = _localizer->getPose();
+    frc::SmartDashboard::PutNumber("Hubfinder/Turret Angle", getTurretToHubAngle().value());
 }
 
 void HubFinder::UpdateAlliance(){
