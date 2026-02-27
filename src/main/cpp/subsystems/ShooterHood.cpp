@@ -50,11 +50,11 @@ void ShooterHood::Periodic() {
   BaseStatusSignal::RefreshAll(_hoodPositionSig, _hoodCurrentSig);
 
   // Latency compensate the feedback when you sample a value and its rate:
-  //auto compensatedPos = BaseStatusSignal::GetLatencyCompensatedValue(_hoodPositionSig, _hoodVelocitySig);
+
 
   // Populate feedback cache:
   _feedback.current = _hoodCurrentSig.GetValue(); // Convert from hardware units to subsystem units.4
-  //_feedback.position = compensatedPos / TurnsPerMeter; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
+  _feedback.position = _hoodPositionSig.GetValue() / HoodToMotorGearRatio; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
   //_feedback.velocity = _exampleVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
 
 
@@ -70,19 +70,20 @@ void ShooterHood::Periodic() {
   } 
   else if (std::holds_alternative<units::angle::radian_t>(_command)) {
       // Send position based command:
-
+      auto targetAngle = std::get<units::angle::radian_t>(_command);
       // Convert to hardware units:
-      auto motorAngle = std::get<units::angle::radian_t>(_command) * HoodToMotorGearRatio;
+      auto motorAngle = targetAngle * HoodToMotorGearRatio;
 
       // Send to hardware:
       _hoodMotor.SetControl(_commandPositionVoltage.WithPosition(motorAngle));
+      frc::SmartDashboard::PutNumber("Hood/Hood Target Angle", targetAngle.value());
   }
   else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _hoodMotor.SetControl(controls::NeutralOut());
   }
 
-  frc::SmartDashboard::PutNumber("Hood/Hood Angle", Position.value() / HoodToMotorGearRatio);
+  frc::SmartDashboard::PutNumber("Hood/Hood Angle", _feedback.position.value());
 
 }
 
@@ -107,13 +108,13 @@ bool ShooterHood::ConfigureHardware() {
   configs.Slot0.kD = 0.01;
   configs.Slot0.kA = 0.0;
 
-  // Slot 0 for position control mode:
+  // Slot 1 for position control mode:
   configs.Slot1.kV = 0.153; // Motor constant.
-  configs.Slot1.kP = 0.5;
-  configs.Slot1.kI = 0.04;
+  configs.Slot1.kP = 1.0;
+  configs.Slot1.kI = 0.1;
   configs.Slot1.kD = 0.0;
   configs.Slot1.kA = 0.0;
-
+  configs.Slot1.kS = 0.02;
   // Set whether motor control direction is inverted or not:
   configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
 
