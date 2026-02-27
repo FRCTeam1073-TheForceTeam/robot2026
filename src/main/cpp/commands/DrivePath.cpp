@@ -14,6 +14,7 @@ DrivePath::DrivePath(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Loc
   yController{4.8, 0, 0.01},
   thetaController{1.5, 0.0, 0.01}
 {
+  quit = false;
   thetaController.EnableContinuousInput(-std::numbers::pi, std::numbers::pi);
   frc::SmartDashboard::PutString("DrivePath/Status", "Idle");
   AddRequirements({m_drivetrain.get(), m_localizer.get()});
@@ -21,23 +22,22 @@ DrivePath::DrivePath(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Loc
 
 // Called when the command is initially scheduled.
 void DrivePath::Initialize() {
+  frc::SmartDashboard::PutBoolean("Has Trajectory", trajectory.has_value());
+
   startTime = frc::Timer::GetFPGATimestamp();
-  endTime = trajectory.value().GetTotalTime();
+  if(trajectory.has_value()) {
+    endTime = trajectory.value().GetTotalTime();
+    robotPose = m_localizer->getPose();
+    frc::Transform2d diff = (robotPose - trajectory.value().GetInitialPose().value());
+    if(diff.Translation().Norm() >= 2_m) {
+      quit = true;
+    }
+  }
   currentTime = 0.01_s;
 
   xController.Reset();
   yController.Reset();
   thetaController.Reset();
-
-  frc::SmartDashboard::PutNumber("DrivePath/Init_Statement", 67);
-
-  robotPose = m_localizer->getPose();
-  frc::SmartDashboard::PutNumber("DrivePath/InitRobotPoseTranslationNorm", robotPose.Translation().Norm().value());
-  // frc::Transform2d diff = (robotPose - trajectory.value().GetInitialPose().value());
-  // if(diff.Translation().Norm() >= 2_m) {
-  //   quit = true;
-  // }
-  quit = false;
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -82,7 +82,7 @@ void DrivePath::Execute() {
           xVelocity,
           yVelocity,
           thetaVelocity,
-          frc::Rotation2d{m_drivetrain->GetGyroHeadingRadians()} // TODO: replace this angle with localizer one once implemented
+          m_localizer->getPose().Rotation()
         )
       );
     }
@@ -92,7 +92,7 @@ void DrivePath::Execute() {
     }
   }
   else {
-    frc::SmartDashboard::PutString("DrivePath/Status_Blah", "No Trajectory Found");
+    frc::SmartDashboard::PutString("DrivePath/Status", "No Trajectory Found");
     std::cerr << "DrivePath No Trajectory Found" << std::endl;
   }
 }
