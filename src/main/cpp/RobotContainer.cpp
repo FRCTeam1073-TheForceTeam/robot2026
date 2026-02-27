@@ -25,7 +25,7 @@
 // const std::string RobotContainer::rightPosition = "Right Auto";
 // const std::string RobotContainer::leftPosition = "Left Auto";
 // const std::string RobotContainer::centerPosition = "Center Auto";
-const std::string RobotContainer::testAuto = "Test Auto";
+const std::string RobotContainer::testAuto = "Test_Auto";
 const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
 const std::string RobotContainer::noLevelAuto = "No Auto";
 
