@@ -99,11 +99,13 @@ void DrivePath::Execute() {
 
 // Called once the command ends or is interrupted.
 void DrivePath::End(bool interrupted) {
+  frc::SmartDashboard::PutBoolean("DrivePath/End", true);
   m_drivetrain->SetChassisSpeeds(frc::ChassisSpeeds(0_mps, 0_mps, 0_rad_per_s));
 }
 
 // Returns true when the command should end.
 bool DrivePath::IsFinished() {
+  std::cout << "IsFinishedRun" << std::endl;
   frc::SmartDashboard::PutBoolean("DrivePath/Past Time", currentTime >= endTime);
   frc::SmartDashboard::PutBoolean("DrivePath/Quit", quit);
   if(currentTime >= endTime || quit) {

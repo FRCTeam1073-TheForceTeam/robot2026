@@ -41,6 +41,13 @@ class FlywheelTeleop
   std::shared_ptr<OI> m_OI;
 
   bool XButton;
+  bool DPadDown;
+  bool DPadUp;
+
+  bool LastDPadUpState;
+  bool LastDPadDownState;
+
+  double scale;
   
   units::velocity::meters_per_second_t maxVel;
 };

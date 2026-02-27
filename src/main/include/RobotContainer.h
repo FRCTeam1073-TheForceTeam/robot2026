@@ -69,7 +69,11 @@ class RobotContainer {
   // static const std::string rightPosition;
   // static const std::string leftPosition;
   // static const std::string centerPosition;
-  // static const std::string testAuto;
+  static const std::string weekZeroAuto;
+  static const std::string testAuto;
+  static const std::string noLevelAuto;
+
+  static const std::string noPosition;
   
   RobotContainer();
 
@@ -110,9 +114,13 @@ class RobotContainer {
   
   bool haveInitStartPos;
 
+  frc2::Trigger blah;
+
   bool isRed;
 
-  const frc::SendableChooser<std::string> m_positionChooser;
-  const frc::SendableChooser<std::string> m_levelChooser;
+  frc::SendableChooser<std::string> m_positionChooser;
+  frc::SendableChooser<std::string> m_levelChooser;
+
+  std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 
 };

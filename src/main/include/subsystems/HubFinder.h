@@ -1,3 +1,5 @@
+#pragma once
+
 #include <frc/DriverStation.h>
 #include <frc2/command/SubsystemBase.h>
 #include "frc/geometry/Pose2d.h"

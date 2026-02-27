@@ -76,6 +76,8 @@ class Kicker : public frc2::SubsystemBase {
   /// Set the command for the system.
   void SetCommand(Command cmd);
 
+  frc2::CommandPtr SpinToSpeed(units::meters_per_second_t velocity);
+
  private:
 
   // Helper function for configuring hardware from within the constructor of the subsystem.

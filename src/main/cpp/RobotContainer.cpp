@@ -11,11 +11,25 @@
 
 #include "RobotContainer.h"
 
+#include <frc2/command/button/Trigger.h>
+
+#include "commands/Autos.h"
+#include "commands/ExampleCommand.h"
+#include "commands/TeleopDrive.h"
+#include "commands/Collect.h"
+#include "subsystems/LaserCan.h"
+#include "commands/Autos/TestAuto.h"
+
+
 // const std::string RobotContainer::noPosition = "No Position";
 // const std::string RobotContainer::rightPosition = "Right Auto";
 // const std::string RobotContainer::leftPosition = "Left Auto";
 // const std::string RobotContainer::centerPosition = "Center Auto";
-// const std::string RobotContainer::testAuto = "Test Auto";
+const std::string RobotContainer::testAuto = "Test_Auto";
+const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
+const std::string RobotContainer::noLevelAuto = "No Auto";
+
+const std::string RobotContainer::noPosition = "No Position";
 
 RobotContainer::RobotContainer() {
   // Create these subsystems first!
@@ -71,7 +85,7 @@ RobotContainer::RobotContainer() {
   m_kicker->SetDefaultCommand(KickerTeleop(m_kicker,m_OI).ToPtr());
 
   m_turret = std::make_shared<Turret>();
-  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI).ToPtr());
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_HubFinder).ToPtr());
 
   m_laser = std::make_shared<LaserCan>();
   
@@ -83,7 +97,15 @@ RobotContainer::RobotContainer() {
 
 
   std::cerr << "Default commands assigned..." << std::endl;
-  
+
+  m_positionChooser.SetDefaultOption("No Position", noPosition);
+  m_levelChooser.SetDefaultOption("No Level", noLevelAuto);
+  m_levelChooser.AddOption("Week Zero Auto", weekZeroAuto);
+  m_levelChooser.AddOption("Test Auto", testAuto);
+
+  frc::SmartDashboard::PutData("Position Chooser", &m_positionChooser);
+  frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
+
   // Configure the button bindings
   ConfigureBindings();
 }
@@ -91,7 +113,13 @@ RobotContainer::RobotContainer() {
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // TODO: un-comment this code
   try {
-    return WeekZeroAuto::Create(m_spindexer, m_kicker, m_flywheel, m_shooterHood, m_turret);
+    if(m_levelChooser.GetSelected() == weekZeroAuto) {
+      return WeekZeroAuto::Create(m_spindexer, m_kicker, m_flywheel, m_shooterHood, m_turret);
+    }
+    else if (m_levelChooser.GetSelected() == testAuto) {
+      trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
+      return TestAuto::Create(m_drivetrain, m_Localizer, trajectory);
+    }
   }
   catch (...) {
     std::cerr << "Get Autonomous Command Threw Exception" << std::endl;
@@ -111,3 +139,5 @@ bool RobotContainer::DisabledPeriodic() {
 void RobotContainer::ConfigureBindings() {
 
 }
+
+

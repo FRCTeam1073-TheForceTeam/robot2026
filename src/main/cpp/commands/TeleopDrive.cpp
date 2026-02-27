@@ -8,6 +8,7 @@
 
 #include <choreo/Choreo.h>
 #include <commands/Autos/TestAuto.h>
+#include <subsystems/OI.h>
 
 
 TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi, std::shared_ptr<Localizer>& localizer) : 

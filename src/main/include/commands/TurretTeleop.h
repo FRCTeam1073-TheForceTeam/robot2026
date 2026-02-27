@@ -9,6 +9,7 @@
 #include <units/angular_velocity.h>
 #include "subsystems/Turret.h"
 #include "subsystems/OI.h"
+#include "subsystems/HubFinder.h"
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <cmath>
@@ -31,7 +32,7 @@ class TurretTeleop
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
 
-  explicit TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>& oi);
+  explicit TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>& oi,  std::shared_ptr<HubFinder>& hubFinder);
 
   void Initialize() override;
   void Execute() override;
@@ -42,6 +43,7 @@ class TurretTeleop
   
     std::shared_ptr<Turret> m_turret;
     std::shared_ptr<OI> m_OI;
+    std::shared_ptr<HubFinder> m_hubFinder;
 
     bool isAlignedToHub;
 
