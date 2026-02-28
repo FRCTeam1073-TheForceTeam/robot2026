@@ -18,6 +18,7 @@ _hardwareConfigured(true),
 _hoodMotor(HoodMotorId, CANBus("rio")),
 _hoodPositionSig(_hoodMotor.GetPosition()),
 _hoodCurrentSig(_hoodMotor.GetTorqueCurrent()),
+_limiter(3_rad / 1_s),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _commandVelocityVoltage(units::angular_velocity::radians_per_second_t(0.0)) {
   // Extra implementation of subsystem constructor goes here.
@@ -70,7 +71,7 @@ void ShooterHood::Periodic() {
   } 
   else if (std::holds_alternative<units::angle::radian_t>(_command)) {
       // Send position based command:
-      targetAngle = std::get<units::angle::radian_t>(_command);
+      targetAngle = _limiter.Calculate(std::get<units::angle::radian_t>(_command));
       // Convert to hardware units:
       auto motorAngle = targetAngle * HoodToMotorGearRatio;
 
@@ -80,6 +81,7 @@ void ShooterHood::Periodic() {
   else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _hoodMotor.SetControl(controls::NeutralOut());
+    _limiter.Reset(0_rad);
   }
 
   frc::SmartDashboard::PutNumber("Hood/Angle", _feedback.position.value());

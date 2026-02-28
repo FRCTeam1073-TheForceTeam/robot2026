@@ -18,6 +18,7 @@ _rotaterMotor(RotaterMotorId, CANBus("rio")),
 _rotaterPositionSig(_rotaterMotor.GetPosition()),
 _rotaterVelocitySig(_rotaterMotor.GetVelocity()),
 _rotaterCurrentSig(_rotaterMotor.GetTorqueCurrent()),
+_limiter(4.6_rad / 1_s),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
   // Extra implementation of subsystem constructor goes here.
@@ -50,6 +51,7 @@ void Turret::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_rotaterPositionSig, _rotaterVelocitySig, _rotaterCurrentSig);
 
+  units::radian_t turretAngle(0_rad);
 
   // Populate feedback cache:
   _feedback.torque = _rotaterCurrentSig.GetValue() / AmpsPerNewtonMeter; // Convert from hardware units to subsystem units.
@@ -66,18 +68,20 @@ void Turret::Periodic() {
       // Send position based command:
 
       // Convert to hardware units:
-      auto motorAngle = std::get<units::radian_t>(_command) * TurretToMotorTurns;
-
+      turretAngle = _limiter.Calculate(std::get<units::radian_t>(_command));
+      auto motorAngle = turretAngle * TurretToMotorTurns;
       // Send to hardware:
       _rotaterMotor.SetControl(_commandPositionVoltage.WithPosition(motorAngle));
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _rotaterMotor.SetControl(controls::NeutralOut());
+    _limiter.Reset(0_rad);
   }
 
   frc::SmartDashboard::PutNumber("Turret/Position rad", _feedback.position.value());
   frc::SmartDashboard::PutNumber("Turret/Position deg", units::angle::degree_t(_feedback.position).value());
   frc::SmartDashboard::PutNumber("Turret/Velocity (Rad_s))", _feedback.velocity.value());
+  frc::SmartDashboard::PutNumber("Turret/Target", turretAngle.value());
 }
 
 frc2::CommandPtr Turret::RotateToPos(units::radian_t pos) {

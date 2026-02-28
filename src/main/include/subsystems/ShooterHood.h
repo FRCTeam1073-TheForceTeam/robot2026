@@ -16,6 +16,8 @@
 
 #include <variant>
 
+#include <frc/filter/SlewRateLimiter.h>
+
 
 /**
  * This example subsystem shows the basic pattern of any mechanism subsystem.
@@ -103,5 +105,7 @@ class ShooterHood : public frc2::SubsystemBase {
 
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
+
+  frc::SlewRateLimiter<units::radians> _limiter;
 
 };

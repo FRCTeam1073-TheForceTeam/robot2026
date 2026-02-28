@@ -31,9 +31,10 @@ void TurretTeleop::Initialize() {
 void TurretTeleop::Execute() {
   //TODO: determine direction that robot must be facing in & use that to automatically set the angle
   leftX = m_OI->GetOperatorLeftX();
+  
 
   if (std::abs(leftX) > 0.1) {
-    targetAngle = 1.5 * leftX * 1_rad;
+    targetAngle = 1.5_rad * leftX;
   }
   else if(m_OI->GetOperatorDPadLeft()) {
     targetAngle = units::radian_t(std::clamp(m_hubFinder->getTurretToHubAngle().value(), -2 * std::numbers::pi / 3, std::numbers::pi / 2));
