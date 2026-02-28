@@ -77,7 +77,7 @@ void Turret::Periodic() {
 
   frc::SmartDashboard::PutNumber("Turret/Position rad", _feedback.position.value());
   frc::SmartDashboard::PutNumber("Turret/Position deg", units::angle::degree_t(_feedback.position).value());
-  frc::SmartDashboard::PutNumber("Turret/Velocity (Rad/s))", _feedback.velocity.value());
+  frc::SmartDashboard::PutNumber("Turret/Velocity (Rad_s))", _feedback.velocity.value());
 }
 
 frc2::CommandPtr Turret::RotateToPos(units::radian_t pos) {

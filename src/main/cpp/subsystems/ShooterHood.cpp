@@ -48,7 +48,7 @@ void ShooterHood::SetCommand(Command cmd) {
 void ShooterHood::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_hoodPositionSig, _hoodCurrentSig);
-
+  units::angle::radian_t targetAngle(0_rad);
   // Latency compensate the feedback when you sample a value and its rate:
 
 
@@ -56,7 +56,7 @@ void ShooterHood::Periodic() {
   _feedback.current = _hoodCurrentSig.GetValue(); // Convert from hardware units to subsystem units.4
   _feedback.position = _hoodPositionSig.GetValue() / HoodToMotorGearRatio; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
   //_feedback.velocity = _exampleVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
-
+  
 
   // Process command:
   if (std::holds_alternative<units::angular_velocity::radians_per_second_t>(_command)) {
@@ -70,21 +70,20 @@ void ShooterHood::Periodic() {
   } 
   else if (std::holds_alternative<units::angle::radian_t>(_command)) {
       // Send position based command:
-      auto targetAngle = std::get<units::angle::radian_t>(_command);
+      targetAngle = std::get<units::angle::radian_t>(_command);
       // Convert to hardware units:
       auto motorAngle = targetAngle * HoodToMotorGearRatio;
 
       // Send to hardware:
       _hoodMotor.SetControl(_commandPositionVoltage.WithPosition(motorAngle));
-      frc::SmartDashboard::PutNumber("Hood/Hood Target Angle", targetAngle.value());
   }
   else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _hoodMotor.SetControl(controls::NeutralOut());
   }
 
-  frc::SmartDashboard::PutNumber("Hood/Hood Angle", _feedback.position.value());
-
+  frc::SmartDashboard::PutNumber("Hood/Angle", _feedback.position.value());
+  frc::SmartDashboard::PutNumber("Hood/Target", targetAngle.value());
 }
 
 frc2::CommandPtr ShooterHood::SetHoodLevel(int level) {
@@ -110,8 +109,8 @@ bool ShooterHood::ConfigureHardware() {
 
   // Slot 1 for position control mode:
   configs.Slot1.kV = 0.153; // Motor constant.
-  configs.Slot1.kP = 1.0;
-  configs.Slot1.kI = 0.1;
+  configs.Slot1.kP = 2.2;
+  configs.Slot1.kI = 0.15;
   configs.Slot1.kD = 0.0;
   configs.Slot1.kA = 0.0;
   configs.Slot1.kS = 0.02;
@@ -129,7 +128,7 @@ bool ShooterHood::ConfigureHardware() {
   _hoodMotor.SetPosition(units::angle::turn_t(0));
 
   // Set our neutral mode to brake on:
-  status = _hoodMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
+  status = _hoodMotor.SetNeutralMode(signals::NeutralModeValue::Coast, 1_s);
 
   if (!status.IsOK()) {
       std::cerr << "ShooterHood: Neutral mode brake Failed To Configure!" << std::endl;
