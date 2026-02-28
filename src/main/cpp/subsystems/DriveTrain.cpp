@@ -55,7 +55,7 @@ Drivetrain::Drivetrain() :
         _hardwareConfigured &= _swerveModules[ii].HardwareConfigured();
     }
 
-    if (_hardwareConfigured) {
+    if (!_hardwareConfigured) {
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
     }
 

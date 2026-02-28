@@ -8,8 +8,6 @@ DrivePath::DrivePath(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Loc
   m_drivetrain(drivetrain),
   m_localizer(localizer),
   trajectory(trajectory),
-  distanceTolerance(0.1_m),
-  angleTolerance(0.1_rad),
   xController{4.8, 0, 0.01},
   yController{4.8, 0, 0.01},
   thetaController{1.5, 0.0, 0.01}
@@ -28,9 +26,12 @@ void DrivePath::Initialize() {
   if(trajectory.has_value()) {
     endTime = trajectory.value().GetTotalTime();
     robotPose = m_localizer->getPose();
-    frc::Transform2d diff = (robotPose - trajectory.value().GetInitialPose().value());
-    if(diff.Translation().Norm() >= 2_m) {
-      quit = true;
+    std::optional<frc::Pose2d> initPose = trajectory.value().GetInitialPose();
+    if (initPose.has_value()){
+      frc::Transform2d diff = (robotPose - initPose.value());
+      if(diff.Translation().Norm() >= 2_m) {
+        quit = true;
+      }
     }
   }
   currentTime = 0.01_s;
@@ -57,10 +58,10 @@ void DrivePath::Execute() {
       const auto &cur = currentSample.value();
       frc::ChassisSpeeds sample_speed = cur.GetChassisSpeeds();
       maxVelocity = 1_mps * std::sqrt(std::pow(sample_speed.vx.value(), 2) + std::sqrt(std::pow(sample_speed.vy.value(), 2))); 
-      maxAngularVelocity = std::sqrt(std::pow(sample_speed.vx.value(), 2) + std::sqrt(std::pow(sample_speed.vy.value(), 2))) * 2_rad_per_s;
+      maxAngularVelocity = std::sqrt(std::pow(sample_speed.vx.value(), 2) + std::sqrt(std::pow(sample_speed.vy.value(), 2))) * 2_rad_per_s * std::numbers::pi;  //TODO: Find how to access choreo values
 
       xVelocity = xController.Calculate(robotPose.X().value(), sample_speed.vx.value()) * 1_mps;
-      yVelocity = yController.Calculate(robotPose.Y().value(), sample_speed.vy.value()) * 1_mps;
+      yVelocity = yController.Calculate(robotPose.Y().value(), sample_speed.vy.value()) * 1_mps; 
       thetaVelocity = thetaController.Calculate(robotPose.Rotation().Radians().value(), cur.GetPose().Rotation().Radians().value()) * 1_rad_per_s;
 
       xVelocity = std::clamp(xVelocity, -maxVelocity, maxVelocity);
@@ -77,11 +78,21 @@ void DrivePath::Execute() {
       frc::SmartDashboard::PutNumber("DrivePath/CommandedVy", yVelocity.value());
       frc::SmartDashboard::PutNumber("DrivePath/CommandedVw", thetaVelocity.value());
       
+      // m_drivetrain->SetChassisSpeeds(
+      //   frc::ChassisSpeeds::FromFieldRelativeSpeeds(
+      //     xVelocity,
+      //     yVelocity,
+      //     thetaVelocity,
+      //     m_localizer->getPose().Rotation()
+      //   )
+      // );
+
+      //TODO: test this
       m_drivetrain->SetChassisSpeeds(
         frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-          xVelocity,
-          yVelocity,
-          thetaVelocity,
+          sample_speed.vx,
+          sample_speed.vy,
+          sample_speed.omega,
           m_localizer->getPose().Rotation()
         )
       );
@@ -105,11 +116,11 @@ void DrivePath::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool DrivePath::IsFinished() {
-  std::cout << "IsFinishedRun" << std::endl;
   frc::SmartDashboard::PutBoolean("DrivePath/Past Time", currentTime >= endTime);
   frc::SmartDashboard::PutBoolean("DrivePath/Quit", quit);
   if(currentTime >= endTime || quit) {
     frc::SmartDashboard::PutString("DrivePath/Status", "Finished");
+    std::cout << "IsFinishedRun" << std::endl;
     return true;
   }
   return false;

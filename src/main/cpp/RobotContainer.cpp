@@ -26,8 +26,10 @@
 // const std::string RobotContainer::leftPosition = "Left Auto";
 // const std::string RobotContainer::centerPosition = "Center Auto";
 const std::string RobotContainer::testAuto = "Test_Auto";
+const std::string RobotContainer::centerAuto = "Center_Test";
 const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
 const std::string RobotContainer::noLevelAuto = "No Auto";
+const std::string RobotContainer::basicAuto = "Basic Auto";
 
 const std::string RobotContainer::noPosition = "No Position";
 
@@ -35,19 +37,19 @@ RobotContainer::RobotContainer() {
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
   m_drivetrain = std::make_shared<Drivetrain>();
-  std::cerr << "Drivetrain created..." << std::endl;
+  //std::cerr << "Drivetrain created..." << std::endl;
 
   //m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
   m_FieldMap = std::make_shared<FieldMap>();
   m_Tags = std::make_shared<AprilTagFinder>();
-  std::cerr << "Tags Created..." << std::endl;
+  //std::cerr << "Tags Created..." << std::endl;
 
   m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
   m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
   m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
   m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
 
-  std::cerr << "Localize Stuff created..." << std::endl;
+  //std::cerr << "Localize Stuff created..." << std::endl;
 
   m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
 
@@ -59,7 +61,7 @@ RobotContainer::RobotContainer() {
   m_flywheel = std::make_shared<Flywheel>();
   m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI).ToPtr());
 
-  std::cerr << "Shoot Stuff created..." << std::endl;
+  //std::cerr << "Shoot Stuff created..." << std::endl;
 
 
 
@@ -70,7 +72,7 @@ RobotContainer::RobotContainer() {
   m_climber = std::make_shared<Climber>();
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
 
-  std::cerr << "More stuff created..." << std::endl;
+  //std::cerr << "More stuff created..." << std::endl;
 
 
   // TODO: Turn on this and teleop for collector.
@@ -89,19 +91,21 @@ RobotContainer::RobotContainer() {
 
   m_laser = std::make_shared<LaserCan>();
   
-  std::cerr << "Mechanisms created..." << std::endl;
+  //std::cerr << "Mechanisms created..." << std::endl;
 
 
   // Configure detault commands for subsystemns:
   //m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI).ToPtr());
 
 
-  std::cerr << "Default commands assigned..." << std::endl;
+  //std::cerr << "Default commands assigned..." << std::endl;
 
   m_positionChooser.SetDefaultOption("No Position", noPosition);
   m_levelChooser.SetDefaultOption("No Level", noLevelAuto);
   m_levelChooser.AddOption("Week Zero Auto", weekZeroAuto);
   m_levelChooser.AddOption("Test Auto", testAuto);
+  m_levelChooser.AddOption("Center Auto", centerAuto);
+  m_levelChooser.AddOption("Basic Auto", basicAuto);
 
   frc::SmartDashboard::PutData("Position Chooser", &m_positionChooser);
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
@@ -116,9 +120,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     if(m_levelChooser.GetSelected() == weekZeroAuto) {
       return WeekZeroAuto::Create(m_spindexer, m_kicker, m_flywheel, m_shooterHood, m_turret);
     }
-    else if (m_levelChooser.GetSelected() == testAuto) {
+    else if (m_levelChooser.GetSelected() == testAuto || m_levelChooser.GetSelected() == centerAuto) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
       return TestAuto::Create(m_drivetrain, m_Localizer, trajectory);
+    }
+    else if (m_levelChooser.GetSelected() == basicAuto){
+      return BasicAuto::Create(m_drivetrain, m_Localizer);
     }
   }
   catch (...) {

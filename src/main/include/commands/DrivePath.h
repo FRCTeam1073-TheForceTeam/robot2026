@@ -43,9 +43,6 @@ class DrivePath
   private:
     bool quit;
 
-    units::meter_t distanceTolerance;
-    units::radian_t angleTolerance;
-
     std::shared_ptr<Drivetrain> m_drivetrain;
     std::shared_ptr<Localizer> m_localizer;
 

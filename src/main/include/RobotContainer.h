@@ -48,6 +48,7 @@
 
 #include "commands/Autos/TestAuto.h"
 #include "commands/Autos/WeekZeroAuto.h"
+#include "commands/Autos/BasicAuto.h"
 
 #include <choreo/Choreo.h>
 
@@ -72,6 +73,8 @@ class RobotContainer {
   static const std::string weekZeroAuto;
   static const std::string testAuto;
   static const std::string noLevelAuto;
+  static const std::string centerAuto;
+  static const std::string basicAuto;
 
   static const std::string noPosition;
   
