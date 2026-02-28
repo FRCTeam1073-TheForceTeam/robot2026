@@ -58,6 +58,7 @@ RobotContainer::RobotContainer() {
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
   m_flywheel = std::make_shared<Flywheel>();
   m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI).ToPtr());
+  m_shooterTable = std::make_shared<ShooterTable>();
 
   std::cerr << "Shoot Stuff created..." << std::endl;
 

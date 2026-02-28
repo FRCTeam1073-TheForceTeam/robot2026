@@ -50,9 +50,11 @@
 #include "commands/Autos/WeekZeroAuto.h"
 
 #include <choreo/Choreo.h>
+#include <utilities/ShooterTable.h>
 
 #include "subsystems/Climber.h"
 #include "commands/ClimberTeleop.h"
+
 
 
 /**
@@ -111,6 +113,7 @@ class RobotContainer {
   std::shared_ptr<Turret> m_turret;
   std::shared_ptr<Collector> m_collector;
   std::shared_ptr<LaserCan> m_laser;
+  std::shared_ptr<ShooterTable> m_shooterTable;
   
   bool haveInitStartPos;
 
