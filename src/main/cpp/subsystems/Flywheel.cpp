@@ -92,7 +92,7 @@ bool Flywheel::ConfigureHardware() {
     configs.Slot0.kI = 0.0;
     configs.Slot0.kD = 0.015;
     configs.Slot0.kA = 0.0;
-    configs.Slot0.kS = 0.02;
+    configs.Slot0.kS = 0.04;
 
     // Set whether motor control direction is inverted or not:
     configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);

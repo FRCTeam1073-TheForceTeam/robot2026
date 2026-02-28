@@ -14,6 +14,7 @@ FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_
   m_OI(oi) {
   maxVel = 10_mps;
   scale = 1.0;
+  level = 0;
   LastDPadUpState = false;
   LastDPadDownState = false;
   AddRequirements({m_flywheel.get()});
@@ -26,25 +27,15 @@ void FlywheelTeleop::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void FlywheelTeleop::Execute() {
-  XButton = m_OI->GetOperatorXButton();
   DPadUp = m_OI->GetOperatorDPadUp();
   DPadDown = m_OI->GetOperatorDPadDown();
 
-  if (XButton) {
-    frc::SmartDashboard::PutNumber("FlywheelTeleop/CommandedVelocity", maxVel.value());
-    m_flywheel->SetCommand(scale * maxVel);
-  }
-  else{
-    frc::SmartDashboard::PutNumber("FlywheelTeleop/CommandedVelocity", 0.0);
-    m_flywheel->SetCommand(0_mps);
-  }
-
-  if (m_OI->GetOperatorDPadUp() && !LastDPadUpState && scale <= 0.9) {
-    scale += 0.1;
+  if (m_OI->GetOperatorDPadUp() && !LastDPadUpState && level < maxLevel) {
+    level += 1;
     LastDPadUpState = true;
   }
-  else if (m_OI->GetOperatorDPadDown() && !LastDPadDownState && scale >= 0.1) {
-    scale -= 0.1;
+  else if (m_OI->GetOperatorDPadDown() && !LastDPadDownState && level > 0) {
+    level -= 1;
     LastDPadDownState = true;
   }
   else {
@@ -56,7 +47,9 @@ void FlywheelTeleop::Execute() {
     }
   }
 
-  frc::SmartDashboard::PutNumber("Flywheel/Speed Level", scale);
+  m_flywheel->SetCommand(level * scaleFactor);
+  frc::SmartDashboard::PutNumber("Flywheel/Speed Level", level);
+  frc::SmartDashboard::PutNumber("Flywheel/Speed", level * scaleFactor.value());
 }
 
 // Called once the command ends or is interrupted.
