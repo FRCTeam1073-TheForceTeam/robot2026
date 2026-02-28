@@ -15,30 +15,29 @@ const frc::Transform2d HubFinder::ROBOTOTURRET = frc::Transform2d(4.902_in, -5.3
 
 
 
-HubFinder::HubFinder(std::shared_ptr<Localizer> localizer):_localizer(localizer){}
+HubFinder::HubFinder(std::shared_ptr<Localizer> localizer):_localizer(localizer){
+    feedback.rangeToHub = 0_m;
+    feedback.turretToHubAngle = 0_rad;
+}
 
 
 frc::Pose2d HubFinder::getHubPos()
 {
-    frc::Pose2d HubLoc = OurHub.frc::Pose2d::RelativeTo(RoboPos);
+    frc::Pose2d HubLoc = OurHub.frc::Pose2d::RelativeTo(roboPos);
     return HubLoc;
-}
-
-units::angle::radian_t HubFinder::getTurretToHubAngle()
-{
-
-    frc::Pose2d TurretLoc = getHubPos().TransformBy(ROBOTOTURRET);
-    auto RelativeHubPos = TurretLoc.Translation();
-    auto Angle = units::math::atan2(RelativeHubPos.Y(), RelativeHubPos.X());
-    return units::angle::radian_t (Angle);
-
 }
 
 
 void HubFinder::Periodic(){
     UpdateAlliance();
-    RoboPos = _localizer->getPose();
-    frc::SmartDashboard::PutNumber("Hubfinder/Turret Angle", getTurretToHubAngle().value());
+    roboPos = _localizer->getPose();
+    frc::Pose2d turretLoc = getHubPos().TransformBy(ROBOTOTURRET);
+    auto relativeHubPos = turretLoc.Translation();
+    auto angle = units::math::atan2(relativeHubPos.Y(), relativeHubPos.X());
+    feedback.turretToHubAngle = angle;
+    feedback.rangeToHub = relativeHubPos.Norm();
+    frc::SmartDashboard::PutNumber("Hubfinder/Turret Angle", feedback.turretToHubAngle.value());
+    frc::SmartDashboard::PutNumber("Hubfinder/Turret Range", feedback.rangeToHub.value());
 }
 
 void HubFinder::UpdateAlliance(){
