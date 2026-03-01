@@ -126,6 +126,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     std::cerr << "Get Autonomous Command Threw Exception" << std::endl;
     return frc2::cmd::Idle(); // A do-nothing command from the commands factory.
   }
+
+  return frc2::cmd::Idle(); // Do nothing.
 }
 
 // Called from Robot

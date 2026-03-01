@@ -14,11 +14,13 @@ void IntakeTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void IntakeTeleop::Execute() {
-  m_intake->SetCommand(0.0_m);
+  m_intake->SetCommand(0.0_rad);
 }
 
 // Called once the command ends or is interrupted.
-void IntakeTeleop::End(bool interrupted) {}
+void IntakeTeleop::End(bool interrupted) {
+  m_intake->SetCommand(std::monostate());
+}
 
 // Returns true when the command should end.
 bool IntakeTeleop::IsFinished() {

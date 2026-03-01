@@ -38,26 +38,30 @@ class Localizer : public frc2::SubsystemBase {
     
     void InitSendable(wpi::SendableBuilder &builder) override;
 
-    units::time::millisecond_t getTime() { return timeGap; }
+    units::time::millisecond_t getTimeGap() { return timeGap; }
 
-    void setTime(units::time::millisecond_t time) { timeGap = time; }
+    void setTimeGap(units::time::millisecond_t time) { timeGap = time; }
 
     // creates an entirely new estimator so the rotation is reset for sure
     void resetPose(frc::Pose2d newPos);
 
     void resetOrientation();
 
-    units::velocity::meters_per_second_t getLinearSpeed() { return linearSpeedThreshold; }
+    units::velocity::meters_per_second_t getLinearSpeedThreshold() { return linearSpeedThreshold; }
 
-    void setLinearSpeed(units::velocity::meters_per_second_t speed) { linearSpeedThreshold = speed; }
+    void setLinearSpeedThreshold(units::velocity::meters_per_second_t speed) { linearSpeedThreshold = speed; }
 
-    units::angular_velocity::radians_per_second_t getAngularSpeed() { return angularSpeedThreshold; }
+    units::angular_velocity::radians_per_second_t getAngularSpeedThreshold() { return angularSpeedThreshold; }
 
-    void setAngularSpeed(units::angular_velocity::radians_per_second_t angularSpeed) { angularSpeedThreshold = angularSpeed; }
+    void setAngularSpeedThreshold(units::angular_velocity::radians_per_second_t angularSpeed) { angularSpeedThreshold = angularSpeed; }
 
     void Periodic() override;
 
+    // Returns field-centric, localizer based position estimate.
     frc::Pose2d getPose() { return _estimator->GetEstimatedPosition(); }
+
+    // Returns field-centric, localizer based speeds.
+    frc::ChassisSpeeds getSpeeds();
 
     void additionalSensorMeasurement(int id, FieldMap fieldMap);
 
@@ -65,12 +69,11 @@ class Localizer : public frc2::SubsystemBase {
 
     private:
 
-    std::shared_ptr<Drivetrain> _driveTrain;    
+    std::shared_ptr<Drivetrain> _driveTrain;  
     std::shared_ptr<AprilTagFinder> _finder;
     frc::SwerveDriveKinematics<4U> _kinematics;
     std::shared_ptr<frc::SwerveDrivePoseEstimator<4U>> _estimator;
 
-    //apriltag finder here when made
     units::time::second_t _lastUpdateTime;
     int measurementCounter = 0;
     units::time::millisecond_t timeGap{30};

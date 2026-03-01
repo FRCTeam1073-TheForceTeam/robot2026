@@ -7,9 +7,9 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
-#include <units/length.h>
-#include <units/velocity.h>
-#include <units/force.h>
+#include <units/angle.h>
+#include <units/angular_velocity.h>
+#include <units/torque.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
@@ -32,27 +32,28 @@ class Intake : public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
-  static constexpr int IntakeMotorId = 23;
+  static constexpr int IntakeLeadId = 18;
+  static constexpr int IntakeFollowId = 19;
 
   // Mechanism conversion constants for the subsystem:
   // Gear Ratio:
-  static constexpr auto GearRatio = units::angle::turn_t(3) / units::angle::turn_t(1); // TODO: get the correct values, these are just copied from spindexer
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(0.1524 * std::numbers::pi);
-  static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
+  static constexpr auto GearRatio = units::angle::turn_t(10) / units::angle::turn_t(1); // TODO: get the correct values, these are just copied from spindexer
+  // static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(0.1524 * std::numbers::pi);
+  static constexpr auto AmpsPerNewtonMeter = units::current::ampere_t(10.0) / units::torque::newton_meter_t(1.0);
 
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
-      units::length::meter_t position;
-      units::velocity::meters_per_second_t velocity;
-      units::force::newton_t force;
+      units::angle::radian_t position;
+      units::angular_velocity::radians_per_second_t velocity;
+      units::torque::newton_meter_t torque;
   };
 
 
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::length::meter_t>;
+  using Command = std::variant<std::monostate, units::angle::radian_t>;
 
 
   // Constructor for the subsystem.
@@ -83,10 +84,12 @@ class Intake : public frc2::SubsystemBase {
   bool _hardwareConfigured;
 
   // Example TalonFX motor interface.
-  ctre::phoenix6::hardware::TalonFX _intakeMotor;
+  ctre::phoenix6::hardware::TalonFX _leadMotor;
+  ctre::phoenix6::hardware::TalonFX _followMotor;
 
   // CTRE hardware feedback signals:
   ctre::phoenix6::StatusSignal<units::angle::turn_t> _intakePositionSig;
+  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _intakeVelocitySig;
   ctre::phoenix6::StatusSignal<units::current::ampere_t> _intakeCurrentSig;
 
 
@@ -99,6 +102,6 @@ class Intake : public frc2::SubsystemBase {
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
 
-  frc::SlewRateLimiter<units::meters_per_second> _limiter;
+  frc::SlewRateLimiter<units::radians> _limiter;
 
 };

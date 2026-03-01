@@ -1,7 +1,6 @@
 #include "subsystems/Localizer.h"
 
 
-
 Localizer::Localizer(std::shared_ptr<Drivetrain> driveTrain, std::shared_ptr<AprilTagFinder> finder) : 
     _driveTrain(driveTrain),
     _finder(finder),
@@ -13,10 +12,6 @@ Localizer::Localizer(std::shared_ptr<Drivetrain> driveTrain, std::shared_ptr<Apr
 void Localizer::InitSendable(wpi::SendableBuilder &builder) {
     
     builder.SetSmartDashboardType("Localizer");
-    builder.AddDoubleProperty("Time between updates", [this] { return getTime().value(); },   [this] (double timeGap) { setTime(units::time::millisecond_t(timeGap)); });
-    builder.AddDoubleProperty("Linear Speed Thres", [this] { return getLinearSpeed().value(); }, [this] (double linearSpeed) { setTime(units::time::millisecond_t(timeGap));} );
-    builder.AddDoubleProperty("Angular Speed Thres", [this] { return getAngularSpeed().value(); }, [this] (double angularSpeed) { setTime(units::time::millisecond_t(timeGap));} );
-
 }
 
 void Localizer::resetPose(frc::Pose2d newPos) {
@@ -38,6 +33,12 @@ void Localizer::Periodic() {
         _lastUpdateTime = now;
         frc::SmartDashboard::PutNumber("Localize Measurements", measurementCounter);
     }
+}
+
+frc::ChassisSpeeds Localizer::getSpeeds() {
+    auto speeds = _driveTrain->GetChassisSpeeds();
+    auto field_speeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(speeds, _estimator->GetEstimatedPosition().Rotation());
+    return field_speeds;
 }
 
 bool Localizer::measurementStable(){
