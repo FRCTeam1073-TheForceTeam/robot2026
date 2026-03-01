@@ -4,8 +4,12 @@
 
 #include "commands/IntakeTeleop.h"
 
-IntakeTeleop::IntakeTeleop(std::shared_ptr<Intake> Intake) :
-    m_intake{Intake} {
+IntakeTeleop::IntakeTeleop(std::shared_ptr<Intake>& intake, std::shared_ptr<OI>& oi) :
+    m_intake(intake),
+    m_oi(oi),
+    position_in(true),
+    last_button_A(false) {
+
     AddRequirements({m_intake.get()});
 }
 
@@ -14,11 +18,27 @@ void IntakeTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void IntakeTeleop::Execute() {
-  m_intake->SetCommand(0.0_m);
+
+  bool button_A = m_oi->GetDriverAButton();
+
+  if (!last_button_A && button_A) {
+    // Toggle position:
+    position_in = !position_in;
+  }
+  last_button_A = button_A; // Keep track of button for toggle.
+
+  
+  if (position_in) {  
+    m_intake->SetCommand(-122.0_deg);
+  } else {
+    m_intake->SetCommand(0.1_deg);
+  }
 }
 
 // Called once the command ends or is interrupted.
-void IntakeTeleop::End(bool interrupted) {}
+void IntakeTeleop::End(bool interrupted) {
+  m_intake->SetCommand(std::monostate());
+}
 
 // Returns true when the command should end.
 bool IntakeTeleop::IsFinished() {

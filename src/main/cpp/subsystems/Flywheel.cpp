@@ -9,20 +9,20 @@
 using namespace ctre::phoenix6;
 
 Flywheel::Flywheel(): 
-
     _leadFlywheelMotor(LeadMotorId, CANBus::RoboRIO()),
     _followFlywheelMotor(FollowMotorId, CANBus::RoboRIO()),
     _flywheelVelocitySig(_leadFlywheelMotor.GetVelocity()),
     _flywheelCurrentSig(_leadFlywheelMotor.GetTorqueCurrent()),
-    _limiter(20_mps / 1_s),
+
     _flywheelVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
-    _hardwareConfigured(false) {
+    _hardwareConfigured(false),
+    _limiter(20_mps / 1_s) {
         
     _flywheelVelocityVoltage.WithSlot(0);
 
     _hardwareConfigured = ConfigureHardware();
-    if(!_hardwareConfigured) {
-        std::cerr << "hardware failed to conifgure in shooter" << std::endl;
+    if (!_hardwareConfigured) {
+        std::cerr << "Flywheel failed to conifgure:" << std::endl;
     }
 
     frc::SmartDashboard::PutBoolean("Flywheel/Flywheel - hardware_configured", _hardwareConfigured);
@@ -70,7 +70,6 @@ void Flywheel::Periodic() {
     frc::SmartDashboard::PutNumber("Flywheel/AngularVelocity (RPM)", (60.0_s*_flywheelVelocitySig.GetValue()).value());
     frc::SmartDashboard::PutNumber("Flywheel/TargetVelocity (mps)", _limiter.LastValue().value());
     frc::SmartDashboard::PutNumber("Flywheel/Velocity (mps)", _feedback.velocity.value());
-
 }
 
 frc2::CommandPtr Flywheel::SpinToSpeed(units::meters_per_second_t velocity) {
@@ -92,7 +91,7 @@ bool Flywheel::ConfigureHardware() {
     configs.Slot0.kI = 0.0;
     configs.Slot0.kD = 0.015;
     configs.Slot0.kA = 0.0;
-    configs.Slot0.kS = 0.02;
+    configs.Slot0.kS = 0.04;
 
     // Set whether motor control direction is inverted or not:
     configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);

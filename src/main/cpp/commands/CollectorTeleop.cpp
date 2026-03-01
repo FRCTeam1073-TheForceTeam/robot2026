@@ -6,7 +6,9 @@
 
 CollectorTeleop::CollectorTeleop(std::shared_ptr<Collector>& collector, std::shared_ptr<OI>& OI) :
   m_collector(collector), 
-  m_OI(OI) {
+  m_OI(OI),
+  collect(false),
+  last_b_button(false) {
   AddRequirements(m_collector.get());
 }
 
@@ -19,18 +21,25 @@ void CollectorTeleop::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void CollectorTeleop::Execute() {  
   
-  if (m_OI->GetDriverBButton()){
-    targetVelocity = 3.5_mps;
-  }
-  else if (m_OI->GetDriverXButton()) { //for testing purposes?
+ if (m_OI->GetDriverXButton()) { //for testing purposes?
     targetVelocity = -3.5_mps;
-  }
-  else{
-    targetVelocity = 0_mps;
+    collect = false;
+  } else {
+    auto b_button = m_OI->GetDriverBButton();
+    if (!last_b_button && b_button) {
+      collect = !collect;
+    } 
+
+    last_b_button = b_button;
+
+    if (collect) {
+      targetVelocity = 3.5_mps;
+    } else {
+      targetVelocity = 0_mps;
+    }
   }
 
   m_collector->SetCommand(targetVelocity);
-  frc::SmartDashboard::PutBoolean("CollectorTeleop/AButton", m_OI->GetOperatorAButton());
 }
 
 // Called once the command ends or is interrupted.

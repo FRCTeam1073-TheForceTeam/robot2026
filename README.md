@@ -51,8 +51,8 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Left Trigger     | GetDriverLeftTrigger  |                               |
 | Right Trigger    | GetDriverRightTrigger |                               |
 | A Button         | GetDriverAButton      | Intake In/Out                 |
-| B Button         | GetDriverBButton      | Intake Start/Stop Spin        |
-| X Button         | GetDriverXButton      | Intake Reverse                |
+| B Button         | GetDriverBButton      | Collector Start/Stop Spin     |
+| X Button         | GetDriverXButton      | Collector Reverse             |
 | Y Button         | GetDriverYButton      |                               |
 | Menu Button      | GetDriverMenuButton   |                               |
 | View Button      | GetDriverViewButton   |                               |
@@ -109,3 +109,15 @@ Add mechanisms after this...
 | ________           |    25    |  rio       |
 | ________           |    26    |  rio       |
 | ________           |    27    |  rio       |
+
+# System Network Addresses
+
+- Vision Server 1 : 10.10.73.3
+- AP Radio: 10.10.73.4
+- Vision Server 2: 10.10.73.7
+- Robo Rio: 10.10.73.2
+- Robot Radio: 10.10.73.1
+
+
+
+

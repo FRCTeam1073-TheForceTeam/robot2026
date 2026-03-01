@@ -37,8 +37,8 @@ class HoodTeleop
    std::shared_ptr<OI> m_OI;
 
    short level; // level that the hood is at (when multiplied by scale factor)
-   const short maxLevel = 5; //TODO: change value after testing it
-   const units::angle::radian_t ScaleFactor = 0.1_rad; //TODO: change and test this value
+   const short maxLevel = 25; //TODO: change value after testing it
+   const units::angle::radian_t ScaleFactor = 0.02_rad; //TODO: change and test this value
 
    bool LeftBumper;
    bool RightBumper;

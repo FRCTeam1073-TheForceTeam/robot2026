@@ -18,6 +18,7 @@ _hardwareConfigured(true),
 _hoodMotor(HoodMotorId, CANBus("rio")),
 _hoodPositionSig(_hoodMotor.GetPosition()),
 _hoodCurrentSig(_hoodMotor.GetTorqueCurrent()),
+_limiter(3_rad / 1_s),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _commandVelocityVoltage(units::angular_velocity::radians_per_second_t(0.0)) {
   // Extra implementation of subsystem constructor goes here.
@@ -48,15 +49,15 @@ void ShooterHood::SetCommand(Command cmd) {
 void ShooterHood::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_hoodPositionSig, _hoodCurrentSig);
-
+  units::angle::radian_t targetAngle(0_rad);
   // Latency compensate the feedback when you sample a value and its rate:
-  //auto compensatedPos = BaseStatusSignal::GetLatencyCompensatedValue(_hoodPositionSig, _hoodVelocitySig);
+
 
   // Populate feedback cache:
   _feedback.current = _hoodCurrentSig.GetValue(); // Convert from hardware units to subsystem units.4
-  //_feedback.position = compensatedPos / TurnsPerMeter; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
+  _feedback.position = _hoodPositionSig.GetValue() / HoodToMotorGearRatio; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
   //_feedback.velocity = _exampleVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
-
+  
 
   // Process command:
   if (std::holds_alternative<units::angular_velocity::radians_per_second_t>(_command)) {
@@ -67,12 +68,13 @@ void ShooterHood::Periodic() {
 
       // Send to hardware:
       _hoodMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorAngularVelocity));
+      _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
   } 
   else if (std::holds_alternative<units::angle::radian_t>(_command)) {
       // Send position based command:
-
+      targetAngle = _limiter.Calculate(std::get<units::angle::radian_t>(_command));
       // Convert to hardware units:
-      auto motorAngle = std::get<units::angle::radian_t>(_command) * HoodToMotorGearRatio;
+      auto motorAngle = targetAngle * HoodToMotorGearRatio;
 
       // Send to hardware:
       _hoodMotor.SetControl(_commandPositionVoltage.WithPosition(motorAngle));
@@ -80,10 +82,12 @@ void ShooterHood::Periodic() {
   else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _hoodMotor.SetControl(controls::NeutralOut());
+    _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
+
   }
 
-  frc::SmartDashboard::PutNumber("Hood/Hood Angle", Position.value() / HoodToMotorGearRatio);
-
+  frc::SmartDashboard::PutNumber("Hood/Angle", _feedback.position.value());
+  frc::SmartDashboard::PutNumber("Hood/Target", targetAngle.value());
 }
 
 frc2::CommandPtr ShooterHood::SetHoodLevel(int level) {
@@ -107,13 +111,13 @@ bool ShooterHood::ConfigureHardware() {
   configs.Slot0.kD = 0.01;
   configs.Slot0.kA = 0.0;
 
-  // Slot 0 for position control mode:
+  // Slot 1 for position control mode:
   configs.Slot1.kV = 0.153; // Motor constant.
-  configs.Slot1.kP = 0.5;
-  configs.Slot1.kI = 0.04;
+  configs.Slot1.kP = 2.2;
+  configs.Slot1.kI = 0.15;
   configs.Slot1.kD = 0.0;
   configs.Slot1.kA = 0.0;
-
+  configs.Slot1.kS = 0.02;
   // Set whether motor control direction is inverted or not:
   configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
 
@@ -128,7 +132,7 @@ bool ShooterHood::ConfigureHardware() {
   _hoodMotor.SetPosition(units::angle::turn_t(0));
 
   // Set our neutral mode to brake on:
-  status = _hoodMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
+  status = _hoodMotor.SetNeutralMode(signals::NeutralModeValue::Coast, 1_s);
 
   if (!status.IsOK()) {
       std::cerr << "ShooterHood: Neutral mode brake Failed To Configure!" << std::endl;

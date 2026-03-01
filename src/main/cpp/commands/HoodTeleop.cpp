@@ -53,10 +53,5 @@ void HoodTeleop::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool HoodTeleop::IsFinished() {
-  
-  if (!LeftBumper && !RightBumper && (m_shooterHood->GetFeedback().position - level * ScaleFactor).value() <= 0.08 && (m_shooterHood->GetFeedback().position - level * ScaleFactor).value() >= -0.08) { //TODO: change how precise the it is  
-    return true;
-  }
-
   return false;
 }

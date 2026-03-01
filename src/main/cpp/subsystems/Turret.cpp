@@ -18,6 +18,7 @@ _rotaterMotor(RotaterMotorId, CANBus("rio")),
 _rotaterPositionSig(_rotaterMotor.GetPosition()),
 _rotaterVelocitySig(_rotaterMotor.GetVelocity()),
 _rotaterCurrentSig(_rotaterMotor.GetTorqueCurrent()),
+_limiter(4.6_rad / 1_s),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
   // Extra implementation of subsystem constructor goes here.
@@ -50,6 +51,7 @@ void Turret::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_rotaterPositionSig, _rotaterVelocitySig, _rotaterCurrentSig);
 
+  units::radian_t turretAngle(0_rad);
 
   // Populate feedback cache:
   _feedback.torque = _rotaterCurrentSig.GetValue() / AmpsPerNewtonMeter; // Convert from hardware units to subsystem units.
@@ -61,23 +63,26 @@ void Turret::Periodic() {
     auto motorVelocity = std::get<units::radians_per_second_t>(_command) * TurretToMotorTurns;
 
     _rotaterMotor.SetControl(_commandPositionVoltage.WithVelocity(motorVelocity));
+    _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
   }
   if (std::holds_alternative<units::radian_t>(_command)) {
       // Send position based command:
 
       // Convert to hardware units:
-      auto motorAngle = std::get<units::radian_t>(_command) * TurretToMotorTurns;
-
+      turretAngle = _limiter.Calculate(std::get<units::radian_t>(_command));
+      auto motorAngle = turretAngle * TurretToMotorTurns;
       // Send to hardware:
       _rotaterMotor.SetControl(_commandPositionVoltage.WithPosition(motorAngle));
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _rotaterMotor.SetControl(controls::NeutralOut());
+    _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
   }
 
   frc::SmartDashboard::PutNumber("Turret/Position rad", _feedback.position.value());
   frc::SmartDashboard::PutNumber("Turret/Position deg", units::angle::degree_t(_feedback.position).value());
-  frc::SmartDashboard::PutNumber("Turret/Velocity (Rad/s))", _feedback.velocity.value());
+  frc::SmartDashboard::PutNumber("Turret/Velocity (Rad_s))", _feedback.velocity.value());
+  frc::SmartDashboard::PutNumber("Turret/Target", turretAngle.value());
 }
 
 frc2::CommandPtr Turret::RotateToPos(units::radian_t pos) {
@@ -98,9 +103,9 @@ configs::TalonFXConfiguration configs{};
 
     // Slot 0 for position control mode:
     configs.Slot0.kV = 0.153; // Motor constant.
-    configs.Slot0.kP = 0.4;
-    configs.Slot0.kI = 0.1;
-    configs.Slot0.kD = 0.01;
+    configs.Slot0.kP = 2.4;
+    configs.Slot0.kI = 0.2;
+    configs.Slot0.kD = 0.05;
     configs.Slot0.kA = 0.0;
     configs.Slot0.kS = 0.1;
 

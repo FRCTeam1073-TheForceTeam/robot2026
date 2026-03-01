@@ -48,6 +48,10 @@ class FlywheelTeleop
   bool LastDPadDownState;
 
   double scale;
+
+  short level;
+  const units::velocity::meters_per_second_t scaleFactor = 0.16666_mps; //TODO: change value
+  const short maxLevel = 120; //TODO: change value
   
   units::velocity::meters_per_second_t maxVel;
 };
