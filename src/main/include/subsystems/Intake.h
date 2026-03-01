@@ -53,13 +53,13 @@ class Intake : public frc2::SubsystemBase {
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::angle::radian_t>;
+  using Command = std::variant<std::monostate, units::angular_velocity::radians_per_second_t, units::angle::radian_t>;
 
 
   // Constructor for the subsystem.
   Intake();
 
-  /**
+  /** 
    * Will be called periodically whenever the CommandScheduler runs.
    * 
    * This function samples and updates feedback from hardware, and sends target
@@ -95,6 +95,8 @@ class Intake : public frc2::SubsystemBase {
 
   // Example velocity and position controls:
   ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot0 gains.
+  ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;  // Uses Slot1 gains.
+
   
   // Cached feedback:
   Feedback _feedback;

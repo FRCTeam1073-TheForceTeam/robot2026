@@ -68,6 +68,7 @@ void ShooterHood::Periodic() {
 
       // Send to hardware:
       _hoodMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorAngularVelocity));
+      _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
   } 
   else if (std::holds_alternative<units::angle::radian_t>(_command)) {
       // Send position based command:
@@ -81,7 +82,8 @@ void ShooterHood::Periodic() {
   else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _hoodMotor.SetControl(controls::NeutralOut());
-    _limiter.Reset(0_rad);
+    _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
+
   }
 
   frc::SmartDashboard::PutNumber("Hood/Angle", _feedback.position.value());

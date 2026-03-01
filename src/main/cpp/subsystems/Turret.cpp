@@ -63,6 +63,7 @@ void Turret::Periodic() {
     auto motorVelocity = std::get<units::radians_per_second_t>(_command) * TurretToMotorTurns;
 
     _rotaterMotor.SetControl(_commandPositionVoltage.WithVelocity(motorVelocity));
+    _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
   }
   if (std::holds_alternative<units::radian_t>(_command)) {
       // Send position based command:
@@ -75,7 +76,7 @@ void Turret::Periodic() {
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _rotaterMotor.SetControl(controls::NeutralOut());
-    _limiter.Reset(0_rad);
+    _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
   }
 
   frc::SmartDashboard::PutNumber("Turret/Position rad", _feedback.position.value());
