@@ -14,9 +14,9 @@
 #include <grpl/LaserCan.h>
 
 #include <ctre/phoenix6/TalonFX.hpp>
+#include "subsystems/CANIDs.h"
 
 #include <variant>
-
 
 /**
  * This example subsystem shows the basic pattern of any mechanism subsystem.

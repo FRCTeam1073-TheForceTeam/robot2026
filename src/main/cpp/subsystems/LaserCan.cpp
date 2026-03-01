@@ -8,12 +8,16 @@
 
 using namespace ctre::phoenix6;
 
+//CANIDs thecanid = CANIDs::LaserCAN;
+//CANIDs::CANID1;
+
 /**
  * You have to use initializer lists to build up the elements of the subsystem in the right order.
  */
 LaserCan::LaserCan() :
 _hardwareConfigured(true), 
-_laserCAN(28)
+// _laserCAN(28)
+_laserCAN(CANIDs::LaserCAN)
 {
   _feedback.is_valid = false;
   _feedback.range = 0.0_m;

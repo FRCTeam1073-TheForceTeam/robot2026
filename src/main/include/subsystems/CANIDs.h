@@ -1,0 +1,30 @@
+#pragma once
+
+enum class CANIDs {
+    CANdle = 4,
+    Pigeon = 5,
+    Swerve0Encoder = 6,
+    Swerve0Drive = 7,
+    Swerve0Steer = 8,
+    Swerve1Encoder = 9,
+    Swerve1Drive = 10,
+    Swerve1Steer = 11,
+    Swerve2Encoder = 12,
+    Swerve2Drive = 13,
+    Swerve2Steer = 14,
+    Swerve3Encoder = 15,
+    Swerve3Drive = 16,
+    Swerve3Steer = 17,
+    IntakeActuatorLead = 18,
+    IntageActuatorFollow = 19,
+    IntageCollectorMotor = 20,
+    LeadFlywheel = 21,
+    FollowFlywheel = 22,
+    SpindexerMotor = 23,
+    HoodMotor = 24,
+    TurretMotor = 25,
+    TurretEncoder = 26,
+    KickerMotor = 27,
+    LaserCAN = 28,
+    ClimberMotor = 29
+};
