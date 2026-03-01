@@ -143,7 +143,7 @@ bool Intake::ConfigureHardware() {
   }
 
   // Initialize at the zero position:
-  _leadMotor.SetPosition(0_rad); 
+  _leadMotor.SetPosition(units::angle::turn_t(-122_deg)*GearRatio); 
 
   // Log errors.
   return true;

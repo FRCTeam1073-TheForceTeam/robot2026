@@ -37,8 +37,7 @@ class Intake : public frc2::SubsystemBase {
 
   // Mechanism conversion constants for the subsystem:
   // Gear Ratio:
-  static constexpr auto GearRatio = units::angle::turn_t(10) / units::angle::turn_t(1); // TODO: get the correct values, these are just copied from spindexer
-  // static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(0.1524 * std::numbers::pi);
+  static constexpr auto GearRatio = units::angle::turn_t(40) / units::angle::turn_t(1); // From new design.
   static constexpr auto AmpsPerNewtonMeter = units::current::ampere_t(10.0) / units::torque::newton_meter_t(1.0);
 
   

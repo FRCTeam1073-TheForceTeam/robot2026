@@ -33,7 +33,6 @@
 #include "subsystems/Turret.h"
 #include "subsystems/Spindexer.h" 
 #include "subsystems/ZoneFinder.h" 
-#include "commands/Collect.h" 
 #include "commands/FlywheelTeleop.h"
 #include "commands/HoodTeleop.h"
 #include "commands/CollectorTeleop.h"

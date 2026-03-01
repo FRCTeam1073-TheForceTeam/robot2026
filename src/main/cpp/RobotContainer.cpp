@@ -16,7 +16,6 @@
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
 #include "commands/TeleopDrive.h"
-#include "commands/Collect.h"
 #include "subsystems/LaserCan.h"
 #include "commands/Autos/TestAuto.h"
 
