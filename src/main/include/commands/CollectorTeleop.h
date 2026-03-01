@@ -42,7 +42,9 @@ class CollectorTeleop
    std::shared_ptr<Collector> m_collector;
    std::shared_ptr<OI> m_OI;
 
-    units::velocity::meters_per_second_t velocity;
-    units::velocity::meters_per_second_t targetVelocity;
+   bool collect;
+   bool last_b_button;
+
+  units::velocity::meters_per_second_t targetVelocity;
 
 };

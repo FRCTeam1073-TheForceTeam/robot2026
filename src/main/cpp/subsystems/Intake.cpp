@@ -20,7 +20,7 @@ _intakeVelocitySig(_leadMotor.GetVelocity()),
 _intakeCurrentSig(_leadMotor.GetTorqueCurrent()),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _commandVelocityVoltage(units::angular_velocity::radians_per_second_t(0.0)),
-_command(0.0_rad),
+_command(std::monostate()),
 _limiter(5.0_rad_per_s) {
   // Extra implementation of subsystem constructor goes here.
 
