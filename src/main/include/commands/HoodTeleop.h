@@ -10,6 +10,8 @@
 #include "subsystems/ShooterHood.h"
 #include "subsystems/OI.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "utilities/ShooterTable.h"
+#include "subsystems/HubFinder.h"
 
 /**
  * HoodTeleop command.
@@ -22,7 +24,7 @@ class HoodTeleop
     : public frc2::CommandHelper<frc2::Command, HoodTeleop> {
  public:
 
-  HoodTeleop(std::shared_ptr<ShooterHood>& ShooterHood, std::shared_ptr<OI>& OI);
+  HoodTeleop(std::shared_ptr<ShooterHood>& ShooterHood, std::shared_ptr<OI>& OI, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st);
 
   void Initialize() override;
 
@@ -35,6 +37,8 @@ class HoodTeleop
   private:
    std::shared_ptr<ShooterHood> m_shooterHood;
    std::shared_ptr<OI> m_OI;
+   std::shared_ptr<HubFinder> m_hf;
+   std::shared_ptr<ShooterTable> m_st;
 
    short level; // level that the hood is at (when multiplied by scale factor)
    const short maxLevel = 25; //TODO: change value after testing it

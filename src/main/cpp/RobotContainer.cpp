@@ -52,6 +52,8 @@ RobotContainer::RobotContainer() {
   m_climber = std::make_shared<Climber>();
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
 
+  m_shooterTable = std::make_shared<ShooterTable>();
+
   m_intake = std::make_shared<Intake>();
   m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI).ToPtr());
   m_collector = std::make_shared<Collector>();
@@ -60,18 +62,18 @@ RobotContainer::RobotContainer() {
   m_spindexer = std::make_shared<Spindexer>();
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
   m_kicker = std::make_shared<Kicker>();
-  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker,m_OI).ToPtr());
+  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
 
   m_shooterHood = std::make_shared<ShooterHood>();
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI).ToPtr());
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_HubFinder, m_shooterTable).ToPtr());
 
   m_flywheel = std::make_shared<Flywheel>();
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI).ToPtr());
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_HubFinder, m_shooterTable).ToPtr());
 
   m_turret = std::make_shared<Turret>();
   m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_HubFinder).ToPtr());
 
-  m_shooterTable = std::make_shared<ShooterTable>();
+
 
   std::cerr << "Shoot Stuff created..." << std::endl;
 
