@@ -63,17 +63,11 @@ RobotContainer::RobotContainer() {
   // m_Laser = std::make_shared<LaserCan>();
   m_spindexer = std::make_shared<Spindexer>();
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
-  m_flywheel = std::make_shared<Flywheel>();
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI).ToPtr());
 
   //std::cerr << "Shoot Stuff created..." << std::endl;
 
-
-
 // m_shooterLoad = std::make_shared<ShooterLoad>();
 // m_Tags = std::make_shared<AprilTagFinder>();
-  m_shooterHood = std::make_shared<ShooterHood>();
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI).ToPtr());
 
   //std::cerr << "More stuff created..." << std::endl;
 
