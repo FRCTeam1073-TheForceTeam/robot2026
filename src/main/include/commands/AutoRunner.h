@@ -1,0 +1,90 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+#pragma once
+
+#include <frc2/command/Command.h>
+#include <frc2/command/CommandHelper.h>
+#include "subsystems/AprilTagFinder.h"
+#include "subsystems/DriveTrain.h"
+#include "subsystems/ExampleSubsystem.h"
+#include "subsystems/FieldMap.h" 
+#include "subsystems/FieldMapDisplay.h"
+#include "subsystems/Flywheel.h" 
+#include "subsystems/HubFinder.h"
+#include "subsystems/Collector.h"
+#include "subsystems/Intake.h"  
+#include "subsystems/LaserCan.h" 
+#include "subsystems/Localizer.h" 
+#include "subsystems/OI.h" 
+#include "subsystems/ShooterHood.h" 
+#include "subsystems/Turret.h"
+#include "subsystems/Spindexer.h" 
+#include "subsystems/ZoneFinder.h" 
+#include "subsystems/Kicker.h"
+#include "subsystems/Climber.h"
+#include <utilities/ShooterTable.h>
+
+#include <choreo/Choreo.h>
+
+
+/**
+ * An example command.
+ *
+ * <p>Note that this extends CommandHelper, rather extending Command
+ * directly; this is crucially important, or else the decorator functions in
+ * Command will *not* work!
+ */
+class AutoRunner
+    : public frc2::CommandHelper<frc2::Command, AutoRunner> {
+ public:
+  /* You should consider using the more terse Command factories API instead
+   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
+   */
+  AutoRunner(
+    std::shared_ptr<Drivetrain> drivetrain,
+    std::shared_ptr<FieldMap> FieldMap,
+    std::shared_ptr<AprilTagFinder> Tags,
+    std::shared_ptr<Localizer> Localizer,
+    std::shared_ptr<FieldMapDisplay> FieldDisplay,
+    std::shared_ptr<HubFinder> HubFinder,
+    std::shared_ptr<ZoneFinder> ZoneFinder,
+    std::shared_ptr<Kicker> kicker,
+    std::shared_ptr<Climber> climber,
+    std::shared_ptr<Flywheel> flywheel,
+    std::shared_ptr<ShooterHood> shooterHood,
+    std::shared_ptr<Spindexer> spindexer,
+    std::shared_ptr<Turret> turret,
+    std::shared_ptr<Collector> collector,
+    std::shared_ptr<Intake> intake,
+    std::shared_ptr<LaserCan> laser,
+    std::shared_ptr<ShooterTable> shooterTable,
+    std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory  
+  );
+  static frc2::CommandPtr Create();
+
+  std::string EventListener();
+
+private:
+  std::shared_ptr<Drivetrain> m_drivetrain;
+  std::shared_ptr<FieldMap> m_FieldMap;
+  std::shared_ptr<AprilTagFinder> m_Tags;
+  std::shared_ptr<Localizer> m_Localizer;
+  std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
+  std::shared_ptr<HubFinder> m_HubFinder;
+  std::shared_ptr<ZoneFinder> m_ZoneFinder;
+  std::shared_ptr<Kicker> m_kicker;
+  std::shared_ptr<Climber> m_climber;
+  std::shared_ptr<Flywheel> m_flywheel;
+  std::shared_ptr<ShooterHood> m_shooterHood;
+  std::shared_ptr<Spindexer> m_spindexer;
+  std::shared_ptr<Turret> m_turret;
+  std::shared_ptr<Collector> m_collector;
+  std::shared_ptr<Intake> m_intake;
+  std::shared_ptr<LaserCan> m_laser;
+  std::shared_ptr<ShooterTable> m_shooterTable;
+  std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
+
+
+};
