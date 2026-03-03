@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/controller/ProfiledPIDController.h>
+#include <frc/DriverStation.h>
 
 #include <subsystems/DriveTrain.h>
 #include <subsystems/Localizer.h>
@@ -50,6 +51,7 @@ class DrivePath
     std::optional<choreo::SwerveSample> currentSample;
 
     frc::Pose2d robotPose;
+    frc::Pose2d stopPose;
 
     frc::PIDController xController;
     frc::PIDController yController;
@@ -66,5 +68,5 @@ class DrivePath
     units::velocity::meters_per_second_t yVelocity;
     units::angular_velocity::radians_per_second_t thetaVelocity;
 
-
+    bool IsRedAlliance();
 };

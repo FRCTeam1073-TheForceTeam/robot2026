@@ -29,6 +29,7 @@ const std::string RobotContainer::centerAuto = "Center_Test";
 const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
 const std::string RobotContainer::noLevelAuto = "No Auto";
 const std::string RobotContainer::basicAuto = "Basic Auto";
+const std::string RobotContainer::cyclicAuto = "Cyclic_Auto";
 
 const std::string RobotContainer::noPosition = "No Position";
 
@@ -112,6 +113,7 @@ RobotContainer::RobotContainer() {
   m_levelChooser.AddOption("Test Auto", testAuto);
   m_levelChooser.AddOption("Center Auto", centerAuto);
   m_levelChooser.AddOption("Basic Auto", basicAuto);
+  m_levelChooser.AddOption("Cyclic Auto", cyclicAuto);
 
   frc::SmartDashboard::PutData("Position Chooser", &m_positionChooser);
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
@@ -126,7 +128,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     if(m_levelChooser.GetSelected() == weekZeroAuto) {
       return WeekZeroAuto::Create(m_spindexer, m_kicker, m_flywheel, m_shooterHood, m_turret);
     }
-    else if (m_levelChooser.GetSelected() == testAuto || m_levelChooser.GetSelected() == centerAuto) {
+    else if (m_levelChooser.GetSelected() == testAuto || m_levelChooser.GetSelected() == centerAuto || m_levelChooser.GetSelected() == cyclicAuto) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
       return TestAuto::Create(m_drivetrain, m_Localizer, trajectory);
     }

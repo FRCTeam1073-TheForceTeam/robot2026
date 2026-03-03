@@ -76,6 +76,7 @@ class RobotContainer {
   static const std::string noLevelAuto;
   static const std::string centerAuto;
   static const std::string basicAuto;
+  static const std::string cyclicAuto;
 
   static const std::string noPosition;
   
