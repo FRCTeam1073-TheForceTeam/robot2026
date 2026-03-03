@@ -33,19 +33,24 @@ RobotContainer::RobotContainer() {
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
   m_drivetrain = std::make_shared<Drivetrain>();
-  std::cerr << "Drivetrain created..." << std::endl;
+    //m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
 
-  //m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
+  //std::cerr << "Drivetrain created..." << std::endl;
+
+  m_turret = std::make_shared<Turret>();
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_HubFinder).ToPtr());
+
+  
   m_FieldMap = std::make_shared<FieldMap>();
-  m_Tags = std::make_shared<AprilTagFinder>();
-  std::cerr << "Tags Created..." << std::endl;
+  m_Tags = std::make_shared<AprilTagFinder>(m_turret);
+  //std::cerr << "Tags Created..." << std::endl;
 
   m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
   m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
   m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
   m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
 
-  std::cerr << "Localize Stuff created..." << std::endl;
+  //std::cerr << "Localize Stuff created..." << std::endl;
 
   m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
 
@@ -70,20 +75,19 @@ RobotContainer::RobotContainer() {
   m_flywheel = std::make_shared<Flywheel>();
   m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_HubFinder, m_shooterTable).ToPtr());
 
-  m_turret = std::make_shared<Turret>();
-  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_HubFinder).ToPtr());
 
 
 
-  std::cerr << "Shoot Stuff created..." << std::endl;
+
+  //std::cerr << "Shoot Stuff created..." << std::endl;
 
   m_laser = std::make_shared<LaserCan>();
 
-  std::cerr << "More stuff created..." << std::endl;
+  //std::cerr << "More stuff created..." << std::endl;
 
-  std::cerr << "Mechanisms created..." << std::endl;
+  //std::cerr << "Mechanisms created..." << std::endl;
 
-  std::cerr << "Default commands assigned..." << std::endl;
+  //std::cerr << "Default commands assigned..." << std::endl;
 
   // Autonomous Chooser:
 

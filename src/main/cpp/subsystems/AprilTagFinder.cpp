@@ -1,13 +1,15 @@
 #include "subsystems/AprilTagFinder.h"
 std::vector<AprilTagFinder::RobotCamera> AprilTagFinder::_cameras = {};
-AprilTagFinder::AprilTagFinder()
+AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret) : 
+    m_turret(turret)
 {
     std::cout << "Creating April Tag Object" << std::endl;
     _cameras = {
         RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Front"), frc::Transform3d(frc::Translation3d(-9.999553_in, 10.825414_in, 10.597388_in),frc::Rotation3d(0_deg, -9.9536084_deg, 65_deg))),
         RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-11.89629_in, 10.235522_in, 12.579398_in),frc::Rotation3d(0_deg, -10.19422_deg, 150_deg))),
         RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Front"), frc::Transform3d(frc::Translation3d(-9.999553_in, -10.825414_in, 10.597388_in),frc::Rotation3d(0_deg, -10.3495493_deg, -65_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-11.89629_in, -10.235522_in, 12.579398_in),frc::Rotation3d(0_deg, -10.19422_deg, -150_deg)))
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-11.89629_in, -10.235522_in, 12.579398_in),frc::Rotation3d(0_deg, -10.19422_deg, -150_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Turret"), frc::Transform3d(frc::Translation3d(-4.373_in, -7.404_in, 18.35_in),frc::Rotation3d(0_deg, 0_deg, 0_deg)), true) //TODO: Change Numbers
     };
 }
 
@@ -49,10 +51,8 @@ frc::Transform2d AprilTagFinder::toTransform2d(frc::Transform3d t3d) {
     return frc::Transform2d(t3d.X(), t3d.Y(), t3d.Rotation().ToRotation2d());
 }
 
-std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getCamMeasurements(std::shared_ptr<photon::PhotonCamera> camera, frc::Transform3d camTransform3d) {
+std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getCamMeasurements(std::vector<photon::PhotonPipelineResult> results, frc::Transform3d camTransform3d) {
     std::vector<VisionMeasurement> measurements = std::vector<VisionMeasurement>();
-    std::vector<photon::PhotonPipelineResult> results = camera->GetAllUnreadResults();
-
     for (auto& result : results){
         if (result.HasTargets()){
         // targets.addAll(result.getTargets());
@@ -91,22 +91,45 @@ frc::Transform3d AprilTagFinder::getRobotCam(int index) {
 }
 
 void AprilTagFinder::Periodic() {
+     auto turretVelocity = m_turret->GetFeedback().velocity;
     _visionMeasurements.clear();
     int i = 0;
     for (auto& cam : _cameras) {
-        std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(cam._camera, cam._transform);
-        // for(auto& vm : measurements){
-        //     std::cout << "Cam: " << i << std::endl;
-        //     std::cout << "ID: " << vm._tagID << std::endl;
-        //     std::cout << "Range: " << vm._range.value() << std::endl;
-        //     std::cout << "Time: " << vm._timeStamp.value() << std::endl;
-        // }
-        _visionMeasurements.insert(
-            _visionMeasurements.end(),
-            measurements.begin(),
-            measurements.end()
-        );
-        i++;
+        std::vector<photon::PhotonPipelineResult> results = cam._camera->GetAllUnreadResults();
+        frc::Transform3d transform = cam._transform;
+        //If the camera is the turrets camera, and the velocty of the turret is acceptable we will use it. And if not we will skip over using the camera.
+        //TODO: Revisit threshold
+        if (cam._isTurret && std::abs(turretVelocity.value()) < 1.0){
+            units::time::millisecond_t totalLatency = 0_ms;
+            float count = 0.0;
+            for (auto &result : results){
+                totalLatency += result.GetLatency();
+                count = count + 1.0;
+            }
+            units::time::millisecond_t averageLatency = 0_ms;
+            if(count > 0.0){
+                averageLatency = totalLatency / count;
+            }
+
+            auto turretAngle = m_turret->GetFeedback().position - turretVelocity * averageLatency; //TODO: Tweak this number
+            transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
+            std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
+            _visionMeasurements.insert(
+                _visionMeasurements.end(),
+                measurements.begin(),
+                measurements.end()
+            );
+            i++;
+        }else{
+            std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
+            _visionMeasurements.insert(
+                _visionMeasurements.end(),
+                measurements.begin(),
+                measurements.end()
+            );
+            i++;
+        }
+        
     }
 }
 
