@@ -76,12 +76,10 @@ RobotContainer::RobotContainer() {
   m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_HubFinder, m_shooterTable).ToPtr());
 
 
-
-
-
   //std::cerr << "Shoot Stuff created..." << std::endl;
 
   m_laser = std::make_shared<LaserCan>();
+  m_lidar = std::make_shared<Lidar>();
 
   //std::cerr << "More stuff created..." << std::endl;
 

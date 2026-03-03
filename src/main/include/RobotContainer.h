@@ -26,7 +26,8 @@
 #include "subsystems/HubFinder.h"
 #include "subsystems/Collector.h"
 #include "subsystems/Intake.h"  
-#include "subsystems/LaserCan.h" 
+#include "subsystems/LaserCan.h"
+#include "subsystems/Lidar.h"
 #include "subsystems/Localizer.h" 
 #include "subsystems/OI.h" 
 #include "subsystems/ShooterHood.h" 
@@ -111,6 +112,7 @@ class RobotContainer {
   std::shared_ptr<Collector> m_collector;
   std::shared_ptr<Intake> m_intake;
   std::shared_ptr<LaserCan> m_laser;
+  std::shared_ptr<Lidar> m_lidar;
   std::shared_ptr<ShooterTable> m_shooterTable;
   
   bool haveInitStartPos;
