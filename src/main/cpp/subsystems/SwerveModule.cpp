@@ -4,6 +4,7 @@
 
 #include "subsystems/SwerveModule.h"
 #include <iostream>
+#include <units/math.h>
 
 using namespace ctre::phoenix6;
 
@@ -119,6 +120,13 @@ void SwerveModule::SetCommand(frc::SwerveModuleState cmd, units::force::newton_t
     // Convert and send this command to the hardware.
     auto drive_motor_velocity = _targetState.speed / SwerveControlConfig::DriveMetersPerMotorTurn;
     auto steering_angle = units::angle::degree_t(_targetState.angle.Degrees());
+
+    // Scrub compensation for being off-angle:
+    // Scale drive motor velocity by how well aligned it is with target steering angle.
+    auto steering_delta = steering_angle -_latestFeedback.steeringAngle;
+    auto factor = units::math::cos(steering_delta);
+    if (factor < 0.0) factor = 0.0; // Don't flip things around.
+    drive_motor_velocity = drive_motor_velocity * factor;
     
     // Controller commands.
     // std::cerr << "Swerve Module [" << _ids.number << "] command " << drive_motor_velocity.value() << ", " << steering_angle.value() << std::endl;
