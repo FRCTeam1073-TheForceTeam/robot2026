@@ -7,6 +7,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <vector>
 
+#include "subsystems/Turret.h"
 //Photon Vision Includes
 #include <photon/PhotonCamera.h>
 #include <photon/PhotonUtils.h>
@@ -25,7 +26,7 @@
 
 class AprilTagFinder : public frc2::SubsystemBase {
     public:
-    AprilTagFinder();
+    AprilTagFinder(std::shared_ptr<Turret> &turret);
     class VisionMeasurement
     {
     public:
@@ -41,7 +42,8 @@ class AprilTagFinder : public frc2::SubsystemBase {
     public: 
         std::shared_ptr<photon::PhotonCamera> _camera;
         frc::Transform3d _transform;
-        RobotCamera(std::shared_ptr<photon::PhotonCamera> camera, frc::Transform3d transform) : _camera(camera), _transform(transform) {};
+        bool _isTurret;
+        RobotCamera(std::shared_ptr<photon::PhotonCamera> camera, frc::Transform3d transform, bool isTurret = false) : _camera(camera), _transform(transform), _isTurret(isTurret){};
     };
     
     static frc::Pose3d estimateFieldToRobotAprilTag(frc::Transform3d cameraToTarget, frc::Pose3d fieldRelativeTagPose, frc::Transform3d robotToCamera);
@@ -52,7 +54,7 @@ class AprilTagFinder : public frc2::SubsystemBase {
 
     frc::Transform2d toTransform2d(frc::Transform3d t3d);
 
-    std::vector<VisionMeasurement> getCamMeasurements(std::shared_ptr<photon::PhotonCamera> camera, frc::Transform3d camTransform3d);
+    std::vector<VisionMeasurement> getCamMeasurements(std::vector<photon::PhotonPipelineResult> results, frc::Transform3d camTransform3d);
     
     frc::Transform3d getRobotCam(int index);
 
@@ -72,5 +74,6 @@ class AprilTagFinder : public frc2::SubsystemBase {
         units::meter_t max_range{3.5};
 
         std::vector<VisionMeasurement> _visionMeasurements;
+        std::shared_ptr<Turret> m_turret;
 
 };
