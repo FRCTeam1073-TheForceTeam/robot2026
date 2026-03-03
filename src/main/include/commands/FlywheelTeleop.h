@@ -9,6 +9,8 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "subsystems/Flywheel.h"
+#include "subsystems/HubFinder.h"
+#include "utilities/ShooterTable.h"
 #include "subsystems/OI.h"
 #include <units/angular_velocity.h>
 
@@ -23,7 +25,7 @@ class FlywheelTeleop
    *
    * @param flywheel The subsystem used by this command.
    */
-  explicit FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi);
+  explicit FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st);
 
   void Initialize() override;
 
@@ -33,12 +35,12 @@ class FlywheelTeleop
 
   bool IsFinished() override;
 
-
-  
   
  private:
   std::shared_ptr<Flywheel> m_flywheel;
   std::shared_ptr<OI> m_OI;
+  std::shared_ptr<HubFinder> m_hf;
+  std::shared_ptr<ShooterTable> m_st;
 
   bool XButton;
   bool DPadDown;

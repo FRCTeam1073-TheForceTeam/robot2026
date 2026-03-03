@@ -37,11 +37,16 @@ RobotContainer::RobotContainer() {
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
   m_drivetrain = std::make_shared<Drivetrain>();
+    //m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
+
   //std::cerr << "Drivetrain created..." << std::endl;
 
-  //m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
+  m_turret = std::make_shared<Turret>();
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_HubFinder).ToPtr());
+
+  
   m_FieldMap = std::make_shared<FieldMap>();
-  m_Tags = std::make_shared<AprilTagFinder>();
+  m_Tags = std::make_shared<AprilTagFinder>(m_turret);
   //std::cerr << "Tags Created..." << std::endl;
 
   m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
@@ -76,6 +81,8 @@ RobotContainer::RobotContainer() {
   m_climber = std::make_shared<Climber>();
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
 
+  m_shooterTable = std::make_shared<ShooterTable>();
+
   m_intake = std::make_shared<Intake>();
   m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI).ToPtr());
   m_collector = std::make_shared<Collector>();
@@ -84,26 +91,27 @@ RobotContainer::RobotContainer() {
   m_spindexer = std::make_shared<Spindexer>();
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
   m_kicker = std::make_shared<Kicker>();
-  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker,m_OI).ToPtr());
+  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
 
   m_shooterHood = std::make_shared<ShooterHood>();
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI).ToPtr());
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_HubFinder, m_shooterTable).ToPtr());
 
   m_flywheel = std::make_shared<Flywheel>();
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI).ToPtr());
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_HubFinder, m_shooterTable).ToPtr());
 
-  m_turret = std::make_shared<Turret>();
-  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_HubFinder).ToPtr());
 
-  m_shooterTable = std::make_shared<ShooterTable>();
 
-  std::cerr << "Shoot Stuff created..." << std::endl;
+
+
+  //std::cerr << "Shoot Stuff created..." << std::endl;
 
   m_laser = std::make_shared<LaserCan>();
 
-  std::cerr << "Mechanisms created..." << std::endl;
+  //std::cerr << "More stuff created..." << std::endl;
 
-  std::cerr << "Default commands assigned..." << std::endl;
+  //std::cerr << "Mechanisms created..." << std::endl;
+
+  //std::cerr << "Default commands assigned..." << std::endl;
 
   // Autonomous Chooser:
 

@@ -1,4 +1,4 @@
-
+#pragma once
 #include <units/length.h>
 #include <units/angle.h>
 #include <units/velocity.h>

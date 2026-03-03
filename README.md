@@ -1,5 +1,15 @@
 # WeeWee2026 C++
 
+# Robot Network IPs
+
+|       Location       |     IP     | Cameras on Server |
+| -------------------- | ---------- | ----------------- |
+| Radio                | 10.10.73.1 |       N/A         |
+| RoboRio              | 10.10.73.2 |       N/A         |
+| 1st Vision Server    | 10.10.73.3 |   FR, FL, BR, BL  |
+| 2nd Vision Server    | 10.10.73.7 | Turret, Collector |
+| Home AP (Plank)      | 10.10.73.4 |       N/A         |
+| Driver Station (FMS) | 10.10.73.5 |       N/A         |
 
 # CANBus Configuration
 
