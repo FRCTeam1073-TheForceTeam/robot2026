@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/ZeroTurret.h"
+#include <units/math.h>
 
 ZeroTurret::ZeroTurret(std::shared_ptr<Turret> turret) :
   // Use addRequirements() here to declare subsystem dependencies.
@@ -28,7 +29,7 @@ void ZeroTurret::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool ZeroTurret::IsFinished() {
-  if(m_turret->GetFeedback().torque > limit) { //TODO: change limit
+  if(units::math::abs(m_turret->GetFeedback().torque) > limit) { //TODO: change limit
     return true;
   }
   return false;
