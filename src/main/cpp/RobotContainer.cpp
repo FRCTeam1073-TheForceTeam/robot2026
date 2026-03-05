@@ -137,4 +137,6 @@ void RobotContainer::ConfigureBindings() {
   frc2::Trigger xButton = _testController.X();
   frc2::Trigger AButton = _testController.A();
   AButton.OnTrue(ZeroTurret(m_turret).ToPtr());
+  frc2::Trigger yButton = _testController.Y();
+  _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
 }

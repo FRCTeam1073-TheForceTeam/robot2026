@@ -45,6 +45,7 @@
 #include "commands/Autos.h"
 #include "commands/ZeroIntake.h"
 #include "commands/ZeroTurret.h"
+#include "commands/ZeroHood.h"
 
 
 #include "commands/Autos/TestAuto.h"
