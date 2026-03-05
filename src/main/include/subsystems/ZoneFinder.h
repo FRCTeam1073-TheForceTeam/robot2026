@@ -1,3 +1,4 @@
+#pragma once
 #include <frc/geometry/Rectangle2d.h>
 #include <frc/geometry/Translation2d.h>
 #include "subsystems/Localizer.h"

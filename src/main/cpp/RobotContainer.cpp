@@ -38,7 +38,7 @@ RobotContainer::RobotContainer() {
   //std::cerr << "Drivetrain created..." << std::endl;
 
   m_turret = std::make_shared<Turret>();
-  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_HubFinder).ToPtr());
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_TargetFinder).ToPtr());
 
   
   m_FieldMap = std::make_shared<FieldMap>();
@@ -47,7 +47,7 @@ RobotContainer::RobotContainer() {
 
   m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
   m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
-  m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
+  m_TargetFinder = std::make_shared<TargetFinder>(m_Localizer);
   m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
 
   //std::cerr << "Localize Stuff created..." << std::endl;
@@ -70,10 +70,10 @@ RobotContainer::RobotContainer() {
   m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
 
   m_shooterHood = std::make_shared<ShooterHood>();
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_HubFinder, m_shooterTable).ToPtr());
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_TargetFinder, m_shooterTable).ToPtr());
 
   m_flywheel = std::make_shared<Flywheel>();
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_HubFinder, m_shooterTable).ToPtr());
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_TargetFinder, m_shooterTable).ToPtr());
 
 
 
