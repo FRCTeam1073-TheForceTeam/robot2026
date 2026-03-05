@@ -135,4 +135,6 @@ bool RobotContainer::DisabledPeriodic() {
 
 void RobotContainer::ConfigureBindings() {
   frc2::Trigger xButton = _testController.X();
+
+  _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
 }

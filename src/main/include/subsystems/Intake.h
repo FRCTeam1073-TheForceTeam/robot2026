@@ -39,8 +39,9 @@ class Intake : public frc2::SubsystemBase {
   // Gear Ratio:
   static constexpr auto GearRatio = units::angle::turn_t(40) / units::angle::turn_t(1); // From new design.
   static constexpr auto AmpsPerNewtonMeter = units::current::ampere_t(10.0) / units::torque::newton_meter_t(1.0);
+  units::angle::radian_t maxPosition = -2.13_rad;
+  units::angle::radian_t minPosition = 0_rad;
 
-  
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
       units::angle::radian_t position;
@@ -54,6 +55,7 @@ class Intake : public frc2::SubsystemBase {
   // Otherwise you can have two different types of commands.
   using Command = std::variant<std::monostate, units::angular_velocity::radians_per_second_t, units::angle::radian_t>;
 
+\
 
   // Constructor for the subsystem.
   Intake();
@@ -72,6 +74,8 @@ class Intake : public frc2::SubsystemBase {
 
   /// Set the command for the system.
   void SetCommand(Command cmd);
+
+  void Zero();
 
  private:
 
