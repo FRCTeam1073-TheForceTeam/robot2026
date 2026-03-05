@@ -44,6 +44,7 @@
 #include "commands/TeleopDrive.h"
 #include "commands/Autos.h"
 #include "commands/ZeroIntake.h"
+#include "commands/ZeroHood.h"
 
 
 #include "commands/Autos/TestAuto.h"

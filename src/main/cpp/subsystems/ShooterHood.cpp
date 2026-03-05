@@ -91,6 +91,7 @@ void ShooterHood::Periodic() {
   }
 
   frc::SmartDashboard::PutNumber("Hood/Angle", _feedback.position.value());
+  frc::SmartDashboard::PutNumber("Hood/Torque", _feedback.torque.value());
   frc::SmartDashboard::PutNumber("Hood/Target", targetAngle.value());
 }
 
