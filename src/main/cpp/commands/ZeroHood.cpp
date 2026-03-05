@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/ZeroHood.h"
-
+#include <units/math.h>
 ZeroHood::ZeroHood(std::shared_ptr<ShooterHood> shooterHood) :
   m_shooterHood(shooterHood) {
   AddRequirements({m_shooterHood.get()});
@@ -14,7 +14,7 @@ void ZeroHood::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ZeroHood::Execute() {
-  auto velocity = 1.00_rad_per_s;
+  auto velocity = -0.1_rad_per_s;
   m_shooterHood->SetCommand(velocity);
 }
 
@@ -26,7 +26,7 @@ void ZeroHood::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool ZeroHood::IsFinished() {
-  if(m_shooterHood->GetFeedback().torque > 9_Nm) {
+  if(units::math::abs(m_shooterHood->GetFeedback().torque) > 2.2_Nm) {
     return true;
   }
   return false;

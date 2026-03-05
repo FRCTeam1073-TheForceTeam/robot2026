@@ -76,7 +76,7 @@ void ShooterHood::Periodic() {
   } 
   else if (std::holds_alternative<units::angle::radian_t>(_command)) {
       // Send position based command:
-      targetAngle = _limiter.Calculate(std::get<units::angle::radian_t>(_command));
+      targetAngle = clamp(_limiter.Calculate(std::get<units::angle::radian_t>(_command)), minPosition, maxPosition);
       // Convert to hardware units:
       auto motorAngle = targetAngle * HoodToMotorGearRatio;
 
@@ -91,6 +91,7 @@ void ShooterHood::Periodic() {
   }
 
   frc::SmartDashboard::PutNumber("Hood/Angle", _feedback.position.value());
+  frc::SmartDashboard::PutNumber("Hood/Torque", _feedback.torque.value());
   frc::SmartDashboard::PutNumber("Hood/Target", targetAngle.value());
 }
 

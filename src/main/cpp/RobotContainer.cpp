@@ -135,6 +135,10 @@ bool RobotContainer::DisabledPeriodic() {
 
 void RobotContainer::ConfigureBindings() {
   frc2::Trigger xButton = _testController.X();
+  frc2::Trigger AButton = _testController.A();
+  frc2::Trigger yButton = _testController.Y();
 
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
+  AButton.OnTrue(ZeroTurret(m_turret).ToPtr());
+  _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
 }

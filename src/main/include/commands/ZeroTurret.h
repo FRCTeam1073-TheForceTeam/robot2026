@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/Turret.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 /**
  * An example command.
@@ -32,6 +33,6 @@ public:
   bool IsFinished() override;
   
 private:
-  
+  units::torque::newton_meter_t limit;
   std::shared_ptr<Turret> m_turret;
 };
