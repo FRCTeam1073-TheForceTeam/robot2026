@@ -23,7 +23,7 @@
 #include "subsystems/FieldMap.h" 
 #include "subsystems/FieldMapDisplay.h"
 #include "subsystems/Flywheel.h" 
-#include "subsystems/HubFinder.h"
+#include "subsystems/TargetFinder.h"
 #include "subsystems/Collector.h"
 #include "subsystems/Intake.h"  
 #include "subsystems/LaserCan.h" 
@@ -99,7 +99,7 @@ class RobotContainer {
   std::shared_ptr<AprilTagFinder> m_Tags;
   std::shared_ptr<Localizer> m_Localizer;
   std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
-  std::shared_ptr<HubFinder> m_HubFinder;
+  std::shared_ptr<TargetFinder> m_TargetFinder;
   std::shared_ptr<ZoneFinder> m_ZoneFinder;
 
   std::shared_ptr<Kicker> m_kicker;

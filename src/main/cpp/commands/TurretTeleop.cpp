@@ -8,10 +8,10 @@
 
 //TODO: finish the command; it is not complete yet
 
-TurretTeleop::TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>& oi, std::shared_ptr<HubFinder>& hubFinder) :
+TurretTeleop::TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& targetFinder) :
   m_turret(turret),
   m_OI(oi),
-  m_hubFinder(hubFinder) {
+  m_targetFinder(targetFinder) {
   lastError = 0,
   isAlignedToHub = false,
   angularVel = 0_rad_per_s,
@@ -37,7 +37,7 @@ void TurretTeleop::Execute() {
     targetAngle = 1.5_rad * leftX;
   }
   else if(m_OI->GetOperatorDPadLeft()) {
-    targetAngle = units::radian_t(std::clamp(m_hubFinder->getFeedback().turretToHubAngle.value(), -2 * std::numbers::pi / 3, std::numbers::pi / 2));
+    targetAngle = units::radian_t(std::clamp(m_targetFinder->getFeedback().turretToHubAngle.value(), -2 * std::numbers::pi / 3, std::numbers::pi / 2));
   }
   else {
     targetAngle = 0_rad;
