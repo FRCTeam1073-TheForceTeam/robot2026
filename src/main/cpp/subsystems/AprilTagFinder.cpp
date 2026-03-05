@@ -1,7 +1,8 @@
 #include "subsystems/AprilTagFinder.h"
 std::vector<AprilTagFinder::RobotCamera> AprilTagFinder::_cameras = {};
-AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret) : 
-    m_turret(turret)
+AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<Drivetrain> drivetrain) : 
+    m_turret(turret),
+    m_drivetrain(drivetrain)
 {
     std::cout << "Creating April Tag Object" << std::endl;
     _cameras = {
@@ -135,9 +136,9 @@ void AprilTagFinder::Periodic() {
 
 wpi::array<double, 3U> AprilTagFinder::estimate_stddevs(units::length::meter_t range) {
     wpi::array<double, 3U> result(base_stddevs);
-
-    result[0] += 0.2 * range.value();
-    result[1] += 0.2 * range.value();
-    result[2] += 0.15 * range.value();
+    units::velocity::meters_per_second_t speed = m_drivetrain->GetChassisSpeeds().vx;
+    result[0] += 0.2 * range.value() * (1+speed.value()/2.0);
+    result[1] += 0.2 * range.value() * (1+speed.value()/2.0);
+    result[2] += 0.15 * range.value() * (1+speed.value()/2.0);
     return result;
 }

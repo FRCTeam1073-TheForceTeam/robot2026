@@ -100,8 +100,8 @@ class OI : public frc2::SubsystemBase {
         bool GetOperatorDPadRight();
         bool GetOperatorDPadLeft();
         bool GetOperatorDPadDown();
-        bool OperatorRumble();
-        bool OperatorStopRumble();
+        void OperatorRumble();
+        void OperatorStopRumble();
 
         void ZeroDriverController();
         void ZeroOperatorController();

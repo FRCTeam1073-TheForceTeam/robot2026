@@ -42,7 +42,7 @@ RobotContainer::RobotContainer() {
 
   
   m_FieldMap = std::make_shared<FieldMap>();
-  m_Tags = std::make_shared<AprilTagFinder>(m_turret);
+  m_Tags = std::make_shared<AprilTagFinder>(m_turret,m_drivetrain);
   //std::cerr << "Tags Created..." << std::endl;
 
   m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);

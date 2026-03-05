@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "subsystems/Turret.h"
+#include "subsystems/DriveTrain.h"
 //Photon Vision Includes
 #include <photon/PhotonCamera.h>
 #include <photon/PhotonUtils.h>
@@ -26,7 +27,7 @@
 
 class AprilTagFinder : public frc2::SubsystemBase {
     public:
-    AprilTagFinder(std::shared_ptr<Turret> &turret);
+    AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<Drivetrain> drivetrain);
     class VisionMeasurement
     {
     public:
@@ -75,5 +76,6 @@ class AprilTagFinder : public frc2::SubsystemBase {
 
         std::vector<VisionMeasurement> _visionMeasurements;
         std::shared_ptr<Turret> m_turret;
+        std::shared_ptr<Drivetrain> m_drivetrain;
 
 };

@@ -173,11 +173,11 @@ bool OI::GetOperatorDPadDown() {
     return _operatorController.GetPOV() == 180;
 }
 
-bool OI::OperatorRumble() {
+void OI::OperatorRumble() {
     _operatorController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
 }
 
-bool OI::OperatorStopRumble() {
+void OI::OperatorStopRumble() {
     _operatorController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
 }
 
