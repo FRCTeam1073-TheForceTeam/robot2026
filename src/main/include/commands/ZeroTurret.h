@@ -32,6 +32,6 @@ public:
   bool IsFinished() override;
   
 private:
-  
+  units::torque::newton_meter_t limit;
   std::shared_ptr<Turret> m_turret;
 };

@@ -6,7 +6,8 @@
 
 ZeroTurret::ZeroTurret(std::shared_ptr<Turret> turret) :
   // Use addRequirements() here to declare subsystem dependencies.
-  m_turret(turret) {
+  m_turret(turret), 
+  limit(4_Nm)  {
   AddRequirements({m_turret.get()});
 }
 
@@ -27,7 +28,7 @@ void ZeroTurret::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool ZeroTurret::IsFinished() {
-  if(m_turret->GetFeedback().torque > 9_Nm) { //TODO: change limit
+  if(m_turret->GetFeedback().torque > limit) { //TODO: change limit
     return true;
   }
   return false;
