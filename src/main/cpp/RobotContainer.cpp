@@ -29,7 +29,9 @@ const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
 const std::string RobotContainer::noLevelAuto = "No Auto";
 const std::string RobotContainer::noPosition = "No Position";
 
-RobotContainer::RobotContainer() {
+RobotContainer::RobotContainer() :
+_testController(2)
+{
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
   m_drivetrain = std::make_shared<Drivetrain>();
@@ -132,7 +134,5 @@ bool RobotContainer::DisabledPeriodic() {
 }
 
 void RobotContainer::ConfigureBindings() {
-
+  frc2::Trigger xButton = _testController.X();
 }
-
-

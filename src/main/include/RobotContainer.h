@@ -43,6 +43,7 @@
 #include "commands/SpindexerTeleop.h"
 #include "commands/TeleopDrive.h"
 #include "commands/Autos.h"
+#include "commands/ZeroIntake.h"
 
 
 #include "commands/Autos/TestAuto.h"
@@ -112,6 +113,7 @@ class RobotContainer {
   std::shared_ptr<Intake> m_intake;
   std::shared_ptr<LaserCan> m_laser;
   std::shared_ptr<ShooterTable> m_shooterTable;
+
   
   bool haveInitStartPos;
 
@@ -123,5 +125,8 @@ class RobotContainer {
   frc::SendableChooser<std::string> m_levelChooser;
 
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
+
+  frc2::CommandXboxController _testController;
+
 
 };
