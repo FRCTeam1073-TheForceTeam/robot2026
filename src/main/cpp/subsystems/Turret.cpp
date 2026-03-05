@@ -47,6 +47,10 @@ void Turret::SetCommand(Command cmd) {
   _command = cmd;
 }
 
+void Turret::Zero(){
+  _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
+}
+
 void Turret::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_rotaterPositionSig, _rotaterVelocitySig, _rotaterCurrentSig);
