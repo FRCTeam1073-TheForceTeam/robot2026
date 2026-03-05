@@ -21,6 +21,7 @@ void ZeroClimber::Execute() {
 
 // Called once the command ends or is interrupted.
 void ZeroClimber::End(bool interrupted) {
+  m_climber->Zero();
   m_climber->SetCommand(std::monostate());
 }
 
