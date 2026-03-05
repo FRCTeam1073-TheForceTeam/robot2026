@@ -40,7 +40,8 @@ class ShooterHood : public frc2::SubsystemBase {
   //static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
   static constexpr auto AmpsPerNewtonMeter = units::current::ampere_t(10.0) / units::torque::newton_meter_t(1.0);
   static constexpr double HoodToMotorGearRatio = (52.0 / 12.0) * (33.0 / 15.0) * (160.0 / 10.0);
-
+  static constexpr auto maxPosition = 0.49_rad;
+  static constexpr auto minPosition = 0.00_rad;
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
