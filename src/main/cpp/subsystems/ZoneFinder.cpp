@@ -5,6 +5,10 @@ const frc::Rectangle2d ZoneFinder::BLUEZONE = frc::Rectangle2d(frc::Translation2
 const frc::Rectangle2d ZoneFinder::REDZONE = frc::Rectangle2d(frc::Translation2d(468.56_in, 0_in), frc::Translation2d(650.12_in, 316.64_in));
 const frc::Rectangle2d ZoneFinder::NEUTRALZONE = frc::Rectangle2d(frc::Translation2d(181.56_in, 0_in), frc::Translation2d(468.56_in, 316.64_in));
 
+const frc::Rectangle2d ZoneFinder::RIGHTHALF = frc::Rectangle2d(frc::Translation2d(0_in, 0_in), frc::Translation2d(0_in, 0_in));
+const frc::Rectangle2d ZoneFinder::LEFTHALF = frc::Rectangle2d(frc::Translation2d(0_in, 0_in), frc::Translation2d(0_in, 0_in));
+
+
 const frc::Rectangle2d ZoneFinder::TRENCH_A = frc::Rectangle2d(frc::Translation2d(156.06_in, 0_in), frc::Translation2d(200.46_in, 49.86_in));
 const frc::Rectangle2d ZoneFinder::TRENCH_B = frc::Rectangle2d(frc::Translation2d(156.06_in, 266.78_in), frc::Translation2d(200.46_in, 316.64_in));
 const frc::Rectangle2d ZoneFinder::TRENCH_C = frc::Rectangle2d(frc::Translation2d(445.06_in, 0_in), frc::Translation2d(489.46_in, 49.86_in));
@@ -41,28 +45,37 @@ std::string ZoneFinder::GetZone()
 {
 if(REDZONE.frc::Rectangle2d::Contains(CurrentTrans))
 {
-    return "REDZONE";
+    return "Red";
 }
 else if(BLUEZONE.frc::Rectangle2d::Contains(CurrentTrans))
 {
-    return "BLUEZONE";
+    return "Blue";
 }
 else if(NEUTRALZONE.frc::Rectangle2d::Contains(CurrentTrans))
 {
-    return "NEUTRALZONE";
+    return "Neutral";
 }
 else 
 {
     return "UNKNOWN";
 }
 
+if(RIGHTHALF.frc::Rectangle2d::Contains(CurrentTrans))
+{
+    return " Right";
+}
+else if(LEFTHALF.frc::Rectangle2d::Contains(CurrentTrans))
+{
+    return " Left";
+}
+
 if(TRENCH_A.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_B.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_C.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_D.frc::Rectangle2d::Contains(CurrentTrans))
 {
-    return "TRENCH";
+    return " Trench";
 }
 
 if(BUMP_A.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_B.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_C.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_D.frc::Rectangle2d::Contains(CurrentTrans))
 {
-    return "BUMP";
+    return " Bump";
 }
 };

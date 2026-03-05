@@ -16,7 +16,10 @@ class ZoneFinder
     static const frc::Rectangle2d REDZONE;
     static const frc::Rectangle2d BLUEZONE;
     static const frc::Rectangle2d NEUTRALZONE;
-    
+
+    static const frc::Rectangle2d RIGHTHALF;
+    static const frc::Rectangle2d LEFTHALF;
+
     static const frc::Rectangle2d TRENCH_A;
     static const frc::Rectangle2d TRENCH_B;
     static const frc::Rectangle2d TRENCH_C;
