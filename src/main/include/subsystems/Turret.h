@@ -74,6 +74,8 @@ class Turret: public frc2::SubsystemBase {
 
   frc2::CommandPtr RotateToPos(units::radian_t pos);
 
+  void Zero();
+
  private:
 
 

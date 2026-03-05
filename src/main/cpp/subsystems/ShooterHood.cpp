@@ -46,6 +46,10 @@ void ShooterHood::SetCommand(Command cmd) {
   _command = cmd;
 }
 
+void ShooterHood::Zero() {
+  _hoodMotor.SetPosition(units::angle::turn_t(0));
+}
+
 void ShooterHood::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_hoodPositionSig, _hoodCurrentSig);
@@ -54,7 +58,7 @@ void ShooterHood::Periodic() {
 
 
   // Populate feedback cache:
-  _feedback.current = _hoodCurrentSig.GetValue(); // Convert from hardware units to subsystem units.4
+  _feedback.torque = _hoodCurrentSig.GetValue() / AmpsPerNewtonMeter; // Convert from hardware units to subsystem units.4
   _feedback.position = _hoodPositionSig.GetValue() / HoodToMotorGearRatio; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
   //_feedback.velocity = _exampleVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
   

@@ -2,32 +2,32 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/ZeroClimber.h"
+#include "commands/ZeroTurret.h"
 
-ZeroClimber::ZeroClimber(std::shared_ptr<Climber> climber) :
+ZeroTurret::ZeroTurret(std::shared_ptr<Turret> turret) :
   // Use addRequirements() here to declare subsystem dependencies.
-  m_climber(climber) {
-  AddRequirements({m_climber.get()});
+  m_turret(turret) {
+  AddRequirements({m_turret.get()});
 }
 
+
 // Called when the command is initially scheduled.
-void ZeroClimber::Initialize() {}
+void ZeroTurret::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void ZeroClimber::Execute() {
-  auto velocity = 0.67_mps;
-  m_climber->SetCommand(velocity);
+void ZeroTurret::Execute() {
+  auto velocity = 1_rad_per_s; //TODO: change this value
+  m_turret->SetCommand(velocity);
 }
 
 // Called once the command ends or is interrupted.
-void ZeroClimber::End(bool interrupted) {
-  m_climber->Zero();
-  m_climber->SetCommand(std::monostate());
+void ZeroTurret::End(bool interrupted) {
+  m_turret->SetCommand(std::monostate());
 }
 
 // Returns true when the command should end.
-bool ZeroClimber::IsFinished() {
-  if(m_climber->GetFeedback().force > 9_N) { 
+bool ZeroTurret::IsFinished() {
+  if(m_turret->GetFeedback().torque > 9_Nm) { //TODO: change limit
     return true;
   }
   return false;
