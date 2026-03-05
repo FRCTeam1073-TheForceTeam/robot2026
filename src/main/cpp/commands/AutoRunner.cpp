@@ -46,13 +46,39 @@ trajectory(trajectory)
   // Use addRequirements() here to declare subsystem dependencies.
 }
 
-std::string AutoRunner::EventListener() {
+std::vector<std::unique_ptr<frc2::Command>> AutoRunner::EventListener() {
+  std::vector<std::unique_ptr<frc2::Command>> autoSequence;
+
   if (trajectory.has_value()) {
     auto &traj = trajectory.value();
-    
     auto events = traj.events;
 
-    frc::SmartDashboard::PutString("Choreo/Events", events.at(0).event);
+    autoSequence.emplace_back(frc2::cmd::Print("Starting"));
+    autoSequence.emplace_back(DrivePath(m_drivetrain, m_Localizer, trajectory));
 
+    std::vector<std::unique_ptr<frc2::Command>> parallelSequence; // might not be unique pointers or may need to convert
+    for(int e = 0; e < events.size(); e++) {
+      auto activeEvent = events.at(e);
+      auto eventType = activeEvent.event;
+
+      //TODO: discuss with Strategy subgroup what we will call this
+      if (eventType == "StartFlywheel") {
+        parallelSequence.emplace_back(m_flywheel->SpinToSpeed(14_mps));
+      }
+      else if (eventType == "StartSpindexer") {
+        parallelSequence.emplace_back(m_spindexer->SpinToSpeed(4.2_mps));
+      } //TODO: continue with other events
+      else if(eventType.substr(0,4) == "Stop") {
+        auto waitTime = activeEvent.timestamp - (events.at(e - 1).timestamp);
+        parallelSequence.emplace_back(frc2::cmd::Wait(waitTime));
+
+        //TODO: do things for stop here
+      }
+    }
+    autoSequence.emplace_back(parallelSequence);
   }
+}
+
+frc2::CommandPtr AutoRunner::Create() {
+  return frc2::cmd::Sequence(); //TODO: put in eventlistener as a call
 }

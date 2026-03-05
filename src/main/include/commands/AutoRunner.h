@@ -5,7 +5,9 @@
 #pragma once
 
 #include <frc2/command/Command.h>
+#include <frc2/command/Commands.h>
 #include <frc2/command/CommandHelper.h>
+
 #include "subsystems/AprilTagFinder.h"
 #include "subsystems/DriveTrain.h"
 #include "subsystems/ExampleSubsystem.h"
@@ -25,6 +27,8 @@
 #include "subsystems/Kicker.h"
 #include "subsystems/Climber.h"
 #include <utilities/ShooterTable.h>
+
+#include "commands/DrivePath.h"
 
 #include <choreo/Choreo.h>
 
@@ -62,9 +66,10 @@ class AutoRunner
     std::shared_ptr<ShooterTable> shooterTable,
     std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory  
   );
-  static frc2::CommandPtr Create();
+  
+  frc2::CommandPtr Create();
 
-  std::string EventListener();
+  std::vector<std::unique_ptr<frc2::Command>> EventListener();
 
 private:
   std::shared_ptr<Drivetrain> m_drivetrain;
@@ -85,6 +90,4 @@ private:
   std::shared_ptr<LaserCan> m_laser;
   std::shared_ptr<ShooterTable> m_shooterTable;
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
-
-
 };
