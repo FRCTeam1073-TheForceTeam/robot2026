@@ -17,6 +17,7 @@ class ZoneFinder
     static const frc::Rectangle2d BLUEZONE;
     static const frc::Rectangle2d NEUTRALZONE;
 
+    //Blue alliance POV
     static const frc::Rectangle2d RIGHTHALF;
     static const frc::Rectangle2d LEFTHALF;
 
@@ -34,7 +35,8 @@ class ZoneFinder
     ZoneFinder(std::shared_ptr<Localizer> _localizer);
 
     std::string GetZone();
-    //checks what zone robot is in based on localizer and returns Rectangle2d of the zone (Eva)
+    void periodic();
+    std::shared_ptr<Localizer> _localizer;
 
 
     private:

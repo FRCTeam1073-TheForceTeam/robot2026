@@ -35,8 +35,9 @@ class TargetFinder  : public frc2::SubsystemBase {
         frc::Translation2d BluePass_L;
     };
 
-    TargetFinder(std::shared_ptr<Localizer> localizer);
+    TargetFinder(std::shared_ptr<Localizer> localizer, std::shared_ptr<ZoneFinder> _zonefinder);
     std::shared_ptr<Localizer> _localizer;
+    std::shared_ptr<ZoneFinder> _zonefinder;
 
     frc::Pose2d getHubPos();
     frc::Pose2d HubLoc;
@@ -62,6 +63,6 @@ class TargetFinder  : public frc2::SubsystemBase {
     std::optional<frc::DriverStation::Alliance> _alliance;
 
     ZoneFinder zonefinder(std::shared_ptr<Localizer> _localizer);
-    std::string _zone;
+    std::string zone;
 
 };

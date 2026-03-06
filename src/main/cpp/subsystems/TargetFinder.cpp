@@ -20,7 +20,7 @@ const frc::Pose2d TargetFinder::BLUEPASS_L = frc::Pose2d(0_in, 0_in, frc::Rotati
 
 
 
-TargetFinder::TargetFinder(std::shared_ptr<Localizer> localizer):_localizer(localizer){
+TargetFinder::TargetFinder(std::shared_ptr<Localizer> localizer, std::shared_ptr<ZoneFinder> _zonefinder):_localizer(localizer){
     feedback.rangeToHub = 0_m;
     feedback.turretToHubAngle = 0_rad;
 }
@@ -32,32 +32,33 @@ frc::Pose2d TargetFinder::getHubPos()
     return HubLoc;
 }
 
-/*
+
 frc::Pose2d TargetFinder::Pass()
 {
     UpdateAlliance();
-    if (_alliance.value() == frc::DriverStation::Alliance::kRed && _zone.find("Right") != std::string::npos)
+    if (_alliance.value() == frc::DriverStation::Alliance::kRed && zone.find("Right") != std::string::npos)
     {
         return REDPASS_R.frc::Pose2d::RelativeTo(roboPos);
     }
-    else if (_alliance.value() == frc::DriverStation::Alliance::kRed && _zone.find("Left") != std::string::npos)
+    else if (_alliance.value() == frc::DriverStation::Alliance::kRed && zone.find("Left") != std::string::npos)
     {
         return REDPASS_L.frc::Pose2d::RelativeTo(roboPos);
     }
-    else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && _zone.find("Right") != std::string::npos)
+    else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && zone.find("Right") != std::string::npos)
     {
         return REDPASS_L.frc::Pose2d::RelativeTo(roboPos);
     }
-    else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && _zone.find("Left") != std::string::npos)
+    else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && zone.find("Left") != std::string::npos)
     {
         return REDPASS_L.frc::Pose2d::RelativeTo(roboPos);
     }
 }
-*/
+
 
 void TargetFinder::Periodic(){
     UpdateAlliance();
     roboPos = _localizer->getPose();
+    zone = _zonefinder->GetZone();
     frc::Pose2d turretLoc = getHubPos().TransformBy(ROBOTOTURRET);
     auto relativeHubPos = turretLoc.Translation();
     auto angle = units::math::atan2(relativeHubPos.Y(), relativeHubPos.X());
@@ -65,7 +66,6 @@ void TargetFinder::Periodic(){
     feedback.rangeToHub = relativeHubPos.Norm();
     frc::SmartDashboard::PutNumber("TargetFinder/Turret Angle", feedback.turretToHubAngle.value());
     frc::SmartDashboard::PutNumber("TargetFinder/Turret Range", feedback.rangeToHub.value());
-    //_zone = zonefinder.GetZone();
 }
 
 void TargetFinder::UpdateAlliance(){

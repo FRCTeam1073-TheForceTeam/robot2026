@@ -47,8 +47,8 @@ RobotContainer::RobotContainer() {
 
   m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
   m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
-  m_TargetFinder = std::make_shared<TargetFinder>(m_Localizer);
   m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
+  m_TargetFinder = std::make_shared<TargetFinder>(m_Localizer, m_ZoneFinder);
 
   //std::cerr << "Localize Stuff created..." << std::endl;
 
