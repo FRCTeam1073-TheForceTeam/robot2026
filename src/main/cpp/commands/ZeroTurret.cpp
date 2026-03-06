@@ -18,12 +18,13 @@ void ZeroTurret::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ZeroTurret::Execute() {
-  auto velocity = 1_rad_per_s; //TODO: change this value
+  auto velocity = 1.5_rad_per_s; //TODO: change this value
   m_turret->SetCommand(velocity);
 }
 
 // Called once the command ends or is interrupted.
 void ZeroTurret::End(bool interrupted) {
+  m_turret->Zero();
   m_turret->SetCommand(std::monostate());
 }
 

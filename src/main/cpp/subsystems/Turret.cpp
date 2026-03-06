@@ -66,14 +66,13 @@ void Turret::Periodic() {
   if (std::holds_alternative<units::radians_per_second_t>(_command)) {
     auto motorVelocity = std::get<units::radians_per_second_t>(_command) * TurretToMotorTurns;
 
-    _rotaterMotor.SetControl(_commandPositionVoltage.WithVelocity(motorVelocity));
-    _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
-  }
-  if (std::holds_alternative<units::radian_t>(_command)) {
+    _rotaterMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorVelocity));
+  } else if (std::holds_alternative<units::radian_t>(_command)) {
       // Send position based command:
-
+      auto clamped_command = clamp(std::get<units::angle::radian_t>(_command), minPosition, maxPosition);
       // Convert to hardware units:
-      turretAngle = _limiter.Calculate(std::get<units::radian_t>(_command));
+      turretAngle = _limiter.Calculate(clamped_command);
+
       auto motorAngle = turretAngle * TurretToMotorTurns;
       // Send to hardware:
       _rotaterMotor.SetControl(_commandPositionVoltage.WithPosition(motorAngle));
