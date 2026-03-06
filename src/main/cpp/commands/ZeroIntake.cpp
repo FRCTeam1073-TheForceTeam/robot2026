@@ -2,32 +2,34 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/ZeroClimber.h"
+#include "commands/ZeroIntake.h"
+#include <units/math.h>
 
-ZeroClimber::ZeroClimber(std::shared_ptr<Climber> climber) :
+ZeroIntake::ZeroIntake(std::shared_ptr<Intake> intake) :
+  m_intake(intake) {
   // Use addRequirements() here to declare subsystem dependencies.
-  m_climber(climber) {
-  AddRequirements({m_climber.get()});
+  AddRequirements({m_intake.get()});
 }
 
 // Called when the command is initially scheduled.
-void ZeroClimber::Initialize() {}
+void ZeroIntake::Initialize() {
+}
 
 // Called repeatedly when this Command is scheduled to run
-void ZeroClimber::Execute() {
-  auto velocity = 0.67_mps;
-  m_climber->SetCommand(velocity);
+void ZeroIntake::Execute() {
+  auto velocity = -2_rad_per_s;
+  m_intake->SetCommand(velocity);
 }
 
 // Called once the command ends or is interrupted.
-void ZeroClimber::End(bool interrupted) {
-  m_climber->Zero();
-  m_climber->SetCommand(std::monostate());
+void ZeroIntake::End(bool interrupted) {
+  m_intake->Zero();
+  m_intake->SetCommand(std::monostate());
 }
 
 // Returns true when the command should end.
-bool ZeroClimber::IsFinished() {
-  if(m_climber->GetFeedback().force > 9_N) { 
+bool ZeroIntake::IsFinished() {
+  if(units::math::abs(m_intake->GetFeedback().torque) > 2.5_Nm) {
     return true;
   }
   return false;

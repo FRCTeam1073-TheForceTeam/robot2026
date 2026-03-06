@@ -47,6 +47,10 @@ void Turret::SetCommand(Command cmd) {
   _command = cmd;
 }
 
+void Turret::Zero(){
+  _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
+}
+
 void Turret::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_rotaterPositionSig, _rotaterVelocitySig, _rotaterCurrentSig);
@@ -83,6 +87,7 @@ void Turret::Periodic() {
   frc::SmartDashboard::PutNumber("Turret/Position deg", units::angle::degree_t(_feedback.position).value());
   frc::SmartDashboard::PutNumber("Turret/Velocity (Rad_s))", _feedback.velocity.value());
   frc::SmartDashboard::PutNumber("Turret/Target", turretAngle.value());
+  frc::SmartDashboard::PutNumber("Turret/Torque", _feedback.torque.value());
 }
 
 frc2::CommandPtr Turret::RotateToPos(units::radian_t pos) {

@@ -6,8 +6,8 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+
 #include "subsystems/Intake.h"
-#include "subsystems/OI.h"
 
 /**
  * An example command.
@@ -16,14 +16,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class IntakeTeleop :
- public frc2::CommandHelper<frc2::Command, IntakeTeleop> {
- 
-  public:
+class ZeroIntake
+    : public frc2::CommandHelper<frc2::Command, ZeroIntake> {
+ public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  IntakeTeleop(std::shared_ptr<Intake>& Intake, std::shared_ptr<OI>& OI);
+  ZeroIntake(std::shared_ptr<Intake> intake);
 
   void Initialize() override;
 
@@ -33,14 +32,6 @@ class IntakeTeleop :
 
   bool IsFinished() override;
 
-
-
   private:
-
-  std::shared_ptr<Intake> m_intake;
-  std::shared_ptr<OI> m_oi;
-
-  bool position_in;
-  bool last_button_A; // For click detect on button A.
-
+      std::shared_ptr<Intake> m_intake;
 };

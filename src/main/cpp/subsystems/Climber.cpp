@@ -40,6 +40,10 @@ void Climber::SetCommand(Command cmd) {
   _command = cmd;
 }
 
+void Climber::Zero() {
+  _climberMotor.SetPosition(units::angle::turn_t(0));
+}
+
 bool Climber::IsHooked() {
   return m_ClimberOnInput.Get();
 }
@@ -101,6 +105,8 @@ bool Climber::ConfigureHardware() {
       std::cerr << "Climber: config failed to config!" << std::endl;
       return false;
   }
+
+  _climberMotor.SetPosition(units::angle::turn_t(0));
 
   // Set our neutral mode to brake on:
   status = _climberMotor.SetNeutralMode(signals::NeutralModeValue::Coast, 1_s);
