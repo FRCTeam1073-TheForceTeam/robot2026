@@ -17,7 +17,7 @@ void ZeroIntake::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void ZeroIntake::Execute() {
-  auto velocity = -1_rad_per_s;
+  auto velocity = -2_rad_per_s;
   m_intake->SetCommand(velocity);
 }
 

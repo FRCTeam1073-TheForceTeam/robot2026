@@ -14,7 +14,7 @@ void ZeroHood::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ZeroHood::Execute() {
-  auto velocity = -0.1_rad_per_s;
+  auto velocity = -0.2_rad_per_s;
   m_shooterHood->SetCommand(velocity);
 }
 

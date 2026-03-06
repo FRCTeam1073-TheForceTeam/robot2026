@@ -31,7 +31,7 @@ void IntakeTeleop::Execute() {
   if (position_in) {  
     m_intake->SetCommand(-122.0_deg);
   } else {
-    m_intake->SetCommand(0.1_deg);
+    m_intake->SetCommand(-0.1_deg);
   }
 }
 
