@@ -67,7 +67,9 @@ void Intake::Periodic() {
       _limiter.Reset(_feedback.position); // Keep the limiter in sync in the other control mode.
   } else if (std::holds_alternative<units::angle::radian_t>(_command)) {
       // auto limitedIntakeTarget = _limiter.Calculate(std::get<units::radian_t>(_command));
-      targetAngle = clamp(_limiter.Calculate(std::get<units::angle::radian_t>(_command)), minPosition, maxPosition);
+      auto clamped_command = clamp(std::get<units::angle::radian_t>(_command), minPosition, maxPosition);
+      targetAngle = _limiter.Calculate(clamped_command);
+
       auto limitedIntakeTarget = _limiter.Calculate(std::get<units::angle::radian_t>(_command));
 
       // Send position based command:

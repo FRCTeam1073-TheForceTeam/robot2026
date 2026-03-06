@@ -76,7 +76,10 @@ void ShooterHood::Periodic() {
   } 
   else if (std::holds_alternative<units::angle::radian_t>(_command)) {
       // Send position based command:
-      targetAngle = clamp(_limiter.Calculate(std::get<units::angle::radian_t>(_command)), minPosition, maxPosition);
+
+      auto clamped_command = clamp(std::get<units::angle::radian_t>(_command), minPosition, maxPosition);
+      targetAngle = _limiter.Calculate(clamped_command);
+
       // Convert to hardware units:
       auto motorAngle = targetAngle * HoodToMotorGearRatio;
 
