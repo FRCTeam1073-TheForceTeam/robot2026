@@ -39,13 +39,13 @@ const frc::Rectangle2d ZoneFinder::BUMP_C = frc::Rectangle2d(frc::Translation2d(
 const frc::Rectangle2d ZoneFinder::BUMP_D = frc::Rectangle2d(frc::Translation2d(445.61_in, 182.1_in), frc::Translation2d(490.01_in, 255.1_in));
 */
 
-ZoneFinder::ZoneFinder(std::shared_ptr<Localizer> _localizer)
+ZoneFinder::ZoneFinder(std::shared_ptr<Localizer>& localizer) : _localizer(localizer)
 {
-};
+}
 
 std::string ZoneFinder::GetZone()
 {
-    if(REDZONE.frc::Rectangle2d::Contains(CurrentTrans))
+    if (REDZONE.frc::Rectangle2d::Contains(CurrentTrans))
     {
         return "Red";
     }
@@ -66,17 +66,17 @@ std::string ZoneFinder::GetZone()
     {
         return " Right";
     }
-    else if(LEFTHALF.frc::Rectangle2d::Contains(CurrentTrans))
+    else if (LEFTHALF.frc::Rectangle2d::Contains(CurrentTrans))
     {
         return " Left";
     }
 
-    if(TRENCH_A.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_B.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_C.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_D.frc::Rectangle2d::Contains(CurrentTrans))
+    if (TRENCH_A.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_B.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_C.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_D.frc::Rectangle2d::Contains(CurrentTrans))
     {
         return " Trench";
     }
 
-    if(BUMP_A.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_B.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_C.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_D.frc::Rectangle2d::Contains(CurrentTrans))
+    if (BUMP_A.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_B.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_C.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_D.frc::Rectangle2d::Contains(CurrentTrans))
     {
         return " Bump";
     }
@@ -86,5 +86,5 @@ std::string ZoneFinder::GetZone()
 void ZoneFinder::Periodic()
 {
     CurrentTrans = _localizer->getPose().Translation();
-    frc::SmartDashboard::PutString("Zone/Current zone", GetZone());
+    frc::SmartDashboard::PutString("Zone/Zone", GetZone());
 }

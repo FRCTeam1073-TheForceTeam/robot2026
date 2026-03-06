@@ -32,13 +32,12 @@ class ZoneFinder : public frc2::SubsystemBase
     static const frc::Rectangle2d BUMP_D;
 
 
-    ZoneFinder(std::shared_ptr<Localizer> _localizer);
+    ZoneFinder(std::shared_ptr<Localizer>& localizer);
 
     std::string GetZone();
-    void Periodic()override;
-    std::shared_ptr<Localizer> _localizer;
-
+    void Periodic() override;
 
     private:
+    std::shared_ptr<Localizer> _localizer;
     frc::Translation2d CurrentTrans;
 };
