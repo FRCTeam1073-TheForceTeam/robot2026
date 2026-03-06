@@ -45,46 +45,46 @@ ZoneFinder::ZoneFinder(std::shared_ptr<Localizer> _localizer)
 
 std::string ZoneFinder::GetZone()
 {
-if(REDZONE.frc::Rectangle2d::Contains(CurrentTrans))
-{
-    return "Red";
-}
-else if(BLUEZONE.frc::Rectangle2d::Contains(CurrentTrans))
-{
-    return "Blue";
-}
-else if(NEUTRALZONE.frc::Rectangle2d::Contains(CurrentTrans))
-{
-    return "Neutral";
-}
-else 
-{
-    return "UNKNOWN";
-}
+    if(REDZONE.frc::Rectangle2d::Contains(CurrentTrans))
+    {
+        return "Red";
+    }
+    else if (BLUEZONE.frc::Rectangle2d::Contains(CurrentTrans))
+    {
+        return "Blue";
+    }
+    else if (NEUTRALZONE.frc::Rectangle2d::Contains(CurrentTrans))
+    {
+        return "Neutral";
+    }
+    else 
+    {
+        return "UNKNOWN";
+    }
 
-if(RIGHTHALF.frc::Rectangle2d::Contains(CurrentTrans))
-{
-    return " Right";
-}
-else if(LEFTHALF.frc::Rectangle2d::Contains(CurrentTrans))
-{
-    return " Left";
-}
+    if (RIGHTHALF.frc::Rectangle2d::Contains(CurrentTrans))
+    {
+        return " Right";
+    }
+    else if(LEFTHALF.frc::Rectangle2d::Contains(CurrentTrans))
+    {
+        return " Left";
+    }
 
-if(TRENCH_A.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_B.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_C.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_D.frc::Rectangle2d::Contains(CurrentTrans))
-{
-    return " Trench";
-}
+    if(TRENCH_A.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_B.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_C.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_D.frc::Rectangle2d::Contains(CurrentTrans))
+    {
+        return " Trench";
+    }
 
-if(BUMP_A.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_B.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_C.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_D.frc::Rectangle2d::Contains(CurrentTrans))
-{
-    return " Bump";
-}
+    if(BUMP_A.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_B.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_C.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_D.frc::Rectangle2d::Contains(CurrentTrans))
+    {
+        return " Bump";
+    }
 };
 
 
-void ZoneFinder::periodic()
+void ZoneFinder::Periodic()
 {
-    CurrentTrans = _localizer->getPose().frc::Pose2d::Translation();
+    CurrentTrans = _localizer->getPose().Translation();
     frc::SmartDashboard::PutString("Zone/Current zone", GetZone());
 }

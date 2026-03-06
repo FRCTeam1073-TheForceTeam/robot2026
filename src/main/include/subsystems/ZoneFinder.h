@@ -10,7 +10,7 @@
 #include <frc/apriltag/AprilTagFieldLayout.h>
 
 
-class ZoneFinder
+class ZoneFinder : public frc2::SubsystemBase
 {
     public:
     static const frc::Rectangle2d REDZONE;
@@ -35,7 +35,7 @@ class ZoneFinder
     ZoneFinder(std::shared_ptr<Localizer> _localizer);
 
     std::string GetZone();
-    void periodic();
+    void Periodic()override;
     std::shared_ptr<Localizer> _localizer;
 
 

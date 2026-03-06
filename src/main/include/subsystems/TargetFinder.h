@@ -48,9 +48,7 @@ class TargetFinder  : public frc2::SubsystemBase {
         return feedback;
     }
 
-    void Periodic();
-
-
+    void Periodic()override;
     
 
     private:
@@ -61,8 +59,6 @@ class TargetFinder  : public frc2::SubsystemBase {
 
     void UpdateAlliance();
     std::optional<frc::DriverStation::Alliance> _alliance;
-
-    ZoneFinder zonefinder(std::shared_ptr<Localizer> _localizer);
     std::string zone;
 
 };

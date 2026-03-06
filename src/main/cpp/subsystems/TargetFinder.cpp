@@ -20,7 +20,7 @@ const frc::Pose2d TargetFinder::BLUEPASS_L = frc::Pose2d(0_in, 0_in, frc::Rotati
 
 
 
-TargetFinder::TargetFinder(std::shared_ptr<Localizer> localizer, std::shared_ptr<ZoneFinder> _zonefinder):_localizer(localizer){
+TargetFinder::TargetFinder(std::shared_ptr<Localizer> localizer, std::shared_ptr<ZoneFinder> zonefinder):_localizer(localizer), _zonefinder(zonefinder){
     feedback.rangeToHub = 0_m;
     feedback.turretToHubAngle = 0_rad;
 }
