@@ -9,10 +9,16 @@
 
 #include "commands/ExampleCommand.h"
 
+
+namespace Autos {
+    
 frc2::CommandPtr TrackHub(std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st){
     return frc2::ParallelCommandGroup{
         TrackHood(shooterHood, hf, st),
         TrackFlywheel(flywheel, hf, st),
         TrackTurret(turret, hf)
     }.ToPtr();
+}
+
+
 }
