@@ -8,6 +8,8 @@
 #include <units/length.h>
 #include <string>
 #include <iostream>
+#include <units/time.h>
+
 
 #include "subsystems/Localizer.h"
 #include "subsystems/ZoneFinder.h"
@@ -26,7 +28,8 @@ class TargetFinder  : public frc2::SubsystemBase {
     static const frc::Pose2d BLUEPASS_L;
     static const frc::Transform2d ROBOTOTURRET;
     
-    struct Feedback {
+    struct Feedback 
+    {
         units::angle::radian_t turretToHubAngle;
         units::length::meter_t rangeToHub;
         frc::Translation2d RedPass_R;
@@ -56,6 +59,9 @@ class TargetFinder  : public frc2::SubsystemBase {
 
     frc::Pose2d OurHub;
     frc::Pose2d roboPos;
+    frc::Pose2d futureRoboPos;
+    //const units::time::second_t time;
+
 
     Feedback feedback;
 

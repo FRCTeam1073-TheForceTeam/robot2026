@@ -59,10 +59,13 @@ frc::Pose2d TargetFinder::Pass()
 
 void TargetFinder::Periodic(){
     UpdateAlliance();
-    roboPos = _localizer->getPose();
+
     zone = _zonefinder->GetZones();
+    roboPos = _localizer->getPose();
+
     frc::Pose2d turretLoc = getHubPos().TransformBy(ROBOTOTURRET);
     auto relativeHubPos = turretLoc.Translation();
+
     auto angle = units::math::atan2(relativeHubPos.Y(), relativeHubPos.X());
     feedback.turretToHubAngle = angle;
     feedback.rangeToHub = relativeHubPos.Norm();
