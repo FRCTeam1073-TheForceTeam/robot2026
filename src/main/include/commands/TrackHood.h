@@ -6,8 +6,10 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/Intake.h"
-#include "subsystems/OI.h"
+#include "subsystems/ShooterHood.h"
+#include <frc/smartdashboard/SmartDashboard.h>
+#include "utilities/ShooterTable.h"
+#include "subsystems/HubFinder.h"
 
 /**
  * An example command.
@@ -16,14 +18,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class IntakeTeleop :
- public frc2::CommandHelper<frc2::Command, IntakeTeleop> {
- 
-  public:
+class TrackHood
+    : public frc2::CommandHelper<frc2::Command, TrackHood> {
+ public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  IntakeTeleop(std::shared_ptr<Intake>& Intake, std::shared_ptr<OI>& OI);
+  TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st);
 
   void Initialize() override;
 
@@ -33,14 +34,8 @@ class IntakeTeleop :
 
   bool IsFinished() override;
 
-
-
-  private:
-
-  std::shared_ptr<Intake> m_intake;
-  std::shared_ptr<OI> m_oi;
-
-  bool position_in;
-  bool last_button_A; // For click detect on button A.
-
+ private:
+  std::shared_ptr<ShooterHood> m_shooterHood;
+  std::shared_ptr<HubFinder> m_hf;
+  std::shared_ptr<ShooterTable> m_st;
 };

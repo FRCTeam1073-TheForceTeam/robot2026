@@ -29,18 +29,18 @@ const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
 const std::string RobotContainer::noLevelAuto = "No Auto";
 const std::string RobotContainer::noPosition = "No Position";
 
-RobotContainer::RobotContainer() {
+RobotContainer::RobotContainer() :
+_testController(2)
+{
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
   m_drivetrain = std::make_shared<Drivetrain>();
-    //m_drivetrain->ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_rad)));
 
-  //std::cerr << "Drivetrain created..." << std::endl;
+  std::cerr << "Drivetrain created..." << std::endl;
 
+  // Must be here because localizer depends on this due to moving camera.
   m_turret = std::make_shared<Turret>();
-  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_HubFinder).ToPtr());
 
-  
   m_FieldMap = std::make_shared<FieldMap>();
   m_Tags = std::make_shared<AprilTagFinder>(m_turret,m_drivetrain);
   //std::cerr << "Tags Created..." << std::endl;
@@ -50,44 +50,36 @@ RobotContainer::RobotContainer() {
   m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
   m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
 
-  //std::cerr << "Localize Stuff created..." << std::endl;
-
-  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
-
   m_climber = std::make_shared<Climber>();
-  m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
 
   m_shooterTable = std::make_shared<ShooterTable>();
 
   m_intake = std::make_shared<Intake>();
-  m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI).ToPtr());
   m_collector = std::make_shared<Collector>();
-  m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI).ToPtr());
 
   m_spindexer = std::make_shared<Spindexer>();
-  m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
   m_kicker = std::make_shared<Kicker>();
-  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
 
   m_shooterHood = std::make_shared<ShooterHood>();
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_HubFinder, m_shooterTable).ToPtr());
-
   m_flywheel = std::make_shared<Flywheel>();
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_HubFinder, m_shooterTable).ToPtr());
-
-
-
-
-
-  //std::cerr << "Shoot Stuff created..." << std::endl;
 
   m_laser = std::make_shared<LaserCan>();
 
-  //std::cerr << "More stuff created..." << std::endl;
+  std::cerr << "Mechanisms created..." << std::endl;
 
-  //std::cerr << "Mechanisms created..." << std::endl;
+  // Assign default commands here after all subssytems are created to avoid using
+  // uninitialized subsystems in default commands.
+  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
+  m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI).ToPtr());
+  m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI).ToPtr());
+  m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
+  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_HubFinder, m_shooterTable).ToPtr());
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_HubFinder, m_shooterTable).ToPtr());
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_HubFinder).ToPtr());
+  m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
 
-  //std::cerr << "Default commands assigned..." << std::endl;
+  std::cerr << "Default commands assigned..." << std::endl;
 
   // Autonomous Chooser:
 
@@ -132,7 +124,8 @@ bool RobotContainer::DisabledPeriodic() {
 }
 
 void RobotContainer::ConfigureBindings() {
-
+// Use the test controller to bind test commands:
+  _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
+  _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
+  _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
 }
-
-

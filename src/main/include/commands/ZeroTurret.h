@@ -6,8 +6,8 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/Intake.h"
-#include "subsystems/OI.h"
+#include "subsystems/Turret.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 /**
  * An example command.
@@ -16,14 +16,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class IntakeTeleop :
- public frc2::CommandHelper<frc2::Command, IntakeTeleop> {
- 
-  public:
+class ZeroTurret
+    : public frc2::CommandHelper<frc2::Command, ZeroTurret> {
+public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  IntakeTeleop(std::shared_ptr<Intake>& Intake, std::shared_ptr<OI>& OI);
+  explicit ZeroTurret(std::shared_ptr<Turret> turret);
 
   void Initialize() override;
 
@@ -32,15 +31,8 @@ class IntakeTeleop :
   void End(bool interrupted) override;
 
   bool IsFinished() override;
-
-
-
-  private:
-
-  std::shared_ptr<Intake> m_intake;
-  std::shared_ptr<OI> m_oi;
-
-  bool position_in;
-  bool last_button_A; // For click detect on button A.
-
+  
+private:
+  units::torque::newton_meter_t limit;
+  std::shared_ptr<Turret> m_turret;
 };

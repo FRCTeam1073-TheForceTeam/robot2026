@@ -6,24 +6,27 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/Intake.h"
-#include "subsystems/OI.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
-/**
+#include "subsystems/Flywheel.h"
+#include "subsystems/HubFinder.h"
+#include "utilities/ShooterTable.h"
+#include <units/angular_velocity.h>
+
+/*
  * An example command.
  *
  * <p>Note that this extends CommandHelper, rather extending Command
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class IntakeTeleop :
- public frc2::CommandHelper<frc2::Command, IntakeTeleop> {
- 
-  public:
+class TrackFlywheel
+    : public frc2::CommandHelper<frc2::Command, TrackFlywheel> {
+ public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  IntakeTeleop(std::shared_ptr<Intake>& Intake, std::shared_ptr<OI>& OI);
+  TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st);
 
   void Initialize() override;
 
@@ -34,13 +37,156 @@ class IntakeTeleop :
   bool IsFinished() override;
 
 
-
   private:
 
-  std::shared_ptr<Intake> m_intake;
-  std::shared_ptr<OI> m_oi;
-
-  bool position_in;
-  bool last_button_A; // For click detect on button A.
-
+  std::shared_ptr<Flywheel> m_flywheel;
+  std::shared_ptr<HubFinder> m_hf;
+  std::shared_ptr<ShooterTable> m_st;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

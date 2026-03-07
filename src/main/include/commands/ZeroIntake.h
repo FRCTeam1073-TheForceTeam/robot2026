@@ -7,7 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
-#include "subsystems/Flywheel.h"
+#include "subsystems/Intake.h"
 
 /**
  * An example command.
@@ -16,15 +16,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class Shoot
-    : public frc2::CommandHelper<frc2::Command, Shoot> {
+class ZeroIntake
+    : public frc2::CommandHelper<frc2::Command, ZeroIntake> {
  public:
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param flywheel The subsystem used by this command.
+  /* You should consider using the more terse Command factories API instead
+   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  explicit Shoot(std::shared_ptr<Flywheel> flywheel);
+  ZeroIntake(std::shared_ptr<Intake> intake);
 
   void Initialize() override;
 
@@ -34,6 +32,6 @@ class Shoot
 
   bool IsFinished() override;
 
- private:
-  std::shared_ptr<Flywheel> m_flywheel;
+  private:
+      std::shared_ptr<Intake> m_intake;
 };

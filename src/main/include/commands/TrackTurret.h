@@ -6,8 +6,8 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/Intake.h"
-#include "subsystems/OI.h"
+#include "subsystems/Turret.h"
+#include <subsystems/HubFinder.h>
 
 /**
  * An example command.
@@ -16,31 +16,30 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class IntakeTeleop :
- public frc2::CommandHelper<frc2::Command, IntakeTeleop> {
- 
-  public:
+class TrackTurret
+    : public frc2::CommandHelper<frc2::Command, TrackTurret> {
+ public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  IntakeTeleop(std::shared_ptr<Intake>& Intake, std::shared_ptr<OI>& OI);
+  TrackTurret(std::shared_ptr<Turret>& turret, std::shared_ptr<HubFinder>& hubFinder);
 
   void Initialize() override;
-
   void Execute() override;
-
   void End(bool interrupted) override;
-
   bool IsFinished() override;
-
-
 
   private:
 
-  std::shared_ptr<Intake> m_intake;
-  std::shared_ptr<OI> m_oi;
+  bool isAlignedToHub;
 
-  bool position_in;
-  bool last_button_A; // For click detect on button A.
+  double lastError;
 
+  std::shared_ptr<Turret> m_turret;
+  std::shared_ptr<HubFinder> m_hubFinder;
+
+  units::angle::radian_t targetPosition;
+  units::angle::radian_t position;//zeroed position is up against the hard stop
+  units::angle::radian_t maxPosition;
+  units::angle::radian_t minPosition;
 };
