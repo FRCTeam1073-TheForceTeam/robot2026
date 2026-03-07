@@ -4,7 +4,7 @@
 
 #include "commands/TrackHood.h"
 
-TrackHood::TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st) {
+TrackHood::TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) {
   AddRequirements(m_shooterHood.get());
 }
 

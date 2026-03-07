@@ -10,7 +10,7 @@
 #include "commands/TrackHood.h"
 #include "commands/TrackTurret.h"
 #include "commands/TrackFlywheel.h"
-#include "subsystems/HubFinder.h"
+#include "subsystems/TargetFinder.h"
 #include "subsystems/Turret.h"
 #include "subsystems/Flywheel.h"
 #include "subsystems/ShooterHood.h"
@@ -21,7 +21,7 @@ namespace Autos {
 /**
  * Example static factory for an autonomous command.
  */
-frc2::CommandPtr TrackHub(std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st);
+frc2::CommandPtr TrackHub(std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st);
 
 
 

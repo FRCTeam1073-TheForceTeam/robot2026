@@ -130,5 +130,5 @@ void RobotContainer::ConfigureBindings() {
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
   _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
   _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
-  // _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_HubFinder, m_shooterTable));
+  // _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_TargetFinder, m_shooterTable));
 }

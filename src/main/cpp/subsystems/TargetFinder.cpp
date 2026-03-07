@@ -30,8 +30,17 @@ TargetFinder::TargetFinder(std::shared_ptr<Localizer>& localizer, std::shared_pt
 
 frc::Pose2d TargetFinder::getHubPos()
 {
-    frc::Pose2d HubLoc = OurHub.frc::Pose2d::RelativeTo(roboPos);
-    return HubLoc;
+    //all in field coordinates
+    frc::Pose2d HubLoc = OurHub;
+
+    units::second_t time = 0.5_s;
+    frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * 1_s, _localizer->getSpeeds().vy * 1_s);
+    //TODO: Fix scaling offset
+    velocityOffset = velocityOffset * 0.0;
+    HubLoc.TransformBy(frc::Transform2d(velocityOffset, frc::Rotation2d()));
+
+    //turns into robo coordinates
+    return HubLoc.frc::Pose2d::RelativeTo(roboPos);
 }
 
 
