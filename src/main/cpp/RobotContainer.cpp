@@ -126,4 +126,5 @@ void RobotContainer::ConfigureBindings() {
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
   _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
   _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
+  _testController.B().OnTrue(ZeroClimber(m_climber).ToPtr());
 }
