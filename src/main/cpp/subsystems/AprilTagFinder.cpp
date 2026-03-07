@@ -91,8 +91,7 @@ frc::Transform3d AprilTagFinder::getRobotCam(int index) {
 }
 
 void AprilTagFinder::Periodic() {
-    return; //TODO: fix periodic
-     auto turretVelocity = m_turret->GetFeedback().velocity;
+    auto turretVelocity = m_turret->GetFeedback().velocity;
     _visionMeasurements.clear();
     int i = 0;
     for (auto& cam : _cameras) {
@@ -114,22 +113,14 @@ void AprilTagFinder::Periodic() {
 
             auto turretAngle = m_turret->GetFeedback().position - turretVelocity * averageLatency; //TODO: Tweak this number
             transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
-            std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
-            _visionMeasurements.insert(
-                _visionMeasurements.end(),
-                measurements.begin(),
-                measurements.end()
-            );
-            i++;
-        }else{
-            std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
-            _visionMeasurements.insert(
-                _visionMeasurements.end(),
-                measurements.begin(),
-                measurements.end()
-            );
-            i++;
         }
+        std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
+        _visionMeasurements.insert(
+            _visionMeasurements.end(),
+            measurements.begin(),
+            measurements.end()
+        );
+        i++;
         
     }
 }
