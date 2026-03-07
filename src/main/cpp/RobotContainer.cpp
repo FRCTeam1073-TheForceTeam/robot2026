@@ -54,13 +54,10 @@ _testController(2)
 
   m_intake = std::make_shared<Intake>();
   m_collector = std::make_shared<Collector>();
-
   m_spindexer = std::make_shared<Spindexer>();
   m_kicker = std::make_shared<Kicker>();
-
   m_shooterHood = std::make_shared<ShooterHood>();
   m_flywheel = std::make_shared<Flywheel>();
-
   m_laser = std::make_shared<LaserCan>();
 
   std::cerr << "Mechanisms created..." << std::endl;
@@ -126,4 +123,5 @@ void RobotContainer::ConfigureBindings() {
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
   _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
   _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
+  _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_HubFinder, m_shooterTable));
 }
