@@ -5,6 +5,7 @@
 
 #include "subsystems/Intake.h"
 #include <ctre/phoenix6/controls/NeutralOut.hpp>
+#include "commands/IntakeTeleop.h"
 
 using namespace ctre::phoenix6;
 
@@ -44,11 +45,15 @@ void Intake::SetCommand(Command cmd) {
   _command = cmd;
 }
 
+void Intake::Zero() {
+  _leadMotor.SetPosition(units::angle::turn_t(-122_deg)*GearRatio); 
+}
 
 void Intake::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_intakePositionSig, _intakeCurrentSig);
 
+  units::angle::radian_t targetAngle(0_rad);
   // Populate feedback cache:
   _feedback.torque = _intakeCurrentSig.GetValue() / AmpsPerNewtonMeter; // Convert from hardware units to subsystem units.
   _feedback.position = _intakePositionSig.GetValue() / GearRatio; // Convert from hardware units to subsystem units.
@@ -62,6 +67,9 @@ void Intake::Periodic() {
       _limiter.Reset(_feedback.position); // Keep the limiter in sync in the other control mode.
   } else if (std::holds_alternative<units::angle::radian_t>(_command)) {
       // auto limitedIntakeTarget = _limiter.Calculate(std::get<units::radian_t>(_command));
+      auto clamped_command = clamp(std::get<units::angle::radian_t>(_command), minPosition, maxPosition);
+      targetAngle = _limiter.Calculate(clamped_command);
+
       auto limitedIntakeTarget = _limiter.Calculate(std::get<units::angle::radian_t>(_command));
 
       // Send position based command:
@@ -70,6 +78,8 @@ void Intake::Periodic() {
       // Send to hardware:
       _leadMotor.SetControl(_commandPositionVoltage.WithPosition(motorPosition));
       _followMotor.SetControl(controls::Follower(_leadMotor.GetDeviceID(), signals::MotorAlignmentValue::Opposed));
+
+ 
 
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
@@ -80,6 +90,7 @@ void Intake::Periodic() {
 
   frc::SmartDashboard::PutNumber("Intake/Position(rad)", _feedback.position.value());  
   frc::SmartDashboard::PutNumber("Intake/TargetPosition(rad)", _limiter.LastValue().value());  
+  frc::SmartDashboard::PutNumber("Intake/Torque(Nm)", _feedback.torque.value());
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
@@ -104,7 +115,7 @@ bool Intake::ConfigureHardware() {
 
   // Slot 1 for the velocity control loop:
   configs.Slot1.kV = 0.153;
-  configs.Slot1.kP = 0.2;
+  configs.Slot1.kP = 0.3;
   configs.Slot1.kI = 0.0;
   configs.Slot1.kD = 0.0;
   configs.Slot1.kA = 0.0;

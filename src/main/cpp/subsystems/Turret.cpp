@@ -47,6 +47,10 @@ void Turret::SetCommand(Command cmd) {
   _command = cmd;
 }
 
+void Turret::Zero(){
+  _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
+}
+
 void Turret::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_rotaterPositionSig, _rotaterVelocitySig, _rotaterCurrentSig);
@@ -62,14 +66,13 @@ void Turret::Periodic() {
   if (std::holds_alternative<units::radians_per_second_t>(_command)) {
     auto motorVelocity = std::get<units::radians_per_second_t>(_command) * TurretToMotorTurns;
 
-    _rotaterMotor.SetControl(_commandPositionVoltage.WithVelocity(motorVelocity));
-    _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
-  }
-  if (std::holds_alternative<units::radian_t>(_command)) {
+    _rotaterMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorVelocity));
+  } else if (std::holds_alternative<units::radian_t>(_command)) {
       // Send position based command:
-
+      auto clamped_command = clamp(std::get<units::angle::radian_t>(_command), minPosition, maxPosition);
       // Convert to hardware units:
-      turretAngle = _limiter.Calculate(std::get<units::radian_t>(_command));
+      turretAngle = _limiter.Calculate(clamped_command);
+
       auto motorAngle = turretAngle * TurretToMotorTurns;
       // Send to hardware:
       _rotaterMotor.SetControl(_commandPositionVoltage.WithPosition(motorAngle));
@@ -83,6 +86,7 @@ void Turret::Periodic() {
   frc::SmartDashboard::PutNumber("Turret/Position deg", units::angle::degree_t(_feedback.position).value());
   frc::SmartDashboard::PutNumber("Turret/Velocity (Rad_s))", _feedback.velocity.value());
   frc::SmartDashboard::PutNumber("Turret/Target", turretAngle.value());
+  frc::SmartDashboard::PutNumber("Turret/Torque", _feedback.torque.value());
 }
 
 frc2::CommandPtr Turret::RotateToPos(units::radian_t pos) {
