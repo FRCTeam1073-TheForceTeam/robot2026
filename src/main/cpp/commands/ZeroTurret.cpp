@@ -8,7 +8,7 @@
 ZeroTurret::ZeroTurret(std::shared_ptr<Turret> turret) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_turret(turret), 
-  limit(4_Nm)  {
+  limit(3.5_Nm)  {
   AddRequirements({m_turret.get()});
 }
 
@@ -18,12 +18,13 @@ void ZeroTurret::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ZeroTurret::Execute() {
-  auto velocity = 1_rad_per_s; //TODO: change this value
+  auto velocity = 1.5_rad_per_s; //TODO: change this value
   m_turret->SetCommand(velocity);
 }
 
 // Called once the command ends or is interrupted.
 void ZeroTurret::End(bool interrupted) {
+  m_turret->Zero();
   m_turret->SetCommand(std::monostate());
 }
 

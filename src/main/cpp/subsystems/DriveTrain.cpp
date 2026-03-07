@@ -43,19 +43,28 @@ Drivetrain::Drivetrain() :
     _pitchSig(_imu.GetPitch()),
     _rollSig(_imu.GetRoll()),
     _yawRateSig(_imu.GetAngularVelocityZWorld()),
+    _wheelForceCalculator({_swerveModules[0].GetLocation(),
+                           _swerveModules[1].GetLocation(),
+                           _swerveModules[2].GetLocation(),
+                           _swerveModules[3].GetLocation() }, 140_lb, 100_kg_sq_m),     // TODO: Need accurate robot mass and rotational inertia.
     _hardwareConfigured(false),
     _parkingBrake(false)
 {
+    // We don't want to go anywhere at the start.
     _targetSpeeds.vx = 0_mps;
     _targetSpeeds.vy = 0_mps;
     _targetSpeeds.omega = 0_rad_per_s;
+    _previousTargetSpeeds = _targetSpeeds;
+    _previousUpdateTime = frc::Timer::GetFPGATimestamp();
+
+    // Run hardware configuration:
     _hardwareConfigured = ConfigureHardware();
 
     for (size_t ii(0); ii < _swerveModules.size(); ++ii) {
         _hardwareConfigured &= _swerveModules[ii].HardwareConfigured();
     }
 
-    if (_hardwareConfigured) {
+    if (!_hardwareConfigured) {
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
     }
 
@@ -90,17 +99,32 @@ void Drivetrain::Periodic()  {
         // Hardcoded brake mode:
         // Leaves brake command on, does nothing here.
     } else {
+
         // Normal command pathway:
         auto moduleCommands = _kinematics.ToSwerveModuleStates(_targetSpeeds);
         frc::SwerveDriveKinematics<4>::DesaturateWheelSpeeds(&moduleCommands, SwerveControlConfig::MaxModuleSpeed);  // Keep commands feasible.
 
+        // Acceleration compensation for chassis:
+        // Compute Accelerations in X, Y and Theta
+        auto delta_t = now - _previousUpdateTime;
+        units::meters_per_second_squared_t ax = (_targetSpeeds.vx - _previousTargetSpeeds.vx) / delta_t;
+        units::meters_per_second_squared_t ay = (_targetSpeeds.vy - _previousTargetSpeeds.vy) / delta_t;
+        units::radians_per_second_squared_t aomega = (_targetSpeeds.omega - _previousTargetSpeeds.omega) / delta_t;
+
+        // Use wheel force calculator to get feed-forward values:
+        auto feedForwards = _wheelForceCalculator.Calculate(ax, ay, aomega);
+
         // Send the commands to swerve module hardware:
         for (size_t ii(0); ii < _swerveModules.size(); ++ii) {
             moduleCommands[ii].Optimize(_swerveModulePositions[ii].angle);
-            _swerveModules[ii].SetCommand(moduleCommands[ii]);
+            // Pass along calculated feed-forward forces to swerve modules.
+            _swerveModules[ii].SetCommand(moduleCommands[ii], feedForwards.x[ii], feedForwards.y[ii]);
         }
     }
 
+    // Always update previous target speeds and time so we can compute input accelerations:
+    _previousTargetSpeeds = _targetSpeeds;
+    _previousUpdateTime = now; // We already sampled it above in this function.
 }
 
 /// Reset the odometry to a specific pose on the field.

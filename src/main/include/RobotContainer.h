@@ -33,13 +33,13 @@
 #include "subsystems/Turret.h"
 #include "subsystems/Spindexer.h" 
 #include "subsystems/ZoneFinder.h" 
+#include "commands/Autos.h"
 #include "commands/FlywheelTeleop.h"
 #include "commands/HoodTeleop.h"
 #include "commands/CollectorTeleop.h"
 #include "commands/IntakeTeleop.h" 
 #include "commands/KickerTeleop.h"
 #include "commands/TurretTeleop.h"
-#include "commands/Shoot.h"
 #include "commands/SpindexerTeleop.h"
 #include "commands/TeleopDrive.h"
 #include "commands/Autos.h"
@@ -130,7 +130,7 @@ class RobotContainer {
 
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 
+  // Just used for launching test commands, separate from OI and other controls.
   frc2::CommandXboxController _testController;
-
 
 };

@@ -23,6 +23,7 @@ Robot::Robot() {
     // TODO: Integrate CppTrace library to speed up debugging
   try {
     m_container = std::make_unique<RobotContainer>(); // Actually create robot container here so we can capture errors for debugging.
+    std::cerr << "******* ROBOT CONTAINER CREATED ******** " << std::endl;
   } catch(std::exception& e) {
     std::cerr << "CREATION OF ROBOT CONTAINER THREW AN EXCEPTION!: " << e.what() << std::endl;
   } catch(...) {

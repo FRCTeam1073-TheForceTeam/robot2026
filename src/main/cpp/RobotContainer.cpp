@@ -36,7 +36,7 @@ _testController(2)
   m_OI = std::make_shared<OI>();
   m_drivetrain = std::make_shared<Drivetrain>();
 
-  std::cerr << "Drivetrain created..." << std::endl;
+  std::cerr << "\tDrivetrain created..." << std::endl;
 
   // Must be here because localizer depends on this due to moving camera.
   m_turret = std::make_shared<Turret>();
@@ -51,19 +51,22 @@ _testController(2)
   m_climber = std::make_shared<Climber>();
 
   m_shooterTable = std::make_shared<ShooterTable>();
-
+ std::cerr << "\tShooter table created..." << std::endl;
   m_intake = std::make_shared<Intake>();
+   std::cerr << "\tIntake created..." << std::endl;
   m_collector = std::make_shared<Collector>();
-
+   std::cerr << "\tCollector created..." << std::endl;
   m_spindexer = std::make_shared<Spindexer>();
+   std::cerr << "\tSpindexer created..." << std::endl;
   m_kicker = std::make_shared<Kicker>();
-
+   std::cerr << "\tKicker created..." << std::endl;
   m_shooterHood = std::make_shared<ShooterHood>();
+   std::cerr << "\tShooterHood created..." << std::endl;
   m_flywheel = std::make_shared<Flywheel>();
+   std::cerr << "\tFlywheel created..." << std::endl;
+  //m_laser = std::make_shared<LaserCan>();
 
-  m_laser = std::make_shared<LaserCan>();
-
-  std::cerr << "Mechanisms created..." << std::endl;
+  std::cerr << "\tMechanisms created..." << std::endl;
 
   // Assign default commands here after all subssytems are created to avoid using
   // uninitialized subsystems in default commands.
@@ -77,7 +80,7 @@ _testController(2)
   m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_TargetFinder).ToPtr());
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
 
-  std::cerr << "Default commands assigned..." << std::endl;
+  std::cerr << "\tDefault commands assigned..." << std::endl;
 
   // Autonomous Chooser:
 
@@ -91,6 +94,7 @@ _testController(2)
 
   // Configure the button bindings
   ConfigureBindings();
+  std::cerr << "Controller bindings configured..." << std::endl;
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
@@ -126,4 +130,5 @@ void RobotContainer::ConfigureBindings() {
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
   _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
   _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
+  // _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_HubFinder, m_shooterTable));
 }

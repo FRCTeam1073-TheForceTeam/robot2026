@@ -5,10 +5,10 @@ AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret) :
 {
     std::cout << "Creating April Tag Object" << std::endl;
     _cameras = {
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Front"), frc::Transform3d(frc::Translation3d(-8.974_in, 8.454_in, 4.896_in),frc::Rotation3d(0_deg, -30_deg, 65_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-10.864_in, 7.858_in, 6.896_in),frc::Rotation3d(0_deg, -30_deg, 150_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Front"), frc::Transform3d(frc::Translation3d(-8.974_in, -13.454_in, 4.896_in),frc::Rotation3d(0_deg, -30_deg, -65_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-10.864_in, -10.235522_in, 6.896_in),frc::Rotation3d(0_deg, -30_deg, -150_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Front"), frc::Transform3d(frc::Translation3d(-8.974_in, 8.454_in, 4.896_in),frc::Rotation3d(0_deg, -20_deg, 65_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-10.864_in, 7.858_in, 6.896_in),frc::Rotation3d(0_deg, -13_deg, 150_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Front"), frc::Transform3d(frc::Translation3d(-8.974_in, -13.454_in, 4.896_in),frc::Rotation3d(0_deg, -20_deg, -65_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-10.864_in, -10.235522_in, 6.896_in),frc::Rotation3d(0_deg, -13_deg, -150_deg))),
         RobotCamera(std::make_shared<photon::PhotonCamera>("Turret"), frc::Transform3d(frc::Translation3d(-4.373_in, -12.858_in, 18.35_in),frc::Rotation3d(0_deg, 0_deg, 0_deg)), true) //TODO: Change Numbers
     };
 }
@@ -91,7 +91,7 @@ frc::Transform3d AprilTagFinder::getRobotCam(int index) {
 }
 
 void AprilTagFinder::Periodic() {
-     auto turretVelocity = m_turret->GetFeedback().velocity;
+    auto turretVelocity = m_turret->GetFeedback().velocity;
     _visionMeasurements.clear();
     int i = 0;
     for (auto& cam : _cameras) {
@@ -113,22 +113,14 @@ void AprilTagFinder::Periodic() {
 
             auto turretAngle = m_turret->GetFeedback().position - turretVelocity * averageLatency; //TODO: Tweak this number
             transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
-            std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
-            _visionMeasurements.insert(
-                _visionMeasurements.end(),
-                measurements.begin(),
-                measurements.end()
-            );
-            i++;
-        }else{
-            std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
-            _visionMeasurements.insert(
-                _visionMeasurements.end(),
-                measurements.begin(),
-                measurements.end()
-            );
-            i++;
         }
+        std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
+        _visionMeasurements.insert(
+            _visionMeasurements.end(),
+            measurements.begin(),
+            measurements.end()
+        );
+        i++;
         
     }
 }
