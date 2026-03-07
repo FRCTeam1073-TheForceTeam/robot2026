@@ -51,14 +51,20 @@ _testController(2)
   m_climber = std::make_shared<Climber>();
 
   m_shooterTable = std::make_shared<ShooterTable>();
-
+ std::cerr << "Shooter table created..." << std::endl;
   m_intake = std::make_shared<Intake>();
+   std::cerr << "Intake created..." << std::endl;
   m_collector = std::make_shared<Collector>();
+   std::cerr << "Collector created..." << std::endl;
   m_spindexer = std::make_shared<Spindexer>();
+   std::cerr << "Spindexer created..." << std::endl;
   m_kicker = std::make_shared<Kicker>();
+   std::cerr << "Kicker created..." << std::endl;
   m_shooterHood = std::make_shared<ShooterHood>();
+   std::cerr << "ShooterHood created..." << std::endl;
   m_flywheel = std::make_shared<Flywheel>();
-  m_laser = std::make_shared<LaserCan>();
+   std::cerr << "Flywheel created..." << std::endl;
+  //m_laser = std::make_shared<LaserCan>();
 
   std::cerr << "Mechanisms created..." << std::endl;
 
@@ -88,6 +94,7 @@ _testController(2)
 
   // Configure the button bindings
   ConfigureBindings();
+  std::cerr << "Controller bindings configured..." << std::endl;
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
