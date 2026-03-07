@@ -18,6 +18,7 @@ void ZeroClimber::Initialize() {}
 void ZeroClimber::Execute() {
   auto velocity = -0.03_mps;
   m_climber->SetCommand(velocity);
+
 }
 
 // Called once the command ends or is interrupted.

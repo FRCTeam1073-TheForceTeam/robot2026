@@ -20,7 +20,8 @@ _climberPositionSig(_climberMotor.GetPosition()),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _command(0.0_mps),
-_limiter(10.0_mps/1.0_s) 
+_limiter(10.0_mps/1.0_s),
+_positionLimiter(0.104_m/1.0_s)
 {
   // Extra implementation of subsystem constructor goes here.
 
@@ -80,7 +81,8 @@ void Climber::Periodic() {
 
 
   } else if (std::holds_alternative<units::length::meter_t>(_command)) {
-    auto clamped_command = clamp(std::get<units::length::meter_t>(_command), minPosition, maxPosition);
+    auto limitedPos = _positionLimiter.Calculate(std::get<units::length::meter_t>(_command));
+    auto clamped_command = clamp(limitedPos, minPosition, maxPosition);
 
     // climberPosition = _positionLimiter.Calculate(clamped_command);
 
@@ -123,11 +125,11 @@ bool Climber::ConfigureHardware() {
 
   // Slot 1 for the position control loop:
   configs.Slot1.kV = 0.12;
-  configs.Slot1.kP = 0.15;
-  configs.Slot1.kI = 0.0;
+  configs.Slot1.kP = 0.3;
+  configs.Slot1.kI = 0.03;
   configs.Slot1.kD = 0.01;
   configs.Slot1.kA = 0.0;
-  configs.Slot1.kS = 0.0;
+  configs.Slot1.kS = 0.03;
 
   
   // Set whether motor control direction is inverted or not:

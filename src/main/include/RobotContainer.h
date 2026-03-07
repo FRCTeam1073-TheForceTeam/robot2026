@@ -131,6 +131,7 @@ class RobotContainer {
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 
   frc2::CommandXboxController _testController;
+  frc2::CommandXboxController _operatorController;
 
 
 };

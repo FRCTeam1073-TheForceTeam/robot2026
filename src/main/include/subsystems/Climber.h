@@ -106,6 +106,7 @@ class Climber : public frc2::SubsystemBase {
   Command  _command;
 
   frc::SlewRateLimiter<units::meters_per_second> _limiter;
+  frc::SlewRateLimiter<units::length::meter> _positionLimiter;
   //frc::SlewRateLimiter<units::meter_t> _positionLimiter;
 
   frc::DigitalInput m_ClimberOnInput{0};
