@@ -13,6 +13,8 @@
 #include <photon/PhotonCamera.h>
 #include <photon/PhotonUtils.h>
 #include <photon/targeting/PhotonPipelineResult.h>
+#include <photon/PhotonPoseEstimator.h>
+
 
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Pose3d.h>
@@ -56,7 +58,10 @@ class AprilTagFinder : public frc2::SubsystemBase {
     frc::Transform2d toTransform2d(frc::Transform3d t3d);
 
     std::vector<VisionMeasurement> getCamMeasurements(std::vector<photon::PhotonPipelineResult> results, frc::Transform3d camTransform3d);
-    
+
+    std::vector<VisionMeasurement> getMultiTagEstimate(std::vector<photon::PhotonPipelineResult> results, photon::PhotonPoseEstimator estimator, frc::Transform3d camTransform3d);
+
+
     frc::Transform3d getRobotCam(int index);
 
     void Periodic() override;
@@ -77,5 +82,6 @@ class AprilTagFinder : public frc2::SubsystemBase {
         std::vector<VisionMeasurement> _visionMeasurements;
         std::shared_ptr<Turret> m_turret;
         std::shared_ptr<Drivetrain> m_drivetrain;
+        std::vector<photon::PhotonPoseEstimator> _estimators;
 
 };
