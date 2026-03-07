@@ -8,36 +8,34 @@
 #include <frc/apriltag/AprilTagFieldLayout.h>
 #include <frc/geometry/Pose3d.h>
 #include <frc/apriltag/AprilTagFieldLayout.h>
+#include <set>
 
 
 class ZoneFinder : public frc2::SubsystemBase
 {
     public:
-    static const frc::Rectangle2d REDZONE;
-    static const frc::Rectangle2d BLUEZONE;
-    static const frc::Rectangle2d NEUTRALZONE;
+    class Zone 
+    {
+        public:
 
-    //Blue alliance POV
-    static const frc::Rectangle2d RIGHTHALF;
-    static const frc::Rectangle2d LEFTHALF;
+        Zone() = default;
+        Zone(const std::string &n, const frc::Rectangle2d &r) : name(n), rect(r) {};
+        std::string name;
+        frc::Rectangle2d rect;
 
-    static const frc::Rectangle2d TRENCH_A;
-    static const frc::Rectangle2d TRENCH_B;
-    static const frc::Rectangle2d TRENCH_C;
-    static const frc::Rectangle2d TRENCH_D;
-    
-    static const frc::Rectangle2d BUMP_A;
-    static const frc::Rectangle2d BUMP_B;
-    static const frc::Rectangle2d BUMP_C;
-    static const frc::Rectangle2d BUMP_D;
+    };
+    using ZoneVector = std::vector<Zone>;
 
 
     ZoneFinder(std::shared_ptr<Localizer>& localizer);
 
-    std::string GetZone();
+    std::set<std::string> GetZones();
     void Periodic() override;
 
     private:
     std::shared_ptr<Localizer> _localizer;
     frc::Translation2d CurrentTrans;
+    ZoneVector zones;
+    
+
 };

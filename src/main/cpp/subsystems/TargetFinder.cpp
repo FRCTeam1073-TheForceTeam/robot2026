@@ -38,19 +38,19 @@ frc::Pose2d TargetFinder::getHubPos()
 frc::Pose2d TargetFinder::Pass()
 {
     UpdateAlliance();
-    if (_alliance.value() == frc::DriverStation::Alliance::kRed && zone.find("Right") != std::string::npos)
+    if (_alliance.value() == frc::DriverStation::Alliance::kRed && zone.contains("RIGHTHALF"))
     {
         return REDPASS_R.frc::Pose2d::RelativeTo(roboPos);
     }
-    else if (_alliance.value() == frc::DriverStation::Alliance::kRed && zone.find("Left") != std::string::npos)
+    else if (_alliance.value() == frc::DriverStation::Alliance::kRed && zone.contains("LEFTHALF"))
     {
         return REDPASS_L.frc::Pose2d::RelativeTo(roboPos);
     }
-    else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && zone.find("Right") != std::string::npos)
+    else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && zone.contains("RIGHTHALF"))
     {
         return REDPASS_L.frc::Pose2d::RelativeTo(roboPos);
     }
-    else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && zone.find("Left") != std::string::npos)
+    else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && zone.contains("LEFTHALF"))
     {
         return REDPASS_L.frc::Pose2d::RelativeTo(roboPos);
     }
@@ -60,7 +60,7 @@ frc::Pose2d TargetFinder::Pass()
 void TargetFinder::Periodic(){
     UpdateAlliance();
     roboPos = _localizer->getPose();
-    zone = _zonefinder->GetZone();
+    zone = _zonefinder->GetZones();
     frc::Pose2d turretLoc = getHubPos().TransformBy(ROBOTOTURRET);
     auto relativeHubPos = turretLoc.Translation();
     auto angle = units::math::atan2(relativeHubPos.Y(), relativeHubPos.X());

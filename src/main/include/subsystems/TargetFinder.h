@@ -61,6 +61,6 @@ class TargetFinder  : public frc2::SubsystemBase {
 
     void UpdateAlliance();
     std::optional<frc::DriverStation::Alliance> _alliance;
-    std::string zone;
+    std::set<std::string> zone;
 
 };
