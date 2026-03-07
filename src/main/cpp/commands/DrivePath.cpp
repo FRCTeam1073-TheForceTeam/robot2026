@@ -16,7 +16,7 @@ DrivePath::DrivePath(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Loc
 {
   thetaController.EnableContinuousInput(-std::numbers::pi, std::numbers::pi);
   frc::SmartDashboard::PutString("DrivePath/Status", "Idle");
-  AddRequirements({m_drivetrain.get(), m_localizer.get()});
+  AddRequirements({m_drivetrain.get()});
 }
 
 // Called when the command is initially scheduled.
