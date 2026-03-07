@@ -91,6 +91,7 @@ frc::Transform3d AprilTagFinder::getRobotCam(int index) {
 }
 
 void AprilTagFinder::Periodic() {
+    return; //TODO: fix periodic
      auto turretVelocity = m_turret->GetFeedback().velocity;
     _visionMeasurements.clear();
     int i = 0;
