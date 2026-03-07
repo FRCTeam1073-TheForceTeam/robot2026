@@ -93,6 +93,14 @@ void Intake::Periodic() {
   frc::SmartDashboard::PutNumber("Intake/Torque(Nm)", _feedback.torque.value());
 }
 
+frc2::CommandPtr Intake::IntakeOut() {
+  return RunOnce([this] {SetCommand(-0.1_deg);});
+}
+
+frc2::CommandPtr Intake::IntakeIn() {
+  return RunOnce([this] {SetCommand(-122.0_deg);});
+}
+
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool Intake::ConfigureHardware() {
   configs::TalonFXConfiguration configs{};

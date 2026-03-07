@@ -71,6 +71,10 @@ void Collector::Periodic() {
   frc::SmartDashboard::PutNumber("Collector/TargetVelocity(mps)", _limiter.LastValue().value());
 }
 
+frc2::CommandPtr Collector::CollectSpeed(units::meters_per_second_t speed) {
+  return RunOnce([this, speed] {SetCommand(3.5_mps);});
+}
+
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool Collector::ConfigureHardware() {
   configs::TalonFXConfiguration configs{};

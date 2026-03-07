@@ -46,14 +46,10 @@ class AutoRunner
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  AutoRunner(
+  explicit AutoRunner(
     std::shared_ptr<Drivetrain> drivetrain,
-    std::shared_ptr<FieldMap> FieldMap,
     std::shared_ptr<AprilTagFinder> Tags,
     std::shared_ptr<Localizer> Localizer,
-    std::shared_ptr<FieldMapDisplay> FieldDisplay,
-    std::shared_ptr<HubFinder> HubFinder,
-    std::shared_ptr<ZoneFinder> ZoneFinder,
     std::shared_ptr<Kicker> kicker,
     std::shared_ptr<Climber> climber,
     std::shared_ptr<Flywheel> flywheel,
@@ -62,23 +58,17 @@ class AutoRunner
     std::shared_ptr<Turret> turret,
     std::shared_ptr<Collector> collector,
     std::shared_ptr<Intake> intake,
-    std::shared_ptr<LaserCan> laser,
-    std::shared_ptr<ShooterTable> shooterTable,
-    std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory  
+    std::shared_ptr<LaserCan> laser
   );
   
-  frc2::CommandPtr Create();
+  frc2::CommandPtr Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 
-  std::vector<std::unique_ptr<frc2::Command>> EventListener();
+  std::vector<frc2::CommandPtr> EventListener(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 
 private:
   std::shared_ptr<Drivetrain> m_drivetrain;
-  std::shared_ptr<FieldMap> m_FieldMap;
   std::shared_ptr<AprilTagFinder> m_Tags;
   std::shared_ptr<Localizer> m_Localizer;
-  std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
-  std::shared_ptr<HubFinder> m_HubFinder;
-  std::shared_ptr<ZoneFinder> m_ZoneFinder;
   std::shared_ptr<Kicker> m_kicker;
   std::shared_ptr<Climber> m_climber;
   std::shared_ptr<Flywheel> m_flywheel;
@@ -88,6 +78,4 @@ private:
   std::shared_ptr<Collector> m_collector;
   std::shared_ptr<Intake> m_intake;
   std::shared_ptr<LaserCan> m_laser;
-  std::shared_ptr<ShooterTable> m_shooterTable;
-  std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 };

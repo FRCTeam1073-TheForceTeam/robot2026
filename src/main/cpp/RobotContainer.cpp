@@ -19,7 +19,6 @@
 #include "subsystems/LaserCan.h"
 #include "commands/Autos/TestAuto.h"
 
-
 // const std::string RobotContainer::noPosition = "No Position";
 // const std::string RobotContainer::rightPosition = "Right Auto";
 // const std::string RobotContainer::leftPosition = "Left Auto";
@@ -30,6 +29,7 @@ const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
 const std::string RobotContainer::noLevelAuto = "No Auto";
 const std::string RobotContainer::basicAuto = "Basic Auto";
 const std::string RobotContainer::cyclicAuto = "Cyclic_Auto";
+const std::string RobotContainer::eventTestAuto = "Event_Test";
 
 const std::string RobotContainer::noPosition = "No Position";
 
@@ -67,6 +67,8 @@ _testController(2)
 
   m_laser = std::make_shared<LaserCan>();
 
+  m_autoRunner = std::make_shared<AutoRunner>(m_drivetrain, m_Tags, m_Localizer, m_kicker, m_climber, m_flywheel, m_shooterHood, m_spindexer, m_turret, m_collector, m_intake, m_laser);
+
   std::cerr << "Mechanisms created..." << std::endl;
 
   // Assign default commands here after all subssytems are created to avoid using
@@ -92,6 +94,7 @@ _testController(2)
   m_levelChooser.AddOption("Center Auto", centerAuto);
   m_levelChooser.AddOption("Basic Auto", basicAuto);
   m_levelChooser.AddOption("Cyclic Auto", cyclicAuto);
+  m_levelChooser.AddOption("Event Test Auto", eventTestAuto);
 
   frc::SmartDashboard::PutData("Position Chooser", &m_positionChooser);
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
@@ -103,7 +106,11 @@ _testController(2)
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // TODO: un-comment this code
   try {
-    if(m_levelChooser.GetSelected() == weekZeroAuto) {
+    if (m_levelChooser.GetSelected() == eventTestAuto) {
+      trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
+      return m_autoRunner->Create(trajectory);
+    }
+    else if(m_levelChooser.GetSelected() == weekZeroAuto) {
       return WeekZeroAuto::Create(m_spindexer, m_kicker, m_flywheel, m_shooterHood, m_turret);
     }
     else if (m_levelChooser.GetSelected() == testAuto || m_levelChooser.GetSelected() == centerAuto || m_levelChooser.GetSelected() == cyclicAuto) {

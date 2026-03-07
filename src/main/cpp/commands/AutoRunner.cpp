@@ -6,12 +6,8 @@
 
 AutoRunner::AutoRunner(
   std::shared_ptr<Drivetrain> drivetrain,
-  std::shared_ptr<FieldMap> FieldMap,
   std::shared_ptr<AprilTagFinder> Tags,
   std::shared_ptr<Localizer> Localizer,
-  std::shared_ptr<FieldMapDisplay> FieldDisplay,
-  std::shared_ptr<HubFinder> HubFinder,
-  std::shared_ptr<ZoneFinder> ZoneFinder,
   std::shared_ptr<Kicker> kicker,
   std::shared_ptr<Climber> climber,
   std::shared_ptr<Flywheel> flywheel,
@@ -20,17 +16,11 @@ AutoRunner::AutoRunner(
   std::shared_ptr<Turret> turret,
   std::shared_ptr<Collector> collector,
   std::shared_ptr<Intake> intake,
-  std::shared_ptr<LaserCan> laser,
-  std::shared_ptr<ShooterTable> shooterTable,
-  std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory  
+  std::shared_ptr<LaserCan> laser
 ) :
 m_drivetrain(drivetrain),
-m_FieldMap(FieldMap),
 m_Tags(Tags),
 m_Localizer(Localizer),
-m_FieldDisplay(FieldDisplay),
-m_HubFinder(HubFinder),
-m_ZoneFinder(ZoneFinder),
 m_kicker(kicker),
 m_climber(climber),
 m_flywheel(flywheel),
@@ -39,46 +29,78 @@ m_spindexer(spindexer),
 m_turret(turret),
 m_collector(collector),
 m_intake(intake),
-m_laser(laser),
-m_shooterTable(shooterTable),
-trajectory(trajectory)
+m_laser(laser)
 {
   // Use addRequirements() here to declare subsystem dependencies.
 }
 
-std::vector<std::unique_ptr<frc2::Command>> AutoRunner::EventListener() {
-  std::vector<std::unique_ptr<frc2::Command>> autoSequence;
+std::vector<frc2::CommandPtr> AutoRunner::EventListener(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
+  // std::vector<frc2::CommandPtr> autoSequence;
 
-  if (trajectory.has_value()) {
-    auto &traj = trajectory.value();
-    auto events = traj.events;
+  // if (trajectory.has_value()) {
+  //   auto &traj = trajectory.value();
+  //   auto events = traj.events;
 
-    autoSequence.emplace_back(frc2::cmd::Print("Starting"));
-    autoSequence.emplace_back(DrivePath(m_drivetrain, m_Localizer, trajectory));
+  //   autoSequence.emplace_back(frc2::cmd::Print("Starting"));
+  //   autoSequence.emplace_back(DrivePath(m_drivetrain, m_Localizer, trajectory));
 
-    std::vector<std::unique_ptr<frc2::Command>> parallelSequence; // might not be unique pointers or may need to convert
-    for(int e = 0; e < events.size(); e++) {
-      auto activeEvent = events.at(e);
-      auto eventType = activeEvent.event;
+  //   std::vector<frc2::CommandPtr> parallelSequence; // might not be unique pointers or may need to convert
+  //   for(int e = 0; e < events.size(); e++) {
+  //     auto activeEvent = events.at(e);
+  //     auto eventType = activeEvent.event;
 
-      //TODO: discuss with Strategy subgroup what we will call this
-      if (eventType == "StartFlywheel") {
-        parallelSequence.emplace_back(m_flywheel->SpinToSpeed(14_mps));
-      }
-      else if (eventType == "StartSpindexer") {
-        parallelSequence.emplace_back(m_spindexer->SpinToSpeed(4.2_mps));
-      } //TODO: continue with other events
-      else if(eventType.substr(0,4) == "Stop") {
-        auto waitTime = activeEvent.timestamp - (events.at(e - 1).timestamp);
-        parallelSequence.emplace_back(frc2::cmd::Wait(waitTime));
-
-        //TODO: do things for stop here
-      }
-    }
-    autoSequence.emplace_back(parallelSequence);
-  }
+  //     //TODO: discuss with Strategy subgroup what we will call this
+  //     if (eventType == "StartFlywheel") {
+  //       parallelSequence.emplace_back(m_flywheel->SpinToSpeed(14_mps));
+  //     }
+  //     else if (eventType == "StartSpindexer") {
+  //       parallelSequence.emplace_back(m_spindexer->SpinToSpeed(4.2_mps));
+  //     }
+  //     else if (eventType == "StartKicker") {
+  //       parallelSequence.emplace_back(m_kicker->SpinToSpeed(4.5_mps));
+  //     }
+  //     else if (eventType.substr(0, 12) == "SetHoodLevel") {
+  //       parallelSequence.emplace_back(m_shooterHood->SetHoodLevel(0));
+  //     }
+  //     else if (eventType == "SetTurret") {
+  //        parallelSequence.emplace_back(m_turret->RotateToPos(90_deg));
+  //     }
+  //     else if (eventType == "IntakeOut") {
+  //       parallelSequence.emplace_back(m_intake->IntakeOut());
+  //     }
+  //     else if (eventType == "IntakeIn") {
+  //       parallelSequence.emplace_back(m_intake->IntakeIn());
+  //     }
+  //     else if (eventType == "StartCollector") {
+  //       parallelSequence.emplace_back(m_collector->CollectSpeed(3.5_mps));
+  //     }
+  //     else if (eventType.substr(0, 4) == "Wait") {
+  //       parallelSequence.emplace_back(frc2::cmd::Wait(units::second_t(eventType[5])));
+  //     }
+  //     //TODO: put in other complex shooter commands
+  //     else if(eventType.substr(0,4) == "Stop") {
+  //       auto waitTime = activeEvent.timestamp - (events.at(e - 1).timestamp);
+  //       parallelSequence.emplace_back(frc2::cmd::Wait(waitTime));
+  //       if (eventType == "StopFlywheel") {
+  //         parallelSequence.emplace_back(m_flywheel->SpinToSpeed(0_mps));
+  //       }
+  //       else if (eventType == "StopSpindexer") {
+  //         parallelSequence.emplace_back(m_spindexer->SpinToSpeed(0_mps));
+  //       }
+  //       else if (eventType == "StopKicker") {
+  //         parallelSequence.emplace_back(m_kicker->SpinToSpeed(0_mps));
+  //       }
+  //       else if (eventType == "StopCollector") {
+  //         parallelSequence.emplace_back(m_collector->CollectSpeed(0_mps));
+  //       }
+  //     }
+  //   }
+  //   autoSequence.emplace_back(parallelSequence);
+  // }
+  // return autoSequence;
 }
 
-frc2::CommandPtr AutoRunner::Create() {
-  return frc2::cmd::Sequence(); //TODO: put in eventlistener as a call
+frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
+  // return frc2::cmd::Sequence(EventListener(trajectory));
+  return frc2::cmd::Sequence();
 }

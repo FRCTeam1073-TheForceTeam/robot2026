@@ -69,6 +69,10 @@ class Intake : public frc2::SubsystemBase {
   void Periodic() override;
 
 
+  frc2::CommandPtr IntakeOut();
+
+  frc2::CommandPtr IntakeIn();
+
   /// Access the latest feedback from the system. 
   const Feedback& GetFeedback() const { return _feedback; }
 

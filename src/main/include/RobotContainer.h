@@ -32,7 +32,9 @@
 #include "subsystems/ShooterHood.h" 
 #include "subsystems/Turret.h"
 #include "subsystems/Spindexer.h" 
-#include "subsystems/ZoneFinder.h" 
+#include "subsystems/ZoneFinder.h"
+
+#include "commands/AutoRunner.h"
 #include "commands/FlywheelTeleop.h"
 #include "commands/HoodTeleop.h"
 #include "commands/CollectorTeleop.h"
@@ -79,6 +81,7 @@ class RobotContainer {
   static const std::string centerAuto;
   static const std::string basicAuto;
   static const std::string cyclicAuto;
+  static const std::string eventTestAuto;
 
   static const std::string noPosition;
   
@@ -118,6 +121,8 @@ class RobotContainer {
   std::shared_ptr<Intake> m_intake;
   std::shared_ptr<LaserCan> m_laser;
   std::shared_ptr<ShooterTable> m_shooterTable;
+
+  std::shared_ptr<AutoRunner> m_autoRunner;
 
   std::shared_ptr<ZeroTurret> cmd_zeroTurret;
 
