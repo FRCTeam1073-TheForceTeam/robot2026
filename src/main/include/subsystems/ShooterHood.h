@@ -9,9 +9,8 @@
 
 #include <units/length.h>
 #include <units/velocity.h>
-#include <units/torque.h>
+#include <units/force.h>
 #include <units/current.h>
-
 
 #include <ctre/phoenix6/TalonFX.hpp>
 
@@ -38,15 +37,14 @@ class ShooterHood : public frc2::SubsystemBase {
 
   // Mechanism conversion constants for the subsystem:
   //static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
-  static constexpr auto AmpsPerNewtonMeter = units::current::ampere_t(10.0) / units::torque::newton_meter_t(1.0);
+  //static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
   static constexpr double HoodToMotorGearRatio = (52.0 / 12.0) * (33.0 / 15.0) * (160.0 / 10.0);
-  static constexpr auto maxPosition = 0.49_rad;
-  static constexpr auto minPosition = 0.00_rad;
+
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
       units::angle::radian_t position;
-      units::torque::newton_meter_t torque;
+      units::current::ampere_t current;
   };
 
   
@@ -75,8 +73,6 @@ class ShooterHood : public frc2::SubsystemBase {
 
   /// Set the command for the system.
   void SetCommand(Command cmd);
-
-  void Zero();
 
   frc2::CommandPtr SetHoodLevel(int level);
 

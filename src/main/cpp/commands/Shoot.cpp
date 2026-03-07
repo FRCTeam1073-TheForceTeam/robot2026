@@ -1,0 +1,30 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+#include "commands/Shoot.h"
+// #include <frc/Timer.h>
+
+Shoot::Shoot(std::shared_ptr<Flywheel> flywheel) :
+  m_flywheel{flywheel} {
+  AddRequirements({m_flywheel.get()});
+}
+
+// Called when the command is initially scheduled.
+void Shoot::Initialize() {
+  
+}
+// Called repeatedly when this Command is scheduled to run
+void Shoot::Execute() {  
+  m_flywheel->SetCommand(6.7_mps);//TODO: change number into one that catually makes sense
+  }
+
+// Called once the command ends or is interrupted.
+void Shoot::End(bool interrupted) {
+  m_flywheel->SetCommand(0.0_mps);
+}
+
+// Returns true when the command should end.
+bool Shoot::IsFinished() {
+  return false;
+}

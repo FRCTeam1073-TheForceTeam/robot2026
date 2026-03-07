@@ -111,13 +111,11 @@ const SwerveModule::Feedback& SwerveModule::SampleFeedback(units::time::second_t
 }
 
 
-void SwerveModule::SetCommand(frc::SwerveModuleState cmd, units::force::newton_t ff_x, units::force::newton_t ff_y) {
+void SwerveModule::SetCommand(frc::SwerveModuleState cmd, units::force::newton_t feedForward) {
 
     if (!_hardwareConfigured) return; // No controls if configure failed    
     // Cache command for reference later.
     _targetState = cmd;
-    _ff_x = ff_x;
-    _ff_y = ff_y;
 
     // Convert and send this command to the hardware.
     auto drive_motor_velocity = _targetState.speed / SwerveControlConfig::DriveMetersPerMotorTurn;
@@ -126,21 +124,14 @@ void SwerveModule::SetCommand(frc::SwerveModuleState cmd, units::force::newton_t
     // Scrub compensation for being off-angle:
     // Scale drive motor velocity by how well aligned it is with target steering angle.
     auto steering_delta = steering_angle -_latestFeedback.steeringAngle;
-    auto ca = units::math::cos(steering_delta);
-    auto sa = units::math::sin(steering_angle);
-    if (ca < 0.0) ca = 0.0; // Don't flip things around.
-    drive_motor_velocity = drive_motor_velocity * ca;
+    auto factor = units::math::cos(steering_delta);
+    if (factor < 0.0) factor = 0.0; // Don't flip things around.
+    drive_motor_velocity = drive_motor_velocity * factor;
     
     // Controller commands.
     // std::cerr << "Swerve Module [" << _ids.number << "] command " << drive_motor_velocity.value() << ", " << steering_angle.value() << std::endl;
-
-    // Map feedforward control to drive motor based on steering angle:
-    auto ff_drive_force = ca * _ff_x + sa * _ff_y;    // Map the force vector onto the direction of the drive vector.
-
-    // TODO: Enable ethis gain to turn on feed-forward driving.
-    auto ff_drive_volts = ff_drive_force * 0_V / 1_N; // Motor/module specific conversion factor for feed-forward voltage control.
-
-    _driveMotor.SetControl(_driveVelocityVoltage.WithSlot(0).WithVelocity(drive_motor_velocity).WithFeedForward(ff_drive_volts));
+    // TODO: figure out feedForward conversion
+    _driveMotor.SetControl(_driveVelocityVoltage.WithSlot(0).WithVelocity(drive_motor_velocity));
     _steerMotor.SetControl(_steerPositionVoltage.WithSlot(0).WithPosition(steering_angle));
 }
 

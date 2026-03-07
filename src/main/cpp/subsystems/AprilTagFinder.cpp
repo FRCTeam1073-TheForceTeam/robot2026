@@ -1,16 +1,16 @@
 #include "subsystems/AprilTagFinder.h"
 std::vector<AprilTagFinder::RobotCamera> AprilTagFinder::_cameras = {};
-AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<Drivetrain> drivetrain) : 
+AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret/*, std::shared_ptr<Drivetrain> drivetrain*/) : 
     m_turret(turret),
-    m_drivetrain(drivetrain),
+    //m_drivetrain(drivetrain),
     _estimators({})
 {
     std::cout << "Creating April Tag Object" << std::endl;
     _cameras = {
         RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Front"), frc::Transform3d(frc::Translation3d(-8.974_in, 8.454_in, 4.896_in),frc::Rotation3d(0_deg, -20_deg, 65_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-10.864_in, 7.858_in, 6.896_in),frc::Rotation3d(0_deg, -15_deg, 150_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-10.864_in, 7.858_in, 6.896_in),frc::Rotation3d(0_deg, -13_deg, 150_deg))),
         RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Front"), frc::Transform3d(frc::Translation3d(-8.974_in, -13.454_in, 4.896_in),frc::Rotation3d(0_deg, -20_deg, -65_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-10.864_in, -10.235522_in, 6.896_in),frc::Rotation3d(0_deg, -15_deg, -150_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-10.864_in, -10.235522_in, 6.896_in),frc::Rotation3d(0_deg, -13_deg, -150_deg))),
         RobotCamera(std::make_shared<photon::PhotonCamera>("Turret"), frc::Transform3d(frc::Translation3d(-4.373_in, -12.858_in, 18.35_in),frc::Rotation3d(0_deg, 0_deg, 0_deg)), true) //TODO: Change Numbers
     };
     for(auto& camera : _cameras)
@@ -59,19 +59,23 @@ frc::Transform2d AprilTagFinder::toTransform2d(frc::Transform3d t3d) {
 
 std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getCamMeasurements(std::vector<photon::PhotonPipelineResult> results, frc::Transform3d camTransform3d) {
     std::vector<VisionMeasurement> measurements = std::vector<VisionMeasurement>();
+    std::cout<<"Starting receiving measurements" << std::endl; //DEBUG
     for (auto& result : results){
+        std::cout << "Received result" << std::endl; //DEBUG
         if (result.HasTargets()){
+        std::cout << "Camera has targets" << std::endl; //DEBUG
         // targets.addAll(result.getTargets());
         units::time::second_t result_timestamp = result.GetTimestamp(); // Adjusted for each result for time compensation.
 
         for (auto& target : result.GetTargets()) {
-            
+            std::cout << "Tag Received: " << target.GetFiducialId() << std::endl; //DEBUG
             if (FieldMap::fieldMap.GetTagPose(target.GetFiducialId()).has_value()){
                 if (target.GetPoseAmbiguity() != -1 && target.GetPoseAmbiguity() < ambiguityThreshold){
                     frc::Transform3d best = target.GetBestCameraToTarget();
                     frc::Pose3d robotPose = estimateFieldToRobotAprilTag(best,
                         FieldMap::fieldMap.GetTagPose(target.GetFiducialId()).value(), 
                         camTransform3d);
+                    
                     // In robot coordinates:
                     frc::Transform2d relativePose = toTransform2d(camTransform3d+best);
                     units::length::meter_t range = relativePose.Translation().Norm();
@@ -105,8 +109,15 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
         std::optional<photon::EstimatedRobotPose> pose = estimator.EstimateCoprocMultiTagPose(result);
         if(pose.has_value())
         {
+
             auto std_devs = estimate_stddevs(1.0_m); //TODO: find the actual value
             auto estimated_pose = pose.value();
+            std::cout<<"Using april tags: " ;
+            for(auto& c : estimated_pose.targetsUsed)
+            {
+                std::cout << c.fiducialId << ", ";
+            }
+            std::cout<<std::endl;
             measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
         }
     }
@@ -118,6 +129,7 @@ void AprilTagFinder::Periodic() {
     _visionMeasurements.clear();
     for (int i = 0; i<_cameras.size(); i++) {
         auto& cam = _cameras[i];
+        std::cout << "Current Camera: " <<  cam._camera->GetCameraName() << std::endl; //DEBUG
         auto& estimator = _estimators[i];
         std::vector<photon::PhotonPipelineResult> results = cam._camera->GetAllUnreadResults();
         frc::Transform3d transform = cam._transform;
@@ -161,9 +173,12 @@ void AprilTagFinder::Periodic() {
 
 wpi::array<double, 3U> AprilTagFinder::estimate_stddevs(units::length::meter_t range) {
     wpi::array<double, 3U> result(base_stddevs);
-    units::velocity::meters_per_second_t speed = m_drivetrain->GetChassisSpeeds().vx;
-    result[0] += 0.2 * range.value() * (1+speed.value()/2.0);
-    result[1] += 0.2 * range.value() * (1+speed.value()/2.0);
-    result[2] += 0.15 * range.value() * (1+speed.value()/2.0);
+    // units::velocity::meters_per_second_t speed = m_drivetrain->GetChassisSpeeds().vx;
+    // result[0] += 0.2 * range.value() * (1+speed.value()/2.0);
+    // result[1] += 0.2 * range.value() * (1+speed.value()/2.0);
+    // result[2] += 0.15 * range.value() * (1+speed.value()/2.0);
+    result[0] += 0.2 * range.value();
+    result[1] += 0.2 * range.value();
+    result[2] += 0.15 * range.value();
     return result;
 }

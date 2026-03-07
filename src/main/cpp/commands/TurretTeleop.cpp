@@ -29,8 +29,7 @@ void TurretTeleop::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void TurretTeleop::Execute() {
-
-
+  //TODO: determine direction that robot must be facing in & use that to automatically set the angle
   leftX = m_OI->GetOperatorLeftX();
   
 
@@ -38,7 +37,6 @@ void TurretTeleop::Execute() {
     targetAngle = 1.5_rad * leftX;
   }
   else if(m_OI->GetOperatorDPadLeft()) {
-    // Determine direction that robot must be facing in & use that to automatically set the angle
     targetAngle = units::radian_t(std::clamp(m_hubFinder->getFeedback().turretToHubAngle.value(), -2 * std::numbers::pi / 3, std::numbers::pi / 2));
   }
   else {
@@ -53,6 +51,7 @@ void TurretTeleop::Execute() {
   frc::SmartDashboard::PutNumber("Turret/targetPosition", targetPosition.value());
   frc::SmartDashboard::PutNumber("Turret/leftX", leftX);
   frc::SmartDashboard::PutBoolean("TeleopDrive/isAlignedToHub", isAlignedToHub);
+  //m_turret->SetTargetAngle(targetPosition); // use this line of code once the localizer is added
 
 }
 

@@ -29,7 +29,7 @@
 
 class AprilTagFinder : public frc2::SubsystemBase {
     public:
-    AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<Drivetrain> drivetrain);
+    AprilTagFinder(std::shared_ptr<Turret> &turret/*, std::shared_ptr<Drivetrain> drivetrain*/);
     class VisionMeasurement
     {
     public:
@@ -81,7 +81,7 @@ class AprilTagFinder : public frc2::SubsystemBase {
 
         std::vector<VisionMeasurement> _visionMeasurements;
         std::shared_ptr<Turret> m_turret;
-        std::shared_ptr<Drivetrain> m_drivetrain;
+        //std::shared_ptr<Drivetrain> m_drivetrain;
         std::vector<photon::PhotonPoseEstimator> _estimators;
 
 };

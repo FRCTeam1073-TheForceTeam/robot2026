@@ -38,8 +38,6 @@ class Turret: public frc2::SubsystemBase {
   // Mechanism conversion constants for the subsystem:
   static constexpr double TurretToMotorTurns = (50.0 / 14.0) * (82.0 / 14.0); // Gear ratio.
   static constexpr auto AmpsPerNewtonMeter = units::current::ampere_t(10.0) / 1.0_Nm;
-  units::angle::radian_t minPosition = units::angle::radian_t(-2 * std::numbers::pi / 3);
-  units::angle::radian_t maxPosition = units::angle::radian_t(std::numbers::pi / 2);
 
   
   // The feedback for this subsystem provided as a struct.
@@ -75,8 +73,6 @@ class Turret: public frc2::SubsystemBase {
   void SetCommand(Command cmd);
 
   frc2::CommandPtr RotateToPos(units::radian_t pos);
-
-  void Zero();
 
  private:
 

@@ -21,13 +21,12 @@ void ZeroClimber::Execute() {
 
 // Called once the command ends or is interrupted.
 void ZeroClimber::End(bool interrupted) {
-  m_climber->Zero();
   m_climber->SetCommand(std::monostate());
 }
 
 // Returns true when the command should end.
 bool ZeroClimber::IsFinished() {
-  if(m_climber->GetFeedback().force > 9_N) { 
+  if(m_climber->GetFeedback().force > 9_N) {
     return true;
   }
   return false;

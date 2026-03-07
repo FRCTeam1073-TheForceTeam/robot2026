@@ -36,6 +36,9 @@ class HubFinder  : public frc2::SubsystemBase {
 
     void Periodic();
 
+
+    
+
     private:
     frc::Pose2d OurHub;
     frc::Pose2d roboPos;

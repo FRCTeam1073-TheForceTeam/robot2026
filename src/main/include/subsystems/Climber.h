@@ -73,8 +73,6 @@ class Climber : public frc2::SubsystemBase {
 
   /// Set the command for the system.
   void SetCommand(Command cmd);
-  
-  void Zero();
 
   bool IsHooked();
 

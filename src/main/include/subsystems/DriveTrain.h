@@ -23,9 +23,6 @@
 
 #include "subsystems/SwerveModule.h"
 
-// CTRE wheel force calculator for feed forward:
-#include <ctre/phoenix6/swerve/utility/WheelForceCalculator.hpp>
-
 class Drivetrain : public frc2::SubsystemBase {
  public:
 
@@ -111,18 +108,12 @@ class Drivetrain : public frc2::SubsystemBase {
   ctre::phoenix6::StatusSignal<units::angle::degree_t> _rollSig;
   ctre::phoenix6::StatusSignal<units::angular_velocity::degrees_per_second_t> _yawRateSig;
 
-  // Wheel force calculator.
-  ctre::phoenix6::swerve::WheelForceCalculator _wheelForceCalculator;
 
   // Most recent chassis speeds: Computed in periodic.
   frc::ChassisSpeeds _speeds;
 
   // Most recent target chassis speeds: Processed in periodic.
   frc::ChassisSpeeds _targetSpeeds;
-  // Keep track of previous speeds to compute accelerations.
-  frc::ChassisSpeeds _previousTargetSpeeds;
-  // Used to keep accurate time deltas.
-  units::time::second_t _previousUpdateTime;
 
   // Was hardware configured correctly?
   bool _hardwareConfigured;

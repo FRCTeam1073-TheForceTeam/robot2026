@@ -33,8 +33,6 @@ class IntakeTeleop :
 
   bool IsFinished() override;
 
-
-
   private:
 
   std::shared_ptr<Intake> m_intake;

@@ -85,16 +85,13 @@ class SwerveModule {
   const frc::SwerveModulePosition& GetPosition() const { return _latestSwerveModulePosition; }
 
   /// Send the command to the hardware and cache them.
-  void SetCommand(frc::SwerveModuleState cmd, units::force::newton_t feedForward_x = 0_N, units::force::newton_t feedForward_y = 0_N);
+  void SetCommand(frc::SwerveModuleState cmd, units::force::newton_t feedForward = 0_N);
 
   /// Set the drive brake mode:
   void SetDriveBrakeMode(bool brakes = true);
 
   /// Return the drive motor load / force:
   units::force::newton_t GetLoad() const;
-
-  // Location of the module in the robot.
-  const frc::Translation2d& GetLocation() const { return _location; }
 
  private:
 
@@ -136,6 +133,4 @@ class SwerveModule {
 
   // Cached last command sent from drivetrain:
   frc::SwerveModuleState _targetState;
-  units::force::newton_t _ff_x;
-  units::force::newton_t _ff_y;
 };
