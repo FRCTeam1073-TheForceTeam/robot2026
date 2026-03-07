@@ -11,6 +11,7 @@ TrackHood::TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<
 // Called when the command is initially scheduled.
 void TrackHood::Initialize() {}
 
+
 // Called repeatedly when this Command is scheduled to run
 void TrackHood::Execute() {
   units::length::meter_t range = m_hf->getFeedback().rangeToHub;
