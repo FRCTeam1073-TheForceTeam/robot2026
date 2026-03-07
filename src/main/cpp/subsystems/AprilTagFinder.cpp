@@ -106,7 +106,8 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
         if(pose.has_value())
         {
             auto std_devs = estimate_stddevs(1.0_m); //TODO: find the actual value
-            measurements.push_back(VisionMeasurement(pose.value().estimatedPose.ToPose2d(),frc::Transform2d(),pose.value().timestamp,0,std_devs));
+            auto estimated_pose = pose.value();
+            measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
         }
     }
     return measurements;
@@ -136,16 +137,16 @@ void AprilTagFinder::Periodic() {
 
             auto turretAngle = m_turret->GetFeedback().position - turretVelocity * averageLatency; //TODO: Tweak this number
             transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
-            //std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
-            std::vector<AprilTagFinder::VisionMeasurement> measurements = getMultiTagEstimate(results, estimator, transform);
+            std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
+            //std::vector<AprilTagFinder::VisionMeasurement> measurements = getMultiTagEstimate(results, estimator, transform);
             _visionMeasurements.insert(
                 _visionMeasurements.end(),
                 measurements.begin(),
                 measurements.end()
             );
         }else{
-            //std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
-            std::vector<AprilTagFinder::VisionMeasurement> measurements = getMultiTagEstimate(results, estimator, transform);
+            std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
+            //std::vector<AprilTagFinder::VisionMeasurement> measurements = getMultiTagEstimate(results, estimator, transform);
             _visionMeasurements.insert(
                 _visionMeasurements.end(),
                 measurements.begin(),
