@@ -116,12 +116,8 @@ class RobotContainer {
   std::shared_ptr<LaserCan> m_laser;
   std::shared_ptr<ShooterTable> m_shooterTable;
 
-  std::shared_ptr<ZeroTurret> cmd_zeroTurret;
-
   
   bool haveInitStartPos;
-
-  bool isRed;
 
   frc::SendableChooser<std::string> m_positionChooser;
   frc::SendableChooser<std::string> m_levelChooser;

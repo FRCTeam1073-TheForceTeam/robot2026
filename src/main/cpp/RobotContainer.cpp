@@ -2,13 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
-
-//    !!ATTENTION!!     Most of this code is commented out because it was copied directly from weewee 2026 cpp code and 
-//                      might not work. Create working code on the designated branches, and do not un-comment on main until
-//                      the branch throws no errors
-
-
 #include "RobotContainer.h"
 
 #include <frc2/command/button/Trigger.h>
@@ -130,5 +123,5 @@ void RobotContainer::ConfigureBindings() {
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
   _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
   _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
-  // _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
+  _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
 }

@@ -4,7 +4,11 @@
 
 #include "commands/TrackFlywheel.h"
 
-TrackFlywheel::TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) {
+TrackFlywheel::TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
+ m_flywheel(flywheel),
+ m_hf(hf),
+ m_st(st)
+  {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements(m_flywheel.get());
 }
