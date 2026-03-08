@@ -159,7 +159,7 @@ units::force::newton_t SwerveModule::GetLoad() const {
 bool SwerveModule::ConfigureDriveHardware() {
     configs::TalonFXConfiguration configs;
 
-    configs.FutureProofConfigs = true;
+    // configs.FutureProofConfigs = true;
 
     configs.TorqueCurrent.PeakForwardTorqueCurrent = SwerveControlConfig::DriveCurrentLimit;
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -SwerveControlConfig::DriveCurrentLimit;

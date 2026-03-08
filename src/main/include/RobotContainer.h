@@ -98,12 +98,12 @@ class RobotContainer {
   std::shared_ptr<Drivetrain> m_drivetrain;
 
   std::shared_ptr<OI> m_OI;
-  std::shared_ptr<FieldMap> m_FieldMap;
-  std::shared_ptr<AprilTagFinder> m_Tags;
-  std::shared_ptr<Localizer> m_Localizer;
-  std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
-  std::shared_ptr<TargetFinder> m_TargetFinder;
-  std::shared_ptr<ZoneFinder> m_ZoneFinder;
+  std::shared_ptr<FieldMap> m_fieldMap;
+  std::shared_ptr<AprilTagFinder> m_tagFinder;
+  std::shared_ptr<Localizer> m_localizer;
+  std::shared_ptr<FieldMapDisplay> m_fieldDisplay;
+  std::shared_ptr<TargetFinder> m_targetFinder;
+  std::shared_ptr<ZoneFinder> m_zoneFinder;
 
   std::shared_ptr<Kicker> m_kicker;
   std::shared_ptr<Climber> m_climber;
@@ -120,8 +120,6 @@ class RobotContainer {
 
   
   bool haveInitStartPos;
-
-  frc2::Trigger blah;
 
   bool isRed;
 

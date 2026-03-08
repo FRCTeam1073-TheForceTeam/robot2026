@@ -41,12 +41,12 @@ _testController(2)
   // Must be here because localizer depends on this due to moving camera.
   m_turret = std::make_shared<Turret>();
 
-  m_FieldMap = std::make_shared<FieldMap>();
-  m_Tags = std::make_shared<AprilTagFinder>(m_turret);
-  m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
-  m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
-  m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
-  m_TargetFinder = std::make_shared<TargetFinder>(m_Localizer, m_ZoneFinder);
+  m_fieldMap = std::make_shared<FieldMap>();
+  m_tagFinder = std::make_shared<AprilTagFinder>(m_turret);
+  m_localizer = std::make_shared<Localizer>(m_drivetrain, m_tagFinder);
+  m_fieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_localizer, m_fieldMap);
+  m_zoneFinder = std::make_shared<ZoneFinder>(m_localizer);
+  m_targetFinder = std::make_shared<TargetFinder>(m_localizer, m_zoneFinder);
 
   m_climber = std::make_shared<Climber>();
 
@@ -70,15 +70,15 @@ _testController(2)
 
   // Assign default commands here after all subssytems are created to avoid using
   // uninitialized subsystems in default commands.
-  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
+  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_localizer).ToPtr());
   m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI).ToPtr());
   m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI).ToPtr());
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
   m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_TargetFinder, m_shooterTable).ToPtr());
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_TargetFinder, m_shooterTable).ToPtr());
-  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_TargetFinder).ToPtr());
-  m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable).ToPtr());
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable).ToPtr());
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder).ToPtr());
+  m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI).ToPtr());
 
   std::cerr << "\tDefault commands assigned..." << std::endl;
 
@@ -105,7 +105,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     }
     else if (m_levelChooser.GetSelected() == testAuto) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
-      return TestAuto::Create(m_drivetrain, m_Localizer, trajectory);
+      return TestAuto::Create(m_drivetrain, m_localizer, trajectory);
     }
   }
   catch (...) {
@@ -130,5 +130,5 @@ void RobotContainer::ConfigureBindings() {
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
   _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
   _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
-  // _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_TargetFinder, m_shooterTable));
+  // _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
 }
