@@ -2,9 +2,12 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/TrackHood.h"
+#include "commands/Autos/TrackHood.h"
 
-TrackHood::TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st) {
+TrackHood::TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
+m_shooterHood(shooterHood),
+m_hf(hf),
+m_st(st) {
   AddRequirements(m_shooterHood.get());
 }
 

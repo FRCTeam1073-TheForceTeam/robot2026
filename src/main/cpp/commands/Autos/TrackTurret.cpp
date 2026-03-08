@@ -2,14 +2,14 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/TrackTurret.h"
+#include "commands/Autos/TrackTurret.h"
 #include <iostream>
 #include <frc/DriverStation.h>
 
 
-TrackTurret::TrackTurret(std::shared_ptr<Turret>& turret, std::shared_ptr<HubFinder>& hubFinder) :
+TrackTurret::TrackTurret(std::shared_ptr<Turret>& turret, std::shared_ptr<TargetFinder>& targetFinder) :
   m_turret(turret),
-  m_hubFinder(hubFinder) 
+  m_targetFinder(targetFinder) 
   {
   lastError = 0,
   isAlignedToHub = false,
@@ -27,7 +27,7 @@ void TrackTurret::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void TrackTurret::Execute() {
-  targetPosition = m_hubFinder->getFeedback().turretToHubAngle;
+  targetPosition = m_targetFinder->getFeedback().turretToHubAngle;
   if (targetPosition >= minPosition && targetPosition <= maxPosition) {
     m_turret->SetCommand(targetPosition);
   }

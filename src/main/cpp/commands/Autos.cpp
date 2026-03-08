@@ -7,14 +7,15 @@
 #include <frc2/command/Commands.h>
 #include <frc2/command/WaitCommand.h>
 
-#include "commands/ExampleCommand.h"
-
+#include "commands/Autos/TrackHood.h"
+#include "commands/Autos/TrackTurret.h"
+#include "commands/Autos/TrackFlywheel.h"
 
 namespace Autos {
     
 frc2::CommandPtr TrackHub(std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, 
     std::shared_ptr<ShooterHood>& shooterHood, 
-    std::shared_ptr<HubFinder>& hf, 
+    std::shared_ptr<TargetFinder>& hf, 
     std::shared_ptr<ShooterTable>& st){
     return frc2::cmd::Parallel(
         TrackHood(shooterHood, hf, st).ToPtr(),

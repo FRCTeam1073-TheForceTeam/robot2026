@@ -4,7 +4,7 @@
 
 #include "commands/HoodTeleop.h"
 
-HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<OI>&  OI, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st) :
+HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<OI>&  OI, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_shooterHood(shooterHood),
   m_OI(OI),

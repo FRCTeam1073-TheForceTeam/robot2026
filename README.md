@@ -64,8 +64,8 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | B Button         | GetDriverBButton      | Collector Start/Stop Spin     |
 | X Button         | GetDriverXButton      | Collector Reverse             |
 | Y Button         | GetDriverYButton      |                               |
-| Menu Button      | GetDriverMenuButton   |                               |
-| View Button      | GetDriverViewButton   |                               |
+| Menu Button      | GetDriverMenuButton   | Climber Up                    |
+| View Button      | GetDriverViewButton   | Climber Down                  |
 | Left Bumper      | GetDriverLeftBumper   |                               |
 | Right Bumper     | GetDriverRightBumper  |                               |
 | D-Pad Up         | GetDriverDPadUp       |                               |
@@ -91,9 +91,9 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | A Button         | GetOperatorAButton      | Spindexer + Kicker Forward    |
 | B Button         | GetOperatorBButton      | Kicker Backwards              |
 | X Button         | GetOperatorXButton      | Start/Stop Flywheel           |
-| Y Button         | GetOperatorYButton      | Climber L1                    |
-| Menu Button      | GetOperatorMenuButton   | Climber L2                    |
-| View Button      | GetOperatorViewButton   | Climber L3                    |
+| Y Button         | GetOperatorYButton      |                               |
+| Menu Button      | GetOperatorMenuButton   |                               |
+| View Button      | GetOperatorViewButton   | Zero Climber                  |
 | Left Bumper      | GetOperatorLeftBumper   | Decrease Hood Angle           |
 | Right Bumper     | GetOperatorRightBumper  | Increase Hood Angle           |
 | D-Pad Up         | GetOperatorDPadUp       | Flywheel Increase Speed       |

@@ -27,6 +27,8 @@ _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
   _feedback.velocity = 0.0_rad_per_s;
   _feedback.torque = 0.0_Nm;
 
+  _haveZero = false; // We have not seen zero yet.
+
   // Assign gain slots for the commands to use:
   _commandPositionVoltage.WithSlot(0);  // Position control loop uses these gains.
   _commandVelocityVoltage.WithSlot(1);
@@ -49,6 +51,7 @@ void Turret::SetCommand(Command cmd) {
 
 void Turret::Zero(){
   _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
+  _haveZero = true;
 }
 
 void Turret::Periodic() {
@@ -61,6 +64,7 @@ void Turret::Periodic() {
   _feedback.torque = _rotaterCurrentSig.GetValue() / AmpsPerNewtonMeter; // Convert from hardware units to subsystem units.
   _feedback.position = _rotaterPositionSig.GetValue() / TurretToMotorTurns; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
   _feedback.velocity = _rotaterVelocitySig.GetValue()/ TurretToMotorTurns;
+  _feedback.haveZero = _haveZero;
 
   // // Process command:
   if (std::holds_alternative<units::radians_per_second_t>(_command)) {
@@ -87,6 +91,8 @@ void Turret::Periodic() {
   frc::SmartDashboard::PutNumber("Turret/Velocity (Rad_s))", _feedback.velocity.value());
   frc::SmartDashboard::PutNumber("Turret/Target", turretAngle.value());
   frc::SmartDashboard::PutNumber("Turret/Torque", _feedback.torque.value());
+  frc::SmartDashboard::PutBoolean("Turret/HaveZero", _feedback.haveZero);
+
 }
 
 frc2::CommandPtr Turret::RotateToPos(units::radian_t pos) {

@@ -2,13 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
-
-//    !!ATTENTION!!     Most of this code is commented out because it was copied directly from weewee 2026 cpp code and 
-//                      might not work. Create working code on the designated branches, and do not un-comment on main until
-//                      the branch throws no errors
-
-
 #include "RobotContainer.h"
 
 #include <frc2/command/button/Trigger.h>
@@ -30,7 +23,8 @@ const std::string RobotContainer::noLevelAuto = "No Auto";
 const std::string RobotContainer::noPosition = "No Position";
 
 RobotContainer::RobotContainer() :
-_testController(2)
+_testController(2),
+_operatorController(1)
 {
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
@@ -41,12 +35,12 @@ _testController(2)
   // Must be here because localizer depends on this due to moving camera.
   m_turret = std::make_shared<Turret>();
 
-  m_FieldMap = std::make_shared<FieldMap>();
-  m_Tags = std::make_shared<AprilTagFinder>(m_turret);
-  m_Localizer = std::make_shared<Localizer>(m_drivetrain, m_Tags);
-  m_FieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_Localizer, m_FieldMap);
-  m_HubFinder = std::make_shared<HubFinder>(m_Localizer);
-  m_ZoneFinder = std::make_shared<ZoneFinder>(m_Localizer);
+  m_fieldMap = std::make_shared<FieldMap>();
+  m_tagFinder = std::make_shared<AprilTagFinder>(m_turret);
+  m_localizer = std::make_shared<Localizer>(m_drivetrain, m_tagFinder);
+  m_fieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_localizer, m_fieldMap);
+  m_zoneFinder = std::make_shared<ZoneFinder>(m_localizer);
+  m_targetFinder = std::make_shared<TargetFinder>(m_localizer, m_zoneFinder);
 
   m_climber = std::make_shared<Climber>();
 
@@ -70,15 +64,15 @@ _testController(2)
 
   // Assign default commands here after all subssytems are created to avoid using
   // uninitialized subsystems in default commands.
-  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
+  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_localizer).ToPtr());
   m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI).ToPtr());
   m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI).ToPtr());
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
   m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_HubFinder, m_shooterTable).ToPtr());
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_HubFinder, m_shooterTable).ToPtr());
-  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_HubFinder).ToPtr());
-  m_climber->SetDefaultCommand(ClimberTeleop(m_climber,m_OI).ToPtr());
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable).ToPtr());
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable).ToPtr());
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder).ToPtr());
+  m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI).ToPtr());
 
   std::cerr << "\tDefault commands assigned..." << std::endl;
 
@@ -105,7 +99,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     }
     else if (m_levelChooser.GetSelected() == testAuto) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
-      return TestAuto::Create(m_drivetrain, m_Localizer, trajectory);
+      return TestAuto::Create(m_drivetrain, m_localizer, trajectory);
     }
   }
   catch (...) {
@@ -125,10 +119,19 @@ bool RobotContainer::DisabledPeriodic() {
   return false; // TODO: Fix return value.
 }
 
+void RobotContainer::TeleopInit() {
+  // If the turret has not yet seen zero, try to index it now.
+  if (!m_turret->GetFeedback().haveZero) {
+     frc2::CommandScheduler::GetInstance().Schedule(ZeroTurret(m_turret).ToPtr());
+  }
+}
+
+
 void RobotContainer::ConfigureBindings() {
 // Use the test controller to bind test commands:
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
   _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
   _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
-  // _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_HubFinder, m_shooterTable));
+  _operatorController.Back().OnTrue(ZeroClimber(m_climber).ToPtr());
+  _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
 }
