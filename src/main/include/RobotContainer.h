@@ -46,6 +46,7 @@
 #include "commands/ZeroIntake.h"
 #include "commands/ZeroTurret.h"
 #include "commands/ZeroHood.h"
+#include "commands/ZeroClimber.h"
 
 
 #include "commands/Autos/TestAuto.h"
@@ -127,5 +128,6 @@ class RobotContainer {
 
   // Just used for launching test commands, separate from OI and other controls.
   frc2::CommandXboxController _testController;
+  frc2::CommandXboxController _operatorController;
 
 };

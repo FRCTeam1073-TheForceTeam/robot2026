@@ -40,5 +40,8 @@ class ClimberTeleop
 
   double rightY;
   units::velocity::meters_per_second_t vy;
+  units::length::meter_t currentPosition;
+  units::length::meter_t commandedPosition;
+  double input;
 
 };

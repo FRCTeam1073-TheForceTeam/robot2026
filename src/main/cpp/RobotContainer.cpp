@@ -23,7 +23,8 @@ const std::string RobotContainer::noLevelAuto = "No Auto";
 const std::string RobotContainer::noPosition = "No Position";
 
 RobotContainer::RobotContainer() :
-_testController(2)
+_testController(2),
+_operatorController(1)
 {
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
@@ -131,5 +132,6 @@ void RobotContainer::ConfigureBindings() {
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
   _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
   _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
+  _operatorController.Back().OnTrue(ZeroClimber(m_climber).ToPtr());
   _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
 }
