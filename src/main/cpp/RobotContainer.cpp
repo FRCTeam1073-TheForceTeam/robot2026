@@ -118,6 +118,14 @@ bool RobotContainer::DisabledPeriodic() {
   return false; // TODO: Fix return value.
 }
 
+void RobotContainer::TeleopInit() {
+  // If the turret has not yet seen zero, try to index it now.
+  if (!m_turret->GetFeedback().haveZero) {
+     frc2::CommandScheduler::GetInstance().Schedule(ZeroTurret(m_turret).ToPtr());
+  }
+}
+
+
 void RobotContainer::ConfigureBindings() {
 // Use the test controller to bind test commands:
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());

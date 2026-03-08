@@ -87,6 +87,9 @@ class RobotContainer {
   void DisabledInit();
   bool DisabledPeriodic();
 
+  // Called from Robot
+  void TeleopInit();
+
  private:
 
   void ConfigureBindings();

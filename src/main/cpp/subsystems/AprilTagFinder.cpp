@@ -114,6 +114,7 @@ void AprilTagFinder::Periodic() {
             auto turretAngle = m_turret->GetFeedback().position - turretVelocity * averageLatency; //TODO: Tweak this number
             transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
         }
+        // TODO: If the turret does not have zero yet, we should ignore it's measurements.
         std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
         _visionMeasurements.insert(
             _visionMeasurements.end(),

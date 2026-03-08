@@ -47,6 +47,7 @@ class Turret: public frc2::SubsystemBase {
       units::angle::radian_t position;
       units::angular_velocity::radians_per_second_t velocity;
       units::torque::newton_meter_t torque;
+      bool haveZero;
   };
 
 
@@ -86,6 +87,9 @@ class Turret: public frc2::SubsystemBase {
 
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
+
+  // Have we ever zeroed the hardware?
+  bool _haveZero;
 
   // Example TalonFX motor interface.
   ctre::phoenix6::hardware::TalonFX _rotaterMotor;
