@@ -7,8 +7,9 @@
 #include <frc2/command/Commands.h>
 #include <frc2/command/WaitCommand.h>
 
-#include "commands/ExampleCommand.h"
-
+#include "commands/Autos/TrackHood.h"
+#include "commands/Autos/TrackTurret.h"
+#include "commands/Autos/TrackFlywheel.h"
 
 namespace Autos {
     
