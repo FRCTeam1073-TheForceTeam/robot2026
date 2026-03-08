@@ -18,7 +18,7 @@ void ZeroTurret::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ZeroTurret::Execute() {
-  auto velocity = 1.5_rad_per_s; //TODO: change this value
+  auto velocity = 2.0_rad_per_s; //TODO: change this value
   m_turret->SetCommand(velocity);
 }
 
