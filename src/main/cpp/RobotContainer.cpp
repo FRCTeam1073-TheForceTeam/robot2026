@@ -20,6 +20,7 @@
 const std::string RobotContainer::testAuto = "Test_Auto";
 const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
 const std::string RobotContainer::noLevelAuto = "No Auto";
+const std::string RobotContainer::basicShotAuto = "Basic Shot Auto";
 const std::string RobotContainer::noPosition = "No Position";
 
 RobotContainer::RobotContainer() :
@@ -82,6 +83,7 @@ _operatorController(1)
   m_levelChooser.SetDefaultOption("No Level", noLevelAuto);
   m_levelChooser.AddOption("Week Zero Auto", weekZeroAuto);
   m_levelChooser.AddOption("Test Auto", testAuto);
+  m_levelChooser.AddOption("Basic Shot Auto", basicShotAuto);
 
   frc::SmartDashboard::PutData("Position Chooser", &m_positionChooser);
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
@@ -100,6 +102,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     else if (m_levelChooser.GetSelected() == testAuto) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
       return TestAuto::Create(m_drivetrain, m_localizer, trajectory);
+    }
+    else if (m_levelChooser.GetSelected() == basicShotAuto) {
+      return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable);
     }
   }
   catch (...) {

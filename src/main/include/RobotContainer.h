@@ -79,6 +79,7 @@ class RobotContainer {
   static const std::string weekZeroAuto;
   static const std::string testAuto;
   static const std::string noLevelAuto;
+  static const std::string basicShotAuto;
 
   static const std::string noPosition;
   
