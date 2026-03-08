@@ -51,6 +51,8 @@
 
 #include "commands/Autos/TestAuto.h"
 #include "commands/Autos/WeekZeroAuto.h"
+#include "commands/Autos/SetKicker.h"
+#include "commands/Autos/SetSpindexer.h"
 
 #include <choreo/Choreo.h>
 #include <utilities/ShooterTable.h>

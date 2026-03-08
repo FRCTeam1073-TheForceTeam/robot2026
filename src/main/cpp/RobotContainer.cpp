@@ -130,8 +130,12 @@ void RobotContainer::TeleopInit() {
 void RobotContainer::ConfigureBindings() {
 // Use the test controller to bind test commands:
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
+  
   _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
   _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
   _operatorController.Back().OnTrue(ZeroClimber(m_climber).ToPtr());
   _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
+  _testController.LeftBumper().OnTrue(SetSpindexer(m_spindexer).ToPtr());
+  _testController.RightBumper().OnTrue(SetKicker(m_kicker).ToPtr());
+  _testController.LeftTrigger().OnTrue(Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
 }
