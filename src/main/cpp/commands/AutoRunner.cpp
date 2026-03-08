@@ -95,8 +95,10 @@ std::vector<frc2::CommandPtr> AutoRunner::EventListener(std::optional<choreo::Tr
         }
       }
     }
-    // auto blah = frc2::cmd::Sequence(std::vector<frc2::CommandPtr>(parallelSequence));
-    // autoRoutine.emplace_back(blah);
+
+    autoRoutine.emplace_back(
+      frc2::cmd::Sequence(std::move(parallelSequence))
+    );
     // autoRoutine.emplace_back(m_kicker->SpinToSpeed(1_mps));
 
   }

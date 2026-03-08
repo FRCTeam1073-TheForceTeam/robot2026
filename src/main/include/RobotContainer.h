@@ -83,8 +83,7 @@ class RobotContainer {
   static const std::string basicAuto;
   static const std::string cyclicAuto;
   static const std::string eventTestAuto;
-
-  static const std::string noPosition;
+  static const std::string l_Auto;
   
   RobotContainer();
 
@@ -128,7 +127,6 @@ class RobotContainer {
   
   bool haveInitStartPos;
 
-  frc::SendableChooser<std::string> m_positionChooser;
   frc::SendableChooser<std::string> m_levelChooser;
 
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
