@@ -47,12 +47,15 @@
 #include "commands/ZeroTurret.h"
 #include "commands/ZeroHood.h"
 #include "commands/ZeroClimber.h"
+#include "commands/Autos/SetKicker.h"
+#include "commands/Autos/SetSpindexer.h"
 
 #include "commands/Autos.h"
 #include "commands/AutoRunner.h"
 #include "commands/Autos/TestAuto.h"
 #include "commands/Autos/WeekZeroAuto.h"
 #include "commands/Autos/BasicAuto.h"
+
 
 #include <choreo/Choreo.h>
 #include <utilities/ShooterTable.h>
@@ -84,6 +87,7 @@ class RobotContainer {
   static const std::string cyclicAuto;
   static const std::string eventTestAuto;
   static const std::string l_Auto;
+  static const std::string basicShotAuto;
   
   RobotContainer();
 

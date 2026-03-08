@@ -24,6 +24,7 @@ const std::string RobotContainer::basicAuto = "Basic Auto";
 const std::string RobotContainer::cyclicAuto = "Cyclic_Auto";
 const std::string RobotContainer::eventTestAuto = "Event_Test";
 const std::string RobotContainer::l_Auto = "L_Auto";
+const std::string RobotContainer::basicShotAuto = "Basic Shot Auto";
 
 RobotContainer::RobotContainer() :
 _testController(2),
@@ -39,7 +40,7 @@ _operatorController(1)
   m_turret = std::make_shared<Turret>();
 
   m_fieldMap = std::make_shared<FieldMap>();
-  m_tagFinder = std::make_shared<AprilTagFinder>(m_turret);
+  m_tagFinder = std::make_shared<AprilTagFinder>(m_turret,m_drivetrain);
   m_localizer = std::make_shared<Localizer>(m_drivetrain, m_tagFinder);
   m_fieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_localizer, m_fieldMap);
   m_zoneFinder = std::make_shared<ZoneFinder>(m_localizer);
@@ -91,6 +92,7 @@ _operatorController(1)
   m_levelChooser.AddOption("Cyclic Auto", cyclicAuto);
   m_levelChooser.AddOption("Event Test Auto", eventTestAuto);
   m_levelChooser.AddOption("L Auto", l_Auto);
+  m_levelChooser.AddOption("Basic Shot Auto", basicShotAuto);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -121,6 +123,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     else if (m_levelChooser.GetSelected() == basicAuto){
       return BasicAuto::Create(m_drivetrain, m_localizer);
     }
+    else if (m_levelChooser.GetSelected() == basicShotAuto) {
+      return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable);
+    }
   }
   catch (...) {
     std::cerr << "Get Autonomous Command Threw Exception" << std::endl;
@@ -150,8 +155,12 @@ void RobotContainer::TeleopInit() {
 void RobotContainer::ConfigureBindings() {
 // Use the test controller to bind test commands:
   _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
+  
   _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
   _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
   _operatorController.Back().OnTrue(ZeroClimber(m_climber).ToPtr());
   _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
+  _testController.LeftBumper().OnTrue(SetSpindexer(m_spindexer).ToPtr());
+  _testController.RightBumper().OnTrue(SetKicker(m_kicker).ToPtr());
+  _testController.LeftTrigger().OnTrue(Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
 }

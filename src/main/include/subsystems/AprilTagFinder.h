@@ -5,6 +5,7 @@
 
 #include "subsystems/FieldMap.h"
 #include <frc2/command/SubsystemBase.h>
+#include "subsystems/DriveTrain.h"
 #include <vector>
 
 #include "subsystems/Turret.h"
@@ -12,6 +13,7 @@
 #include <photon/PhotonCamera.h>
 #include <photon/PhotonUtils.h>
 #include <photon/targeting/PhotonPipelineResult.h>
+#include <photon/PhotonPoseEstimator.h>
 
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Pose3d.h>
@@ -26,7 +28,7 @@
 
 class AprilTagFinder : public frc2::SubsystemBase {
     public:
-    AprilTagFinder(std::shared_ptr<Turret> &turret);
+    AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<Drivetrain> drivetrain);
     class VisionMeasurement
     {
     public:
@@ -58,6 +60,11 @@ class AprilTagFinder : public frc2::SubsystemBase {
     
     frc::Transform3d getRobotCam(int index);
 
+
+    std::vector<VisionMeasurement> getMultiTagEstimate(std::vector<photon::PhotonPipelineResult> results, photon::PhotonPoseEstimator& estimator, frc::Transform3d camTransform3d);
+
+    void clearMeasurements();
+
     void Periodic() override;
     
     static std::vector<RobotCamera> _cameras;
@@ -75,4 +82,6 @@ class AprilTagFinder : public frc2::SubsystemBase {
 
         std::vector<VisionMeasurement> _visionMeasurements;
         std::shared_ptr<Turret> m_turret;
+        std::shared_ptr<Drivetrain> m_drivetrain;
+        std::vector<photon::PhotonPoseEstimator> _estimators;
 };
