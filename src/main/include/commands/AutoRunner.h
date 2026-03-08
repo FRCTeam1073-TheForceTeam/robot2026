@@ -28,6 +28,8 @@
 #include <utilities/ShooterTable.h>
 
 #include "commands/DrivePath.h"
+#include "commands/SmartDashPrint.h"
+#include "commands/ZeroTurret.h"
 
 #include <choreo/Choreo.h>
 
@@ -39,8 +41,7 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class AutoRunner
-    : public frc2::CommandHelper<frc2::Command, AutoRunner> {
+class AutoRunner {
  public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
@@ -59,10 +60,9 @@ class AutoRunner
     std::shared_ptr<Intake> intake,
     std::shared_ptr<LaserCan> laser
   );
-  
+
   frc2::CommandPtr Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 
-  std::vector<frc2::CommandPtr> EventListener(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 
 private:
   std::shared_ptr<Drivetrain> m_drivetrain;
@@ -77,4 +77,6 @@ private:
   std::shared_ptr<Collector> m_collector;
   std::shared_ptr<Intake> m_intake;
   std::shared_ptr<LaserCan> m_laser;
+
+  frc2::CommandPtr EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 };

@@ -105,7 +105,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // TODO: un-comment this code
   try {
     if (m_levelChooser.GetSelected() == eventTestAuto) {
-      trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
+      trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory);
     }
     else if(m_levelChooser.GetSelected() == weekZeroAuto) {
