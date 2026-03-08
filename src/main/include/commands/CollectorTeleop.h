@@ -10,6 +10,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "subsystems/Collector.h"
+#include "subsystems/DriveTrain.h"
 #include "subsystems/OI.h"
 
 /**
@@ -28,7 +29,7 @@ class CollectorTeleop
    * @param spindexer The subsystem used by this command.
    */
 
-  explicit CollectorTeleop(std::shared_ptr<Collector>& collector, std::shared_ptr<OI>& OI);
+  explicit CollectorTeleop(std::shared_ptr<Collector>& collector, std::shared_ptr<OI>& OI, std::shared_ptr<Drivetrain>& dt);
 
   void Initialize() override;
 
@@ -41,6 +42,10 @@ class CollectorTeleop
   private:
    std::shared_ptr<Collector> m_collector;
    std::shared_ptr<OI> m_OI;
+
+   // Observes drivetrain, does not require it.
+  std::shared_ptr<Drivetrain> m_dt;
+
 
    bool collect;
    bool last_b_button;

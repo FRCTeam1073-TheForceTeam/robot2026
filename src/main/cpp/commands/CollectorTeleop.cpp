@@ -4,11 +4,14 @@
 
 #include "commands/CollectorTeleop.h"
 
-CollectorTeleop::CollectorTeleop(std::shared_ptr<Collector>& collector, std::shared_ptr<OI>& OI) :
+CollectorTeleop::CollectorTeleop(std::shared_ptr<Collector>& collector, std::shared_ptr<OI>& OI, std::shared_ptr<Drivetrain>& dt) :
   m_collector(collector), 
   m_OI(OI),
+  m_dt(dt),
   collect(false),
   last_b_button(false) {
+
+    // DO NOT REQUIRE DRIVETRAIN:
   AddRequirements(m_collector.get());
 }
 
@@ -21,8 +24,8 @@ void CollectorTeleop::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void CollectorTeleop::Execute() {  
   
- if (m_OI->GetDriverXButton()) { //for testing purposes?
-    targetVelocity = -3.5_mps;
+ if (m_OI->GetDriverXButton()) { // To eject fuel.
+    targetVelocity = -4.0_mps;
     collect = false;
   } else {
     auto b_button = m_OI->GetDriverBButton();
@@ -33,7 +36,7 @@ void CollectorTeleop::Execute() {
     last_b_button = b_button;
 
     if (collect) {
-      targetVelocity = 3.5_mps;
+      targetVelocity = 3.5_mps + 0.1 * m_dt->GetChassisSpeeds().vx;
     } else {
       targetVelocity = 0_mps;
     }
