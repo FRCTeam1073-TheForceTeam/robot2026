@@ -16,7 +16,7 @@ class SwerveControlConfig {
     public:
 
     // Drive Constants:
-    static constexpr units::length::meter_t DriveWheelDiameter = 0.1016_m;
+    static constexpr units::length::meter_t DriveWheelDiameter = 4_in;
     static constexpr auto DriveGearRatio = units::angle::turn_t(6.03)/ units::angle::turn_t(1.0);
     static constexpr auto DriveMetersPerMotorTurn = DriveWheelDiameter * units::constants::pi / (units::angle::turn_t(1.0) * DriveGearRatio);
     static constexpr units::current::ampere_t DriveCurrentLimit = 35.0_A;

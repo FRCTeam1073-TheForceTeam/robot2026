@@ -1,68 +1,73 @@
 #include "subsystems/ZoneFinder.h"
 
-//AndyMark Dimentions
-const frc::Rectangle2d ZoneFinder::BLUEZONE = frc::Rectangle2d(frc::Translation2d(0_in, 0_in), frc::Translation2d(181.56_in, 316.64_in));
-const frc::Rectangle2d ZoneFinder::REDZONE = frc::Rectangle2d(frc::Translation2d(468.56_in, 0_in), frc::Translation2d(650.12_in, 316.64_in));
-const frc::Rectangle2d ZoneFinder::NEUTRALZONE = frc::Rectangle2d(frc::Translation2d(181.56_in, 0_in), frc::Translation2d(468.56_in, 316.64_in));
 
-const frc::Rectangle2d ZoneFinder::TRENCH_A = frc::Rectangle2d(frc::Translation2d(156.06_in, 0_in), frc::Translation2d(200.46_in, 49.86_in));
-const frc::Rectangle2d ZoneFinder::TRENCH_B = frc::Rectangle2d(frc::Translation2d(156.06_in, 266.78_in), frc::Translation2d(200.46_in, 316.64_in));
-const frc::Rectangle2d ZoneFinder::TRENCH_C = frc::Rectangle2d(frc::Translation2d(445.06_in, 0_in), frc::Translation2d(489.46_in, 49.86_in));
-const frc::Rectangle2d ZoneFinder::TRENCH_D = frc::Rectangle2d(frc::Translation2d(445.06_in, 266.78_in), frc::Translation2d(489.46_in, 316.64_in));
-
-const frc::Rectangle2d ZoneFinder::BUMP_A = frc::Rectangle2d(frc::Translation2d(156.06_in, 61.86_in), frc::Translation2d(200.46_in, 134.86_in));
-const frc::Rectangle2d ZoneFinder::BUMP_B = frc::Rectangle2d(frc::Translation2d(156.06_in, 181.78_in), frc::Translation2d(200.46_in, 254.78_in));
-const frc::Rectangle2d ZoneFinder::BUMP_C = frc::Rectangle2d(frc::Translation2d(445.06_in, 61.86_in), frc::Translation2d(489.46_in, 134.86_in));
-const frc::Rectangle2d ZoneFinder::BUMP_D = frc::Rectangle2d(frc::Translation2d(445.06_in, 181.78_in), frc::Translation2d(489.46_in, 254.78_in));
-
-//Welded Dimentions
-/*
-const frc::Rectangle2d ZoneFinder::BLUEZONE = frc::Rectangle2d(frc::Translation2d(0_in, 0_in), frc::Translation2d(156.61_in, 317.69_in));
-const frc::Rectangle2d ZoneFinder::REDZONE = frc::Rectangle2d(frc::Translation2d(490.01_in, 0_in), frc::Translation2d(651.22_in, 317.69_in));
-const frc::Rectangle2d ZoneFinder::NEUTRALZONE = frc::Rectangle2d(frc::Translation2d(201.01_in, 0_in), frc::Translation2d(325.61_in, 317.69_in));
-
-const frc::Rectangle2d ZoneFinder::TRENCH_A = frc::Rectangle2d(frc::Translation2d(156.61_in, 0_in), frc::Translation2d(201.01_in, 50.35_in));
-const frc::Rectangle2d ZoneFinder::TRENCH_B = frc::Rectangle2d(frc::Translation2d(156.61_in, 267.098_in), frc::Translation2d(201.01_in, 317.69_in));
-const frc::Rectangle2d ZoneFinder::TRENCH_C = frc::Rectangle2d(frc::Translation2d(445.61_in, 0_in), frc::Translation2d(490.01_in, 50.35_in));
-const frc::Rectangle2d ZoneFinder::TRENCH_D = frc::Rectangle2d(frc::Translation2d(445.61_in, 267.098_in), frc::Translation2d(490.01_in, 317.69_in));
-
-const frc::Rectangle2d ZoneFinder::BUMP_A = frc::Rectangle2d(frc::Translation2d(156.61_in, 62.59_in), frc::Translation2d(201.01_in, 135.59_in));
-const frc::Rectangle2d ZoneFinder::BUMP_B = frc::Rectangle2d(frc::Translation2d(156.61_in, 182.1_in), frc::Translation2d(201.01_in, 255.1_in));
-const frc::Rectangle2d ZoneFinder::BUMP_C = frc::Rectangle2d(frc::Translation2d(445.61_in, 62.59_in), frc::Translation2d(490.01_in, 135.59_in));
-const frc::Rectangle2d ZoneFinder::BUMP_D = frc::Rectangle2d(frc::Translation2d(445.61_in, 182.1_in), frc::Translation2d(490.01_in, 255.1_in));
-*/
-
-ZoneFinder::ZoneFinder(std::shared_ptr<Localizer> _localizer)
+ZoneFinder::ZoneFinder(std::shared_ptr<Localizer>& localizer) : _localizer(localizer)
 {
-    frc::Translation2d CurrentTrans = _localizer->getPose().frc::Pose2d::Translation();
-};
+    //AndyMark Dimentions
+    zones.push_back(Zone("BLUEZONE", frc::Rectangle2d(frc::Translation2d(0_in, 0_in), frc::Translation2d(181.56_in, 316.64_in))));
+    zones.push_back(Zone("REDZONE", frc::Rectangle2d(frc::Translation2d(468.56_in, 0_in), frc::Translation2d(650.12_in, 316.64_in))));
+    zones.push_back(Zone("NEUTRALZONE", frc::Rectangle2d(frc::Translation2d(181.56_in, 0_in), frc::Translation2d(468.56_in, 316.64_in))));
+    
+    //Blue alliance POV
+    zones.push_back(Zone("RIGHTHALF", frc::Rectangle2d(frc::Translation2d(0_in, 0_in), frc::Translation2d(650.12_in, 158.32_in))));
+    zones.push_back(Zone("LEFTHALF", frc::Rectangle2d(frc::Translation2d(0_in, 158.32_in), frc::Translation2d(650.12_in, 316.64_in))));
+    
+    //added 35 in. (robot dimentions w/ bumpers) in x-dimention on either side to expand trench zones. -35 to first x-value, +35 to second x-value
+    zones.push_back(Zone("TRENCH_A", frc::Rectangle2d(frc::Translation2d(121.06_in, 0_in), frc::Translation2d(235.46_in, 49.86_in))));
+    zones.push_back(Zone("TRENCH_B", frc::Rectangle2d(frc::Translation2d(121.06_in, 266.78_in), frc::Translation2d(235.46_in, 316.64_in))));
+    zones.push_back(Zone("TRENCH_C", frc::Rectangle2d(frc::Translation2d(410.06_in, 0_in), frc::Translation2d(524.46_in, 49.86_in))));
+    zones.push_back(Zone("TRENCH_D", frc::Rectangle2d(frc::Translation2d(410.06_in, 266.78_in), frc::Translation2d(524.46_in, 316.64_in))));
+    
+    zones.push_back(Zone("BUMP_A", frc::Rectangle2d(frc::Translation2d(156.06_in, 61.86_in), frc::Translation2d(200.46_in, 134.86_in))));
+    zones.push_back(Zone("BUMP_B", frc::Rectangle2d(frc::Translation2d(156.06_in, 181.78_in), frc::Translation2d(200.46_in, 254.78_in))));
+    zones.push_back(Zone("BUMP_C", frc::Rectangle2d(frc::Translation2d(445.06_in, 61.86_in), frc::Translation2d(489.46_in, 134.86_in))));
+    zones.push_back(Zone("BUMP_D", frc::Rectangle2d(frc::Translation2d(445.06_in, 181.78_in), frc::Translation2d(489.46_in, 254.78_in))));
 
-std::string ZoneFinder::GetZone()
-{
-if(REDZONE.frc::Rectangle2d::Contains(CurrentTrans))
-{
-    return "REDZONE";
-}
-else if(BLUEZONE.frc::Rectangle2d::Contains(CurrentTrans))
-{
-    return "BLUEZONE";
-}
-else if(NEUTRALZONE.frc::Rectangle2d::Contains(CurrentTrans))
-{
-    return "NEUTRALZONE";
-}
-else 
-{
-    return "UNKNOWN";
+    //Welded Dimentions
+    /*
+    zones.push_back(Zone("BLUEZONE", frc::Rectangle2d(frc::Translation2d(0_in, 0_in), frc::Translation2d(156.61_in, 317.69_in))));
+    zones.push_back(Zone("REDZONE", frc::Rectangle2d(frc::Translation2d(490.01_in, 0_in), frc::Translation2d(651.22_in, 317.69_in))));
+    zones.push_back(Zone("NEUTRALZONE", frc::Rectangle2d(frc::Translation2d(201.01_in, 0_in), frc::Translation2d(325.61_in, 317.69_in))));
+    
+    //Blue alliance POV
+    zones.push_back(Zone("RIGHTHALF", frc::Rectangle2d(frc::Translation2d(0_in, 0_in), frc::Translation2d(651.22_in, 158.84_in))));
+    zones.push_back(Zone("LEFTHALF", frc::Rectangle2d(frc::Translation2d(0_in, 158.84_in), frc::Translation2d(651.22_in, 317.69_in))));
+    
+    //added 35 in. (robot dimentions w/ bumpers) in x-dimention on either side to expand trench zones. -35 to first x-value, +35 to second x-value
+    zones.push_back(Zone("TRENCH_A", frc::Rectangle2d(frc::Translation2d(121.61_in, 0_in), frc::Translation2d(236.01_in, 50.35_in))));
+    zones.push_back(Zone("TRENCH_B", frc::Rectangle2d(frc::Translation2d(121.61_in, 267.098_in), frc::Translation2d(236.01_in, 317.69_in))));
+    zones.push_back(Zone("TRENCH_C", frc::Rectangle2d(frc::Translation2d(410.61_in, 0_in), frc::Translation2d(525.01_in, 50.35_in))));
+    zones.push_back(Zone("TRENCH_D", frc::Rectangle2d(frc::Translation2d(410.61_in, 267.098_in), frc::Translation2d(525.01_in, 317.69_in))));
+    
+    zones.push_back(Zone("BUMP_A", frc::Rectangle2d(frc::Translation2d(156.61_in, 62.59_in), frc::Translation2d(201.01_in, 135.59_in))));
+    zones.push_back(Zone("BUMP_B", frc::Rectangle2d(frc::Translation2d(156.61_in, 182.1_in), frc::Translation2d(201.01_in, 255.1_in))));
+    zones.push_back(Zone("BUMP_C", frc::Rectangle2d(frc::Translation2d(445.61_in, 62.59_in), frc::Translation2d(490.01_in, 135.59_in))));
+    zones.push_back(Zone("BUMP_D", frc::Rectangle2d(frc::Translation2d(445.61_in, 182.1_in), frc::Translation2d(490.01_in, 255.1_in))));
+    */
 }
 
-if(TRENCH_A.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_B.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_C.frc::Rectangle2d::Contains(CurrentTrans) || TRENCH_D.frc::Rectangle2d::Contains(CurrentTrans))
+std::set<std::string> ZoneFinder::GetZones()
 {
-    return "TRENCH";
+    std::set<std::string> result;
+    for(const auto &zone : zones)
+    {
+        if(zone.rect.Contains(CurrentTrans))
+        {
+            result.insert(zone.name);
+        }
+    }
+    return result;
 }
 
-if(BUMP_A.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_B.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_C.frc::Rectangle2d::Contains(CurrentTrans) || BUMP_D.frc::Rectangle2d::Contains(CurrentTrans))
+
+void ZoneFinder::Periodic()
 {
-    return "BUMP";
+    CurrentTrans = _localizer->getPose().Translation();
+    auto result = GetZones();
+    std::string zonelist;
+    for(const auto &zone : result)
+    {
+        zonelist += zone + ", ";
+    }
+    frc::SmartDashboard::PutString("Zone/Zone", zonelist);
 }
-};

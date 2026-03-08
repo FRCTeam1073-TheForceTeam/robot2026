@@ -38,9 +38,11 @@ class Climber : public frc2::SubsystemBase {
 
   // Mechanism conversion constants for the subsystem:
   // Gear Ratio:
-  static constexpr auto TurnsPerMeter = units::angle::turn_t(32.0) / units::length::meter_t(1.0);
+  static constexpr auto GearRatio = units::angle::turn_t(32.0) / units::angle::turn_t(1.0);
+  static constexpr auto TurnsPerMeter = units::angle::turn_t(1.0) / units::meter_t(0.75_in * std::numbers::pi) ;
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
-
+  units::length::meter_t minPosition = units::length::meter_t(0);
+  units::length::meter_t maxPosition = units::length::meter_t(0.07);
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
@@ -49,12 +51,10 @@ class Climber : public frc2::SubsystemBase {
       units::force::newton_t force;
   };
 
-
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
-  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t>;
-
+  using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
 
   // Constructor for the subsystem.
   Climber();
@@ -67,7 +67,6 @@ class Climber : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
-
   /// Access the latest feedback from the system. 
   const Feedback& GetFeedback() const { return _feedback; }
 
@@ -78,8 +77,9 @@ class Climber : public frc2::SubsystemBase {
 
   bool IsHooked();
 
- private:
+  units::length::meter_t getClimberPosition();
 
+ private:
 
   // Helper function for configuring hardware from within the constructor of the subsystem.
   bool ConfigureHardware();
@@ -93,10 +93,11 @@ class Climber : public frc2::SubsystemBase {
   // CTRE hardware feedback signals:
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _climberVelocitySig;
   ctre::phoenix6::StatusSignal<units::current::ampere_t> _climberCurrentSig;
-
+  ctre::phoenix6::StatusSignal<units::angle::turn_t> _climberPositionSig;
 
   // Example velocity and position controls:
   ctre::phoenix6::controls::VelocityVoltage _commandVelocityVoltage;  // Uses Slot0 gains.
+  ctre::phoenix6::controls::PositionVoltage _commandPositionVoltage;  // Uses Slot1 gains
   
   // Cached feedback:
   Feedback _feedback;
@@ -105,6 +106,8 @@ class Climber : public frc2::SubsystemBase {
   Command  _command;
 
   frc::SlewRateLimiter<units::meters_per_second> _limiter;
+  frc::SlewRateLimiter<units::length::meter> _positionLimiter;
+  //frc::SlewRateLimiter<units::meter_t> _positionLimiter;
 
   frc::DigitalInput m_ClimberOnInput{0};
 

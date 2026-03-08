@@ -5,12 +5,22 @@
 #pragma once
 
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/ParallelCommandGroup.h>
 
-#include "subsystems/ExampleSubsystem.h"
 
-namespace autos {
+#include "subsystems/TargetFinder.h"
+#include "subsystems/Turret.h"
+#include "subsystems/Flywheel.h"
+#include "subsystems/ShooterHood.h"
+#include "utilities/ShooterTable.h"
+
+
+namespace Autos {
 /**
  * Example static factory for an autonomous command.
  */
-frc2::CommandPtr ExampleAuto(ExampleSubsystem* subsystem);
-}  // namespace autos
+frc2::CommandPtr TrackHub(std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st);
+
+
+
+}  // namespace Autos

@@ -75,5 +75,4 @@ class AprilTagFinder : public frc2::SubsystemBase {
 
         std::vector<VisionMeasurement> _visionMeasurements;
         std::shared_ptr<Turret> m_turret;
-
 };

@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/ZeroClimber.h"
+#include <units/math.h>
 
 ZeroClimber::ZeroClimber(std::shared_ptr<Climber> climber) :
   // Use addRequirements() here to declare subsystem dependencies.
@@ -15,8 +16,9 @@ void ZeroClimber::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ZeroClimber::Execute() {
-  auto velocity = 0.67_mps;
+  auto velocity = -0.03_mps;
   m_climber->SetCommand(velocity);
+
 }
 
 // Called once the command ends or is interrupted.
@@ -27,8 +29,8 @@ void ZeroClimber::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool ZeroClimber::IsFinished() {
-  if(m_climber->GetFeedback().force > 9_N) { 
+  if(units::math::abs(m_climber->GetFeedback().force) > 6_N) { 
     return true;
   }
-  return false;
+  return false; 
 }
