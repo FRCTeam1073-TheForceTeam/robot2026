@@ -14,6 +14,18 @@ using namespace ctre::phoenix;
 const CANBus Drivetrain::canBus("Canivore");
 bool debug = false;
 
+// Feedforward dynamics compensation for drivetrain:
+// Rotational inertia of a rectangular object through com perpendicular to rectangle
+// I = 1/12 * m * (a^2 + b^2)
+//
+// Robot mass ~137lb = 62.14Kg
+// Robot Sides are about 0.6m
+// I = 1/12 * mass * (0.6^2 + 0.6^2) = 1/6 * mass * 0.6^2
+//
+
+constexpr auto Mass = 62.14_kg;
+constexpr auto Inertia = 1.0/12.0 * 62.14_kg * 2.0 * (0.6_m * 0.6_m);
+
 Drivetrain::Drivetrain() :
     _imu(PigeonId, canBus),
     _swerveModules{
@@ -46,7 +58,7 @@ Drivetrain::Drivetrain() :
     _wheelForceCalculator({_swerveModules[0].GetLocation(),
                            _swerveModules[1].GetLocation(),
                            _swerveModules[2].GetLocation(),
-                           _swerveModules[3].GetLocation() }, 140_lb, 100_kg_sq_m),     // TODO: Need accurate robot mass and rotational inertia.
+                           _swerveModules[3].GetLocation() }, Mass, Inertia),
     _hardwareConfigured(false),
     _parkingBrake(false)
 {
@@ -64,7 +76,7 @@ Drivetrain::Drivetrain() :
         _hardwareConfigured &= _swerveModules[ii].HardwareConfigured();
     }
 
-    if (_hardwareConfigured) {
+    if (!_hardwareConfigured) {
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
     }
 
@@ -104,7 +116,7 @@ void Drivetrain::Periodic()  {
         auto moduleCommands = _kinematics.ToSwerveModuleStates(_targetSpeeds);
         frc::SwerveDriveKinematics<4>::DesaturateWheelSpeeds(&moduleCommands, SwerveControlConfig::MaxModuleSpeed);  // Keep commands feasible.
 
-        // Acceleration compensation for chassis:
+        // Dynamics compensation for chassis:
         // Compute Accelerations in X, Y and Theta
         auto delta_t = now - _previousUpdateTime;
         units::meters_per_second_squared_t ax = (_targetSpeeds.vx - _previousTargetSpeeds.vx) / delta_t;
@@ -117,14 +129,15 @@ void Drivetrain::Periodic()  {
         // Send the commands to swerve module hardware:
         for (size_t ii(0); ii < _swerveModules.size(); ++ii) {
             moduleCommands[ii].Optimize(_swerveModulePositions[ii].angle);
-            // Pass along calculated feed-forward forces to swerve modules.
+            // Pass along calculated feed-forward forces with commands to swerve modules.
             _swerveModules[ii].SetCommand(moduleCommands[ii], feedForwards.x[ii], feedForwards.y[ii]);
         }
     }
 
     // Always update previous target speeds and time so we can compute input accelerations:
     _previousTargetSpeeds = _targetSpeeds;
-    _previousUpdateTime = now; // We already sampled it above in this function.
+     // We already sampled it above in this function.
+    _previousUpdateTime = now;
 }
 
 /// Reset the odometry to a specific pose on the field.

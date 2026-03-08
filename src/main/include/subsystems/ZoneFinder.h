@@ -1,3 +1,4 @@
+#pragma once
 #include <frc/geometry/Rectangle2d.h>
 #include <frc/geometry/Translation2d.h>
 #include "subsystems/Localizer.h"
@@ -7,32 +8,34 @@
 #include <frc/apriltag/AprilTagFieldLayout.h>
 #include <frc/geometry/Pose3d.h>
 #include <frc/apriltag/AprilTagFieldLayout.h>
+#include <set>
 
 
-class ZoneFinder
+class ZoneFinder : public frc2::SubsystemBase
 {
     public:
-    static const frc::Rectangle2d REDZONE;
-    static const frc::Rectangle2d BLUEZONE;
-    static const frc::Rectangle2d NEUTRALZONE;
-    
-    static const frc::Rectangle2d TRENCH_A;
-    static const frc::Rectangle2d TRENCH_B;
-    static const frc::Rectangle2d TRENCH_C;
-    static const frc::Rectangle2d TRENCH_D;
-    
-    static const frc::Rectangle2d BUMP_A;
-    static const frc::Rectangle2d BUMP_B;
-    static const frc::Rectangle2d BUMP_C;
-    static const frc::Rectangle2d BUMP_D;
+    class Zone 
+    {
+        public:
+
+        Zone() = default;
+        Zone(const std::string &n, const frc::Rectangle2d &r) : name(n), rect(r) {};
+        std::string name;
+        frc::Rectangle2d rect;
+
+    };
+    using ZoneVector = std::vector<Zone>;
 
 
-    ZoneFinder(std::shared_ptr<Localizer> _localizer);
+    ZoneFinder(std::shared_ptr<Localizer>& localizer);
 
-    std::string GetZone();
-    //checks what zone robot is in based on localizer and returns Rectangle2d of the zone (Eva)
-
+    std::set<std::string> GetZones();
+    void Periodic() override;
 
     private:
+    std::shared_ptr<Localizer> _localizer;
     frc::Translation2d CurrentTrans;
+    ZoneVector zones;
+    
+
 };

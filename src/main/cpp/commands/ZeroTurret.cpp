@@ -8,7 +8,7 @@
 ZeroTurret::ZeroTurret(std::shared_ptr<Turret> turret) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_turret(turret), 
-  limit(4.8_Nm)  {
+  limit(3.5_Nm)  {
   AddRequirements({m_turret.get()});
 }
 

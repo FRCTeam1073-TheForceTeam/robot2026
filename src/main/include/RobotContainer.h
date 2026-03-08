@@ -23,7 +23,7 @@
 #include "subsystems/FieldMap.h" 
 #include "subsystems/FieldMapDisplay.h"
 #include "subsystems/Flywheel.h" 
-#include "subsystems/HubFinder.h"
+#include "subsystems/TargetFinder.h"
 #include "subsystems/Collector.h"
 #include "subsystems/Intake.h"  
 #include "subsystems/LaserCan.h" 
@@ -33,6 +33,7 @@
 #include "subsystems/Turret.h"
 #include "subsystems/Spindexer.h" 
 #include "subsystems/ZoneFinder.h" 
+#include "commands/Autos.h"
 #include "commands/FlywheelTeleop.h"
 #include "commands/HoodTeleop.h"
 #include "commands/CollectorTeleop.h"
@@ -87,10 +88,11 @@ class RobotContainer {
   void DisabledInit();
   bool DisabledPeriodic();
 
+  // Called from Robot
+  void TeleopInit();
+
  private:
 
-
- 
   void ConfigureBindings();
 
   //  bool FindStartPos();
@@ -98,12 +100,12 @@ class RobotContainer {
   std::shared_ptr<Drivetrain> m_drivetrain;
 
   std::shared_ptr<OI> m_OI;
-  std::shared_ptr<FieldMap> m_FieldMap;
-  std::shared_ptr<AprilTagFinder> m_Tags;
-  std::shared_ptr<Localizer> m_Localizer;
-  std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
-  std::shared_ptr<HubFinder> m_HubFinder;
-  std::shared_ptr<ZoneFinder> m_ZoneFinder;
+  std::shared_ptr<FieldMap> m_fieldMap;
+  std::shared_ptr<AprilTagFinder> m_tagFinder;
+  std::shared_ptr<Localizer> m_localizer;
+  std::shared_ptr<FieldMapDisplay> m_fieldDisplay;
+  std::shared_ptr<TargetFinder> m_targetFinder;
+  std::shared_ptr<ZoneFinder> m_zoneFinder;
 
   std::shared_ptr<Kicker> m_kicker;
   std::shared_ptr<Climber> m_climber;
@@ -116,22 +118,16 @@ class RobotContainer {
   std::shared_ptr<LaserCan> m_laser;
   std::shared_ptr<ShooterTable> m_shooterTable;
 
-  std::shared_ptr<ZeroTurret> cmd_zeroTurret;
-
   
   bool haveInitStartPos;
-
-  frc2::Trigger blah;
-
-  bool isRed;
 
   frc::SendableChooser<std::string> m_positionChooser;
   frc::SendableChooser<std::string> m_levelChooser;
 
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 
+  // Just used for launching test commands, separate from OI and other controls.
   frc2::CommandXboxController _testController;
   frc2::CommandXboxController _operatorController;
-
 
 };

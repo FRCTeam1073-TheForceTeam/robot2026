@@ -6,6 +6,10 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include "subsystems/ShooterHood.h"
+#include <frc/smartdashboard/SmartDashboard.h>
+#include "utilities/ShooterTable.h"
+#include "subsystems/TargetFinder.h"
 
 /**
  * An example command.
@@ -20,7 +24,7 @@ class TrackHood
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  TrackHood();
+  TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st);
 
   void Initialize() override;
 
@@ -29,4 +33,9 @@ class TrackHood
   void End(bool interrupted) override;
 
   bool IsFinished() override;
+
+ private:
+  std::shared_ptr<ShooterHood> m_shooterHood;
+  std::shared_ptr<TargetFinder> m_hf;
+  std::shared_ptr<ShooterTable> m_st;
 };

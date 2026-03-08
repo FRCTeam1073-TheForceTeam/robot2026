@@ -9,7 +9,7 @@
 #include <choreo/Choreo.h>
 #include <commands/Autos/TestAuto.h>
 
-FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st) :
+FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
   m_flywheel(flywheel),
   m_OI(oi),
   m_hf(hf),

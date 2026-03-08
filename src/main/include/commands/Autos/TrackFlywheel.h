@@ -9,7 +9,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "subsystems/Flywheel.h"
-#include "subsystems/HubFinder.h"
+#include "subsystems/TargetFinder.h"
 #include "utilities/ShooterTable.h"
 #include <units/angular_velocity.h>
 
@@ -26,7 +26,7 @@ class TrackFlywheel
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<HubFinder>& hf, std::shared_ptr<ShooterTable>& st);
+  TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st);
 
   void Initialize() override;
 
@@ -40,7 +40,7 @@ class TrackFlywheel
   private:
 
   std::shared_ptr<Flywheel> m_flywheel;
-  std::shared_ptr<HubFinder> m_hf;
+  std::shared_ptr<TargetFinder> m_hf;
   std::shared_ptr<ShooterTable> m_st;
 };
 

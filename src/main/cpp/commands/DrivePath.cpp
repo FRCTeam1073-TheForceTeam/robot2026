@@ -4,7 +4,8 @@
 
 #include "commands/DrivePath.h"
 
-DrivePath::DrivePath(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Localizer> localizer, std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) :
+DrivePath::DrivePath(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<Localizer>& localizer, 
+                    std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) :
   m_drivetrain(drivetrain),
   m_localizer(localizer),
   trajectory(trajectory),
@@ -16,7 +17,7 @@ DrivePath::DrivePath(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Loc
 {
   thetaController.EnableContinuousInput(-std::numbers::pi, std::numbers::pi);
   frc::SmartDashboard::PutString("DrivePath/Status", "Idle");
-  AddRequirements({m_drivetrain.get(), m_localizer.get()});
+  AddRequirements({m_drivetrain.get()});
 }
 
 // Called when the command is initially scheduled.
@@ -46,7 +47,7 @@ void DrivePath::Execute() {
   frc::SmartDashboard::PutNumber("DrivePath/CurrentTime", currentTime.value());
   frc::SmartDashboard::PutBoolean("DrivePath/Trajectory", trajectory.has_value());
 
-  if(trajectory.has_value()) {
+  if (trajectory.has_value()) {
     const auto &traj = trajectory.value();
 
     currentSample = traj.SampleAt(currentTime);
