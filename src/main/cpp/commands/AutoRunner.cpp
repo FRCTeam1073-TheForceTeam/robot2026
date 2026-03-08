@@ -7,7 +7,7 @@
 AutoRunner::AutoRunner(
   std::shared_ptr<Drivetrain> drivetrain,
   std::shared_ptr<AprilTagFinder> Tags,
-  std::shared_ptr<Localizer> Localizer,
+  std::shared_ptr<Localizer> localizer,
   std::shared_ptr<Kicker> kicker,
   std::shared_ptr<Climber> climber,
   std::shared_ptr<Flywheel> flywheel,
@@ -20,7 +20,7 @@ AutoRunner::AutoRunner(
 ) :
 m_drivetrain(drivetrain),
 m_Tags(Tags),
-m_Localizer(Localizer),
+m_localizer(localizer),
 m_kicker(kicker),
 m_climber(climber),
 m_flywheel(flywheel),
@@ -42,7 +42,7 @@ std::vector<frc2::CommandPtr> AutoRunner::EventListener(std::optional<choreo::Tr
     auto events = traj.events;
 
     autoRoutine.emplace_back(frc2::cmd::Print("Starting"));
-    autoRoutine.emplace_back(DrivePath(m_drivetrain, m_Localizer, trajectory).ToPtr());
+    autoRoutine.emplace_back(DrivePath(m_drivetrain, m_localizer, trajectory).ToPtr());
   
     std::vector<frc2::CommandPtr> parallelSequence;
     for(int e = 0; e < events.size(); e++) {
@@ -95,8 +95,8 @@ std::vector<frc2::CommandPtr> AutoRunner::EventListener(std::optional<choreo::Tr
         }
       }
     }
-    auto blah = frc2::cmd::Sequence(std::vector<frc2::CommandPtr>(parallelSequence));
-    autoRoutine.emplace_back(blah);
+    // auto blah = frc2::cmd::Sequence(std::vector<frc2::CommandPtr>(parallelSequence));
+    // autoRoutine.emplace_back(blah);
     // autoRoutine.emplace_back(m_kicker->SpinToSpeed(1_mps));
 
   }

@@ -14,7 +14,6 @@
 #include "subsystems/FieldMap.h" 
 #include "subsystems/FieldMapDisplay.h"
 #include "subsystems/Flywheel.h" 
-#include "subsystems/HubFinder.h"
 #include "subsystems/Collector.h"
 #include "subsystems/Intake.h"  
 #include "subsystems/LaserCan.h" 
@@ -68,7 +67,7 @@ class AutoRunner
 private:
   std::shared_ptr<Drivetrain> m_drivetrain;
   std::shared_ptr<AprilTagFinder> m_Tags;
-  std::shared_ptr<Localizer> m_Localizer;
+  std::shared_ptr<Localizer> m_localizer;
   std::shared_ptr<Kicker> m_kicker;
   std::shared_ptr<Climber> m_climber;
   std::shared_ptr<Flywheel> m_flywheel;
