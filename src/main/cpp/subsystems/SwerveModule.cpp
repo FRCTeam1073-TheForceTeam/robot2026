@@ -138,7 +138,7 @@ void SwerveModule::SetCommand(frc::SwerveModuleState cmd, units::force::newton_t
     auto ff_drive_force = ca * _ff_x + sa * _ff_y;    // Map the force vector onto the direction of the drive vector.
 
     // TODO: Enable ethis gain to turn on feed-forward driving.
-    auto ff_drive_volts = ff_drive_force * 0_V / 1_N; // Motor/module specific conversion factor for feed-forward voltage control.
+    auto ff_drive_volts = ff_drive_force * 0.0_V / 1_N; // Motor/module specific conversion factor for feed-forward voltage control.
 
     _driveMotor.SetControl(_driveVelocityVoltage.WithSlot(0).WithVelocity(drive_motor_velocity).WithFeedForward(ff_drive_volts));
     _steerMotor.SetControl(_steerPositionVoltage.WithSlot(0).WithPosition(steering_angle));
