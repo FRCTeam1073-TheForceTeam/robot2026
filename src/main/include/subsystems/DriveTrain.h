@@ -66,6 +66,8 @@ class Drivetrain : public frc2::SubsystemBase {
   /// Return the odomery pose of the drivetrain odometry (from most recent reset).
   const frc::Pose2d GetOdometry() const { return _odometry.GetPose(); }
 
+  const units::time::second_t GetPreviousUpdateTime() const { return _previousUpdateTime; }
+
   /// Reset the odometry to a specific pose on the field.
   void ResetOdometry(const frc::Pose2d pose);
 

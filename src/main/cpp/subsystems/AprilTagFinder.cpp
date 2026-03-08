@@ -1,7 +1,8 @@
 #include "subsystems/AprilTagFinder.h"
 std::vector<AprilTagFinder::RobotCamera> AprilTagFinder::_cameras = {};
-AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret) : 
+AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<Drivetrain> drivetrain) : 
     m_turret(turret),
+    m_drivetrain(drivetrain),
     _estimators({})
 {
     std::cout << "Creating April Tag Object" << std::endl;
@@ -14,7 +15,7 @@ AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret) :
     };
     for(auto& camera : _cameras)
     {
-        _estimators.push_back(photon::PhotonPoseEstimator(FieldMap::fieldMap,photon::MULTI_TAG_PNP_ON_COPROCESSOR,camera._transform));
+        _estimators.push_back(photon::PhotonPoseEstimator(FieldMap::fieldMap,camera._transform));
     }
 }
 
@@ -118,10 +119,15 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
     return measurements;
 }
 
+void AprilTagFinder::clearMeasurements() {
+    _visionMeasurements.clear();
+}
+
 void AprilTagFinder::Periodic() {
     auto turretVelocity = m_turret->GetFeedback().velocity;
-    _visionMeasurements.clear();
     for (int i = 0; i<_cameras.size(); i++) {
+        if(i==4 && !m_turret->GetFeedback().haveZero)
+            continue;
         auto& cam = _cameras[i];
         auto& estimator = _estimators[i];
         std::vector<photon::PhotonPipelineResult> results = cam._camera->GetAllUnreadResults();
@@ -144,9 +150,9 @@ void AprilTagFinder::Periodic() {
             transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
         }
 
-        // TODO: If the turret does not have zero yet, we should ignore it's measurements.
-        std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
-        //std::vector<AprilTagFinder::VisionMeasurement> measurements = getMultiTagEstimate(results, estimator, transform);
+        //std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
+        estimator.AddHeadingData(m_drivetrain->GetPreviousUpdateTime(),m_drivetrain->GetGyroHeading());
+        std::vector<AprilTagFinder::VisionMeasurement> measurements = getMultiTagEstimate(results, estimator, transform);
         _visionMeasurements.insert(
             _visionMeasurements.end(),
             measurements.begin(),

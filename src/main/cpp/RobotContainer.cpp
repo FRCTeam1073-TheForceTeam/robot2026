@@ -36,7 +36,7 @@ _operatorController(1)
   m_turret = std::make_shared<Turret>();
 
   m_fieldMap = std::make_shared<FieldMap>();
-  m_tagFinder = std::make_shared<AprilTagFinder>(m_turret);
+  m_tagFinder = std::make_shared<AprilTagFinder>(m_turret,m_drivetrain);
   m_localizer = std::make_shared<Localizer>(m_drivetrain, m_tagFinder);
   m_fieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_localizer, m_fieldMap);
   m_zoneFinder = std::make_shared<ZoneFinder>(m_localizer);
