@@ -47,11 +47,10 @@ class ShooterHood : public frc2::SubsystemBase {
   struct Feedback {
       units::angle::radian_t position;
       units::torque::newton_meter_t torque;
+      bool hasZero;
   };
 
   
-
-
   // Commands may be modal (different command modes):
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
@@ -109,6 +108,9 @@ class ShooterHood : public frc2::SubsystemBase {
 
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
+
+  // Zero tracking:
+  bool _hasZero;
 
   frc::SlewRateLimiter<units::radians> _limiter;
 
