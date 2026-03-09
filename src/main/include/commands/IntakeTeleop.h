@@ -8,6 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/Intake.h"
 #include "subsystems/OI.h"
+#include "subsystems/ZoneFinder.h"
 
 /**
  * An example command.
@@ -23,7 +24,7 @@ class IntakeTeleop :
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  IntakeTeleop(std::shared_ptr<Intake>& Intake, std::shared_ptr<OI>& OI);
+  IntakeTeleop(std::shared_ptr<Intake>& Intake, std::shared_ptr<OI>& OI, std::shared_ptr<ZoneFinder>& zone);
 
   void Initialize() override;
 
@@ -39,6 +40,7 @@ class IntakeTeleop :
 
   std::shared_ptr<Intake> m_intake;
   std::shared_ptr<OI> m_oi;
+  std::shared_ptr<ZoneFinder> m_zone;
 
   bool position_in;
   bool last_button_A; // For click detect on button A.

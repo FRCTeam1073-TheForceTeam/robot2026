@@ -71,7 +71,7 @@ _testController(2)
   // Assign default commands here after all subssytems are created to avoid using
   // uninitialized subsystems in default commands.
   m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_Localizer).ToPtr());
-  m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI).ToPtr());
+  m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI, m_ZoneFinder).ToPtr());
   m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI).ToPtr());
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
   m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());

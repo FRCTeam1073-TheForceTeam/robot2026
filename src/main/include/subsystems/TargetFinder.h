@@ -60,8 +60,6 @@ class TargetFinder  : public frc2::SubsystemBase {
     frc::Pose2d OurHub;
     frc::Pose2d roboPos;
     frc::Pose2d VirtualHub;
-    //const units::time::second_t time;
-
 
     Feedback feedback;
 

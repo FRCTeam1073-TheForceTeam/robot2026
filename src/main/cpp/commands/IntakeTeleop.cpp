@@ -4,9 +4,10 @@
 
 #include "commands/IntakeTeleop.h"
 
-IntakeTeleop::IntakeTeleop(std::shared_ptr<Intake>& intake, std::shared_ptr<OI>& oi) :
+IntakeTeleop::IntakeTeleop(std::shared_ptr<Intake>& intake, std::shared_ptr<OI>& oi, std::shared_ptr<ZoneFinder>& zone) :
     m_intake(intake),
     m_oi(oi),
+    m_zone(zone),
     position_in(true),
     last_button_A(false) {
 
@@ -20,6 +21,11 @@ void IntakeTeleop::Initialize() {}
 void IntakeTeleop::Execute() {
 
   bool button_A = m_oi->GetDriverAButton();
+
+  if (m_zone->GetZones().contains("TRENCH"))
+  {
+    position_in = false;
+  }
 
   if (!last_button_A && button_A) {
     // Toggle position:
