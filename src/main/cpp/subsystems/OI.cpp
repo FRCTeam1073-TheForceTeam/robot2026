@@ -54,7 +54,7 @@ double OI::GetDriverRightTrigger() {
 }
 
 double OI::GetOperatorLeftTrigger() {
-    return _operatorController.GetRightTriggerAxis();
+    return _operatorController.GetLeftTriggerAxis();
 }
 
 double OI::GetOperatorRightTrigger() {
@@ -119,6 +119,10 @@ bool OI::DriverRumble() {
 
 bool OI::DriverStopRumble() {
     _driverController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+}
+
+bool OI::DriverLeftStickPress() {
+    return _driverController.GetLeftStickButton();
 }
 
 bool OI::GetOperatorAButton() {

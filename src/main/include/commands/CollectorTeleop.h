@@ -48,7 +48,7 @@ class CollectorTeleop
 
 
    bool collect;
-   bool last_b_button;
+   bool last_trigger;
 
   units::velocity::meters_per_second_t targetVelocity;
 

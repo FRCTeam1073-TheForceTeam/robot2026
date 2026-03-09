@@ -9,7 +9,7 @@ CollectorTeleop::CollectorTeleop(std::shared_ptr<Collector>& collector, std::sha
   m_OI(OI),
   m_dt(dt),
   collect(false),
-  last_b_button(false) {
+  last_trigger(false) {
 
     // DO NOT REQUIRE DRIVETRAIN:
   AddRequirements(m_collector.get());
@@ -23,23 +23,16 @@ void CollectorTeleop::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void CollectorTeleop::Execute() {  
-  
- if (m_OI->GetDriverXButton()) { // To eject fuel.
+
+  // TODO: ASK SILLY DIRIVE TEAM!!
+ if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) { // To eject fuel.
     targetVelocity = -4.0_mps;
-    collect = false;
-  } else {
-    auto b_button = m_OI->GetDriverBButton();
-    if (!last_b_button && b_button) {
-      collect = !collect;
-    } 
-
-    last_b_button = b_button;
-
-    if (collect) {
-      targetVelocity = 3.5_mps + 0.1 * m_dt->GetChassisSpeeds().vx;
-    } else {
+  }
+  else if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1) {
+    targetVelocity = 3.5_mps + (0.1 * m_dt->GetChassisSpeeds().vx);
+  }
+  else {
       targetVelocity = 0_mps;
-    }
   }
 
   m_collector->SetCommand(targetVelocity);

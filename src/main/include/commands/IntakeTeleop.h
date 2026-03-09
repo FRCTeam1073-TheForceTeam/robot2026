@@ -41,6 +41,6 @@ class IntakeTeleop :
   std::shared_ptr<OI> m_oi;
 
   bool position_in;
-  bool last_button_A; // For click detect on button A.
+  bool last_button_Y; // For click detect on button A.
 
 };
