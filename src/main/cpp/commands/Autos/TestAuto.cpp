@@ -5,5 +5,9 @@
 #include "commands/Autos/TestAuto.h"
 
 frc2::CommandPtr TestAuto::Create(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Localizer> localizer, std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
-  return DrivePath(drivetrain, localizer, trajectory).ToPtr();
+  return frc2::cmd::Sequence(
+    DrivePath(drivetrain, localizer, trajectory).ToPtr(),
+    DrivePath(drivetrain, localizer, trajectory).ToPtr()
+  );
+  // return DrivePath(drivetrain, localizer, trajectory).ToPtr();
 }

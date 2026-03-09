@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/controller/ProfiledPIDController.h>
+#include <frc/DriverStation.h>
 
 #include <subsystems/DriveTrain.h>
 #include <subsystems/Localizer.h>
@@ -27,10 +28,9 @@
 class DrivePath
     : public frc2::CommandHelper<frc2::Command, DrivePath> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
-  DrivePath(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<Localizer> localizer, std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
+
+  DrivePath(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<Localizer>& localizer, 
+    std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 
   void Initialize() override;
 
@@ -38,13 +38,11 @@ class DrivePath
 
   void End(bool interrupted) override;
 
+
   bool IsFinished() override;
 
   private:
     bool quit;
-
-    units::meter_t distanceTolerance;
-    units::radian_t angleTolerance;
 
     std::shared_ptr<Drivetrain> m_drivetrain;
     std::shared_ptr<Localizer> m_localizer;
@@ -53,6 +51,7 @@ class DrivePath
     std::optional<choreo::SwerveSample> currentSample;
 
     frc::Pose2d robotPose;
+    frc::Pose2d stopPose;
 
     frc::PIDController xController;
     frc::PIDController yController;
@@ -69,5 +68,5 @@ class DrivePath
     units::velocity::meters_per_second_t yVelocity;
     units::angular_velocity::radians_per_second_t thetaVelocity;
 
-
+    bool IsRedAlliance();
 };

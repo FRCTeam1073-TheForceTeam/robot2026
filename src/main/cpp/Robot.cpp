@@ -115,6 +115,8 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     m_autonomousCommand.value().Cancel();
   }
+
+  m_container->TeleopInit(); // Let container schedule things at start of teleop.
 }
 
 /**

@@ -9,7 +9,7 @@ IntakeTeleop::IntakeTeleop(std::shared_ptr<Intake>& intake, std::shared_ptr<OI>&
     m_oi(oi),
     m_zone(zone),
     position_in(true),
-    last_button_A(false) {
+    last_bumper_right(false) {
 
     AddRequirements({m_intake.get()});
 }
@@ -20,18 +20,17 @@ void IntakeTeleop::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void IntakeTeleop::Execute() {
 
-  bool button_A = m_oi->GetDriverAButton();
+  bool bumper_right = m_oi->GetDriverRightBumper();
 
   if (m_zone->GetZones().contains("TRENCH"))
   {
     position_in = false;
   }
-
-  if (!last_button_A && button_A) {
+  else if (!bumper_right && bumper_right) {
     // Toggle position:
     position_in = !position_in;
   }
-  last_button_A = button_A; // Keep track of button for toggle.
+  last_bumper_right = bumper_right; // Keep track of button for toggle.
 
   
   if (position_in) {  

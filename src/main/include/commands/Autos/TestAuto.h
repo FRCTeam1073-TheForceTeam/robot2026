@@ -5,9 +5,8 @@
 #pragma once
 
 #include <frc2/command/Command.h>
+#include <frc2/command/Commands.h>
 #include <frc2/command/CommandHelper.h>
-
-#include <frc2/command/SequentialCommandGroup.h>
 
 #include <subsystems/DriveTrain.h>
 #include <subsystems/Localizer.h>

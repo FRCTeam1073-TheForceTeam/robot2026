@@ -32,6 +32,7 @@ void Localizer::Periodic() {
         }
         _lastUpdateTime = now;
         frc::SmartDashboard::PutNumber("Localize Measurements", measurementCounter);
+        _finder->clearMeasurements();
     }
 }
 

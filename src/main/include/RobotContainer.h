@@ -33,7 +33,7 @@
 #include "subsystems/Turret.h"
 #include "subsystems/Spindexer.h" 
 #include "subsystems/ZoneFinder.h" 
-#include "commands/Autos.h"
+
 #include "commands/FlywheelTeleop.h"
 #include "commands/HoodTeleop.h"
 #include "commands/CollectorTeleop.h"
@@ -46,10 +46,16 @@
 #include "commands/ZeroIntake.h"
 #include "commands/ZeroTurret.h"
 #include "commands/ZeroHood.h"
+#include "commands/ZeroClimber.h"
+#include "commands/Autos/SetKicker.h"
+#include "commands/Autos/SetSpindexer.h"
 
-
+#include "commands/Autos.h"
+#include "commands/AutoRunner.h"
 #include "commands/Autos/TestAuto.h"
 #include "commands/Autos/WeekZeroAuto.h"
+#include "commands/Autos/BasicAuto.h"
+
 
 #include <choreo/Choreo.h>
 #include <utilities/ShooterTable.h>
@@ -76,8 +82,12 @@ class RobotContainer {
   static const std::string weekZeroAuto;
   static const std::string testAuto;
   static const std::string noLevelAuto;
-
-  static const std::string noPosition;
+  static const std::string centerAuto;
+  static const std::string basicAuto;
+  static const std::string cyclicAuto;
+  static const std::string eventTestAuto;
+  static const std::string l_Auto;
+  static const std::string basicShotAuto;
   
   RobotContainer();
 
@@ -87,10 +97,11 @@ class RobotContainer {
   void DisabledInit();
   bool DisabledPeriodic();
 
+  // Called from Robot
+  void TeleopInit();
+
  private:
 
-
- 
   void ConfigureBindings();
 
   //  bool FindStartPos();
@@ -98,12 +109,12 @@ class RobotContainer {
   std::shared_ptr<Drivetrain> m_drivetrain;
 
   std::shared_ptr<OI> m_OI;
-  std::shared_ptr<FieldMap> m_FieldMap;
-  std::shared_ptr<AprilTagFinder> m_Tags;
-  std::shared_ptr<Localizer> m_Localizer;
-  std::shared_ptr<FieldMapDisplay> m_FieldDisplay;
-  std::shared_ptr<TargetFinder> m_TargetFinder;
-  std::shared_ptr<ZoneFinder> m_ZoneFinder;
+  std::shared_ptr<FieldMap> m_fieldMap;
+  std::shared_ptr<AprilTagFinder> m_tagFinder;
+  std::shared_ptr<Localizer> m_localizer;
+  std::shared_ptr<FieldMapDisplay> m_fieldDisplay;
+  std::shared_ptr<TargetFinder> m_targetFinder;
+  std::shared_ptr<ZoneFinder> m_zoneFinder;
 
   std::shared_ptr<Kicker> m_kicker;
   std::shared_ptr<Climber> m_climber;
@@ -116,21 +127,16 @@ class RobotContainer {
   std::shared_ptr<LaserCan> m_laser;
   std::shared_ptr<ShooterTable> m_shooterTable;
 
-  std::shared_ptr<ZeroTurret> cmd_zeroTurret;
-
+  std::shared_ptr<AutoRunner> m_autoRunner;
   
   bool haveInitStartPos;
 
-  frc2::Trigger blah;
-
-  bool isRed;
-
-  frc::SendableChooser<std::string> m_positionChooser;
   frc::SendableChooser<std::string> m_levelChooser;
 
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 
   // Just used for launching test commands, separate from OI and other controls.
   frc2::CommandXboxController _testController;
+  frc2::CommandXboxController _operatorController;
 
 };

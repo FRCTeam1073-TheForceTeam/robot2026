@@ -43,6 +43,6 @@ class IntakeTeleop :
   std::shared_ptr<ZoneFinder> m_zone;
 
   bool position_in;
-  bool last_button_A; // For click detect on button A.
+  bool last_bumper_right; // For click detect on button A.
 
 };
