@@ -105,8 +105,14 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
         std::optional<photon::EstimatedRobotPose> pose = estimator.EstimateCoprocMultiTagPose(result);
         if(pose.has_value())
         {
-            auto std_devs = estimate_stddevs(1.0_m); //TODO: find the actual value
             auto estimated_pose = pose.value();
+            units::length::meter_t minDist = 100.0_m;
+            for(auto& t : estimated_pose.targetsUsed)
+                minDist = units::math::min(minDist,units::length::meter_t(
+                    t.GetBestCameraToTarget().Translation().Norm()
+                ));
+            
+            auto std_devs = estimate_stddevs(minDist); //TODO: find the actual value
             // std::cout<<"Using april tags: " ;
             // for(auto& c : estimated_pose.targetsUsed)
             // {
