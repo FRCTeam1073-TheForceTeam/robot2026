@@ -58,21 +58,22 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Left Joystick Y  | GetDriverLeftY        | Drivetrain                    |
 | Right Joystick X | GetDriverRightX       | Drivetrain                    |
 | Right Joystick Y | GetDriverRightY       |                               |
-| Left Trigger     | GetDriverLeftTrigger  | Drivetrain Speed Control      |
-| Right Trigger    | GetDriverRightTrigger | Drivetrain Speed Control      |
+| Left Trigger     | GetDriverLeftTrigger  | Collecter Reverse             |
+| Right Trigger    | GetDriverRightTrigger | Collector Spin                |
 | A Button         | GetDriverAButton      |                               |
 | B Button         | GetDriverBButton      |                               |
 | X Button         | GetDriverXButton      |                               |
-| Y Button         | GetDriverYButton      |                               |
+| Y Button         | GetDriverYButton      | Slow Mode                     |
 | Menu Button      | GetDriverMenuButton   | Climber Up                    |
 | View Button      | GetDriverViewButton   | Climber Down                  |
 | Left Bumper      | GetDriverLeftBumper   | Field Centric                 |
-| Right Bumper     | GetDriverRightBumper  | Field Centric                 |
+| Right Bumper     | GetDriverRightBumper  | Intake In/Out.                |
 | D-Pad Up         | GetDriverDPadUp       |                               |
 | D-Pad Right      | GetDriverDPadRight    |                               |
 | D-Pad Left       | GetDriverDPadLeft     |                               |
 | D-Pad Down       | GetDriverDPadDown     |                               |
 | Zero Controller  | ZeroDriverController  |                               |
+
 
 
 
@@ -86,12 +87,12 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Left Joystick Y  | GetOperatorLeftY        |                               |
 | Right Joystick X | GetOperatorRightX       |                               |
 | Right Joystick Y | GetOperatorRightY       |                               |
-| Left Trigger     | GetOperatorLeftTrigger  | Eject Fuel                    |
-| Right Trigger    | GetOperatorRightTrigger | Intake Fuel                   |
+| Left Trigger     | GetOperatorLeftTrigger  | Auto Aim Flywheel and Turret  |
+| Right Trigger    | GetOperatorRightTrigger | Shoot, Spindexer + Kicker foward|
 | A Button         | GetOperatorAButton      | Spindexer + Kicker Forward    |
 | B Button         | GetOperatorBButton      | Spindexer + Kicker Backwards  |
 | X Button         | GetOperatorXButton      |                               |
-| Y Button         | GetOperatorYButton      | Intake In & Out               |
+| Y Button         | GetOperatorYButton      |                               |
 | Menu Button      | GetOperatorMenuButton   |                               |
 | View Button      | GetOperatorViewButton   | Zero Climber                  |
 | Left Bumper      | GetOperatorLeftBumper   | Decrease Hood Angle           |
