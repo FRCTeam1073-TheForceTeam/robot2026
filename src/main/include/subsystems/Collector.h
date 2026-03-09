@@ -66,6 +66,7 @@ class Collector : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
+  frc2::CommandPtr CollectSpeed(units::meters_per_second_t speed);
 
   /// Access the latest feedback from the system. 
   const Feedback& GetFeedback() const { return _feedback; }

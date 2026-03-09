@@ -12,16 +12,19 @@
 #include "subsystems/LaserCan.h"
 #include "commands/Autos/TestAuto.h"
 
-
 // const std::string RobotContainer::noPosition = "No Position";
 // const std::string RobotContainer::rightPosition = "Right Auto";
 // const std::string RobotContainer::leftPosition = "Left Auto";
 // const std::string RobotContainer::centerPosition = "Center Auto";
 const std::string RobotContainer::testAuto = "Test_Auto";
+const std::string RobotContainer::centerAuto = "Center_Test";
 const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
 const std::string RobotContainer::noLevelAuto = "No Auto";
+const std::string RobotContainer::basicAuto = "Basic Auto";
+const std::string RobotContainer::cyclicAuto = "Cyclic_Auto";
+const std::string RobotContainer::eventTestAuto = "Event_Test";
+const std::string RobotContainer::l_Auto = "L_Auto";
 const std::string RobotContainer::basicShotAuto = "Basic Shot Auto";
-const std::string RobotContainer::noPosition = "No Position";
 
 RobotContainer::RobotContainer() :
 _testController(2),
@@ -61,13 +64,15 @@ _operatorController(1)
    std::cerr << "\tFlywheel created..." << std::endl;
   //m_laser = std::make_shared<LaserCan>();
 
-  std::cerr << "\tMechanisms created..." << std::endl;
+  m_autoRunner = std::make_shared<AutoRunner>(m_drivetrain, m_tagFinder, m_localizer, m_kicker, m_climber, m_flywheel, m_shooterHood, m_spindexer, m_turret, m_collector, m_intake, m_laser);
+
+  std::cerr << "Mechanisms created..." << std::endl;
 
   // Assign default commands here after all subssytems are created to avoid using
   // uninitialized subsystems in default commands.
   m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_localizer).ToPtr());
   m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI).ToPtr());
-  m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI).ToPtr());
+  m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI, m_drivetrain).ToPtr());
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
   m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
   m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable).ToPtr());
@@ -79,13 +84,16 @@ _operatorController(1)
 
   // Autonomous Chooser:
 
-  m_positionChooser.SetDefaultOption("No Position", noPosition);
   m_levelChooser.SetDefaultOption("No Level", noLevelAuto);
   m_levelChooser.AddOption("Week Zero Auto", weekZeroAuto);
   m_levelChooser.AddOption("Test Auto", testAuto);
+  m_levelChooser.AddOption("Center Auto", centerAuto);
+  m_levelChooser.AddOption("Basic Auto", basicAuto);
+  m_levelChooser.AddOption("Cyclic Auto", cyclicAuto);
+  m_levelChooser.AddOption("Event Test Auto", eventTestAuto);
+  m_levelChooser.AddOption("L Auto", l_Auto);
   m_levelChooser.AddOption("Basic Shot Auto", basicShotAuto);
 
-  frc::SmartDashboard::PutData("Position Chooser", &m_positionChooser);
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
   // Configure the button bindings
@@ -96,12 +104,24 @@ _operatorController(1)
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // TODO: un-comment this code
   try {
-    if(m_levelChooser.GetSelected() == weekZeroAuto) {
+    if (m_levelChooser.GetSelected() == eventTestAuto) {
+      trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
+      return m_autoRunner->Create(trajectory);
+    }
+    else if(m_levelChooser.GetSelected() == weekZeroAuto) {
       return WeekZeroAuto::Create(m_spindexer, m_kicker, m_flywheel, m_shooterHood, m_turret);
     }
-    else if (m_levelChooser.GetSelected() == testAuto) {
+    else if (
+      m_levelChooser.GetSelected() == testAuto ||
+      m_levelChooser.GetSelected() == centerAuto ||
+      m_levelChooser.GetSelected() == cyclicAuto ||
+      m_levelChooser.GetSelected() == l_Auto
+    ) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
       return TestAuto::Create(m_drivetrain, m_localizer, trajectory);
+    }
+    else if (m_levelChooser.GetSelected() == basicAuto){
+      return BasicAuto::Create(m_drivetrain, m_localizer);
     }
     else if (m_levelChooser.GetSelected() == basicShotAuto) {
       return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable);

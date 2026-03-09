@@ -20,7 +20,8 @@ _hoodPositionSig(_hoodMotor.GetPosition()),
 _hoodCurrentSig(_hoodMotor.GetTorqueCurrent()),
 _limiter(3_rad / 1_s),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
-_commandVelocityVoltage(units::angular_velocity::radians_per_second_t(0.0)) {
+_commandVelocityVoltage(units::angular_velocity::radians_per_second_t(0.0)),
+_hasZero(false) {
   // Extra implementation of subsystem constructor goes here.
   TargetPosition = 0_rad;
   Position = 0_rad;
@@ -48,6 +49,7 @@ void ShooterHood::SetCommand(Command cmd) {
 
 void ShooterHood::Zero() {
   _hoodMotor.SetPosition(units::angle::turn_t(0));
+  _hasZero = true;
 }
 
 void ShooterHood::Periodic() {
@@ -61,6 +63,7 @@ void ShooterHood::Periodic() {
   _feedback.torque = _hoodCurrentSig.GetValue() / AmpsPerNewtonMeter; // Convert from hardware units to subsystem units.4
   _feedback.position = _hoodPositionSig.GetValue() / HoodToMotorGearRatio; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
   //_feedback.velocity = _exampleVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
+  _feedback.hasZero = _hasZero; // Track if we've been indexed.
   
 
   // Process command:

@@ -47,6 +47,7 @@ class Intake : public frc2::SubsystemBase {
       units::angle::radian_t position;
       units::angular_velocity::radians_per_second_t velocity;
       units::torque::newton_meter_t torque;
+      bool hasZero;
   };
 
 
@@ -54,8 +55,6 @@ class Intake : public frc2::SubsystemBase {
   // std::monostate is the "empty" command or "no command given".
   // Otherwise you can have two different types of commands.
   using Command = std::variant<std::monostate, units::angular_velocity::radians_per_second_t, units::angle::radian_t>;
-
-\
 
   // Constructor for the subsystem.
   Intake();
@@ -68,6 +67,10 @@ class Intake : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
+
+  frc2::CommandPtr IntakeOut();
+
+  frc2::CommandPtr IntakeIn();
 
   /// Access the latest feedback from the system. 
   const Feedback& GetFeedback() const { return _feedback; }
@@ -106,6 +109,9 @@ class Intake : public frc2::SubsystemBase {
 
   // Cached command: Variant of possible different kinds of commands.
   Command  _command;
+
+  // Index traclking:
+  bool _hasZero;
 
   frc::SlewRateLimiter<units::radians> _limiter;
 

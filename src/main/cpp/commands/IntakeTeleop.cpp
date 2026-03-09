@@ -8,7 +8,7 @@ IntakeTeleop::IntakeTeleop(std::shared_ptr<Intake>& intake, std::shared_ptr<OI>&
     m_intake(intake),
     m_oi(oi),
     position_in(true),
-    last_button_A(false) {
+    last_button_Y(false) {
 
     AddRequirements({m_intake.get()});
 }
@@ -19,13 +19,13 @@ void IntakeTeleop::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void IntakeTeleop::Execute() {
 
-  bool button_A = m_oi->GetDriverAButton();
+  bool button_Y = m_oi->GetOperatorYButton();
 
-  if (!last_button_A && button_A) {
+  if (!last_button_Y && button_Y) {
     // Toggle position:
     position_in = !position_in;
   }
-  last_button_A = button_A; // Keep track of button for toggle.
+  last_button_Y = button_Y; // Keep track of button for toggle.
 
   
   if (position_in) {  

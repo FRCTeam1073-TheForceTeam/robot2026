@@ -33,7 +33,7 @@
 #include "subsystems/Turret.h"
 #include "subsystems/Spindexer.h" 
 #include "subsystems/ZoneFinder.h" 
-#include "commands/Autos.h"
+
 #include "commands/FlywheelTeleop.h"
 #include "commands/HoodTeleop.h"
 #include "commands/CollectorTeleop.h"
@@ -47,12 +47,15 @@
 #include "commands/ZeroTurret.h"
 #include "commands/ZeroHood.h"
 #include "commands/ZeroClimber.h"
-
-
-#include "commands/Autos/TestAuto.h"
-#include "commands/Autos/WeekZeroAuto.h"
 #include "commands/Autos/SetKicker.h"
 #include "commands/Autos/SetSpindexer.h"
+
+#include "commands/Autos.h"
+#include "commands/AutoRunner.h"
+#include "commands/Autos/TestAuto.h"
+#include "commands/Autos/WeekZeroAuto.h"
+#include "commands/Autos/BasicAuto.h"
+
 
 #include <choreo/Choreo.h>
 #include <utilities/ShooterTable.h>
@@ -79,9 +82,12 @@ class RobotContainer {
   static const std::string weekZeroAuto;
   static const std::string testAuto;
   static const std::string noLevelAuto;
+  static const std::string centerAuto;
+  static const std::string basicAuto;
+  static const std::string cyclicAuto;
+  static const std::string eventTestAuto;
+  static const std::string l_Auto;
   static const std::string basicShotAuto;
-
-  static const std::string noPosition;
   
   RobotContainer();
 
@@ -121,10 +127,10 @@ class RobotContainer {
   std::shared_ptr<LaserCan> m_laser;
   std::shared_ptr<ShooterTable> m_shooterTable;
 
+  std::shared_ptr<AutoRunner> m_autoRunner;
   
   bool haveInitStartPos;
 
-  frc::SendableChooser<std::string> m_positionChooser;
   frc::SendableChooser<std::string> m_levelChooser;
 
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
