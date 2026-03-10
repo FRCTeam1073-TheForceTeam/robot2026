@@ -4,12 +4,13 @@
 
 #include "commands/HoodTeleop.h"
 
-HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<OI>&  OI, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
+HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<OI>&  OI, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<ZoneFinder>& zone) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_shooterHood(shooterHood),
   m_OI(OI),
   m_hf(hf),
-  m_st(st) {
+  m_st(st),
+  m_zone(zone) {
     level = 0;
     RightBumperPastState = false;
     LeftBumperPastState = false;
@@ -46,6 +47,10 @@ void HoodTeleop::Execute() {
       if (!LeftBumper){
         LeftBumperPastState = false;
       }
+    }
+    if(m_zone->GetZones().contains("TRENCH"))
+    {
+      level = 0;
     }
     
     m_shooterHood->SetCommand(level * ScaleFactor);

@@ -4,9 +4,10 @@
 
 #include "commands/ClimberTeleop.h"
 
-ClimberTeleop::ClimberTeleop(std::shared_ptr<Climber>& climber, std::shared_ptr<OI>& oi) :
+ClimberTeleop::ClimberTeleop(std::shared_ptr<Climber>& climber, std::shared_ptr<OI>& oi, std::shared_ptr<ZoneFinder>& zone) :
   m_climber(climber),
-  m_OI(oi)
+  m_OI(oi),
+  m_zone(zone)
    {
 
   AddRequirements({m_climber.get()});
@@ -37,8 +38,13 @@ void ClimberTeleop::Execute() {
   } else {
     input = 0.0;
   }
-
+  
   commandedPosition = currentPosition + (input * 0.1_m);
+  
+  if(m_zone->GetZones().contains("TRENCH"))
+  {
+    commandedPosition = 0_m;
+  }
   m_climber->SetCommand(commandedPosition);
 
 

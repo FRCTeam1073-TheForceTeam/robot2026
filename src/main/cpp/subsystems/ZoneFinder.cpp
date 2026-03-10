@@ -70,11 +70,11 @@ void ZoneFinder::Periodic()
     for(const auto &zone : result)
     {
         std::string message = zone;
-        /*if(_alliance.value() == frc::DriverStation::Alliance::kRed && message.equals("RIGHTHALF"))
+        /*if(_alliance.value() == frc::DriverStation::Alliance::kRed && message.contains("RIGHTHALF"))
         {
             message = "LEFTHALF";
         }
-        else if(_alliance.value() == frc::DriverStation::Alliance::kRed && zone->contains("LEFTHALF"))
+        else if(_alliance.value() == frc::DriverStation::Alliance::kRed && zone.contains("LEFTHALF"))
         {
             message = "RIGHTHALF";
         } 
