@@ -25,6 +25,7 @@ const std::string RobotContainer::cyclicAuto = "Cyclic_Auto";
 const std::string RobotContainer::eventTestAuto = "Event_Test";
 const std::string RobotContainer::l_Auto = "L_Auto";
 const std::string RobotContainer::basicShotAuto = "Basic Shot Auto";
+const std::string RobotContainer::exampleAuto = "Example_Auto";
 
 RobotContainer::RobotContainer() :
 _testController(2),
@@ -93,6 +94,7 @@ _operatorController(1)
   m_levelChooser.AddOption("Event Test Auto", eventTestAuto);
   m_levelChooser.AddOption("L Auto", l_Auto);
   m_levelChooser.AddOption("Basic Shot Auto", basicShotAuto);
+  m_levelChooser.AddPotion("Example Auto", exampleAuto);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -115,7 +117,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == testAuto ||
       m_levelChooser.GetSelected() == centerAuto ||
       m_levelChooser.GetSelected() == cyclicAuto ||
-      m_levelChooser.GetSelected() == l_Auto
+      m_levelChooser.GetSelected() == l_Auto ||
+      m_levelChooser.GetSelected() == exampleAuto
     ) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
       return TestAuto::Create(m_drivetrain, m_localizer, trajectory);

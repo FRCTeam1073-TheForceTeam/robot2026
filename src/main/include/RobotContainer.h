@@ -88,6 +88,7 @@ class RobotContainer {
   static const std::string eventTestAuto;
   static const std::string l_Auto;
   static const std::string basicShotAuto;
+  static const std::string exampleAuto;
   
   RobotContainer();
 

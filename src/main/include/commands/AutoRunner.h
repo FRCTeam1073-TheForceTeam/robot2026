@@ -26,10 +26,12 @@
 #include "subsystems/Kicker.h"
 #include "subsystems/Climber.h"
 #include <utilities/ShooterTable.h>
+#include "subsystems/TargetFinder.h"
 
 #include "commands/DrivePath.h"
 #include "commands/SmartDashPrint.h"
 #include "commands/ZeroTurret.h"
+#include <frc2/command/WaitCommand.h>
 
 #include <choreo/Choreo.h>
 

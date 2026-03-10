@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/AutoRunner.h"
+#include "commands/Autos.h"
 
 AutoRunner::AutoRunner(
   std::shared_ptr<Drivetrain> drivetrain,
@@ -16,7 +17,9 @@ AutoRunner::AutoRunner(
   std::shared_ptr<Turret> turret,
   std::shared_ptr<Collector> collector,
   std::shared_ptr<Intake> intake,
-  std::shared_ptr<LaserCan> laser
+  std::shared_ptr<LaserCan> laser,
+  std::shared_ptr<ShooterTable> table,
+  std::shared_ptr<TargetFinder> finder
 ) :
 m_drivetrain(drivetrain),
 m_Tags(Tags),
@@ -29,7 +32,9 @@ m_spindexer(spindexer),
 m_turret(turret),
 m_collector(collector),
 m_intake(intake),
-m_laser(laser)
+m_laser(laser),
+m_targetFinder(finder),
+m_shooterTable(table)
 {
   // Use addRequirements() here to declare subsystem dependencies.
 }
@@ -49,55 +54,80 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
 
       auto waitTime = activeEvent.timestamp - previousTime;
       autoRoutine.emplace_back(frc2::cmd::Wait(waitTime));
-      autoRoutine.emplace_back(frc2::cmd::Print(eventType));
       autoRoutine.emplace_back(SmartDashPrint(eventType).ToPtr());
 
       previousTime = activeEvent.timestamp;
 
-      // //TODO: discuss with Strategy subgroup what we will call this
-      // if (eventType == "StartFlywheel") {
-      //   autoRoutine.emplace_back(m_flywheel->SpinToSpeed(14_mps));
-      // }
-      // else if (eventType == "StartSpindexer") {
-      //   autoRoutine.emplace_back(m_spindexer->SpinToSpeed(4.2_mps));
-      // }
-      // else if (eventType == "StartKicker") {
-      //   autoRoutine.emplace_back(m_kicker->SpinToSpeed(4.5_mps));
-      // }
-      // else if (eventType.substr(0, 12) == "SetHoodLevel") {
-      //   autoRoutine.emplace_back(m_shooterHood->SetHoodLevel(0));
-      // }
-      // else if (eventType == "SetTurret") {
-      //    autoRoutine.emplace_back(m_turret->RotateToPos(90_deg));
-      // }
-      // else if (eventType == "IntakeOut") {
-      //   autoRoutine.emplace_back(m_intake->IntakeOut());
-      // }
-      // else if (eventType == "IntakeIn") {
-      //   autoRoutine.emplace_back(m_intake->IntakeIn());
-      // }
-      // else if (eventType == "StartCollector") {
-      //   autoRoutine.emplace_back(m_collector->CollectSpeed(3.5_mps));
-      // }
-      // else if (eventType.substr(0, 4) == "Wait") {
-      //   autoRoutine.emplace_back(frc2::cmd::Wait(units::second_t(eventType[5])));
-      // }
-      // //TODO: put in other complex shooter commands
-      // else if(eventType.substr(0,4) == "Stop") {
-      //   auto waitTime = activeEvent.timestamp - (events.at(e - 1).timestamp);
-      //   autoRoutine.emplace_back(frc2::cmd::Wait(waitTime));
-      //   if (eventType == "StopFlywheel") {
-      //     autoRoutine.emplace_back(m_flywheel->SpinToSpeed(0_mps));
-      //   }
-      //   else if (eventType == "StopSpindexer") {
-      //     autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0_mps));
-      //   }
-      //   else if (eventType == "StopKicker") {
-      //     autoRoutine.emplace_back(m_kicker->SpinToSpeed(0_mps));
-      //   }
-      //   else if (eventType == "StopCollector") {
-      //     autoRoutine.emplace_back(m_collector->CollectSpeed(0_mps));
-      //   }
+      if (eventType == "StartSpindexer") {
+        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(4.2_mps));
+      }
+      else if (eventType == "StartKicker") {
+        autoRoutine.emplace_back(m_kicker->SpinToSpeed(4.5_mps));
+      }
+      else if (eventType == "StopSpindexer") {
+        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0_mps));
+      }
+      else if (eventType == "StopKicker") {
+        autoRoutine.emplace_back(m_kicker->SpinToSpeed(0_mps));
+      }
+      else if (eventType == "DeployIntake") {
+        autoRoutine.emplace_back(m_intake->IntakeOut());
+      }
+      else if (eventType == "RetractIntake") {
+        autoRoutine.emplace_back(m_intake->IntakeIn());
+      }
+      else if (eventType == "StartCollector") {
+        autoRoutine.emplace_back(m_collector->CollectSpeed(-3.5_mps));
+      }
+      else if (eventType == "StopCollector") {
+        autoRoutine.emplace_back(m_collector->CollectSpeed(3.5_mps));
+      }
+      else if (eventType == "Shoot") {
+        autoRoutine.emplace_back(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
+        autoRoutine.emplace_back(frc2::WaitCommand(2.0_s));      
+        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(4.2_mps));
+        autoRoutine.emplace_back(m_kicker->SpinToSpeed(4.5_mps));
+        autoRoutine.emplace_back(frc2::WaitCommand(5.0_s));   
+        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0.0_mps));
+        autoRoutine.emplace_back(m_kicker->SpinToSpeed(0.0_mps));
+        autoRoutine.emplace_back(m_turret->SetCommand(0_rad));
+        autoRoutine.emplace_back(m_flywheel->SetCommand(0_mps));
+        autoRoutine.emplace_back(m_shooterHood->SetCommand(0_rad));
+      }
+
+
+
+      //TODO: discuss with Strategy subgroup what we will call this
+    //   if (eventType == "StartFlywheel") {
+    //     autoRoutine.emplace_back(m_flywheel->SpinToSpeed(14_mps));
+    //   }
+    //   else if (eventType.substr(0, 12) == "SetHoodLevel") {
+    //     autoRoutine.emplace_back(m_shooterHood->SetHoodLevel(0));
+    //   }
+    //   else if (eventType == "SetTurret") {
+    //      autoRoutine.emplace_back(m_turret->RotateToPos(90_deg));
+    //   }
+    //   else if (eventType == "IntakeOut") {
+    //     autoRoutine.emplace_back(m_intake->IntakeOut());
+    //   }
+    //   else if (eventType == "IntakeIn") {
+    //     autoRoutine.emplace_back(m_intake->IntakeIn());
+    //   }
+    //   else if (eventType == "StartCollector") {
+    //     autoRoutine.emplace_back(m_collector->CollectSpeed(3.5_mps));
+    //   }
+    //   else if (eventType == "StopFlywheel") {
+    //     autoRoutine.emplace_back(m_flywheel->SpinToSpeed(0_mps));
+    //   }
+    //   else if (eventType == "StopSpindexer") {
+    //     autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0_mps));
+    //   }
+    //   else if (eventType == "StopKicker") {
+    //     autoRoutine.emplace_back(m_kicker->SpinToSpeed(0_mps));
+    //   }
+    //   else if (eventType == "StopCollector") {
+    //     autoRoutine.emplace_back(m_collector->CollectSpeed(0_mps));
+    //   }
     }
     return frc2::cmd::Sequence(std::move(autoRoutine));
   }
