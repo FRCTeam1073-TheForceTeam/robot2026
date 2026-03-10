@@ -23,35 +23,44 @@ void HoodTeleop::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void HoodTeleop::Execute() {
   
-   if (m_OI->GetOperatorDPadLeft()) {
+   if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) {
     // Use lookup table:
     auto range = m_hf->getFeedback().rangeToHub;
     auto angle = m_st->GetHoodAngle(range);
     m_shooterHood->SetCommand(angle);
-  } else {
-    LeftBumper = m_OI->GetOperatorLeftBumper();
-    RightBumper = m_OI->GetOperatorRightBumper();
-
-    if (RightBumper && level < maxLevel && !RightBumperPastState) {
-      level += 1;
-      RightBumperPastState = true;
-    }
-    else if (LeftBumper && level > 0 && !LeftBumperPastState){
-      level -= 1;
-      LeftBumperPastState = true;
-    } else {
-      if (!RightBumper){
-        RightBumperPastState = false;
-      } 
-      if (!LeftBumper){
-        LeftBumperPastState = false;
-      }
-    }
-    
-    m_shooterHood->SetCommand(level * ScaleFactor);
-    frc::SmartDashboard::PutNumber("HoodTeleop/hood level", level);
-    frc::SmartDashboard::PutNumber("HoodTeleop/hood position", level * ScaleFactor.value());
+  }else if(m_OI->GetOperatorYButton()){
+    auto angle = 0.23_rad;
+    m_shooterHood->SetCommand(angle);
+  }else if(m_OI->GetOperatorXButton()){
+    auto angle = 0.14_rad;
+    m_shooterHood->SetCommand(angle);
+  }else {
+    m_shooterHood->SetCommand(0.0_rad);
   }
+  // } else {
+  //   LeftBumper = m_OI->GetOperatorLeftBumper();
+  //   RightBumper = m_OI->GetOperatorRightBumper();
+
+  //   if (RightBumper && level < maxLevel && !RightBumperPastState) {
+  //     level += 1;
+  //     RightBumperPastState = true;
+  //   }
+  //   else if (LeftBumper && level > 0 && !LeftBumperPastState){
+  //     level -= 1;
+  //     LeftBumperPastState = true;
+  //   } else {
+  //     if (!RightBumper){
+  //       RightBumperPastState = false;
+  //     } 
+  //     if (!LeftBumper){
+  //       LeftBumperPastState = false;
+  //     }
+  //   }
+    
+  //   m_shooterHood->SetCommand(level * ScaleFactor);
+  //   frc::SmartDashboard::PutNumber("HoodTeleop/hood level", level);
+  //   frc::SmartDashboard::PutNumber("HoodTeleop/hood position", level * ScaleFactor.value());
+   
 }
 
 // Called once the command ends or is interrupted.

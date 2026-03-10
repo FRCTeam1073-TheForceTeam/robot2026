@@ -80,6 +80,7 @@ _operatorController(1)
   m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder).ToPtr());
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI).ToPtr());
 
+
   std::cerr << "\tDefault commands assigned..." << std::endl;
 
   // Autonomous Chooser:
@@ -154,11 +155,10 @@ void RobotContainer::TeleopInit() {
 
 void RobotContainer::ConfigureBindings() {
 // Use the test controller to bind test commands:
-  _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
-  
-  _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
-  _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
-  _operatorController.Back().OnTrue(ZeroClimber(m_climber).ToPtr());
+  _operatorController.POVLeft().OnTrue(ZeroIntake(m_intake).ToPtr());
+  _operatorController.POVUp().OnTrue(ZeroTurret(m_turret).ToPtr());
+  _operatorController.POVRight().OnTrue(ZeroHood(m_shooterHood).ToPtr());
+  _operatorController.POVDown().OnTrue(ZeroClimber(m_climber).ToPtr());
   _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
   _testController.LeftBumper().OnTrue(SetSpindexer(m_spindexer).ToPtr());
   _testController.RightBumper().OnTrue(SetKicker(m_kicker).ToPtr());
