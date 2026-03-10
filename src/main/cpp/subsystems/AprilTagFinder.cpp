@@ -170,8 +170,8 @@ void AprilTagFinder::Periodic() {
 wpi::array<double, 3U> AprilTagFinder::estimate_stddevs(units::length::meter_t range) {
     wpi::array<double, 3U> result(base_stddevs);
 
-    result[0] += 0.2 * range.value();
-    result[1] += 0.2 * range.value();
-    result[2] += 0.15 * range.value();
+    result[0] += 0.4 * range.value();
+    result[1] += 0.4 * range.value();
+    result[2] += 0.3 * range.value();
     return result;
 }
