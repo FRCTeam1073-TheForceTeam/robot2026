@@ -35,6 +35,6 @@ class TestHood
     bool lastLeftBumper;
     bool lastRightBumper;
 
-    const int MaxLevel = 20;
-    const units::angle::radian_t ScaleFactor = 0.025_rad;
+    const int MaxLevel = 32;
+    const units::angle::radian_t ScaleFactor = 0.015625_rad;
 };

@@ -58,7 +58,7 @@ class Localizer : public frc2::SubsystemBase {
     void Periodic() override;
 
     // Returns field-centric, localizer based position estimate.
-    frc::Pose2d getPose() { return _estimator->GetEstimatedPosition(); }
+    frc::Pose2d getPose() { return _pose; }
 
     // Returns field-centric, localizer based speeds.
     frc::ChassisSpeeds getSpeeds();
@@ -73,6 +73,8 @@ class Localizer : public frc2::SubsystemBase {
     std::shared_ptr<AprilTagFinder> _finder;
     frc::SwerveDriveKinematics<4U> _kinematics;
     std::shared_ptr<frc::SwerveDrivePoseEstimator<4U>> _estimator;
+    frc::ChassisSpeeds _speeds; // Cached field centric velocity.
+    frc::Pose2d _pose; // Cached localized pose.
 
     units::time::second_t _lastUpdateTime;
     int measurementCounter = 0;

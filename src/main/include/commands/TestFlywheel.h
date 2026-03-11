@@ -39,7 +39,7 @@ class TestFlywheel
 
   int level;
 
-  const units::velocity::meters_per_second_t ScaleFactor = 0.16666_mps; // Speed per level.
+  const units::velocity::meters_per_second_t ScaleFactor = 0.20_mps; // Speed per level.
   const int MaxLevel = 120;
   
 };

@@ -145,25 +145,39 @@ bool RobotContainer::DisabledPeriodic() {
 }
 
 void RobotContainer::TeleopInit() {
-  // If the turret has not yet seen zero, try to index it now.
+
+  // If the turret has not yet seen zero, zero it now.
   if (!m_turret->GetFeedback().haveZero) {
      frc2::CommandScheduler::GetInstance().Schedule(ZeroTurret(m_turret).ToPtr());
   }
-}
 
-
-void RobotContainer::ConfigureBindings() {
-// Use the test controller to bind test commands:
+   // TODO: Consider moving this back to Configuire Bindings.
+   // Moved here to de-conflict DPAD in test mode.
   _operatorController.POVLeft().OnTrue(ZeroIntake(m_intake).ToPtr());
   _operatorController.POVUp().OnTrue(ZeroTurret(m_turret).ToPtr());
   _operatorController.POVRight().OnTrue(ZeroHood(m_shooterHood).ToPtr());
   _operatorController.POVDown().OnTrue(ZeroClimber(m_climber).ToPtr());
- 
+
+}
+
+
+void RobotContainer::ConfigureBindings() {
+
+  // Command bindings moved to TeleopInit().
+
 }
 
 void RobotContainer::TestInit() {
+
+  std::cerr << "***** TestInit ****" << std::endl;
+  
+  // In test mode we run these manually:
+  m_flywheel->RemoveDefaultCommand();
+  m_shooterHood->RemoveDefaultCommand();
+
   // Launch some commands for test mode:
   frc2::CommandScheduler::GetInstance().Schedule(TestFlywheel(m_flywheel, m_OI).ToPtr());
   frc2::CommandScheduler::GetInstance().Schedule(TestHood(m_shooterHood, m_OI).ToPtr());
+
 
 }
