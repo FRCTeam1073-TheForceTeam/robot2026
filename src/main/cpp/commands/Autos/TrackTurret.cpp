@@ -27,7 +27,7 @@ void TrackTurret::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void TrackTurret::Execute() {
-  targetPosition = m_targetFinder->getFeedback().turretToHubAngle;
+  targetPosition = m_targetFinder->getFeedback().turretToTargetAngle;
   targetPosition = clamp(targetPosition, minPosition, maxPosition);
   m_turret->SetCommand(targetPosition);
 

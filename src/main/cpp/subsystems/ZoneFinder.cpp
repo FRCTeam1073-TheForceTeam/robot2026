@@ -8,7 +8,7 @@ ZoneFinder::ZoneFinder(std::shared_ptr<Localizer>& localizer) : _localizer(local
     zones.push_back(Zone("REDZONE", frc::Rectangle2d(frc::Translation2d(468.56_in, 0_in), frc::Translation2d(650.12_in, 316.64_in))));
     zones.push_back(Zone("NEUTRALZONE", frc::Rectangle2d(frc::Translation2d(181.56_in, 0_in), frc::Translation2d(468.56_in, 316.64_in))));
     
-   
+    //Blue alliance POV
     zones.push_back(Zone("RIGHTHALF", frc::Rectangle2d(frc::Translation2d(0_in, 0_in), frc::Translation2d(650.12_in, 158.32_in))));
     zones.push_back(Zone("LEFTHALF", frc::Rectangle2d(frc::Translation2d(0_in, 158.32_in), frc::Translation2d(650.12_in, 316.64_in))));
     

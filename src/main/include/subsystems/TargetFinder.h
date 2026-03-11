@@ -30,19 +30,17 @@ class TargetFinder  : public frc2::SubsystemBase {
     
     struct Feedback 
     {
-        units::angle::radian_t turretToHubAngle;
-        units::length::meter_t rangeToHub;
-        frc::Translation2d RedPass_R;
-        frc::Translation2d RedPass_L;
-        frc::Translation2d BluePass_R;
-        frc::Translation2d BluePass_L;
+        units::angle::radian_t turretToTargetAngle;
+        units::length::meter_t rangeToTarget;
     };
 
     TargetFinder(std::shared_ptr<Localizer>& localizer, std::shared_ptr<ZoneFinder>& zonefinder);
 
+    frc::Pose2d getTargetPos();
+    frc::Pose2d target;
 
     frc::Pose2d getHubPos();
-    frc::Pose2d HubLoc;
+    frc::Pose2d TargetLoc;
 
     frc::Pose2d Pass();
     
@@ -66,5 +64,6 @@ class TargetFinder  : public frc2::SubsystemBase {
     void UpdateAlliance();
     std::optional<frc::DriverStation::Alliance> _alliance;
     std::set<std::string> zone;
+    std::string OurZone;
 
 };

@@ -34,7 +34,7 @@ void FlywheelTeleop::Execute() {
 
    if (m_OI->GetOperatorLeftTrigger()>= 0.1) {
   //   // Use lookup table:
-     auto range = m_hf->getFeedback().rangeToHub;
+     auto range = m_hf->getFeedback().rangeToTarget;
      auto speed = m_st->GetFlywheelVelocity(range);
      m_flywheel->SetCommand(speed);
    } else if(m_OI->GetOperatorYButton()){
