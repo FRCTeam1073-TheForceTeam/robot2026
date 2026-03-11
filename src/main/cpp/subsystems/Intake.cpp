@@ -82,8 +82,6 @@ void Intake::Periodic() {
       _leadMotor.SetControl(_commandPositionVoltage.WithPosition(motorPosition));
       _followMotor.SetControl(controls::Follower(_leadMotor.GetDeviceID(), signals::MotorAlignmentValue::Opposed));
 
- 
-
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _leadMotor.SetControl(controls::NeutralOut());

@@ -17,7 +17,7 @@ void TrackHood::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void TrackHood::Execute() {
-  units::length::meter_t range = m_hf->getFeedback().rangeToHub;
+  units::length::meter_t range = m_hf->getFeedback().rangeToTarget;
   units::angle::radian_t targetAngle = m_st->GetHoodAngle(range);
   m_shooterHood->SetCommand(targetAngle);
 }

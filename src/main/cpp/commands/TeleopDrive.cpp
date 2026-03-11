@@ -25,6 +25,8 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
     last_snap_time = 0;
     angle_tolerance = 0.05_rad;
     torqueGate = 65_N;
+    slowMode = false;
+    lastYPressed = false;
     // TODO: chassisspeeds and speeds appear in the java drivetrain; determine if these are necessary for the c++ file
     // TODO: pointAtTarget boolean, localizer, lidar and aprilTagFinder appears in the java drivetrain, but it might be a better idea to put these in the localize file
 
@@ -71,7 +73,7 @@ void TeleopDrive::Execute() {
 
     // frc::SmartDashboard::PutBoolean("TeleopDrive/Parking Brake", parked);
 
-    if (m_OI->GetDriverRightBumper() && lastFieldCentricButton == false) {
+    if (m_OI->GetDriverLeftBumper() && lastFieldCentricButton == false) {
         fieldCentric = !fieldCentric;
     }
     lastFieldCentricButton = m_OI->GetDriverLeftBumper();
@@ -94,8 +96,11 @@ void TeleopDrive::Execute() {
     bool driverDPadRight = m_OI->GetDriverDPadRight();
     int driverDPadAngle = m_OI->GetDriverDPadAngle();
 
-    double mult1 = 1.0 + (m_OI->GetDriverLeftTrigger() * ((std::sqrt(36)) - 1));
-    double mult2 = 1.0 + (m_OI->GetDriverRightTrigger() * ((std::sqrt(36)) - 1));
+    // double mult1 = 1.0 + (m_OI->GetDriverLeftTrigger() * ((std::sqrt(36)) - 1));
+    // double mult2 = 1.0 + (m_OI->GetDriverRightTrigger() * ((std::sqrt(36)) - 1));
+
+    double mult1 = 4.5;
+    double mult2 = 4.5;
 
     //set deadzones
     if (std::abs(leftY) < JOYSTICK_DEADZONE) {leftY = 0.0;}
@@ -106,10 +111,18 @@ void TeleopDrive::Execute() {
     auto vy = std::clamp((allianceSign * leftX * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
     auto omega = std::clamp((rightX * maximumRotationVelocity / 25) * mult1 * mult2, -maximumRotationVelocity, maximumRotationVelocity);
 
-    if (m_OI->DriverLeftStickPress()) {
-        vx *= 0.75;
-        vy *= 0.75;
+    if (!lastYPressed && m_OI->GetDriverYButton()) {
+        slowMode = !slowMode;
     }
+    lastYPressed = m_OI->GetDriverYButton();
+    if (slowMode) {
+        vx *= 0.2;
+        vy *= 0.2;
+    }
+
+
+
+    frc::SmartDashboard::PutBoolean("TeleopDrive/Slow Mode", slowMode);
 
     frc::SmartDashboard::PutNumber("TeleopDrive/vx", vx.value());
     frc::SmartDashboard::PutNumber("TeleopDrive/vy", vy.value());

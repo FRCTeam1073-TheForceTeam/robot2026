@@ -126,6 +126,11 @@ void Robot::TeleopPeriodic() {
 
 }
 
+void Robot::TestInit() {
+  m_container->TestInit(); // Initialize test mode.
+}
+
+
 /**
  * This function is called periodically during test mode.
  */

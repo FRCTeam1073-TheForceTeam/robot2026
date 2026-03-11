@@ -25,10 +25,10 @@ void CollectorTeleop::Initialize() {
 void CollectorTeleop::Execute() {  
 
   // TODO: ASK SILLY DIRIVE TEAM!!
- if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) { // To eject fuel.
+ if (std::abs(m_OI->GetDriverLeftTrigger()) >= 0.1) { // To eject fuel.
     targetVelocity = -4.0_mps;
   }
-  else if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1) {
+  else if (std::abs(m_OI->GetDriverRightTrigger()) >= 0.1) {
     targetVelocity = 3.5_mps + (0.1 * m_dt->GetChassisSpeeds().vx);
   }
   else {

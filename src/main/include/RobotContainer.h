@@ -56,6 +56,8 @@
 #include "commands/Autos/TestAuto.h"
 #include "commands/Autos/WeekZeroAuto.h"
 #include "commands/Autos/BasicAuto.h"
+#include "commands/TestFlywheel.h"
+#include "commands/TestHood.h"
 
 
 #include <choreo/Choreo.h>
@@ -101,6 +103,9 @@ class RobotContainer {
   // Called from Robot
   void TeleopInit();
 
+  // Called from Robot
+  void TestInit();
+
  private:
 
   void ConfigureBindings();
@@ -137,7 +142,6 @@ class RobotContainer {
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 
   // Just used for launching test commands, separate from OI and other controls.
-  frc2::CommandXboxController _testController;
   frc2::CommandXboxController _operatorController;
 
 };
