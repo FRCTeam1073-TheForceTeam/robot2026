@@ -35,10 +35,10 @@ void HoodTeleop::Execute() {
     auto angle = m_st->GetHoodAngle(range);
     m_shooterHood->SetCommand(angle);
   }else if(m_OI->GetOperatorYButton()){
-    auto angle = 0.23_rad;
+    auto angle = 0.2188_rad; // Corner Shot
     m_shooterHood->SetCommand(angle);
   }else if(m_OI->GetOperatorXButton()){
-    auto angle = 0.14_rad;
+    auto angle = 0.1408_rad; // Tower Shot
     m_shooterHood->SetCommand(angle);
   }else {
     m_shooterHood->SetCommand(0.0_rad);
