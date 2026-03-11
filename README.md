@@ -24,34 +24,34 @@ This season we're going to leave lower CANBus IDs for system-wide / special
 components and start CANBus IDs for subsystem hardware at ID 5.
 
 
-| Device Name           | CANBusID |   CanBus   |
-| --------------------- | -------- | ---------- |
-| CANdle LED Control    |    4     |  Canivore  |
-| Pigeon2 IMU           |    5     |  Canivore  |
-| Swerve 0: Encoder     |    6     |  Canivore  |
-| Swerve 0: Drive       |    7     |  Canivore  |
-| Swerve 0: Steer       |    8     |  Canivore  |
-| Swerve 1: Encoder     |    9     |  Canivore  |
-| Swerve 1: Drive       |    10    |  Canivore  |
-| Swerve 1: Steer       |    11    |  Canivore  |
-| Swerve 2: Encoder     |    12    |  Canivore  |
-| Swerve 2: Drive       |    13    |  Canivore  |
-| Swerve 2: Steer       |    14    |  Canivore  |
-| Swerve 3: Encoder     |    15    |  Canivore  |
-| Swerve 3: Drive       |    16    |  Canivore  |
-| Swerve 3: Steer       |    17    |  Canivore  |
-| Intake Actuator Lead  |    18    |    rio     |
-| Intake Actuator Follow|    19    |    rio     |
-| Intake Collector Motor|    20    |    rio     |
-| Lead Flywheel         |    21    |    rio     |
-| Follow Flywheel       |    22    |    rio     |
-| Spindexer Motor       |    23    |    rio     |
-| Hood Motor            |    24    |    rio     |
-| Turret Motor          |    25    |    rio     |
-| Turret Encoder        |    26    |    rio     |
-| Kicker Motor          |    27    |    rio     |
-| Indexer LaserCAN      |    28    |    rio     |
-| Climber Motor         |    29    |  Canivore  |
+| Device Name                    | CANBusID |   CanBus   |
+| ------------------------------ | -------- | ---------- |
+| CANdle LED Control             |    4     |  Canivore  |
+| Pigeon2 IMU                    |    5     |  Canivore  |
+| Swerve 0: Encoder              |    6     |  Canivore  |
+| Swerve 0: Drive                |    7     |  Canivore  |
+| Swerve 0: Steer                |    8     |  Canivore  |
+| Swerve 1: Encoder              |    9     |  Canivore  |
+| Swerve 1: Drive                |    10    |  Canivore  |
+| Swerve 1: Steer                |    11    |  Canivore  |
+| Swerve 2: Encoder              |    12    |  Canivore  |
+| Swerve 2: Drive                |    13    |  Canivore  |
+| Swerve 2: Steer                |    14    |  Canivore  |
+| Swerve 3: Encoder              |    15    |  Canivore  |
+| Swerve 3: Drive                |    16    |  Canivore  |
+| Swerve 3: Steer                |    17    |  Canivore  |
+| Intake Actuator Lead (Left)    |    18    |    rio     |
+| Intake Actuator Follow (Right) |    19    |    rio     |
+| Intake Collector Motor         |    20    |    rio     |
+| Lead Flywheel                  |    21    |    rio     |
+| Follow Flywheel                |    22    |    rio     |
+| Spindexer Motor                |    23    |    rio     |
+| Hood Motor                     |    24    |    rio     |
+| Turret Motor                   |    25    |    rio     |
+| Turret Encoder                 |    26    |    rio     |
+| Kicker Motor                   |    27    |    rio     |
+| Indexer LaserCAN               |    28    |    rio     |
+| Climber Motor                  |    29    |  Canivore  |
 
 
 
