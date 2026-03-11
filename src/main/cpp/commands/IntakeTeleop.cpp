@@ -20,7 +20,6 @@ void IntakeTeleop::Initialize() {}
 void IntakeTeleop::Execute() {
 
   bool bumper_right = m_oi->GetDriverRightBumper();
-  last_bumper_right = bumper_right; // Keep track of button for toggle.
 
   if (!last_bumper_right && bumper_right) {
     // Toggle position:
@@ -32,6 +31,9 @@ void IntakeTeleop::Execute() {
   } else {
     m_intake->SetCommand(-0.1_deg);
   }
+
+  last_bumper_right = bumper_right; // Keep track of button for toggle.
+
 }
 
 // Called once the command ends or is interrupted.
