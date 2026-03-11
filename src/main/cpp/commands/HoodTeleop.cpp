@@ -23,20 +23,22 @@ void HoodTeleop::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void HoodTeleop::Execute() {
   
-   if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) {
-    // Use lookup table:
+  if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) {
+    // Using lookup table:
     auto range = m_hf->getFeedback().rangeToHub;
     auto angle = m_st->GetHoodAngle(range);
     m_shooterHood->SetCommand(angle);
-  }else if(m_OI->GetOperatorYButton()){
+  } else if (m_OI->GetOperatorYButton()) {
     auto angle = 0.2188_rad; // Corner Shot
     m_shooterHood->SetCommand(angle);
-  }else if(m_OI->GetOperatorXButton()){
+  } else if (m_OI->GetOperatorXButton()) {
     auto angle = 0.1408_rad; // Tower Shot
     m_shooterHood->SetCommand(angle);
-  }else {
+  } else {
     m_shooterHood->SetCommand(0.0_rad);
   }
+
+  // Old Code
   // } else {
   //   LeftBumper = m_OI->GetOperatorLeftBumper();
   //   RightBumper = m_OI->GetOperatorRightBumper();

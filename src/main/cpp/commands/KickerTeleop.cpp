@@ -19,13 +19,11 @@ void KickerTeleop::Execute() {
   // auto AButton = m_OI->GetOperatorAButton();
   auto BButton = m_OI->GetOperatorBButton();
 
-  if(m_OI->GetOperatorRightTrigger() >= 0.1) {
+  if (m_OI->GetOperatorRightTrigger() >= 0.1) {
     m_kicker->SetCommand(4.5_mps);
   } else if (BButton) {
     m_kicker->SetCommand(-1.65_mps);
-  }
-  else
-  {
+  } else {
     m_kicker->SetCommand(0.0_mps);
   }
 }
