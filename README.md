@@ -89,18 +89,18 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Right Joystick Y | GetOperatorRightY       |                               |
 | Left Trigger     | GetOperatorLeftTrigger  | Auto Aim Flywheel and Turret  |
 | Right Trigger    | GetOperatorRightTrigger | Shoot, Spindexer + Kicker foward|
-| A Button         | GetOperatorAButton      | Spindexer + Kicker Forward    |
+| A Button         | GetOperatorAButton      |                               |
 | B Button         | GetOperatorBButton      | Spindexer + Kicker Backwards  |
-| X Button         | GetOperatorXButton      |                               |
-| Y Button         | GetOperatorYButton      |                               |
+| X Button         | GetOperatorXButton      | Tower Set Shot                |
+| Y Button         | GetOperatorYButton      | Corner Set Shot               |
 | Menu Button      | GetOperatorMenuButton   |                               |
-| View Button      | GetOperatorViewButton   | Zero Climber                  |
-| Left Bumper      | GetOperatorLeftBumper   | Decrease Hood Angle           |
-| Right Bumper     | GetOperatorRightBumper  | Increase Hood Angle           |
-| D-Pad Up         | GetOperatorDPadUp       | Flywheel Increase Speed       |
-| D-Pad Right      | GetOperatorDPadRight    |                               |
-| D-Pad Left       | GetOperatorDPadLeft     | Feedback for Flywheel Velocity|
-| D-Pad Down       | GetOperatorDPadDown     | Flywheel Reduce Speed         |
+| View Button      | GetOperatorViewButton   |                               |
+| Left Bumper      | GetOperatorLeftBumper   |                               |
+| Right Bumper     | GetOperatorRightBumper  |                               |
+| D-Pad Up         | GetOperatorDPadUp       | Zero Turret                   |
+| D-Pad Right      | GetOperatorDPadRight    | Zero Hood                     |
+| D-Pad Left       | GetOperatorDPadLeft     | Zero Intake                   |
+| D-Pad Down       | GetOperatorDPadDown     | Zero Climber                  |
 | Zero Controller  | ZeroOperatorController  |                               |
 
 

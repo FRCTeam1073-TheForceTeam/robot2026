@@ -27,7 +27,6 @@ const std::string RobotContainer::l_Auto = "L_Auto";
 const std::string RobotContainer::basicShotAuto = "Basic Shot Auto";
 
 RobotContainer::RobotContainer() :
-_testController(2),
 _operatorController(1)
 {
   // Create these subsystems first!
@@ -79,6 +78,7 @@ _operatorController(1)
   m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable).ToPtr());
   m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder).ToPtr());
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
+
 
   std::cerr << "\tDefault commands assigned..." << std::endl;
 
@@ -154,13 +154,16 @@ void RobotContainer::TeleopInit() {
 
 void RobotContainer::ConfigureBindings() {
 // Use the test controller to bind test commands:
-  _testController.X().OnTrue(ZeroIntake(m_intake).ToPtr());
-  
-  _testController.A().OnTrue(ZeroTurret(m_turret).ToPtr());
-  _testController.Y().OnTrue(ZeroHood(m_shooterHood).ToPtr());
-  _operatorController.Back().OnTrue(ZeroClimber(m_climber).ToPtr());
-  _testController.B().OnTrue(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
-  _testController.LeftBumper().OnTrue(SetSpindexer(m_spindexer).ToPtr());
-  _testController.RightBumper().OnTrue(SetKicker(m_kicker).ToPtr());
-  _testController.LeftTrigger().OnTrue(Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
+  _operatorController.POVLeft().OnTrue(ZeroIntake(m_intake).ToPtr());
+  _operatorController.POVUp().OnTrue(ZeroTurret(m_turret).ToPtr());
+  _operatorController.POVRight().OnTrue(ZeroHood(m_shooterHood).ToPtr());
+  _operatorController.POVDown().OnTrue(ZeroClimber(m_climber).ToPtr());
+ 
+}
+
+void RobotContainer::TestInit() {
+  // Launch some commands for test mode:
+  frc2::CommandScheduler::GetInstance().Schedule(TestFlywheel(m_flywheel, m_OI).ToPtr());
+  frc2::CommandScheduler::GetInstance().Schedule(TestHood(m_shooterHood, m_OI).ToPtr());
+
 }

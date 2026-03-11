@@ -29,37 +29,47 @@ void FlywheelTeleop::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void FlywheelTeleop::Execute() {
-  DPadUp = m_OI->GetOperatorDPadUp();
-  DPadDown = m_OI->GetOperatorDPadDown();
+  // DPadUp = m_OI->GetOperatorDPadUp();
+  // DPadDown = m_OI->GetOperatorDPadDown();
 
-  if (m_OI->GetOperatorDPadLeft()) {
-    // Use lookup table:
-    auto range = m_hf->getFeedback().rangeToHub;
-    auto speed = m_st->GetFlywheelVelocity(range);
-    m_flywheel->SetCommand(speed);
-  } else {
-    if (m_OI->GetOperatorDPadUp() && !LastDPadUpState && level < maxLevel) {
-      level += 1;
-      LastDPadUpState = true;
-    }
-    else if (m_OI->GetOperatorDPadDown() && !LastDPadDownState && level > 0) {
-      level -= 1;
-      LastDPadDownState = true;
-    }
-    else {
-      if (!DPadUp) {
-        LastDPadUpState = false;
-      }
-      if (!DPadDown) {
-        LastDPadDownState = false;
-      }
-    }
+   if (m_OI->GetOperatorLeftTrigger()>= 0.1) {
+  //   // Use lookup table:
+     auto range = m_hf->getFeedback().rangeToHub;
+     auto speed = m_st->GetFlywheelVelocity(range);
+     m_flywheel->SetCommand(speed);
+   } else if(m_OI->GetOperatorYButton()){
+      auto speed = 11.3_mps;
+      m_flywheel->SetCommand(speed);
+   }else if(m_OI->GetOperatorXButton()){
+      auto speed = 9.5_mps;
+      m_flywheel->SetCommand(speed);
 
-    m_flywheel->SetCommand(level * scaleFactor);
-    frc::SmartDashboard::PutNumber("Flywheel/Speed Level", level);
-    frc::SmartDashboard::PutNumber("Flywheel/Speed", level * scaleFactor.value());
-  }
-}
+   }else{
+      m_flywheel->SetCommand(0.0_mps);
+
+   }
+  //  } else {
+  //    if (m_OI->GetOperatorDPadUp() && !LastDPadUpState && level < maxLevel) {
+  //      level += 1;
+  //      LastDPadUpState = true;
+  //    }
+  //    else if (m_OI->GetOperatorDPadDown() && !LastDPadDownState && level > 0) {
+  //      level -= 1;
+  //      LastDPadDownState = true;
+  //    }
+  //    else {
+  //      if (!DPadUp) {
+  //        LastDPadUpState = false;
+  //      }
+  //      if (!DPadDown) {
+  //        LastDPadDownState = false;
+  //     }
+  //    }
+
+  //    m_flywheel->SetCommand(level * scaleFactor);
+  //    frc::SmartDashboard::PutNumber("Flywheel/Speed Level", level);
+  //    frc::SmartDashboard::PutNumber("Flywheel/Speed", level * scaleFactor.value());
+ }
 
 // Called once the command ends or is interrupted.
 void FlywheelTeleop::End(bool interrupted) {
