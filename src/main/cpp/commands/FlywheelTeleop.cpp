@@ -45,18 +45,6 @@ void FlywheelTeleop::Execute() {
     m_flywheel->SetCommand(0.0_mps);
   }
 
-  //  if (m_OI->GetOperatorLeftTrigger()>= 0.1) {
-  // //   // Use lookup table:
-  //    auto range = m_hf->getFeedback().rangeToHub;
-  //    auto speed = m_st->GetFlywheelVelocity(range);
-  //    m_flywheel->SetCommand(speed);
-  //  } else if(m_OI->GetOperatorYButton()){
-  //     auto speed = 11_mps; //Corner shot
-  //     m_flywheel->SetCommand(speed);
-  //  }else if(m_OI->GetOperatorXButton()){
-  //     auto speed = 9.4_mps; //Tower shot
-  //     m_flywheel->SetCommand(speed);
-
 //    m_flywheel->SetCommand(level * scaleFactor);
 //    frc::SmartDashboard::PutNumber("Flywheel/Speed Level", level);
 //    frc::SmartDashboard::PutNumber("Flywheel/Speed", level * scaleFactor.value());
