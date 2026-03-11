@@ -1,5 +1,12 @@
 # WeeWee2026 C++
 
+# WARNING: Fieldmaps
+At each competition you must:
+1. Update the fieldmap loaded in fieldmap
+2. Update target positions in target finder subsystem
+3. Update zones in zone finder subsystem
+4. Upload correct field .json to both vision servers
+
 # Robot Network IPs
 
 |       Location       |     IP     | Cameras on Server |

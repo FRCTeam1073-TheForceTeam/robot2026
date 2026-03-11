@@ -21,6 +21,7 @@ void IntakeTeleop::Initialize() {}
 void IntakeTeleop::Execute() {
 
   bool bumper_right = m_oi->GetDriverRightBumper();
+  last_bumper_right = bumper_right; // Keep track of button for toggle.
 
   if (m_zone->GetZones().contains("TRENCH"))
   {
@@ -30,8 +31,6 @@ void IntakeTeleop::Execute() {
     // Toggle position:
     position_in = !position_in;
   }
-  last_bumper_right = bumper_right; // Keep track of button for toggle.
-
   
   if (position_in) {  
     m_intake->SetCommand(-122.0_deg);

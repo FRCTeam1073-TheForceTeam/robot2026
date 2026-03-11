@@ -34,15 +34,17 @@ void HoodTeleop::Execute() {
     auto range = m_hf->getFeedback().rangeToTarget;
     auto angle = m_st->GetHoodAngle(range);
     m_shooterHood->SetCommand(angle);
-  }else if(m_OI->GetOperatorYButton()){
+  } else if (m_OI->GetOperatorYButton()) {
     auto angle = 0.2188_rad; // Corner Shot
     m_shooterHood->SetCommand(angle);
-  }else if(m_OI->GetOperatorXButton()){
+  } else if (m_OI->GetOperatorXButton()) {
     auto angle = 0.1408_rad; // Tower Shot
     m_shooterHood->SetCommand(angle);
-  }else {
+  } else {
     m_shooterHood->SetCommand(0.0_rad);
   }
+
+  // Old Code
   // } else {
   //   LeftBumper = m_OI->GetOperatorLeftBumper();
   //   RightBumper = m_OI->GetOperatorRightBumper();
@@ -65,7 +67,7 @@ void HoodTeleop::Execute() {
     
   //   m_shooterHood->SetCommand(level * ScaleFactor);
   //   frc::SmartDashboard::PutNumber("HoodTeleop/hood level", level);
-  //   frc::SmartDashboard::PutNumber("HoodTeleop/hood position", level * ScaleFactor.value());
+  //     frc::SmartDashboard::PutNumber("HoodTeleop/hood position", level * ScaleFactor.value());
    
 }
 
