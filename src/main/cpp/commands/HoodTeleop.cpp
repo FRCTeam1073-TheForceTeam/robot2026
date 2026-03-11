@@ -59,7 +59,7 @@ void HoodTeleop::Execute() {
     
   //   m_shooterHood->SetCommand(level * ScaleFactor);
   //   frc::SmartDashboard::PutNumber("HoodTeleop/hood level", level);
-  //   frc::SmartDashboard::PutNumber("HoodTeleop/hood position", level * ScaleFactor.value());
+  //     frc::SmartDashboard::PutNumber("HoodTeleop/hood position", level * ScaleFactor.value());
    
 }
 
