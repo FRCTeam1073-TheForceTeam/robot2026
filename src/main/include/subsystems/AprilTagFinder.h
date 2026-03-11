@@ -45,7 +45,9 @@ class AprilTagFinder : public frc2::SubsystemBase {
         std::shared_ptr<photon::PhotonCamera> _camera;
         frc::Transform3d _transform;
         bool _isTurret;
-        RobotCamera(std::shared_ptr<photon::PhotonCamera> camera, frc::Transform3d transform, bool isTurret = false) : _camera(camera), _transform(transform), _isTurret(isTurret){};
+        std::vector<photon::PhotonPipelineResult> _oldResults;
+        
+        RobotCamera(std::shared_ptr<photon::PhotonCamera> camera, frc::Transform3d transform, bool isTurret = false) : _camera(camera), _transform(transform), _isTurret(isTurret), _oldResults({}) {};
     };
     
     static frc::Pose3d estimateFieldToRobotAprilTag(frc::Transform3d cameraToTarget, frc::Pose3d fieldRelativeTagPose, frc::Transform3d robotToCamera);
@@ -60,6 +62,7 @@ class AprilTagFinder : public frc2::SubsystemBase {
     
     frc::Transform3d getRobotCam(int index);
 
+    std::optional<frc::Pose2d> getPoseToTag(int tag_id);
 
     std::vector<VisionMeasurement> getMultiTagEstimate(std::vector<photon::PhotonPipelineResult> results, photon::PhotonPoseEstimator& estimator, frc::Transform3d camTransform3d);
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <subsystems/DriveTrain.h>
-#include <subsystems/Localizer.h>
 #include <subsystems/AprilTagFinder.h>
 
 #include <frc2/command/Commands.h>
@@ -10,10 +9,12 @@
 #include <units/velocity.h>
 #include <units/angle.h>
 #include <units/math.h>
+#include <units/constants.h>
+
 class AlignWithTower
     : public frc2::CommandHelper<frc2::Command, AlignWithTower> {
 public: 
-    AlignWithTower(std::shared_ptr<Drivetrain> drivetrain);
+    AlignWithTower(std::shared_ptr<Drivetrain> drivetrain, std::shared_ptr<AprilTagFinder> finder);
 
     void Initialize() override;
 
@@ -25,6 +26,7 @@ public:
 
     private:
         std::shared_ptr<Drivetrain> m_drivetrain;
+        std::shared_ptr<AprilTagFinder> m_finder;
 
         frc::Pose2d target_pose;
         frc::Pose2d current_pose;

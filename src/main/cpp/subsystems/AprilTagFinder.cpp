@@ -36,6 +36,32 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getAllMeasurement
     return _visionMeasurements;
 }
 
+std::optional<frc::Pose2d> AprilTagFinder::getPoseToTag(int tag_id)
+{
+    for (int i = 0; i<_cameras.size(); i++) {
+        if(i==4 && !m_turret->GetFeedback().haveZero)
+            continue;
+        auto& cam = _cameras[i];
+        auto& estimator = _estimators[i];
+        for(auto& result : cam._oldResults)
+        {
+            auto estimate = estimator.EstimateCoprocMultiTagPose(result);
+            if(!estimate.has_value())
+                continue;
+            auto targets = estimate->targetsUsed;
+            for(auto& target : targets)
+            {
+                if(target.fiducialId==tag_id)
+                {
+                    frc::Transform3d transform = (cam._transform + target.bestCameraToTarget);
+                    return frc::Pose2d(frc::Translation2d(transform.X(),transform.Y()),transform.Rotation().Angle());
+                }
+            }
+        }
+    }
+    return std::nullopt;
+}
+
 std::vector<photon::PhotonTrackedTarget> AprilTagFinder::getCamTargets(std::shared_ptr<photon::PhotonCamera> camera) {
     std::vector<photon::PhotonPipelineResult> results = camera->GetAllUnreadResults();
     std::vector<photon::PhotonTrackedTarget> targets;
@@ -137,6 +163,7 @@ void AprilTagFinder::Periodic() {
         auto& cam = _cameras[i];
         auto& estimator = _estimators[i];
         std::vector<photon::PhotonPipelineResult> results = cam._camera->GetAllUnreadResults();
+        cam._oldResults = results;
         frc::Transform3d transform = cam._transform;
         //If the camera is the turrets camera, and the velocty of the turret is acceptable we will use it. And if not we will skip over using the camera.
         //TODO: Revisit threshold

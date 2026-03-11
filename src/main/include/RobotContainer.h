@@ -49,6 +49,7 @@
 #include "commands/ZeroClimber.h"
 #include "commands/Autos/SetKicker.h"
 #include "commands/Autos/SetSpindexer.h"
+#include "commands/AlignWithTower.h"
 
 #include "commands/Autos.h"
 #include "commands/AutoRunner.h"

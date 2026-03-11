@@ -163,4 +163,5 @@ void RobotContainer::ConfigureBindings() {
   _testController.LeftBumper().OnTrue(SetSpindexer(m_spindexer).ToPtr());
   _testController.RightBumper().OnTrue(SetKicker(m_kicker).ToPtr());
   _testController.LeftTrigger().OnTrue(Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
+  _testController.RightTrigger().OnTrue(AlignWithTower(m_drivetrain,m_tagFinder).ToPtr());
 }
