@@ -39,8 +39,4 @@ class ZoneFinder : public frc2::SubsystemBase
     std::shared_ptr<Localizer> _localizer;
     frc::Translation2d CurrentTrans;
     ZoneVector zones;
-    std::optional<frc::DriverStation::Alliance> _alliance;
-
-    
-
 };

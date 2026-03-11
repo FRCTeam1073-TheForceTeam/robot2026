@@ -12,10 +12,11 @@ const frc::Pose2d TargetFinder::REDHUB = frc::Pose2d(469.11_in, 158.84_in, frc::
 
 const frc::Transform2d TargetFinder::ROBOTOTURRET = frc::Transform2d(4.902_in, -5.375_in, frc::Rotation2d());
 
-const frc::Pose2d TargetFinder::REDPASS_R = frc::Pose2d(0_in, 0_in, frc::Rotation2d());
-const frc::Pose2d TargetFinder::REDPASS_L = frc::Pose2d(0_in, 0_in, frc::Rotation2d());
-const frc::Pose2d TargetFinder::BLUEPASS_R = frc::Pose2d(0_in, 0_in, frc::Rotation2d());
-const frc::Pose2d TargetFinder::BLUEPASS_L = frc::Pose2d(0_in, 0_in, frc::Rotation2d());
+//literally the most estimated values ever
+const frc::Pose2d TargetFinder::REDPASS_R = frc::Pose2d(557.5_in, 237.5_in, frc::Rotation2d());
+const frc::Pose2d TargetFinder::REDPASS_L = frc::Pose2d(557.5_in, 80_in, frc::Rotation2d());
+const frc::Pose2d TargetFinder::BLUEPASS_R = frc::Pose2d(91_in, 80_in, frc::Rotation2d());
+const frc::Pose2d TargetFinder::BLUEPASS_L = frc::Pose2d(91_in, 237.5_in, frc::Rotation2d());
 
 
 
