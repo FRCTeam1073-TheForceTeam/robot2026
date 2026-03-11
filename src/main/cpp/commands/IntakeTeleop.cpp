@@ -38,6 +38,9 @@ void IntakeTeleop::Execute() {
   } else {
     m_intake->SetCommand(-0.1_deg);
   }
+
+  last_bumper_right = bumper_right; // Keep track of button for toggle.
+
 }
 
 // Called once the command ends or is interrupted.
