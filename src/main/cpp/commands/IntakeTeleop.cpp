@@ -26,7 +26,7 @@ void IntakeTeleop::Execute() {
   {
     position_in = false;
   }
-  else if (!bumper_right && bumper_right) {
+  else if (!last_bumper_right && bumper_right) {
     // Toggle position:
     position_in = !position_in;
   }
