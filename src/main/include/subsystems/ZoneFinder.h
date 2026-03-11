@@ -35,6 +35,7 @@ class ZoneFinder : public frc2::SubsystemBase
     void Periodic() override;
 
     private:
+    std::optional<frc::DriverStation::Alliance> _alliance;
     std::shared_ptr<Localizer> _localizer;
     frc::Translation2d CurrentTrans;
     ZoneVector zones;

@@ -66,20 +66,23 @@ void ZoneFinder::Periodic()
     _alliance = frc::DriverStation::GetAlliance();
     CurrentTrans = _localizer->getPose().Translation();
     auto result = GetZones();
+
+
+    _alliance = frc::DriverStation::GetAlliance();
     std::string zonelist;
     for(const auto &zone : result)
     {
-        std::string message = zone;
-        /*if(_alliance.value() == frc::DriverStation::Alliance::kRed && message.contains("RIGHTHALF"))
+        std::string zonePortion = zone;
+        //this part switches left and right for red alliance POV since all code is from blue alliance POV
+        if(_alliance.value() == frc::DriverStation::Alliance::kRed && zone.find("RIGHTHALF") != std::string::npos)
         {
-            message = "LEFTHALF";
+            zonePortion = "LEFTHALF";
         }
-        else if(_alliance.value() == frc::DriverStation::Alliance::kRed && zone.contains("LEFTHALF"))
+        else if(_alliance.value() == frc::DriverStation::Alliance::kRed && zone.find("LEFTHALF") != std::string::npos)
         {
-            message = "RIGHTHALF";
-        } 
-        */
-        zonelist += message + ", ";
+            zonePortion = "RIGHTHALF";
+        }
+        zonelist += zonePortion + ", ";
     }
     frc::SmartDashboard::PutString("Zone/Zone", zonelist);
 }
