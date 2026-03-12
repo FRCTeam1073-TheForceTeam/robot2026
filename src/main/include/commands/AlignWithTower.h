@@ -4,6 +4,7 @@
 #include <subsystems/AprilTagFinder.h>
 
 #include <frc2/command/Commands.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/PIDController.h>
 #include <iostream>
 #include <units/velocity.h>
@@ -28,12 +29,16 @@ public:
         std::shared_ptr<Drivetrain> m_drivetrain;
         std::shared_ptr<AprilTagFinder> m_finder;
 
-        frc::Pose2d target_pose;
-        frc::Pose2d current_pose;
-        frc::Pose2d delta_pose;
+        frc::Transform2d offset;
+        frc::Pose2d targetPose;
+        frc::Pose2d currentPose;
+        frc::Pose2d deltaPose;
         
         frc::PIDController xController;
         frc::PIDController yController;
         frc::PIDController rotationController;
+
+        bool hasTarget;
+        int timesMissed;
 
 };
