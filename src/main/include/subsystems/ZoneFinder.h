@@ -9,6 +9,8 @@
 #include <frc/geometry/Pose3d.h>
 #include <frc/apriltag/AprilTagFieldLayout.h>
 #include <set>
+#include <frc/DriverStation.h>
+
 
 
 class ZoneFinder : public frc2::SubsystemBase
@@ -33,9 +35,8 @@ class ZoneFinder : public frc2::SubsystemBase
     void Periodic() override;
 
     private:
+    std::optional<frc::DriverStation::Alliance> _alliance;
     std::shared_ptr<Localizer> _localizer;
     frc::Translation2d CurrentTrans;
     ZoneVector zones;
-    
-
 };

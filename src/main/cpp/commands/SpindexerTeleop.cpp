@@ -18,13 +18,11 @@ void SpindexerTeleop::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void SpindexerTeleop::Execute() {  
 
-  if (m_OI->GetOperatorAButton()){
+  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1) {
     targetVelocity = 4.2_mps;
-  }
-  else if (m_OI->GetOperatorBButton()) {
+  } else if (m_OI->GetOperatorBButton()) {
     targetVelocity = -2_mps;
-  }
-  else{
+  } else {
     targetVelocity = 0_mps;
   }
 

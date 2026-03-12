@@ -86,6 +86,7 @@ class OI : public frc2::SubsystemBase {
         bool GetDriverDPadDown();
         bool DriverRumble();
         bool DriverStopRumble();
+        bool DriverLeftStickPress();
 
         bool GetOperatorAButton();
         bool GetOperatorBButton();

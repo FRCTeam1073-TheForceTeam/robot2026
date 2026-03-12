@@ -22,6 +22,7 @@ _intakeCurrentSig(_leadMotor.GetTorqueCurrent()),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _commandVelocityVoltage(units::angular_velocity::radians_per_second_t(0.0)),
 _command(std::monostate()),
+_hasZero(false),
 _limiter(5.0_rad_per_s) {
   // Extra implementation of subsystem constructor goes here.
 
@@ -47,6 +48,7 @@ void Intake::SetCommand(Command cmd) {
 
 void Intake::Zero() {
   _leadMotor.SetPosition(units::angle::turn_t(-122_deg)*GearRatio); 
+  _hasZero = true;
 }
 
 void Intake::Periodic() {
@@ -58,6 +60,7 @@ void Intake::Periodic() {
   _feedback.torque = _intakeCurrentSig.GetValue() / AmpsPerNewtonMeter; // Convert from hardware units to subsystem units.
   _feedback.position = _intakePositionSig.GetValue() / GearRatio; // Convert from hardware units to subsystem units.
   _feedback.velocity = _intakeVelocitySig.GetValue() / GearRatio;
+  _feedback.hasZero = _hasZero; // Index/Zero reporting.
 
   // // Process command:
   if (std::holds_alternative<units::angular_velocity::radians_per_second_t>(_command)) {
@@ -78,8 +81,6 @@ void Intake::Periodic() {
       // Send to hardware:
       _leadMotor.SetControl(_commandPositionVoltage.WithPosition(motorPosition));
       _followMotor.SetControl(controls::Follower(_leadMotor.GetDeviceID(), signals::MotorAlignmentValue::Opposed));
-
- 
 
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:

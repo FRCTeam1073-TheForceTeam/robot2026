@@ -18,13 +18,15 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
     {
     allianceSign = 0;
     fieldCentric = true;
-    lastParkingBreakButton = false;
+    // lastParkingBreakButton = false;
     lastFieldCentricButton = true;
-    parked = false;
+    // parked = false;
     last_error = 0;
     last_snap_time = 0;
     angle_tolerance = 0.05_rad;
     torqueGate = 65_N;
+    slowMode = false;
+    lastYPressed = false;
     // TODO: chassisspeeds and speeds appear in the java drivetrain; determine if these are necessary for the c++ file
     // TODO: pointAtTarget boolean, localizer, lidar and aprilTagFinder appears in the java drivetrain, but it might be a better idea to put these in the localize file
 
@@ -39,9 +41,9 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
         
     allianceSign = 0;
     fieldCentric = true;
-    lastParkingBreakButton = false;
+    // lastParkingBreakButton = false;
     lastFieldCentricButton = true;
-    parked = false;
+    // parked = false;
     last_error = 0;
     last_snap_time = 0;
     angle_tolerance = 0.05_rad;
@@ -69,78 +71,92 @@ void TeleopDrive::Execute() {
     avgTorque = m_drivetrain->GetAverageLoad();
     currentTime = frc::Timer::GetMatchTime();
 
-    frc::SmartDashboard::PutBoolean("TeleopDrive/Parking Brake", parked);
+    // frc::SmartDashboard::PutBoolean("TeleopDrive/Parking Brake", parked);
 
-    if (m_OI->GetDriverRightBumper() && lastFieldCentricButton == false) {
+    if (m_OI->GetDriverLeftBumper() && lastFieldCentricButton == false) {
         fieldCentric = !fieldCentric;
     }
-    lastFieldCentricButton = m_OI->GetDriverRightBumper();
+    lastFieldCentricButton = m_OI->GetDriverLeftBumper();
 
-    if (m_OI->GetDriverLeftBumper() && lastParkingBreakButton == false) {
-        parked = !parked;
+    // if (m_OI->GetDriverLeftBumper() && lastParkingBreakButton == false) {
+    //     parked = !parked;
+    // }
+    // lastParkingBreakButton = m_OI->GetDriverLeftBumper();
+
+    // if (parked && !m_drivetrain->GetParkingBrake()) {
+    //     m_drivetrain->SetParkingBrake(true);
+    // }
+
+    // if (!parked && m_drivetrain->GetParkingBrake()) {
+    //     m_drivetrain->SetParkingBrake(false);
+    // }
+    bool driverDPadUp = m_OI->GetDriverDPadUp();
+    bool driverDPadDown = m_OI->GetDriverDPadDown();
+    bool driverDPadLeft = m_OI->GetDriverDPadLeft();
+    bool driverDPadRight = m_OI->GetDriverDPadRight();
+    int driverDPadAngle = m_OI->GetDriverDPadAngle();
+
+    // double mult1 = 1.0 + (m_OI->GetDriverLeftTrigger() * ((std::sqrt(36)) - 1));
+    // double mult2 = 1.0 + (m_OI->GetDriverRightTrigger() * ((std::sqrt(36)) - 1));
+
+    double mult1 = 4.5;
+    double mult2 = 4.5;
+
+    //set deadzones
+    if (std::abs(leftY) < JOYSTICK_DEADZONE) {leftY = 0.0;}
+    if (std::abs(leftX) < JOYSTICK_DEADZONE) {leftX = 0.0;}
+    if (std::abs(rightX) < JOYSTICK_DEADZONE) {rightX = 0.0;}
+
+    auto vx = std::clamp((allianceSign * leftY * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
+    auto vy = std::clamp((allianceSign * leftX * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
+    auto omega = std::clamp((rightX * maximumRotationVelocity / 25) * mult1 * mult2, -maximumRotationVelocity, maximumRotationVelocity);
+
+    if (!lastYPressed && m_OI->GetDriverYButton()) {
+        slowMode = !slowMode;
     }
-    lastParkingBreakButton = m_OI->GetDriverLeftBumper();
-
-    if (parked && !m_drivetrain->GetParkingBrake()) {
-        m_drivetrain->SetParkingBrake(true);
+    lastYPressed = m_OI->GetDriverYButton();
+    if (slowMode) {
+        vx *= 0.2;
+        vy *= 0.2;
     }
 
-    if (!parked && m_drivetrain->GetParkingBrake()) {
-        m_drivetrain->SetParkingBrake(false);
-    }
-    else {
-        bool driverDPadUp = m_OI->GetDriverDPadUp();
-        bool driverDPadDown = m_OI->GetDriverDPadDown();
-        bool driverDPadLeft = m_OI->GetDriverDPadLeft();
-        bool driverDPadRight = m_OI->GetDriverDPadRight();
-        int driverDPadAngle = m_OI->GetDriverDPadAngle();
 
-        double mult1 = 1.0 + (m_OI->GetDriverLeftTrigger() * ((std::sqrt(36)) - 1));
-        double mult2 = 1.0 + (m_OI->GetDriverRightTrigger() * ((std::sqrt(36)) - 1));
 
-        //set deadzones
-        if (std::abs(leftY) < JOYSTICK_DEADZONE) {leftY = 0.0;}
-        if (std::abs(leftX) < JOYSTICK_DEADZONE) {leftX = 0.0;}
-        if (std::abs(rightX) < JOYSTICK_DEADZONE) {rightX = 0.0;}
+    frc::SmartDashboard::PutBoolean("TeleopDrive/Slow Mode", slowMode);
 
-        auto vx = std::clamp((allianceSign * leftY * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
-        auto vy = std::clamp((allianceSign * leftX * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
-        auto omega = std::clamp((rightX * maximumRotationVelocity / 25) * mult1 * mult2, -maximumRotationVelocity, maximumRotationVelocity);
+    frc::SmartDashboard::PutNumber("TeleopDrive/vx", vx.value());
+    frc::SmartDashboard::PutNumber("TeleopDrive/vy", vy.value());
+    frc::SmartDashboard::PutNumber("TeleopDrive/omega", omega.value());
+    frc::SmartDashboard::PutNumber("TeleopDrive/AvgTorque", avgTorque.value());
+    frc::SmartDashboard::PutBoolean("TeleopDrive/FieldCentric", fieldCentric);
+    frc::SmartDashboard::PutNumber("TeleopDrive/leftX", leftX);
+    frc::SmartDashboard::PutNumber("TeleopDrive/leftY", leftY);
+    frc::SmartDashboard::PutNumber("TeleopDrive/rightX", rightX);
+    frc::SmartDashboard::PutNumber("TeleopDrive/Driver DPad angle", driverDPadAngle);
+    frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Up", driverDPadUp);
+    frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Down", driverDPadDown);
+    frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Left", driverDPadLeft);
+    frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Right", driverDPadRight);
 
-        frc::SmartDashboard::PutNumber("TeleopDrive/vx", vx.value());
-        frc::SmartDashboard::PutNumber("TeleopDrive/vy", vy.value());
-        frc::SmartDashboard::PutNumber("TeleopDrive/omega", omega.value());
-        frc::SmartDashboard::PutNumber("TeleopDrive/AvgTorque", avgTorque.value());
-        frc::SmartDashboard::PutBoolean("TeleopDrive/FieldCentric", fieldCentric);
-        frc::SmartDashboard::PutNumber("TeleopDrive/leftX", leftX);
-        frc::SmartDashboard::PutNumber("TeleopDrive/leftY", leftY);
-        frc::SmartDashboard::PutNumber("TeleopDrive/rightX", rightX);
-        frc::SmartDashboard::PutNumber("TeleopDrive/Driver DPad angle", driverDPadAngle);
-        frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Up", driverDPadUp);
-        frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Down", driverDPadDown);
-        frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Left", driverDPadLeft);
-        frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Right", driverDPadRight);
-
-        // odometry centric drive
-        if (fieldCentric) {
-            frc::Rotation2d rotation;
-            if (m_localizer) {
-                rotation = m_localizer->getPose().Rotation();
-            } else {
-                rotation = m_drivetrain->GetGyroHeading();
-            }
-
-            speeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(vx, vy, omega, rotation);
-            m_drivetrain->SetChassisSpeeds(speeds);
+    // odometry centric drive
+    if (fieldCentric) {
+        frc::Rotation2d rotation;
+        if (m_localizer) {
+            rotation = m_localizer->getPose().Rotation();
+        } else {
+            rotation = m_drivetrain->GetGyroHeading();
         }
-        else { // robot centric drive
-            m_drivetrain->SetChassisSpeeds(frc::ChassisSpeeds{allianceSign * -vx, allianceSign * -vy, omega});
-        }
+
+        speeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(vx, vy, omega, rotation);
+        m_drivetrain->SetChassisSpeeds(speeds);
+    }
+    else { // robot centric drive
+        m_drivetrain->SetChassisSpeeds(frc::ChassisSpeeds{allianceSign * -vx, allianceSign * -vy, omega});
+    }
         // Drivetrain should put out this information, not the command:
         // frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed Omega", m_drivetrain->GetChassisSpeeds().omega.value());
         // frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed X", m_drivetrain->GetChassisSpeeds().vx.value());
         // frc::SmartDashboard::PutNumber("TeleopDrive/Chassis Speed Y", m_drivetrain->GetChassisSpeeds().vy.value());
-    }
 
     // TODO: Put this logic in OI
     // if ((((int)frc::Timer::GetMatchTime().value() - 30) % 25) == 0) {

@@ -18,7 +18,7 @@ void TrackFlywheel::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void TrackFlywheel::Execute() {
-  units::length::meter_t range = m_hf -> getFeedback().rangeToHub;
+  units::length::meter_t range = m_hf -> getFeedback().rangeToTarget;
   units::velocity::meters_per_second_t targetSpeed = m_st -> GetFlywheelVelocity(range);
   m_flywheel -> SetCommand(targetSpeed);
 

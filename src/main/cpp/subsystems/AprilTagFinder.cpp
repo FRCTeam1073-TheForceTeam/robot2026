@@ -105,14 +105,21 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
         std::optional<photon::EstimatedRobotPose> pose = estimator.EstimateCoprocMultiTagPose(result);
         if(pose.has_value())
         {
-            auto std_devs = estimate_stddevs(1.0_m); //TODO: find the actual value
             auto estimated_pose = pose.value();
+            units::length::meter_t minDist = 100.0_m;
+            for(auto& t : estimated_pose.targetsUsed)
+                minDist = units::math::min(minDist,units::length::meter_t(
+                    t.GetBestCameraToTarget().Translation().Norm()
+                ));
+            
+            auto std_devs = estimate_stddevs(minDist); //TODO: find the actual value
             // std::cout<<"Using april tags: " ;
             // for(auto& c : estimated_pose.targetsUsed)
             // {
             //     std::cout << c.fiducialId << ", ";
             // }
             // std::cout<<std::endl;
+            hasAprilTags = true;
             measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
         }
     }
@@ -124,6 +131,7 @@ void AprilTagFinder::clearMeasurements() {
 }
 
 void AprilTagFinder::Periodic() {
+    hasAprilTags = false;
     auto turretVelocity = m_turret->GetFeedback().velocity;
     for (int i = 0; i<_cameras.size(); i++) {
         if(i==4 && !m_turret->GetFeedback().haveZero)
@@ -159,6 +167,7 @@ void AprilTagFinder::Periodic() {
             measurements.end()
         );
     }
+    frc::SmartDashboard::PutBoolean("AprilTagFinder/HasAprilTags", hasAprilTags);
 }
 
 wpi::array<double, 3U> AprilTagFinder::estimate_stddevs(units::length::meter_t range) {

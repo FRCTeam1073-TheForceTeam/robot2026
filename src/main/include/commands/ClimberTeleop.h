@@ -9,6 +9,7 @@
 #include "subsystems/OI.h"
 #include "subsystems/Climber.h"
 #include <iostream>
+#include "subsystems/ZoneFinder.h"
 /**
  * An example command.
  *
@@ -25,7 +26,7 @@ class ClimberTeleop
    * @param climber The subsystem used by this command.
    */
 
-  explicit ClimberTeleop(std::shared_ptr<Climber>& climber,  std::shared_ptr<OI>& oi);
+  explicit ClimberTeleop(std::shared_ptr<Climber>& climber,  std::shared_ptr<OI>& oi, std::shared_ptr<ZoneFinder>& zone);
 
   void Initialize() override;
 
@@ -37,6 +38,7 @@ class ClimberTeleop
 
   std::shared_ptr<Climber> m_climber;
   std::shared_ptr<OI> m_OI;
+  std::shared_ptr<ZoneFinder> m_zone;
 
   double rightY;
   units::velocity::meters_per_second_t vy;

@@ -22,6 +22,7 @@
 #include <frc/geometry/Translation3d.h>
 #include <frc/Timer.h>
 #include <units/time.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <units/length.h>
 #include <units/angle.h>
 
@@ -72,6 +73,7 @@ class AprilTagFinder : public frc2::SubsystemBase {
     private:
 
         const double ambiguityThreshold = 0.28;
+        bool hasAprilTags;
         // Base stddevs for measurements:
         wpi::array<double, 3U> base_stddevs = {0.5, 0.5, 0.5};
         // Use tag range to estimate measurement errors:

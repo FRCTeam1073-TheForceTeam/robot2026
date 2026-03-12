@@ -48,7 +48,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
 
     auto previousTime = 0_s;
   
-    for(int e = 0; e < events.size(); e++) {
+    for(size_t e = 0; e < events.size(); e++) {
       auto activeEvent = events.at(e);
       auto eventType = activeEvent.event;
 

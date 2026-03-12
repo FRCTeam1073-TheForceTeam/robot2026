@@ -48,13 +48,15 @@ private:
     frc::PIDController snapPIDProfile{0.05, 0.0, 0.0, 1_s};
 
     bool fieldCentric;
-    bool parked;
+    // bool parked;
 
     double last_error;
     double last_snap_time;
 
-    bool lastParkingBreakButton;
+    // bool lastParkingBreakButton;
     bool lastFieldCentricButton;
+    bool slowMode;
+    bool lastYPressed;
 
     static constexpr units::velocity::meters_per_second_t maximumLinearVelocity = 3.5_mps;
     static constexpr units::angular_velocity::radians_per_second_t maximumRotationVelocity = 4.0_rad_per_s;
