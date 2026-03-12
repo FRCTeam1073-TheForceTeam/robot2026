@@ -27,6 +27,8 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
   void SimulationInit() override;
   void SimulationPeriodic() override;
+
+  bool IsHubActive();
   
  private:
 
