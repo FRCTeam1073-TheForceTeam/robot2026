@@ -62,7 +62,7 @@ class AprilTagFinder : public frc2::SubsystemBase {
     
     frc::Transform3d getRobotCam(int index);
 
-    std::optional<frc::Pose2d> getPoseToTag(int tag_id);
+    std::optional<frc::Transform2d> getPoseToTag(int tag_id);
 
     std::vector<VisionMeasurement> getMultiTagEstimate(std::vector<photon::PhotonPipelineResult> results, photon::PhotonPoseEstimator& estimator, frc::Transform3d camTransform3d);
 

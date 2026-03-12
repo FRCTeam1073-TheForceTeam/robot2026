@@ -36,7 +36,7 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getAllMeasurement
     return _visionMeasurements;
 }
 
-std::optional<frc::Pose2d> AprilTagFinder::getPoseToTag(int tag_id)
+std::optional<frc::Transform2d> AprilTagFinder::getPoseToTag(int tag_id)
 {
     for (int i = 0; i<_cameras.size(); i++) {
         if(i==4 && !m_turret->GetFeedback().haveZero)
@@ -54,7 +54,7 @@ std::optional<frc::Pose2d> AprilTagFinder::getPoseToTag(int tag_id)
                 if(target.fiducialId==tag_id)
                 {
                     frc::Transform3d transform = (cam._transform + target.bestCameraToTarget);
-                    return frc::Pose2d(frc::Translation2d(transform.X(),transform.Y()),transform.Rotation().Angle());
+                    return frc::Transform2d(frc::Translation2d(transform.X(),transform.Y()),transform.Rotation().Angle());
                 }
             }
         }
