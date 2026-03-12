@@ -10,6 +10,7 @@
 
 #include <frc2/command/CommandScheduler.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DriverStation.h>
 
 #include "grpl/CanBridge.h"
 
@@ -49,6 +50,25 @@ void Robot::RobotPeriodic() {
   } catch (...) {
     std::cerr << "SCHEDULER RUN THREW UNKNOWN EXCEPTION!" << std::endl;
   }
+
+  std::string gameData;
+  gameData = frc::DriverStation::GetGameSpecificMessage();
+  if(gameData.length() > 0)
+  {
+    switch (gameData[0])
+    {
+      case 'B':
+        frc::SmartDashboard::PutString("Auto Winners", "Blu");
+        break;
+      case 'R':
+        frc::SmartDashboard::PutString("Auto Winners", "Red");
+        break;
+      default:
+        frc::SmartDashboard::PutString("Auto Winners", "Somethin Went Wrong");
+        break;
+    }
+  frc::SmartDashboard::PutBoolean("Hub Active", Robot::IsHubActive());
+  }
 }
 
 /**
@@ -83,6 +103,7 @@ void Robot::DisabledPeriodic() {
  */
 void Robot::AutonomousInit() {
   std::cerr << "Autonomous Init..." << std::endl;
+  
 
   try {
     m_autonomousCommand = m_container->GetAutonomousCommand();
@@ -118,7 +139,53 @@ void Robot::TeleopInit() {
 
   m_container->TeleopInit(); // Let container schedule things at start of teleop.
 }
+bool Robot::IsHubActive() {
+  auto alliance = frc::DriverStation::GetAlliance();
+  if (frc::DriverStation::IsAutonomousEnabled()) {
+    return true;
+  }
+  if (!frc::DriverStation::IsTeleopEnabled) {
+    return false;
+    //gang we lost the hub
+  }
+  units::time::second_t matchTime = frc::DriverStation::GetMatchTime();
+  std::string gameData;
+  gameData = frc::DriverStation::GetGameSpecificMessage();
+  if (gameData.length() > 0) {
+    return true;
+  }
 
+  bool redInactiveFirst = false;
+  if (gameData.at(0) == 'R') {
+    redInactiveFirst == true;
+  } else if (gameData.at(0) == 'B') {
+    redInactiveFirst == false;
+  } else {
+    //gamedata is invalid lets just say its true
+    return true;
+  }
+
+  bool shift1Active = true;
+  if (redInactiveFirst == true) {
+    shift1Active = false;
+  } else {
+    shift1Active = true;
+  }
+
+  if (matchTime > 130_s) {
+    return true;
+  } else if (matchTime > 105_s) {
+    return shift1Active;
+  }else if (matchTime > 80_s) {
+    return !shift1Active;
+  } else if (matchTime > 55_s) {
+    return shift1Active;
+  } else if (matchTime > 30_s) {
+    return !shift1Active;
+  } else {
+    return true;
+  }
+}
 /**
  * This function is called periodically during operator control.
  */
