@@ -119,6 +119,7 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
             //     std::cout << c.fiducialId << ", ";
             // }
             // std::cout<<std::endl;
+            hasAprilTags = true;
             measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
         }
     }
@@ -130,6 +131,7 @@ void AprilTagFinder::clearMeasurements() {
 }
 
 void AprilTagFinder::Periodic() {
+    hasAprilTags = false;
     auto turretVelocity = m_turret->GetFeedback().velocity;
     for (int i = 0; i<_cameras.size(); i++) {
         if(i==4 && !m_turret->GetFeedback().haveZero)
@@ -165,6 +167,7 @@ void AprilTagFinder::Periodic() {
             measurements.end()
         );
     }
+    frc::SmartDashboard::PutBoolean("AprilTagFinder/HasAprilTags", hasAprilTags);
 }
 
 wpi::array<double, 3U> AprilTagFinder::estimate_stddevs(units::length::meter_t range) {
