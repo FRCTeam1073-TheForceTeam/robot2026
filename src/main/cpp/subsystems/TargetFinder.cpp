@@ -51,10 +51,13 @@ frc::Pose2d TargetFinder::getHubPos()
     //all in field coordinates
     frc::Pose2d TargetLoc = OurHub;
 
+    auto tempLoc = TargetLoc.RelativeTo(roboPos);
+    auto tempRange = tempLoc.Translation().Norm();
+
     frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * 1_s, _localizer->getSpeeds().vy * 1_s);
     //TODO: Fix scaling offset
-    velocityOffset = velocityOffset * -1;
-    TargetLoc.TransformBy(frc::Transform2d(velocityOffset, frc::Rotation2d()));
+    velocityOffset = velocityOffset * -(0.5 + tempRange.value() * 0.15);
+    TargetLoc = TargetLoc.TransformBy(frc::Transform2d(velocityOffset, frc::Rotation2d()));
 
     //turns into robo coordinates
     return TargetLoc.RelativeTo(roboPos);
