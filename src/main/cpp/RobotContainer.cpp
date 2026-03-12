@@ -25,6 +25,8 @@ const std::string RobotContainer::cyclicAuto = "Cyclic_Auto";
 const std::string RobotContainer::eventTestAuto = "Event_Test";
 const std::string RobotContainer::l_Auto = "L_Auto";
 const std::string RobotContainer::basicShotAuto = "Basic Shot Auto";
+const std::string RobotContainer::hubAuto = "Hub Auto";
+
 
 RobotContainer::RobotContainer() :
 _operatorController(1)
@@ -93,6 +95,8 @@ _operatorController(1)
   m_levelChooser.AddOption("Event Test Auto", eventTestAuto);
   m_levelChooser.AddOption("L Auto", l_Auto);
   m_levelChooser.AddOption("Basic Shot Auto", basicShotAuto);
+  m_levelChooser.AddOption("Hub Auto", hubAuto);
+
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -125,6 +129,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     }
     else if (m_levelChooser.GetSelected() == basicShotAuto) {
       return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable);
+    }
+    else if (m_levelChooser.GetSelected() == hubAuto) {
+      return Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood);
     }
   }
   catch (...) {
