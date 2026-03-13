@@ -99,7 +99,7 @@ class RobotContainer {
   static const std::string halfNeutralLeft;
   static const std::string doubleNeutralRight;
 
-  static const std::string simarMode;
+  static const std::string cornerShotAuto;
 
   static const std::string hubAuto;
   
