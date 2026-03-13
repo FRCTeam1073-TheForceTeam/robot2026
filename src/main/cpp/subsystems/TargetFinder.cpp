@@ -77,11 +77,11 @@ frc::Pose2d TargetFinder::Pass()
     }
     else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && zone.contains("RIGHTHALF"))
     {
-        return REDPASS_L.frc::Pose2d::RelativeTo(roboPos);
+        return BLUEPASS_R.frc::Pose2d::RelativeTo(roboPos);
     }
     else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && zone.contains("LEFTHALF"))
     {
-        return REDPASS_L.frc::Pose2d::RelativeTo(roboPos);
+        return BLUEPASS_L.frc::Pose2d::RelativeTo(roboPos);
     }
 }
 

@@ -21,6 +21,6 @@ namespace Autos {
  */
 frc2::CommandPtr TrackHub(std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st);
 frc2::CommandPtr BasicAutoShot(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st);
-
+frc2::CommandPtr HubAuto(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood);
 
 }  // namespace Autos

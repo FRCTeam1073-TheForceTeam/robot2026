@@ -109,6 +109,11 @@ frc2::CommandPtr ShooterHood::SetHoodLevel(int level) {
     return RunOnce([this, level] {SetCommand(level * 0.1_rad);});
 }
 
+frc2::CommandPtr ShooterHood::SetPosition(units::angle::radian_t angle) {
+  return RunOnce([this, angle] {SetCommand(angle);});
+}
+
+
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool ShooterHood::ConfigureHardware() {
   configs::TalonFXConfiguration configs{};

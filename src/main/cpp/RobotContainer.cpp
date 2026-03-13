@@ -31,6 +31,8 @@ const std::string RobotContainer::neutralRightTrench = "NeutralRightTrench";
 const std::string RobotContainer::neutralLeftTrench = "NeutralLeftTrench";
 const std::string RobotContainer::halfNeutralRight = "HalfNeutralRight";
 const std::string RobotContainer::halfNeutralLeft = "HalfNeutralLeft";
+const std::string RobotContainer::hubAuto = "Hub Auto";
+
 
 RobotContainer::RobotContainer() :
 _operatorController(1)
@@ -105,6 +107,8 @@ _operatorController(1)
   m_levelChooser.AddOption("Neutral Left Trench", neutralLeftTrench);
   m_levelChooser.AddOption("Half Neutral Right", halfNeutralRight);
   m_levelChooser.AddOption("Half Neutral Left", halfNeutralLeft);
+  m_levelChooser.AddOption("Hub Auto", hubAuto);
+
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -142,6 +146,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       return m_autoRunner->Create(trajectory);
     }
 
+    else if (m_levelChooser.GetSelected() == hubAuto) {
+      return Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood);
+    }
   }
   catch (...) {
     std::cerr << "Get Autonomous Command Threw Exception" << std::endl;

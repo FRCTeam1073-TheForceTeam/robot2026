@@ -97,6 +97,8 @@ class RobotContainer {
   static const std::string halfNeutralRight;
   static const std::string halfNeutralLeft;
 
+  static const std::string hubAuto;
+  
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
