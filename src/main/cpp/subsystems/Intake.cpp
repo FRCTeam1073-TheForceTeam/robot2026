@@ -23,7 +23,7 @@ _commandPositionVoltage(units::angle::turn_t(0.0)),
 _commandVelocityVoltage(units::angular_velocity::radians_per_second_t(0.0)),
 _command(std::monostate()),
 _hasZero(false),
-_limiter(6.0_rad_per_s) { //was 5 before
+_limiter(7.0_rad_per_s) { //was 5 radians before
   // Extra implementation of subsystem constructor goes here.
 
   // Assign gain slots for the commands to use:

@@ -14,15 +14,15 @@ lastHubActive(false)
 
 // This method will be called once per scheduler run
 void OI::Periodic() {
-    hubActive = frc::SmartDashboard::GetBoolean("Hub Active", false);
-    if (lastHubActive == !hubActive) {
-        DriverRumble();
-        OperatorRumble();
-    } else {
-        DriverStopRumble();
-        OperatorStopRumble();
-    }
-    lastHubActive = hubActive;
+    // hubActive = frc::SmartDashboard::GetBoolean("Hub Active", false);
+    // if (lastHubActive == !hubActive) {
+    //     DriverRumble();
+    //     OperatorRumble();
+    // } else {
+    //     DriverStopRumble();
+    //     OperatorStopRumble();
+    // }
+    // lastHubActive = hubActive;
     
 }
 
