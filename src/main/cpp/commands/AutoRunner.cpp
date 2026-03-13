@@ -80,19 +80,24 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
         autoRoutine.emplace_back(m_collector->CollectSpeed(-3.5_mps));
       }
       else if (eventType == "StopCollector") {
-        autoRoutine.emplace_back(m_collector->CollectSpeed(3.5_mps));
+        autoRoutine.emplace_back(m_collector->CollectSpeed(0_mps));
       }
       else if (eventType == "Shoot") {
-        autoRoutine.emplace_back(Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable));
-        autoRoutine.emplace_back(frc2::WaitCommand(2.0_s));      
-        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(4.2_mps));
-        autoRoutine.emplace_back(m_kicker->SpinToSpeed(4.5_mps));
-        autoRoutine.emplace_back(frc2::WaitCommand(5.0_s));   
-        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0.0_mps));
-        autoRoutine.emplace_back(m_kicker->SpinToSpeed(0.0_mps));
-        autoRoutine.emplace_back(m_turret->SetCommand(0_rad));
-        autoRoutine.emplace_back(m_flywheel->SetCommand(0_mps));
-        autoRoutine.emplace_back(m_shooterHood->SetCommand(0_rad));
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(1.0_s),
+              m_spindexer->SpinToSpeed(4.2_mps),
+              m_kicker->SpinToSpeed(4.5_mps),
+              frc2::cmd::Wait(4.0_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(4_s),
+              m_spindexer->SpinToSpeed(0.0_mps),
+              m_kicker->SpinToSpeed(0.0_mps)
+            )
+          ).WithTimeout(12_s)
+        );
       }
 
 
@@ -138,6 +143,6 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
 }
 
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
-   return frc2::cmd::Sequence(ZeroTurret(m_turret).ToPtr(), frc2::cmd::Parallel(DrivePath(m_drivetrain, m_localizer, trajectory).ToPtr(), EventParser(trajectory)));
+   return frc2::cmd::Sequence(ZeroTurret(m_turret).ToPtr(), m_intake->IntakeOut(), frc2::cmd::Wait(0.5_s), frc2::cmd::Parallel(DrivePath(m_drivetrain, m_localizer, trajectory).ToPtr(), EventParser(trajectory)));
    //TODO: think about mirroring for red
 }

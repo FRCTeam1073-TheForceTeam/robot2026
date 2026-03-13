@@ -52,6 +52,10 @@ void ShooterHood::Zero() {
   _hasZero = true;
 }
 
+frc2::CommandPtr ShooterHood::RotateToPos(units::radian_t pos) {
+  return RunOnce([this, pos] {SetCommand(pos);});
+}
+
 void ShooterHood::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_hoodPositionSig, _hoodCurrentSig);

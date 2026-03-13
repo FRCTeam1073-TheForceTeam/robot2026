@@ -79,6 +79,8 @@ class ShooterHood : public frc2::SubsystemBase {
 
   frc2::CommandPtr SetHoodLevel(int level);
 
+  frc2::CommandPtr RotateToPos(units::radian_t pos);
+
  private:
 
 

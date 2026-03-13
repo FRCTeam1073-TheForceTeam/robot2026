@@ -91,7 +91,12 @@ class RobotContainer {
   static const std::string l_Auto;
   static const std::string basicShotAuto;
   static const std::string exampleAuto;
-  
+  static const std::string greatAuto;
+  static const std::string neutralRightTrench;
+  static const std::string neutralLeftTrench;
+  static const std::string halfNeutralRight;
+  static const std::string halfNeutralLeft;
+
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
