@@ -27,10 +27,14 @@ const std::string RobotContainer::l_Auto = "L_Auto";
 const std::string RobotContainer::greatAuto = "greatAuto";
 const std::string RobotContainer::basicShotAuto = "Basic Shot Auto";
 const std::string RobotContainer::exampleAuto = "Example_Auto";
+const std::string RobotContainer::simarMode = "SimarMode";
+
 const std::string RobotContainer::neutralRightTrench = "NeutralRightTrench";
 const std::string RobotContainer::neutralLeftTrench = "NeutralLeftTrench";
 const std::string RobotContainer::halfNeutralRight = "HalfNeutralRight";
 const std::string RobotContainer::halfNeutralLeft = "HalfNeutralLeft";
+const std::string RobotContainer::doubleNeutralRight = "DoubleNeutralRight";
+
 const std::string RobotContainer::hubAuto = "Hub Auto";
 
 
@@ -108,7 +112,8 @@ _operatorController(1)
   m_levelChooser.AddOption("Half Neutral Right", halfNeutralRight);
   m_levelChooser.AddOption("Half Neutral Left", halfNeutralLeft);
   m_levelChooser.AddOption("Hub Auto", hubAuto);
-
+  m_levelChooser.AddOption("Double Neutral Right", doubleNeutralRight);
+  m_levelChooser.AddOption("Simar Mode", simarMode);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -140,7 +145,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == neutralRightTrench ||
       m_levelChooser.GetSelected() == neutralLeftTrench ||
       m_levelChooser.GetSelected() == halfNeutralRight ||
-      m_levelChooser.GetSelected() == halfNeutralLeft
+      m_levelChooser.GetSelected() == halfNeutralLeft ||
+      m_levelChooser.GetSelected() == doubleNeutralRight ||
+      m_levelChooser.GetSelected() == simarMode
     ) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
       return m_autoRunner->Create(trajectory);
