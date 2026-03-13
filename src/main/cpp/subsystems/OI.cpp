@@ -7,11 +7,24 @@
 
 OI::OI() :
 _driverController(0),
-_operatorController(1)
+_operatorController(1),
+hubActive(false),
+lastHubActive(false)
 {}
 
 // This method will be called once per scheduler run
-void OI::Periodic() {}
+void OI::Periodic() {
+    hubActive = frc::SmartDashboard::GetBoolean("Hub Active", false);
+    if (lastHubActive == !hubActive) {
+        DriverRumble();
+        OperatorRumble();
+    } else {
+        DriverStopRumble();
+        OperatorStopRumble();
+    }
+    lastHubActive = hubActive;
+    
+}
 
 double OI::GetDriverLeftX() {
     return _driverController.GetLeftX();

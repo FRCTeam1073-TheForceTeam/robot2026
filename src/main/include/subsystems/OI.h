@@ -124,4 +124,7 @@ class OI : public frc2::SubsystemBase {
         double LEFT_Y_ZERO;
         double RIGHT_X_ZERO;
         double RIGHT_Y_ZERO;
+
+        bool hubActive;
+        bool lastHubActive;
 };
