@@ -119,7 +119,7 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
 
       auto part = frc2::cmd::Parallel(
         DrivePath(m_drivetrain, m_localizer, split_traj).ToPtr(),
-        EventParser(trajectory)
+        EventParser(split_traj)
       );
       parts.emplace_back(part);
       parts.emplace_back(SmartDashPrint(std::to_string(s)).ToPtr());
