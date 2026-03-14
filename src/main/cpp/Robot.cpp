@@ -51,10 +51,9 @@ void Robot::RobotPeriodic() {
     std::cerr << "SCHEDULER RUN THREW UNKNOWN EXCEPTION!" << std::endl;
   }
 
-  std::string gameData;
-  gameData = frc::DriverStation::GetGameSpecificMessage();
-  if(gameData.length() > 0)
-  {
+  if (gameData.empty()) {
+    gameData = frc::DriverStation::GetGameSpecificMessage();
+  } else {
     switch (gameData[0])
     {
       case 'B':
@@ -67,8 +66,12 @@ void Robot::RobotPeriodic() {
         frc::SmartDashboard::PutString("Auto Winners", "Somethin Went Wrong");
         break;
     }
-  frc::SmartDashboard::PutBoolean("Hub Active", Robot::IsHubActive());
-  m_container->SetHubAcive(Robot::IsHubActive());
+
+    frc::SmartDashboard::PutBoolean("Hub Active", Robot::IsHubActive());
+    m_container->SetHubAcive(Robot::IsHubActive());
+    
+    int seconds = shiftTime.value();
+    frc::SmartDashboard::PutNumber("Shift Time", seconds);
   }
 }
 
@@ -140,50 +143,54 @@ void Robot::TeleopInit() {
 
   m_container->TeleopInit(); // Let container schedule things at start of teleop.
 }
+
 bool Robot::IsHubActive() {
   auto alliance = frc::DriverStation::GetAlliance();
+  if (!alliance.has_value()) return false;
+
   if (frc::DriverStation::IsAutonomousEnabled()) {
     return true;
   }
-  if (!frc::DriverStation::IsTeleopEnabled) {
+  if (!frc::DriverStation::IsTeleopEnabled()) {
     return false;
-    //gang we lost the hub
+    //if we arent in teleop or auto at this point we can assume there is no hub
   }
   units::time::second_t matchTime = frc::DriverStation::GetMatchTime();
-  std::string gameData;
-  gameData = frc::DriverStation::GetGameSpecificMessage();
-  if (gameData.length() > 0) {
+
+
+  bool weInactiveFirst = false;
+  if (!gameData.empty()) {
+    if (gameData.at(0) == 'R' && alliance.value() == frc::DriverStation::Alliance::kBlue) {
+      weInactiveFirst == true;
+    } else if (gameData.at(0) == 'B' && alliance.value() == frc::DriverStation::Alliance::kRed) {
+      weInactiveFirst == true;
+    } 
+  } else {
+    // gamedata is invalid default to true
     return true;
   }
 
-  bool redInactiveFirst = false;
-  if (gameData.at(0) == 'R') {
-    redInactiveFirst == true;
-  } else if (gameData.at(0) == 'B') {
-    redInactiveFirst == false;
-  } else {
-    //gamedata is invalid lets just say its true
-    return true;
-  }
+  // We know if we're inactive first:
 
-  bool shift1Active = true;
-  if (redInactiveFirst == true) {
-    shift1Active = false;
-  } else {
-    shift1Active = true;
-  }
+  bool shift1Active = !weInactiveFirst;
 
   if (matchTime > 130_s) {
+    shiftTime = matchTime - 130_s;
     return true;
   } else if (matchTime > 105_s) {
+    shiftTime = matchTime - 105_s;
     return shift1Active;
   }else if (matchTime > 80_s) {
+    shiftTime = matchTime - 80_s;
     return !shift1Active;
   } else if (matchTime > 55_s) {
+    shiftTime = matchTime - 55_s;
     return shift1Active;
   } else if (matchTime > 30_s) {
+    shiftTime = matchTime - 30_s;
     return !shift1Active;
   } else {
+    shiftTime = matchTime;
     return true;
   }
 }

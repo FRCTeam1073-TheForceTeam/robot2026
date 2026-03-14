@@ -20,13 +20,15 @@ void KickerTeleop::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void KickerTeleop::Execute() {
   auto BButton = m_OI->GetOperatorBButton();
+  bool AButton = m_OI->GetOperatorAButton();
+
+  if (AButton && !lastFastSpin) {
+    fasterSpin = !fasterSpin;
+  }
+  lastFastSpin = AButton;
 
   if (m_OI->GetOperatorRightTrigger() >= 0.1) {
     targetVelocity = 4.5_mps;
-    
-    if (m_OI->GetOperatorAButton() && !lastFastSpin) {
-      fasterSpin = !fasterSpin;
-    }
 
     if (fasterSpin) {
       targetVelocity *= 1.3;
@@ -39,8 +41,8 @@ void KickerTeleop::Execute() {
   }
   
   m_kicker->SetCommand(targetVelocity);
-  lastFastSpin = fasterSpin;
-  frc::SmartDashboard::PutBoolean("TeleopDrive/Fast Shot", fasterSpin);
+  frc::SmartDashboard::PutBoolean("Kicker/Fast Shot", fasterSpin);
+  frc::SmartDashboard::PutBoolean("Kicker/Last Fast Shot", lastFastSpin);
 
 }
 
