@@ -511,5 +511,6 @@
  "events":[
    {"name":"StartCollector", "from":{"target":2, "targetTimestamp":2.32784, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"StopCollector", "from":{"target":5, "targetTimestamp":4.47197, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Shoot", "from":{"target":8, "targetTimestamp":7.6438, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"Shoot", "from":{"target":8, "targetTimestamp":7.6438, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"DeployIntake", "from":{"target":10, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
