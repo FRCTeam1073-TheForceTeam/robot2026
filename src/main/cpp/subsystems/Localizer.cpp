@@ -24,6 +24,7 @@ void Localizer::resetPose(frc::Pose2d newPos) {
 
 void Localizer::Periodic() {
     units::time::second_t now = frc::Timer::GetFPGATimestamp();	
+    counter++;
     _estimator->UpdateWithTime(now, _driveTrain->GetGyroHeading(), _driveTrain->GetSwerveModulePositions());
 
     if (now - _lastUpdateTime > timeGap && measurementStable()) {
@@ -35,7 +36,7 @@ void Localizer::Periodic() {
             measurementCounter++;
         }
         _lastUpdateTime = now;
-        frc::SmartDashboard::PutNumber("Localize Measurements", measurementCounter);
+        
         _finder->clearMeasurements();
     }
 
@@ -44,7 +45,12 @@ void Localizer::Periodic() {
     // Compute speeds in fleid coordinates:
     auto speeds = _driveTrain->GetChassisSpeeds();
     _speeds = frc::ChassisSpeeds::FromRobotRelativeSpeeds(speeds, _estimator->GetEstimatedPosition().Rotation());
-
+    
+    if (counter == 50) {
+        counter = 0;
+        frc::SmartDashboard::PutNumber("Localize Measurements per second", (measurementCounter));
+        measurementCounter = 0;
+    }
     // Update localized output for debug:
     frc::SmartDashboard::PutNumber("Localizer/Pose(x)", _pose.X().value());
     frc::SmartDashboard::PutNumber("Localizer/Pose(y)", _pose.Y().value());
