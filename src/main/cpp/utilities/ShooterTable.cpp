@@ -1,5 +1,7 @@
 #include <utilities/ShooterTable.h>
 
+const double SPEED_SCALE = 0.96;
+
 ShooterTable::ShooterTable() {
     //Old data, probably can delete this
     // hoodTable.insert(1.00_m, 0.00_rad);
@@ -41,16 +43,16 @@ ShooterTable::ShooterTable() {
     hoodTable.insert(4.20_m, 0.235_rad);
     hoodTable.insert(4.76_m, 0.28_rad);
 
-    flywheelTable.insert(1.00_m, 8.00_mps);
-    flywheelTable.insert(1.50_m, 8.20_mps);
-    flywheelTable.insert(2.00_m, 8.80_mps);
-    flywheelTable.insert(2.30_m, 9.00_mps);
-    flywheelTable.insert(2.72_m, 9.20_mps);
-    flywheelTable.insert(3.00_m, 9.40_mps);
-    flywheelTable.insert(3.38_m, 9.80_mps);
-    flywheelTable.insert(3.85_m, 10.0_mps);
-    flywheelTable.insert(4.20_m, 10.4_mps);
-    flywheelTable.insert(4.76_m, 10.6_mps);
+    flywheelTable.insert(1.00_m, 8.00_mps * SPEED_SCALE);
+    flywheelTable.insert(1.50_m, 8.20_mps * SPEED_SCALE);
+    flywheelTable.insert(2.00_m, 8.80_mps * SPEED_SCALE);
+    flywheelTable.insert(2.30_m, 9.00_mps * SPEED_SCALE);
+    flywheelTable.insert(2.72_m, 9.20_mps * SPEED_SCALE);
+    flywheelTable.insert(3.00_m, 9.40_mps * SPEED_SCALE);
+    flywheelTable.insert(3.38_m, 9.80_mps * SPEED_SCALE);
+    flywheelTable.insert(3.85_m, 10.0_mps * SPEED_SCALE);
+    flywheelTable.insert(4.20_m, 10.4_mps * SPEED_SCALE);
+    flywheelTable.insert(4.76_m, 10.6_mps * SPEED_SCALE);
 };
 
 units::angle::radian_t ShooterTable::GetHoodAngle(units::length::meter_t range){
