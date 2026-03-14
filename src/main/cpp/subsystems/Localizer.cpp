@@ -26,7 +26,6 @@ void Localizer::resetPose(frc::Pose2d newPos) {
 
 void Localizer::Periodic() {
     units::time::second_t now = frc::Timer::GetFPGATimestamp();	
-    counter++;
     _estimator->UpdateWithTime(now, _driveTrain->GetGyroHeading(), _driveTrain->GetSwerveModulePositions());
 
     if (now - _lastUpdateTime > timeGap && measurementStable()) {
@@ -48,10 +47,10 @@ void Localizer::Periodic() {
     auto speeds = _driveTrain->GetChassisSpeeds();
     _speeds = frc::ChassisSpeeds::FromRobotRelativeSpeeds(speeds, _estimator->GetEstimatedPosition().Rotation());
     
-    if (counter == 50) {
-        counter = 0;
-        frc::SmartDashboard::PutNumber("Localize Measurements per second", measurementCounter);
+    if (counter >= 50) {
+        frc::SmartDashboard::PutNumber("Localizer/PS", measurementCounter);
         measurementCounter = 0;
+        counter = 0;
     }
     else {
         counter = counter + 1;
@@ -63,6 +62,8 @@ void Localizer::Periodic() {
     frc::SmartDashboard::PutNumber("Localizer/Vel(x)", _speeds.vx.value());
     frc::SmartDashboard::PutNumber("Localizer/Vel(y)", _speeds.vy.value());
     frc::SmartDashboard::PutNumber("Localizer/Vel(q)", _speeds.omega.value());
+    frc::SmartDashboard::PutNumber("Localizer/MC", measurementCounter);
+
 }
 
 frc::ChassisSpeeds Localizer::getSpeeds() {
