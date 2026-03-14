@@ -8,6 +8,8 @@ Localizer::Localizer(std::shared_ptr<Drivetrain> driveTrain, std::shared_ptr<Apr
     _estimator(std::make_shared<frc::SwerveDrivePoseEstimator<4U>>(_kinematics, driveTrain->GetOdometry().Rotation(), _driveTrain->GetSwerveModulePositions(), frc::Pose2d())),
     _lastUpdateTime(frc::Timer::GetFPGATimestamp())
 {
+    counter = 0;
+    measurementCounter = 0;
     _speeds.vx = 0.0_mps;
     _speeds.vy = 0.0_mps;
     _speeds.omega = 0.0_rad_per_s;
@@ -48,8 +50,11 @@ void Localizer::Periodic() {
     
     if (counter == 50) {
         counter = 0;
-        frc::SmartDashboard::PutNumber("Localize Measurements per second", (measurementCounter));
+        frc::SmartDashboard::PutNumber("Localize Measurements per second", measurementCounter);
         measurementCounter = 0;
+    }
+    else {
+        counter = counter + 1;
     }
     // Update localized output for debug:
     frc::SmartDashboard::PutNumber("Localizer/Pose(x)", _pose.X().value());
