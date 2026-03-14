@@ -77,8 +77,8 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
         autoRoutine.emplace_back(m_intake->IntakeIn());
       }
       else if (eventType == "StartCollector") {
-        autoRoutine.emplace_back(m_collector->CollectSpeed(-3.5_mps));
-      }
+        autoRoutine.emplace_back(m_collector->CollectSpeed(-3.5_mps +  (0.1 * m_drivetrain->GetChassisSpeeds().vx))); //TODO: maybe multiplier should be higher
+      } 
       else if (eventType == "StopCollector") {
         autoRoutine.emplace_back(m_collector->CollectSpeed(0_mps));
       }
