@@ -113,7 +113,7 @@ _operatorController(1)
   m_levelChooser.AddOption("Half Neutral Left", halfNeutralLeft);
   m_levelChooser.AddOption("Hub Auto", hubAuto);
   m_levelChooser.AddOption("Double Neutral Right", doubleNeutralRight);
-  m_levelChooser.AddOption("Simar Sigma Mode", cornerShotAuto);
+  m_levelChooser.AddOption("Corner Shot Auto", cornerShotAuto);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 

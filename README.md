@@ -88,27 +88,27 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 
 # OI (Operator Controller)
 
-| Button/Joystick  | Command Name            | Function                      |
-| ---------------- | ----------------------- | ----------------------------- |
-| Left Joystick X  | GetOperatorLeftX        | Moves Turret                  |
-| Left Joystick Y  | GetOperatorLeftY        |                               |
-| Right Joystick X | GetOperatorRightX       |                               |
-| Right Joystick Y | GetOperatorRightY       |                               |
-| Left Trigger     | GetOperatorLeftTrigger  | Auto Aim Flywheel and Turret  |
-| Right Trigger    | GetOperatorRightTrigger | Shoot, Spindexer + Kicker foward|
-| A Button         | GetOperatorAButton      |                               |
-| B Button         | GetOperatorBButton      | Spindexer + Kicker Backwards  |
-| X Button         | GetOperatorXButton      | Tower Set Shot                |
-| Y Button         | GetOperatorYButton      | Corner Set Shot               |
-| Menu Button      | GetOperatorMenuButton   |                               |
-| View Button      | GetOperatorViewButton   |                               |
-| Left Bumper      | GetOperatorLeftBumper   |                               |
-| Right Bumper     | GetOperatorRightBumper  |                               |
-| D-Pad Up         | GetOperatorDPadUp       | Zero Turret                   |
-| D-Pad Right      | GetOperatorDPadRight    | Zero Hood                     |
-| D-Pad Left       | GetOperatorDPadLeft     | Zero Intake                   |
-| D-Pad Down       | GetOperatorDPadDown     | Zero Climber                  |
-| Zero Controller  | ZeroOperatorController  |                               |
+| Button/Joystick  | Command Name            | Function                        |
+| ---------------- | ----------------------- | ------------------------------- |
+| Left Joystick X  | GetOperatorLeftX        | Moves Turret                    |
+| Left Joystick Y  | GetOperatorLeftY        |                                 |
+| Right Joystick X | GetOperatorRightX       |                                 |
+| Right Joystick Y | GetOperatorRightY       |                                 |
+| Left Trigger     | GetOperatorLeftTrigger  | Auto Aim Flywheel and Turret    |
+| Right Trigger    | GetOperatorRightTrigger | Shoot, Spindexer + Kicker Foward|
+| A Button         | GetOperatorAButton      | Faster Kicker + Spindexer       |
+| B Button         | GetOperatorBButton      | Spindexer + Kicker Backwards    |
+| X Button         | GetOperatorXButton      | Tower Set Shot                  |
+| Y Button         | GetOperatorYButton      | Corner Set Shot                 |
+| Menu Button      | GetOperatorMenuButton   |                                 |
+| View Button      | GetOperatorViewButton   |                                 |
+| Left Bumper      | GetOperatorLeftBumper   |                                 |
+| Right Bumper     | GetOperatorRightBumper  |                                 |
+| D-Pad Up         | GetOperatorDPadUp       | Zero Turret                     |
+| D-Pad Right      | GetOperatorDPadRight    | Zero Hood                       |
+| D-Pad Left       | GetOperatorDPadLeft     | Zero Intake                     |
+| D-Pad Down       | GetOperatorDPadDown     | Zero Climber                    |
+| Zero Controller  | ZeroOperatorController  |                                 |
 
 
 

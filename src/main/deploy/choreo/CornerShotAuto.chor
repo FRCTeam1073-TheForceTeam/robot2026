@@ -1,5 +1,5 @@
 {
- "name":"SimarMode",
+ "name":"CornerShotAuto",
  "version":2,
  "type":"Swerve",
  "variables":{

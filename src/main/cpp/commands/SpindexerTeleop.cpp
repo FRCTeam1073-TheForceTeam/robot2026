@@ -7,6 +7,8 @@
 SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<OI>& OI) :
   m_spindexer(spindexer), 
   m_OI(OI) {
+  fasterSpin = false;
+  lastFastSpin = false;
   AddRequirements(m_spindexer.get());
 }
 
@@ -16,18 +18,27 @@ void SpindexerTeleop::Initialize() {
 }
 
 // Called repeatedly when this Command is scheduled to run
-void SpindexerTeleop::Execute() {  
-
+void SpindexerTeleop::Execute() {
   if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1) {
     targetVelocity = 4.2_mps;
+
+    if (m_OI->GetOperatorAButton() && !lastFastSpin) {
+      fasterSpin = !fasterSpin;
+    }
+
+    if (fasterSpin) {
+      targetVelocity *= 1.3;
+    }
+
   } else if (m_OI->GetOperatorBButton()) {
     targetVelocity = -2_mps;
   } else {
     targetVelocity = 0_mps;
   }
 
+  lastFastSpin = fasterSpin;
+
   m_spindexer->SetCommand(targetVelocity);
-  frc::SmartDashboard::PutBoolean("Spindexer/AButton", m_OI->GetOperatorAButton());
 }
 
 // Called once the command ends or is interrupted.
