@@ -12,19 +12,9 @@
 #include "subsystems/LaserCan.h"
 #include "commands/Autos/TestAuto.h"
 
-// const std::string RobotContainer::noPosition = "No Position";
-// const std::string RobotContainer::rightPosition = "Right Auto";
-// const std::string RobotContainer::leftPosition = "Left Auto";
-// const std::string RobotContainer::centerPosition = "Center Auto";
-const std::string RobotContainer::testAuto = "Test_Auto";
-const std::string RobotContainer::centerAuto = "Center_Test";
 const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
 const std::string RobotContainer::noLevelAuto = "No Auto";
 const std::string RobotContainer::basicAuto = "Basic Auto";
-const std::string RobotContainer::cyclicAuto = "Cyclic_Auto";
-const std::string RobotContainer::eventTestAuto = "Event_Test";
-const std::string RobotContainer::l_Auto = "L_Auto";
-const std::string RobotContainer::greatAuto = "greatAuto";
 const std::string RobotContainer::basicShotAuto = "Basic Shot Auto";
 const std::string RobotContainer::exampleAuto = "Example_Auto";
 
@@ -97,16 +87,7 @@ _operatorController(1)
   // Autonomous Chooser:
 
   m_levelChooser.SetDefaultOption("No Level", noLevelAuto);
-  // m_levelChooser.AddOption("Week Zero Auto", weekZeroAuto);
-  // m_levelChooser.AddOption("Test Auto", testAuto);
-  // m_levelChooser.AddOption("Center Auto", centerAuto);
-  // m_levelChooser.AddOption("Basic Auto", basicAuto);
-  // m_levelChooser.AddOption("Cyclic Auto", cyclicAuto);
-  m_levelChooser.AddOption("Event Test Auto", eventTestAuto);
-  // m_levelChooser.AddOption("L Auto", l_Auto);
   m_levelChooser.AddOption("Basic Shot Auto", basicShotAuto);
-  m_levelChooser.AddOption("Great Auto", greatAuto);
-  // m_levelChooser.AddOption("Example Auto", exampleAuto);
   m_levelChooser.AddOption("Neutral Right Trench", neutralRightTrench);
   m_levelChooser.AddOption("Neutral Left Trench", neutralLeftTrench);
   m_levelChooser.AddOption("Half Neutral Right", halfNeutralRight);
@@ -123,7 +104,6 @@ _operatorController(1)
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  // TODO: un-comment this code
   try {
     if(m_levelChooser.GetSelected() == weekZeroAuto) {
       return WeekZeroAuto::Create(m_spindexer, m_kicker, m_flywheel, m_shooterHood, m_turret);
@@ -134,14 +114,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     else if (m_levelChooser.GetSelected() == basicShotAuto) {
       return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable);
     }
+    else if (m_levelChooser.GetSelected() == hubAuto) {
+      return Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood);
+    }
     else if (
-      m_levelChooser.GetSelected() == eventTestAuto ||
-      m_levelChooser.GetSelected() == testAuto ||
-      m_levelChooser.GetSelected() == centerAuto ||
-      m_levelChooser.GetSelected() == cyclicAuto ||
-      m_levelChooser.GetSelected() == l_Auto ||
       m_levelChooser.GetSelected() == exampleAuto ||
-      m_levelChooser.GetSelected() == greatAuto ||
       m_levelChooser.GetSelected() == neutralRightTrench ||
       m_levelChooser.GetSelected() == neutralLeftTrench ||
       m_levelChooser.GetSelected() == halfNeutralRight ||
@@ -149,12 +126,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == doubleNeutralRight ||
       m_levelChooser.GetSelected() == cornerShotAuto
     ) {
-      trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected()); // TODO: this will not work right now
+      trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory);
-    }
-
-    else if (m_levelChooser.GetSelected() == hubAuto) {
-      return Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood);
     }
   }
   catch (...) {

@@ -82,16 +82,10 @@ class RobotContainer {
   // static const std::string leftPosition;
   // static const std::string centerPosition;
   static const std::string weekZeroAuto;
-  static const std::string testAuto;
   static const std::string noLevelAuto;
-  static const std::string centerAuto;
   static const std::string basicAuto;
-  static const std::string cyclicAuto;
-  static const std::string eventTestAuto;
-  static const std::string l_Auto;
   static const std::string basicShotAuto;
   static const std::string exampleAuto;
-  static const std::string greatAuto;
 
   static const std::string neutralRightTrench;
   static const std::string neutralLeftTrench;
