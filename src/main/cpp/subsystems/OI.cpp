@@ -14,16 +14,14 @@ lastHubActive(false)
 
 // This method will be called once per scheduler run
 void OI::Periodic() {
-    // hubActive = frc::SmartDashboard::GetBoolean("Hub Active", false);
     // if (lastHubActive == !hubActive) {
-    //     DriverRumble();
-    //     OperatorRumble();
+    //     // DriverRumble();
+    //     // OperatorRumble();
     // } else {
-    //     DriverStopRumble();
-    //     OperatorStopRumble();
+    //     // DriverStopRumble();
+    //     // OperatorStopRumble();
     // }
     // lastHubActive = hubActive;
-    
 }
 
 double OI::GetDriverLeftX() {
@@ -127,11 +125,11 @@ bool OI::GetDriverDPadDown() {
 }
 
 bool OI::DriverRumble() {
-    _driverController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
+    _driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1.0);
 }
 
 bool OI::DriverStopRumble() {
-    _driverController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+    _driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0.0);
 }
 
 bool OI::DriverLeftStickPress() {
@@ -191,11 +189,11 @@ bool OI::GetOperatorDPadDown() {
 }
 
 bool OI::OperatorRumble() {
-    _operatorController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1);
+    _operatorController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1.0);
 }
 
 bool OI::OperatorStopRumble() {
-    _operatorController.frc::GenericHID::SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0);
+    _operatorController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0.0);
 }
 
 void OI::ZeroDriverController() {
@@ -218,4 +216,8 @@ void OI::ZeroOperatorController() {
     LEFT_Y_ZERO = GetOperatorLeftY();
     RIGHT_X_ZERO = GetOperatorRightX();
     RIGHT_Y_ZERO = GetOperatorRightY();
+}
+
+void OI::SetHubActive(bool active) {
+    hubActive = active;
 }

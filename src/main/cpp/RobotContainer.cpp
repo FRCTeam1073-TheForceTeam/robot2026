@@ -211,3 +211,7 @@ void RobotContainer::TestInit() {
 
 
 }
+
+void RobotContainer::SetHubAcive(bool active) {
+  m_OI->SetHubActive(active);
+}

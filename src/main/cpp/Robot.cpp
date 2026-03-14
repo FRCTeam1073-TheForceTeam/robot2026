@@ -58,7 +58,7 @@ void Robot::RobotPeriodic() {
     switch (gameData[0])
     {
       case 'B':
-        frc::SmartDashboard::PutString("Auto Winners", "Blu");
+        frc::SmartDashboard::PutString("Auto Winners", "Blue");
         break;
       case 'R':
         frc::SmartDashboard::PutString("Auto Winners", "Red");
@@ -68,6 +68,7 @@ void Robot::RobotPeriodic() {
         break;
     }
   frc::SmartDashboard::PutBoolean("Hub Active", Robot::IsHubActive());
+  m_container->SetHubAcive(Robot::IsHubActive());
   }
 }
 

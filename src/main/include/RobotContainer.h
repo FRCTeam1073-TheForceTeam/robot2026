@@ -117,6 +117,8 @@ class RobotContainer {
   // Called from Robot
   void TestInit();
 
+  void SetHubAcive(bool active);
+
  private:
 
   void ConfigureBindings();
