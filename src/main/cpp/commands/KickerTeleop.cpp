@@ -25,7 +25,7 @@ void KickerTeleop::Execute() {
   if (AButton && !lastFastSpin) {
     fasterSpin = !fasterSpin;
   }
-  lastFastSpin = fasterSpin;
+  lastFastSpin = AButton;
 
   if (m_OI->GetOperatorRightTrigger() >= 0.1) {
     targetVelocity = 4.5_mps;
@@ -42,6 +42,7 @@ void KickerTeleop::Execute() {
   
   m_kicker->SetCommand(targetVelocity);
   frc::SmartDashboard::PutBoolean("Kicker/Fast Shot", fasterSpin);
+  frc::SmartDashboard::PutBoolean("Kicker/Last Fast Shot", lastFastSpin);
 
 }
 

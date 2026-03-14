@@ -21,6 +21,10 @@ void SpindexerTeleop::Initialize() {
 void SpindexerTeleop::Execute() {
   bool AButton = m_OI->GetOperatorAButton();
 
+  if (AButton && !lastFastSpin) {
+    fasterSpin = !fasterSpin;
+  }
+  lastFastSpin = AButton;
 
   if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1) {
     targetVelocity = 4.2_mps;
