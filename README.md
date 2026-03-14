@@ -136,6 +136,20 @@ Add mechanisms after this...
 - Robo Rio: 10.10.73.2
 - Robot Radio: 10.10.73.1
 
+# Week 2 Autos
+
+| Auto Name             | Starting Position        | Description                                                                    |
+| --------------------- | ------------------------ | ------------------------------------------------------------------------------ |
+| No Level              | ------------------------ |  Does Nothing                                                                  |
+| Nuetral Right Trench  | Infront of Right Trench  |  goes under trench, collects across field, goes under other trench, shoots     |
+| Half Neutral Right    | Infront of Right Trench  |  goes under trench, collects accros 1/2 field, back under same trench, shoots  |
+| Neutral Left Trench   | Infront of Left Trench   |  same as right but mirrored across x-axis                                      |
+| Half Neutral Left     | Infront of Left Trench   |  same as right but mirrored across x-axis                                      |
+| Basic Shot Auto       | Infront of Either Trench |  shoots on the start line                                                      |
+| Hub Auto              | Infront of the Hub       |  shoots right against the hub                                                  |
+| Double Neutral Right  | ------------------------ |  Don't use                                                                     |
+| Corner Shot Auto      | Infront of Right Trench  |  half neutral right but move slowly to Human Player while shoot                |
+
 
 
 
