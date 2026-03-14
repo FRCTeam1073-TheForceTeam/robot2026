@@ -78,6 +78,7 @@ class Localizer : public frc2::SubsystemBase {
 
     units::time::second_t _lastUpdateTime;
     int measurementCounter = 0;
+    int counter = 0;
     units::time::millisecond_t timeGap{30};
     units::velocity::meters_per_second_t linearSpeedThreshold{2.5};
     units::angular_velocity::radians_per_second_t angularSpeedThreshold{2};
