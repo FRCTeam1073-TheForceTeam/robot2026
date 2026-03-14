@@ -35,9 +35,8 @@ m_intake(intake),
 m_laser(laser),
 m_targetFinder(finder),
 m_shooterTable(table)
-{
-  // Use addRequirements() here to declare subsystem dependencies.
-}
+{}
+
 
 frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
   std::vector<frc2::CommandPtr> autoRoutine;
@@ -99,41 +98,8 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           ).WithTimeout(12_s)
         );
       }
-
-
-
-      //TODO: discuss with Strategy subgroup what we will call this
-    //   if (eventType == "StartFlywheel") {
-    //     autoRoutine.emplace_back(m_flywheel->SpinToSpeed(14_mps));
-    //   }
-    //   else if (eventType.substr(0, 12) == "SetHoodLevel") {
-    //     autoRoutine.emplace_back(m_shooterHood->SetHoodLevel(0));
-    //   }
-    //   else if (eventType == "SetTurret") {
-    //      autoRoutine.emplace_back(m_turret->RotateToPos(90_deg));
-    //   }
-    //   else if (eventType == "IntakeOut") {
-    //     autoRoutine.emplace_back(m_intake->IntakeOut());
-    //   }
-    //   else if (eventType == "IntakeIn") {
-    //     autoRoutine.emplace_back(m_intake->IntakeIn());
-    //   }
-    //   else if (eventType == "StartCollector") {
-    //     autoRoutine.emplace_back(m_collector->CollectSpeed(3.5_mps));
-    //   }
-    //   else if (eventType == "StopFlywheel") {
-    //     autoRoutine.emplace_back(m_flywheel->SpinToSpeed(0_mps));
-    //   }
-    //   else if (eventType == "StopSpindexer") {
-    //     autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0_mps));
-    //   }
-    //   else if (eventType == "StopKicker") {
-    //     autoRoutine.emplace_back(m_kicker->SpinToSpeed(0_mps));
-    //   }
-    //   else if (eventType == "StopCollector") {
-    //     autoRoutine.emplace_back(m_collector->CollectSpeed(0_mps));
-    //   }
     }
+
     return frc2::cmd::Sequence(std::move(autoRoutine));
   }
   else {
@@ -142,7 +108,39 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
   }  
 }
 
+frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
+  std::vector<frc2::CommandPtr> parts;
+  
+  if (trajectory.has_value()) {
+    auto &traj = trajectory.value();
+
+    for (int s = 0; s < traj.splits.size(); s++) {
+      auto split_traj = traj.GetSplit(s);
+
+      auto part = frc2::cmd::Parallel(
+        DrivePath(m_drivetrain, m_localizer, split_traj).ToPtr(),
+        EventParser(trajectory)
+      );
+      parts.emplace_back(part);
+      parts.emplace_back(SmartDashPrint(std::to_string(s)).ToPtr());
+      parts.emplace_back(frc2::cmd::Wait(1_s));
+    }
+
+    return frc2::cmd::Sequence(std::move(parts));
+  }
+}
+
+frc2::CommandPtr AutoRunner::Prep() {
+  return frc2::cmd::Sequence(
+    ZeroTurret(m_turret).ToPtr(),
+    m_intake->IntakeOut(),
+    frc2::cmd::Wait(0.5_s)
+  );
+}
+
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
-   return frc2::cmd::Sequence(ZeroTurret(m_turret).ToPtr(), m_intake->IntakeOut(), frc2::cmd::Wait(0.5_s), frc2::cmd::Parallel(DrivePath(m_drivetrain, m_localizer, trajectory).ToPtr(), EventParser(trajectory)));
-   //TODO: think about mirroring for red
+   return frc2::cmd::Sequence(
+    Prep(),
+    PartGenerator(trajectory)
+  );
 }
