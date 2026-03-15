@@ -58,10 +58,10 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       previousTime = activeEvent.timestamp;
 
       if (eventType == "StartSpindexer") {
-        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(4.2_mps));
+        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(5.5_mps));
       }
       else if (eventType == "StartKicker") {
-        autoRoutine.emplace_back(m_kicker->SpinToSpeed(4.5_mps));
+        autoRoutine.emplace_back(m_kicker->SpinToSpeed(5.6_mps));
       }
       else if (eventType == "StopSpindexer") {
         autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0_mps));
@@ -135,11 +135,12 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
 }
 
 frc2::CommandPtr AutoRunner::Prep() {
-  return frc2::cmd::Sequence(
+  return frc2::cmd::Parallel(
     ZeroTurret(m_turret).ToPtr(),
+    ZeroClimber(m_climber).ToPtr(),
     m_intake->IntakeOut(),
     frc2::cmd::Wait(0.5_s)
-  );
+  ).WithTimeout(3.0_s);
 }
 
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
