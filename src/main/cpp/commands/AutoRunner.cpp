@@ -138,14 +138,14 @@ frc2::CommandPtr AutoRunner::Prep() {
   return frc2::cmd::Parallel(
     ZeroTurret(m_turret).ToPtr(),
     ZeroClimber(m_climber).ToPtr(),
-    m_intake->IntakeOut(),
-    frc2::cmd::Wait(0.5_s)
+    m_intake->IntakeOut()
   ).WithTimeout(3.0_s);
 }
 
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
    return frc2::cmd::Sequence(
     Prep(),
+    frc2::cmd::Wait(0.5_s),
     PartGenerator(trajectory)
   );
 }
