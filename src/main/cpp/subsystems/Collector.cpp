@@ -72,7 +72,7 @@ void Collector::Periodic() {
 }
 
 frc2::CommandPtr Collector::CollectSpeed(units::meters_per_second_t speed) {
-  return RunOnce([this, speed] {SetCommand(3.5_mps);});
+  return RunOnce([this, speed] {SetCommand(speed);});
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.

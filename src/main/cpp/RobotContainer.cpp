@@ -26,9 +26,9 @@ const std::string RobotContainer::doubleNeutralRight = "DoubleNeutralRight";
 
 const std::string RobotContainer::splitAuto = "SplitAuto";
 const std::string RobotContainer::cornerShotAuto = "CornerShotAuto";
+const std::string RobotContainer::cornerShotManual = "CornerShotManual";
 
 const std::string RobotContainer::hubAuto = "Hub Auto";
-
 
 RobotContainer::RobotContainer() :
 _operatorController(1)
@@ -98,6 +98,7 @@ _operatorController(1)
   m_levelChooser.AddOption("Double Neutral Right", doubleNeutralRight);
   m_levelChooser.AddOption("Corner Shot Auto", cornerShotAuto);
   m_levelChooser.AddOption("Split Path Auto", splitAuto);
+  m_levelChooser.AddOption("Corner Shot Manual", cornerShotManual);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -128,7 +129,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == halfNeutralLeft ||
       m_levelChooser.GetSelected() == doubleNeutralRight ||
       m_levelChooser.GetSelected() == cornerShotAuto ||
-      m_levelChooser.GetSelected() == splitAuto
+      m_levelChooser.GetSelected() == splitAuto ||
+      m_levelChooser.GetSelected() == cornerShotManual
     ) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory);

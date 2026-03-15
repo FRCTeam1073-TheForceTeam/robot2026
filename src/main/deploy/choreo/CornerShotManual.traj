@@ -1,5 +1,5 @@
 {
- "name":"CornerShotAuto",
+ "name":"CornerShotManual",
  "version":3,
  "snapshot":{
   "waypoints":[
@@ -405,5 +405,5 @@
  "events":[
    {"name":"StartCollector", "from":{"target":2, "targetTimestamp":1.93775, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"StopCollector", "from":{"target":7, "targetTimestamp":5.48445, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Shoot-Outpost", "from":{"target":9, "targetTimestamp":8.05484, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"Shoot-OutpostManual", "from":{"target":9, "targetTimestamp":8.05484, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
