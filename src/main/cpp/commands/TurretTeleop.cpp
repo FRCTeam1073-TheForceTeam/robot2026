@@ -38,7 +38,7 @@ void TurretTeleop::Execute() {
     targetAngle = 1.5_rad * leftX;
   }
   else if(m_OI->GetOperatorLeftTrigger() >= 0.1) {
-    targetAngle = units::radian_t(std::clamp(m_targetFinder->getFeedback().turretToTargetAngle.value(), -2 * std::numbers::pi / 3, std::numbers::pi / 2));
+    targetAngle = units::radian_t(m_targetFinder->getFeedback().turretToTargetAngle.value());
   }
   else {
     targetAngle = 0_rad;

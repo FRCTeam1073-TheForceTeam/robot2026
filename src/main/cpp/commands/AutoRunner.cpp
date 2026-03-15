@@ -109,25 +109,33 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               m_spindexer->SpinToSpeed(5.6_mps),
               m_kicker->SpinToSpeed(5.5_mps),
               frc2::cmd::Wait(6.0_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(2.0_s),
               m_intake->IntakeIn()
             )
-          ).WithTimeout(12_s)
+          ).WithTimeout(15_s)
         );
       }
-      else if (eventType == "Shoot-OutpostManual") {
+      else if (eventType == "Shoot-OutpostManual") { //TODO: test other one and remove this
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
             m_turret->RotateToPos(-140_deg),
-            m_flywheel->SpinToSpeed(10.6_mps),
+            m_flywheel->SpinToSpeed(10.5_mps),
             m_shooterHood->RotateToPos(0.267_rad),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.0_s),
               m_spindexer->SpinToSpeed(5.6_mps),
               m_kicker->SpinToSpeed(5.5_mps),
               frc2::cmd::Wait(6.0_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(2.0_s),
               m_intake->IntakeIn()
             )
-          ).WithTimeout(12_s)
+          ).WithTimeout(15_s)
         );
       }
     }
