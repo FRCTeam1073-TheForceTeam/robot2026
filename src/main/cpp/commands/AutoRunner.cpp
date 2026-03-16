@@ -171,6 +171,10 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
 
     return frc2::cmd::Sequence(std::move(parts));
   }
+  else {
+    std::cerr << "Auto Runner Part Generator not have a trajectory" << std::endl;
+    SmartDashPrint("No Trajectory");
+  }
 }
 
 frc2::CommandPtr AutoRunner::Prep() {
