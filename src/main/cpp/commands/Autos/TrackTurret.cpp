@@ -15,8 +15,6 @@ TrackTurret::TrackTurret(std::shared_ptr<Turret>& turret, std::shared_ptr<Target
   isAlignedToHub = false,
   targetPosition = 0_rad,
   position = 0_rad,//zeroed position is touching the hard stop
-  minPosition = -120_deg,
-  maxPosition = 94_deg,//TODO: get maximum velocity form EM
   AddRequirements(m_turret.get());
 }
 
@@ -28,7 +26,6 @@ void TrackTurret::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void TrackTurret::Execute() {
   targetPosition = m_targetFinder->getFeedback().turretToTargetAngle;
-  targetPosition = clamp(targetPosition, minPosition, maxPosition);
   m_turret->SetCommand(targetPosition);
 
   frc::SmartDashboard::PutNumber("Turret/position", position.value());
