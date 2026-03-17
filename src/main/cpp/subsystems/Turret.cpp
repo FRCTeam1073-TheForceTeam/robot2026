@@ -50,7 +50,7 @@ void Turret::SetCommand(Command cmd) {
 }
 
 void Turret::Zero(){
-  _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
+  _rotaterMotor.SetPosition(maxPosition * TurretToMotorTurns);
   _haveZero = true;
 }
 
@@ -85,6 +85,10 @@ void Turret::Periodic() {
     _rotaterMotor.SetControl(controls::NeutralOut());
     _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
   }
+  auto Locked = false;
+  if (units::math::abs(turretAngle - _feedback.position) < 2_deg) {
+      Locked = true;
+  }
 
   frc::SmartDashboard::PutNumber("Turret/Position rad", _feedback.position.value());
   frc::SmartDashboard::PutNumber("Turret/Position deg", units::angle::degree_t(_feedback.position).value());
@@ -92,6 +96,7 @@ void Turret::Periodic() {
   frc::SmartDashboard::PutNumber("Turret/Target", turretAngle.value());
   frc::SmartDashboard::PutNumber("Turret/Torque", _feedback.torque.value());
   frc::SmartDashboard::PutBoolean("Turret/HaveZero", _feedback.haveZero);
+  frc::SmartDashboard::PutBoolean("Turret/LinedUp", Locked);
 
 }
 
@@ -146,7 +151,7 @@ configs::TalonFXConfiguration configs{};
 
     // Depends on mechanism/subsystem design:
     // Optionally start out at zero after initialization:
-    _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
+    _rotaterMotor.SetPosition(maxPosition * TurretToMotorTurns);
 
 
     // Log errors.
