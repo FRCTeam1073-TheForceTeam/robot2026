@@ -107,6 +107,8 @@ class OI : public frc2::SubsystemBase {
         void ZeroDriverController();
         void ZeroOperatorController();
 
+        void SetHubActive(bool active);
+
     private:
     
         Feedback _feedback;
@@ -124,4 +126,7 @@ class OI : public frc2::SubsystemBase {
         double LEFT_Y_ZERO;
         double RIGHT_X_ZERO;
         double RIGHT_Y_ZERO;
+
+        bool hubActive;
+        bool lastHubActive;
 };

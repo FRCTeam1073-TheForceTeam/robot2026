@@ -88,27 +88,27 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 
 # OI (Operator Controller)
 
-| Button/Joystick  | Command Name            | Function                      |
-| ---------------- | ----------------------- | ----------------------------- |
-| Left Joystick X  | GetOperatorLeftX        | Moves Turret                  |
-| Left Joystick Y  | GetOperatorLeftY        |                               |
-| Right Joystick X | GetOperatorRightX       |                               |
-| Right Joystick Y | GetOperatorRightY       |                               |
-| Left Trigger     | GetOperatorLeftTrigger  | Auto Aim Flywheel and Turret  |
-| Right Trigger    | GetOperatorRightTrigger | Shoot, Spindexer + Kicker foward|
-| A Button         | GetOperatorAButton      |                               |
-| B Button         | GetOperatorBButton      | Spindexer + Kicker Backwards  |
-| X Button         | GetOperatorXButton      | Tower Set Shot                |
-| Y Button         | GetOperatorYButton      | Corner Set Shot               |
-| Menu Button      | GetOperatorMenuButton   |                               |
-| View Button      | GetOperatorViewButton   |                               |
-| Left Bumper      | GetOperatorLeftBumper   |                               |
-| Right Bumper     | GetOperatorRightBumper  |                               |
-| D-Pad Up         | GetOperatorDPadUp       | Zero Turret                   |
-| D-Pad Right      | GetOperatorDPadRight    | Zero Hood                     |
-| D-Pad Left       | GetOperatorDPadLeft     | Zero Intake                   |
-| D-Pad Down       | GetOperatorDPadDown     | Zero Climber                  |
-| Zero Controller  | ZeroOperatorController  |                               |
+| Button/Joystick  | Command Name            | Function                        |
+| ---------------- | ----------------------- | ------------------------------- |
+| Left Joystick X  | GetOperatorLeftX        | Moves Turret                    |
+| Left Joystick Y  | GetOperatorLeftY        |                                 |
+| Right Joystick X | GetOperatorRightX       |                                 |
+| Right Joystick Y | GetOperatorRightY       |                                 |
+| Left Trigger     | GetOperatorLeftTrigger  | Auto Aim Flywheel and Turret    |
+| Right Trigger    | GetOperatorRightTrigger | Shoot, Spindexer + Kicker Foward|
+| A Button         | GetOperatorAButton      | Faster Kicker + Spindexer       |
+| B Button         | GetOperatorBButton      | Spindexer + Kicker Backwards    |
+| X Button         | GetOperatorXButton      | Tower Set Shot                  |
+| Y Button         | GetOperatorYButton      | Corner Set Shot                 |
+| Menu Button      | GetOperatorMenuButton   |                                 |
+| View Button      | GetOperatorViewButton   |                                 |
+| Left Bumper      | GetOperatorLeftBumper   |                                 |
+| Right Bumper     | GetOperatorRightBumper  |                                 |
+| D-Pad Up         | GetOperatorDPadUp       | Zero Turret                     |
+| D-Pad Right      | GetOperatorDPadRight    | Zero Hood                       |
+| D-Pad Left       | GetOperatorDPadLeft     | Zero Intake                     |
+| D-Pad Down       | GetOperatorDPadDown     | Zero Climber                    |
+| Zero Controller  | ZeroOperatorController  |                                 |
 
 
 
@@ -135,6 +135,20 @@ Add mechanisms after this...
 - Vision Server 2: 10.10.73.7
 - Robo Rio: 10.10.73.2
 - Robot Radio: 10.10.73.1
+
+# Week 2 Autos
+
+| Auto Name             | Starting Position        | Description                                                                    |
+| --------------------- | ------------------------ | ------------------------------------------------------------------------------ |
+| No Level              | ------------------------ |  Does Nothing                                                                  |
+| Nuetral Right Trench  | Infront of Right Trench  |  goes under trench, collects across field, goes under other trench, shoots     |
+| Half Neutral Right    | Infront of Right Trench  |  goes under trench, collects accros 1/2 field, back under same trench, shoots  |
+| Neutral Left Trench   | Infront of Left Trench   |  same as right but mirrored across x-axis                                      |
+| Half Neutral Left     | Infront of Left Trench   |  same as right but mirrored across x-axis                                      |
+| Basic Shot Auto       | Infront of Either Trench |  shoots on the start line                                                      |
+| Hub Auto              | Infront of the Hub       |  shoots right against the hub                                                  |
+| Double Neutral Right  | ------------------------ |  Don't use                                                                     |
+| Corner Shot Auto      | Infront of Right Trench  |  half neutral right but move slowly to Human Player while shoot                |
 
 
 

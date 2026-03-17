@@ -31,6 +31,7 @@
 #include "commands/DrivePath.h"
 #include "commands/SmartDashPrint.h"
 #include "commands/ZeroTurret.h"
+#include "commands/ZeroClimber.h"
 #include <frc2/command/WaitCommand.h>
 
 #include <choreo/Choreo.h>
@@ -83,6 +84,8 @@ private:
   std::shared_ptr<LaserCan> m_laser;
   std::shared_ptr<ShooterTable> m_shooterTable;
   std::shared_ptr<TargetFinder> m_targetFinder;
+
+  frc2::CommandPtr Prep();
 
   frc2::CommandPtr EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 };

@@ -19,7 +19,7 @@ _climberCurrentSig(_climberMotor.GetTorqueCurrent()),
 _climberPositionSig(_climberMotor.GetPosition()),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
-_command(0.0_mps),
+_command(std::monostate()),
 _limiter(10.0_mps/1.0_s),
 _positionLimiter(0.104_m/1.0_s)
 {
@@ -77,7 +77,6 @@ void Climber::Periodic() {
     auto motorVel = limitedVel * TurnsPerMeter * GearRatio;
 
     _climberMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorVel));
-
 
 
   } else if (std::holds_alternative<units::length::meter_t>(_command)) {
@@ -146,7 +145,7 @@ bool Climber::ConfigureHardware() {
   _climberMotor.SetPosition(units::angle::turn_t(0));
 
   // Set our neutral mode to brake on:
-  status = _climberMotor.SetNeutralMode(signals::NeutralModeValue::Coast, 1_s);
+  status = _climberMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
 
   if (!status.IsOK()) {
       std::cerr << "Climber: neutral mode failed to config :(!" << std::endl;

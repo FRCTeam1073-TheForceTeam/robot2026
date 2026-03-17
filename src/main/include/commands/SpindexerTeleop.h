@@ -42,7 +42,9 @@ class SpindexerTeleop
    std::shared_ptr<Spindexer> m_spindexer;
    std::shared_ptr<OI> m_OI;
 
-    units::velocity::meters_per_second_t velocity;
-    units::velocity::meters_per_second_t targetVelocity;
+  units::velocity::meters_per_second_t velocity;
+  units::velocity::meters_per_second_t targetVelocity;
 
+  bool fasterSpin;
+  bool lastFastSpin;
 };

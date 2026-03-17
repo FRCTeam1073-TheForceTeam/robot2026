@@ -59,10 +59,10 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       previousTime = activeEvent.timestamp;
 
       if (eventType == "StartSpindexer") {
-        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(4.2_mps));
+        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(5.5_mps));
       }
       else if (eventType == "StartKicker") {
-        autoRoutine.emplace_back(m_kicker->SpinToSpeed(4.5_mps));
+        autoRoutine.emplace_back(m_kicker->SpinToSpeed(5.6_mps));
       }
       else if (eventType == "StopSpindexer") {
         autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0_mps));
@@ -77,8 +77,8 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
         autoRoutine.emplace_back(m_intake->IntakeIn());
       }
       else if (eventType == "StartCollector") {
-        autoRoutine.emplace_back(m_collector->CollectSpeed(-3.5_mps));
-      }
+        autoRoutine.emplace_back(m_collector->CollectSpeed(3.5_mps +  (0.1 * m_drivetrain->GetChassisSpeeds().vx))); //TODO: maybe multiplier should be higher
+      } 
       else if (eventType == "StopCollector") {
         autoRoutine.emplace_back(m_collector->CollectSpeed(0_mps));
       }
@@ -88,51 +88,56 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.0_s),
-              m_spindexer->SpinToSpeed(4.2_mps),
-              m_kicker->SpinToSpeed(4.5_mps),
-              frc2::cmd::Wait(4.0_s),
+              m_spindexer->SpinToSpeed(5.6_mps),
+              m_kicker->SpinToSpeed(5.5_mps),
+              frc2::cmd::Wait(5.0_s),
               m_intake->IntakeIn(),
-              frc2::cmd::Wait(4_s),
-              m_spindexer->SpinToSpeed(0.0_mps),
-              m_kicker->SpinToSpeed(0.0_mps)
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeIn()
             )
           ).WithTimeout(12_s)
         );
       }
-
-
-
-      //TODO: discuss with Strategy subgroup what we will call this
-    //   if (eventType == "StartFlywheel") {
-    //     autoRoutine.emplace_back(m_flywheel->SpinToSpeed(14_mps));
-    //   }
-    //   else if (eventType.substr(0, 12) == "SetHoodLevel") {
-    //     autoRoutine.emplace_back(m_shooterHood->SetHoodLevel(0));
-    //   }
-    //   else if (eventType == "SetTurret") {
-    //      autoRoutine.emplace_back(m_turret->RotateToPos(90_deg));
-    //   }
-    //   else if (eventType == "IntakeOut") {
-    //     autoRoutine.emplace_back(m_intake->IntakeOut());
-    //   }
-    //   else if (eventType == "IntakeIn") {
-    //     autoRoutine.emplace_back(m_intake->IntakeIn());
-    //   }
-    //   else if (eventType == "StartCollector") {
-    //     autoRoutine.emplace_back(m_collector->CollectSpeed(3.5_mps));
-    //   }
-    //   else if (eventType == "StopFlywheel") {
-    //     autoRoutine.emplace_back(m_flywheel->SpinToSpeed(0_mps));
-    //   }
-    //   else if (eventType == "StopSpindexer") {
-    //     autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0_mps));
-    //   }
-    //   else if (eventType == "StopKicker") {
-    //     autoRoutine.emplace_back(m_kicker->SpinToSpeed(0_mps));
-    //   }
-    //   else if (eventType == "StopCollector") {
-    //     autoRoutine.emplace_back(m_collector->CollectSpeed(0_mps));
-    //   }
+      else if (eventType == "Shoot-Outpost") {
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(1.0_s),
+              m_spindexer->SpinToSpeed(5.6_mps),
+              m_kicker->SpinToSpeed(5.5_mps),
+              frc2::cmd::Wait(6.0_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(2.0_s),
+              m_intake->IntakeIn()
+            )
+          ).WithTimeout(15_s)
+        );
+      }
+      else if (eventType == "Shoot-OutpostManual") { //TODO: test other one and remove this
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            m_turret->RotateToPos(-140_deg),
+            m_flywheel->SpinToSpeed(10.5_mps),
+            m_shooterHood->RotateToPos(0.267_rad),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(1.0_s),
+              m_spindexer->SpinToSpeed(5.6_mps),
+              m_kicker->SpinToSpeed(5.5_mps),
+              frc2::cmd::Wait(6.0_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(2.0_s),
+              m_intake->IntakeIn()
+            )
+          ).WithTimeout(15_s)
+        );
+      }
     }
     return frc2::cmd::Sequence(std::move(autoRoutine));
   }
@@ -142,7 +147,21 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
   }  
 }
 
+frc2::CommandPtr AutoRunner::Prep() {
+  return frc2::cmd::Parallel(
+    ZeroClimber(m_climber).ToPtr(),
+    ZeroTurret(m_turret).ToPtr(),
+    m_intake->IntakeOut()
+  ).WithTimeout(3.0_s);
+}
+
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
-   return frc2::cmd::Sequence(ZeroTurret(m_turret).ToPtr(), m_intake->IntakeOut(), frc2::cmd::Wait(0.5_s), frc2::cmd::Parallel(DrivePath(m_drivetrain, m_localizer, trajectory).ToPtr(), EventParser(trajectory)));
-   //TODO: think about mirroring for red
+  return frc2::cmd::Sequence(
+    Prep(),
+    frc2::cmd::Wait(0.5_s),
+    frc2::cmd::Parallel(
+      DrivePath(m_drivetrain, m_localizer, trajectory).ToPtr(),
+      EventParser(trajectory)
+    )
+  );
 }

@@ -8,6 +8,8 @@ Localizer::Localizer(std::shared_ptr<Drivetrain> driveTrain, std::shared_ptr<Apr
     _estimator(std::make_shared<frc::SwerveDrivePoseEstimator<4U>>(_kinematics, driveTrain->GetOdometry().Rotation(), _driveTrain->GetSwerveModulePositions(), frc::Pose2d())),
     _lastUpdateTime(frc::Timer::GetFPGATimestamp())
 {
+    counter = 0;
+    measurementCounter = 0;
     _speeds.vx = 0.0_mps;
     _speeds.vy = 0.0_mps;
     _speeds.omega = 0.0_rad_per_s;
@@ -35,7 +37,7 @@ void Localizer::Periodic() {
             measurementCounter++;
         }
         _lastUpdateTime = now;
-        frc::SmartDashboard::PutNumber("Localize Measurements", measurementCounter);
+        
         _finder->clearMeasurements();
     }
 
@@ -44,7 +46,15 @@ void Localizer::Periodic() {
     // Compute speeds in fleid coordinates:
     auto speeds = _driveTrain->GetChassisSpeeds();
     _speeds = frc::ChassisSpeeds::FromRobotRelativeSpeeds(speeds, _estimator->GetEstimatedPosition().Rotation());
-
+    
+    if (counter >= 50) {
+        frc::SmartDashboard::PutNumber("Localizer/PS", measurementCounter);
+        measurementCounter = 0;
+        counter = 0;
+    }
+    else {
+        counter = counter + 1;
+    }
     // Update localized output for debug:
     frc::SmartDashboard::PutNumber("Localizer/Pose(x)", _pose.X().value());
     frc::SmartDashboard::PutNumber("Localizer/Pose(y)", _pose.Y().value());
@@ -52,6 +62,8 @@ void Localizer::Periodic() {
     frc::SmartDashboard::PutNumber("Localizer/Vel(x)", _speeds.vx.value());
     frc::SmartDashboard::PutNumber("Localizer/Vel(y)", _speeds.vy.value());
     frc::SmartDashboard::PutNumber("Localizer/Vel(q)", _speeds.omega.value());
+    frc::SmartDashboard::PutNumber("Localizer/MC", measurementCounter);
+
 }
 
 frc::ChassisSpeeds Localizer::getSpeeds() {
