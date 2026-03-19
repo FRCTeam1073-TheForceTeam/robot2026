@@ -1,5 +1,9 @@
 #include "subsystems/AprilTagFinder.h"
+
+
 std::vector<AprilTagFinder::RobotCamera> AprilTagFinder::_cameras = {};
+
+
 AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<Drivetrain> drivetrain) : 
     m_turret(turret),
     m_drivetrain(drivetrain),
