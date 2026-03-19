@@ -130,6 +130,12 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
     return measurements;
 }
 
+std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getTurretResults()
+{
+    return _turretResults;
+}
+
+
 void AprilTagFinder::clearMeasurements() {
     _visionMeasurements.clear();
 }
@@ -165,6 +171,10 @@ void AprilTagFinder::Periodic() {
         //std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
         estimator.AddHeadingData(m_drivetrain->GetPreviousUpdateTime(),m_drivetrain->GetGyroHeading());
         std::vector<AprilTagFinder::VisionMeasurement> measurements = getMultiTagEstimate(results, estimator, transform);
+        if(cam._isTurret)
+        {
+            _turretResults = measurements;
+        }
         _visionMeasurements.insert(
             _visionMeasurements.end(),
             measurements.begin(),
