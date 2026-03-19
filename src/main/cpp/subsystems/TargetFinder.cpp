@@ -56,7 +56,11 @@ frc::Pose2d TargetFinder::getHubPos()
 
     frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * 1_s, _localizer->getSpeeds().vy * 1_s);
     //TODO: Fix scaling offset
-    auto time = (tempRange / 0.744_mps);
+    // auto time = (tempRange / 0.744_mps); Over Compenstated
+    // auto time = (tempRange / 1.488_mps);
+    // auto time = (tempRange / 2_mps);
+    auto time = (tempRange / 4_mps);
+
     velocityOffset = -velocityOffset * time.value();
     TargetLoc = TargetLoc.TransformBy(frc::Transform2d(velocityOffset, frc::Rotation2d()));
 

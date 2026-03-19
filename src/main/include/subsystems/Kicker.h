@@ -35,7 +35,7 @@ class Kicker : public frc2::SubsystemBase {
   static constexpr int LoadMotorId = 27; // TODO: Get motor id 
   static constexpr int laserCANId = 28;
   
-  const double GearRatio = 3; // TODO: Get gear ratio from EM
+  const double GearRatio = 2; // TODO: Get gear ratio from EM
 
   
 
