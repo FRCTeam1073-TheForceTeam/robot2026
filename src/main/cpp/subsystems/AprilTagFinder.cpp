@@ -103,25 +103,22 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
     for(auto& result : results)
     {
         std::optional<photon::EstimatedRobotPose> pose = estimator.EstimateCoprocMultiTagPose(result);
-        if(pose.has_value())
+        if(!pose.has_value())
         {
-            auto estimated_pose = pose.value();
-            units::length::meter_t minDist = 100.0_m;
-            for(auto& t : estimated_pose.targetsUsed)
-                minDist = units::math::min(minDist,units::length::meter_t(
-                    t.GetBestCameraToTarget().Translation().Norm()
-                ));
-            
-            auto std_devs = estimate_stddevs(minDist); //TODO: find the actual value
-            // std::cout<<"Using april tags: " ;
-            // for(auto& c : estimated_pose.targetsUsed)
-            // {
-            //     std::cout << c.fiducialId << ", ";
-            // }
-            // std::cout<<std::endl;
-            hasAprilTags = true;
-            measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
+            pose = estimator.EstimateLowestAmbiguityPose(result);
+            if(!pose.has_value())
+                continue;
         }
+        auto estimated_pose = pose.value();
+        units::length::meter_t minDist = 100.0_m;
+        for(auto& t : estimated_pose.targetsUsed)
+            minDist = units::math::min(minDist,units::length::meter_t(
+                t.GetBestCameraToTarget().Translation().Norm()
+            ));
+        
+        auto std_devs = estimate_stddevs(minDist); //TODO: find the actual value
+        hasAprilTags = true;
+        measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
     }
     return measurements;
 }
@@ -134,10 +131,10 @@ void AprilTagFinder::Periodic() {
     hasAprilTags = false;
     auto turretVelocity = m_turret->GetFeedback().velocity;
     for (int i = 0; i<_cameras.size(); i++) {
-        if(i==4 && !m_turret->GetFeedback().haveZero)
-            continue;
         auto& cam = _cameras[i];
         auto& estimator = _estimators[i];
+        if(cam._isTurret && (!m_turret->GetFeedback().haveZero || m_turret->GetFeedback().velocity>2_rad_per_s))
+            continue;
         std::vector<photon::PhotonPipelineResult> results = cam._camera->GetAllUnreadResults();
         frc::Transform3d transform = cam._transform;
         //If the camera is the turrets camera, and the velocty of the turret is acceptable we will use it. And if not we will skip over using the camera.
