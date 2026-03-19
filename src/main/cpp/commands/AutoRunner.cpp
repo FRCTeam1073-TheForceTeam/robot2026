@@ -160,13 +160,13 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
         DrivePath(m_drivetrain, m_localizer, split_traj).ToPtr(),
         EventParser(split_traj)
       );
-      parts.emplace_back(SmartDashPrint("start of parts, about to move(part)"));
+      SmartDashPrint("start of parts, about to move(part)");
       parts.emplace_back(std::move(part));
-      parts.emplace_back(SmartDashPrint("just moved, about to print the ToPtr() thing"));
-      parts.emplace_back(SmartDashPrint(std::to_string(s)).ToPtr());
-      parts.emplace_back(SmartDashPrint("about to wait one second"));
+      SmartDashPrint("just moved, about to print the ToPtr() thing");
+      SmartDashPrint(std::to_string(s)).ToPtr();
+      SmartDashPrint("about to wait one second");
       parts.emplace_back(frc2::cmd::Wait(1_s));
-      parts.emplace_back(SmartDashPrint("done waiting"));
+      SmartDashPrint("done waiting");
     }
 
     return frc2::cmd::Sequence(std::move(parts));
