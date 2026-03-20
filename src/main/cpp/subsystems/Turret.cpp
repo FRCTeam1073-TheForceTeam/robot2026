@@ -7,7 +7,7 @@
 #include "subsystems/Turret.h"
 #include <ctre/phoenix6/controls/NeutralOut.hpp>
 
-using namespace ctre::phoenix6;
+using namespace ctre::phoenix6; 
 
 /**
  * You have to use initializer lists to build up the elements of the subsystem in the right order.
@@ -18,7 +18,7 @@ _rotaterMotor(RotaterMotorId, CANBus("rio")),
 _rotaterPositionSig(_rotaterMotor.GetPosition()),
 _rotaterVelocitySig(_rotaterMotor.GetVelocity()),
 _rotaterCurrentSig(_rotaterMotor.GetTorqueCurrent()),
-_limiter(4.6_rad / 1_s),
+_limiter(6.0_rad / 1_s),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
   // Extra implementation of subsystem constructor goes here.
