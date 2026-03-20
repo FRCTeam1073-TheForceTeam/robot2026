@@ -51,21 +51,25 @@ frc::Pose2d TargetFinder::getHubPos()
     //all in field coordinates
     frc::Pose2d TargetLoc = OurHub;
 
-    auto tempLoc = TargetLoc.RelativeTo(roboPos);
-    auto tempRange = tempLoc.Translation().Norm();
+    auto tempLoc = TargetLoc.RelativeTo(turretPos);
+    auto tempRange = tempLoc.Translation().Norm().value();
 
     frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * 1_s, _localizer->getSpeeds().vy * 1_s);
     //TODO: Fix scaling offset
     // auto time = (tempRange / 0.744_mps); Over Compenstated
     // auto time = (tempRange / 1.488_mps);
     // auto time = (tempRange / 2_mps);
-    auto time = (tempRange / 4_mps);
+    // auto time = (tempRange / 4_mps);
+    double A = 1.0/4.0;
+    double B = 0.0;
+    double C = 0.0;
+    double time = ((tempRange*A) + ((tempRange*tempRange)*B) + C); // Emperical Model
 
-    velocityOffset = -velocityOffset * time.value();
+    velocityOffset = -velocityOffset * time;
     TargetLoc = TargetLoc.TransformBy(frc::Transform2d(velocityOffset, frc::Rotation2d()));
 
     //turns into robo coordinates
-    return TargetLoc.RelativeTo(roboPos);
+    return TargetLoc.RelativeTo(turretPos);
 }
 
 //right and left are swapped for red alliance bc zones are from blue alliance perspective
@@ -74,19 +78,19 @@ frc::Pose2d TargetFinder::Pass()
     UpdateAlliance();
     if (_alliance.value() == frc::DriverStation::Alliance::kRed && zone.contains("RIGHTHALF"))
     {
-        return REDPASS_L.frc::Pose2d::RelativeTo(roboPos);
+        return REDPASS_L.frc::Pose2d::RelativeTo(turretPos);
     }
     else if (_alliance.value() == frc::DriverStation::Alliance::kRed && zone.contains("LEFTHALF"))
     {
-        return REDPASS_R.frc::Pose2d::RelativeTo(roboPos);
+        return REDPASS_R.frc::Pose2d::RelativeTo(turretPos);
     }
     else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && zone.contains("RIGHTHALF"))
     {
-        return BLUEPASS_R.frc::Pose2d::RelativeTo(roboPos);
+        return BLUEPASS_R.frc::Pose2d::RelativeTo(turretPos);
     }
     else if (_alliance.value() == frc::DriverStation::Alliance::kBlue && zone.contains("LEFTHALF"))
     {
-        return BLUEPASS_L.frc::Pose2d::RelativeTo(roboPos);
+        return BLUEPASS_L.frc::Pose2d::RelativeTo(turretPos);
     }
 }
 
@@ -95,7 +99,7 @@ void TargetFinder::Periodic(){
     UpdateAlliance();
 
     zone = _zonefinder->GetZones();
-    roboPos = _localizer->getPose().TransformBy(ROBOTOTURRET);
+    turretPos = _localizer->getPose().TransformBy(ROBOTOTURRET);
 
     auto relativeTargetPos = getTargetPos().Translation();
 
