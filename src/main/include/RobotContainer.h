@@ -57,6 +57,7 @@
 #include "commands/Autos/BasicAuto.h"
 #include "commands/TestFlywheel.h"
 #include "commands/TestHood.h"
+#include "commands/Autos/LockTurret.h"
 
 
 #include <choreo/Choreo.h>

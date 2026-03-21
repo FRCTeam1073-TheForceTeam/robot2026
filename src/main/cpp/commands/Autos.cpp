@@ -9,6 +9,7 @@
 
 #include "commands/Autos/TrackHood.h"
 #include "commands/Autos/TrackTurret.h"
+#include "commands/Autos/LockTurret.h"
 #include "commands/Autos/TrackFlywheel.h"
 #include "commands/Autos/SetKicker.h"
 #include "commands/Autos/SetSpindexer.h"
@@ -18,7 +19,8 @@ namespace Autos {
 frc2::CommandPtr TrackHub(std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, 
     std::shared_ptr<ShooterHood>& shooterHood, 
     std::shared_ptr<TargetFinder>& hf, 
-    std::shared_ptr<ShooterTable>& st){
+    std::shared_ptr<ShooterTable>& st,
+    std::shared_ptr<AprilTagFinder>& atf){
     return frc2::cmd::Parallel(
         TrackHood(shooterHood, hf, st).ToPtr(),
         TrackFlywheel(flywheel, hf, st).ToPtr(),
@@ -26,7 +28,7 @@ frc2::CommandPtr TrackHub(std::shared_ptr<Turret>& turret, std::shared_ptr<Flywh
     );
 }
 
-frc2::CommandPtr BasicAutoShot(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st){
+frc2::CommandPtr BasicAutoShot(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<AprilTagFinder>& atf){
     return
         frc2::cmd::Parallel(
         TrackHood(shooterHood, hf, st).ToPtr(),

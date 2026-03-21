@@ -82,8 +82,8 @@ private:
   std::shared_ptr<Collector> m_collector;
   std::shared_ptr<Intake> m_intake;
   std::shared_ptr<LaserCan> m_laser;
-  std::shared_ptr<ShooterTable> m_shooterTable;
   std::shared_ptr<TargetFinder> m_targetFinder;
+  std::shared_ptr<ShooterTable> m_shooterTable;
 
   frc2::CommandPtr Prep();
 

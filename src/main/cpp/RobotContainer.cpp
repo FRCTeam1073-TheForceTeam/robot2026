@@ -113,7 +113,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       return BasicAuto::Create(m_drivetrain, m_localizer);
     }
     else if (m_levelChooser.GetSelected() == basicShotAuto) {
-      return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable);
+      return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_tagFinder);
     }
     else if (m_levelChooser.GetSelected() == hubAuto) {
       return Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood);
@@ -181,10 +181,9 @@ void RobotContainer::TestInit() {
   m_shooterHood->RemoveDefaultCommand();
 
   // Launch some commands for test mode:
-  frc2::CommandScheduler::GetInstance().Schedule(TestFlywheel(m_flywheel, m_OI).ToPtr());
-  frc2::CommandScheduler::GetInstance().Schedule(TestHood(m_shooterHood, m_OI).ToPtr());
-
-
+ // frc2::CommandScheduler::GetInstance().Schedule(TestFlywheel(m_flywheel, m_OI).ToPtr());
+ // frc2::CommandScheduler::GetInstance().Schedule(TestHood(m_shooterHood, m_OI).ToPtr());
+ // frc2::CommandScheduler::GetInstance().Schedule(LockTurret(m_turret, m_targetFinder, m_tagFinder).ToPtr());
 }
 
 void RobotContainer::SetHubAcive(bool active) {
