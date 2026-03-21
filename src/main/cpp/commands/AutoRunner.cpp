@@ -89,14 +89,18 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(0.5_s),
               m_spindexer->SpinToSpeed(5.6_mps),
               m_kicker->SpinToSpeed(5.5_mps),
-              frc2::cmd::Wait(2.5_s),
+              frc2::cmd::Wait(0.1_s),
               m_intake->IntakeIn(),
-              frc2::cmd::Wait(1.0_s),
+              frc2::cmd::Wait(0.5_s),
               m_intake->IntakeOut(),
-              frc2::cmd::Wait(1.0_s),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
               m_intake->IntakeIn()
             )
-          ).WithTimeout(10_s)
+          ).WithTimeout(6.0_s)
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
