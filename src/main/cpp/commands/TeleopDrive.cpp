@@ -96,17 +96,14 @@ void TeleopDrive::Execute() {
     bool driverDPadRight = m_OI->GetDriverDPadRight();
     int driverDPadAngle = m_OI->GetDriverDPadAngle();
 
-    double alpha = 0.337;
-    double beta = 0.41;
-
     //set deadzones
     if (std::abs(leftY) < JOYSTICK_DEADZONE) {leftY = 0.0;}
     if (std::abs(leftX) < JOYSTICK_DEADZONE) {leftX = 0.0;}
     if (std::abs(rightX) < JOYSTICK_DEADZONE) {rightX = 0.0;}
 
-    auto vx = std::clamp(allianceSign * (leftX / std::abs(leftX)) * alpha * (std::pow(maximumLinearVelocity.value(), std::abs(leftX)) - 1) * 1_mps, -maximumLinearVelocity, maximumLinearVelocity);
-    auto vy = std::clamp(allianceSign * (leftY / std::abs(leftY)) * alpha * (std::pow(maximumLinearVelocity.value(), std::abs(leftY)) - 1) * 1_mps, -maximumLinearVelocity, maximumLinearVelocity);
-    auto omega = std::clamp(allianceSign * (rightX / std::abs(rightX)) * beta * (std::pow(maximumRotationVelocity.value(), std::abs(rightX)) - 1) * 1_rad_per_s, -maximumRotationVelocity, maximumRotationVelocity);
+    auto vx = std::clamp(allianceSign * (leftX / std::abs(leftX)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftX)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
+    auto vy = std::clamp(allianceSign * (leftY / std::abs(leftY)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftY)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
+    auto omega = std::clamp(allianceSign * (rightX / std::abs(rightX)) * (maximumRotationVelocity / (maximumRotationVelocity.value() - 1)) * (std::pow(maximumRotationVelocity.value(), std::abs(rightX)) - 1), -maximumRotationVelocity, maximumRotationVelocity);
 
     if (!lastYPressed && m_OI->GetDriverYButton()) {
         slowMode = !slowMode;
