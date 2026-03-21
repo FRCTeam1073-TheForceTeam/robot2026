@@ -8,8 +8,6 @@ SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::sha
   m_spindexer(spindexer), 
   m_kicker(kicker),
   m_OI(OI) {
-  fasterSpin = false;
-  lastFastSpin = false;
   AddRequirements(m_spindexer.get());
 }
 
@@ -22,17 +20,8 @@ void SpindexerTeleop::Initialize() {
 void SpindexerTeleop::Execute() {
   bool AButton = m_OI->GetOperatorAButton();
 
-  if (AButton && !lastFastSpin) {
-    fasterSpin = !fasterSpin;
-  }
-  lastFastSpin = AButton;
-
-  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1 && abs(m_kicker->GetVelocity() - m_kicker->GetTargetVelocity()) <= 0.2) { //checks if the button is pressed and if the kciker is close enough to its target velocity
-    targetVelocity = 5.6_mps;
-
-    if (fasterSpin) {
-      targetVelocity *= 1.2;
-    }
+  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1 && abs(m_kicker->GetVelocity() - m_kicker->GetTargetVelocity()) <= 0.2) {
+    targetVelocity = 5.75_mps;
 
   } else if (m_OI->GetOperatorBButton()) {
     targetVelocity = -2_mps;

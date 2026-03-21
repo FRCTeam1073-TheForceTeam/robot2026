@@ -115,7 +115,7 @@ bool Intake::ConfigureHardware() {
   // Slot 0 for the position control loop:
   configs.Slot0.kV = 0.153;
   configs.Slot0.kP = 0.4;
-  configs.Slot0.kI = 0.02;
+  configs.Slot0.kI = 0.04;
   configs.Slot0.kD = 0.01;
   configs.Slot0.kA = 0.0;
   configs.Slot0.kS = 0.02;
@@ -155,7 +155,8 @@ bool Intake::ConfigureHardware() {
   }
 
   // Set our neutral mode to brake on:
-  status = _leadMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
+
+      status = _leadMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
 
   if (!status.IsOK()) {
       std::cerr << "Intake: neutral mode failed to config :(!" << std::endl;
