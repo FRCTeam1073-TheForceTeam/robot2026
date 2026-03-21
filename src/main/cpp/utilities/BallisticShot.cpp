@@ -14,8 +14,10 @@ BallisticShot::Shot BallisticShot::GetShot(units::length::meter_t range, units::
     timeToFall = std::sqrt((2 * heightAboveHub / gravity).value()) * 1_s;
     xVel = range / (timeToMaxHeight + timeToFall);
     hoodAngle = atan2(yVel.value(), xVel.value()) * 1_rad;
-    flywheelSpeed = std::sqrt((xVel * xVel + yVel * yVel).value()) * 1_mps;
-    shot.FlywheelSpeed = flywheelSpeed;
-    shot.HoodAngle = hoodAngle;
+    flywheelSpeed = std::sqrt((xVel * xVel + yVel * yVel).value()) * 2_mps; //TODO: change scale factor
+    shot.flywheelSpeed = flywheelSpeed;
+    shot.hoodAngle = hoodAngle;
+    shot.timeToFall = timeToFall;
+    shot.timeToMaxHeight = timeToMaxHeight;
     return shot;
 }

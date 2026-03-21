@@ -33,7 +33,7 @@ void HoodTeleop::Execute() {
     // Use lookup table:
     auto range = m_hf->getFeedback().rangeToTarget;
     auto shot = m_bs->GetShot(range, 0.8_m);//TODO: find a good value for the height above the hub
-    auto angle = shot.HoodAngle;
+    auto angle = shot.hoodAngle;
     m_shooterHood->SetCommand(angle);
   } else if (m_OI->GetOperatorYButton()) {
     //auto angle = 0.2188_rad; // Corner Shot old

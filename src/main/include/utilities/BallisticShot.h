@@ -14,8 +14,10 @@ class BallisticShot {
  public:
   struct Shot
   {
-    units::velocity::meters_per_second_t FlywheelSpeed;
-    units::angle::radian_t HoodAngle;
+    units::velocity::meters_per_second_t flywheelSpeed;
+    units::angle::radian_t hoodAngle;
+    units::time::second_t timeToMaxHeight;
+    units::time::second_t timeToFall;
   };
 
   Shot GetShot(units::length::meter_t range, units::length::meter_t heightAboveHub);

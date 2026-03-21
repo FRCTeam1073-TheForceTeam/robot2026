@@ -34,7 +34,7 @@ void FlywheelTeleop::Execute() {
     // Using lookup table:
     auto range = m_hf->getFeedback().rangeToTarget;
     auto shot = m_bs->GetShot(range, 0.8_m); //TODO: find a good value for the height above the hub
-    auto speed = shot.FlywheelSpeed;
+    auto speed = shot.flywheelSpeed;
     m_flywheel->SetCommand(speed);
   } else if (m_OI->GetOperatorYButton()) {
     auto speed = 11.0_mps; // Corner Shot
