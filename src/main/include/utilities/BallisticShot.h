@@ -18,7 +18,7 @@ class BallisticShot {
     units::angle::radian_t HoodAngle;
   };
 
-  Shot GetShot(units::length::meter_t range, units::length::meter_t heightAboveHub){}
+  Shot GetShot(units::length::meter_t range, units::length::meter_t heightAboveHub);
   
   BallisticShot();
  private:
