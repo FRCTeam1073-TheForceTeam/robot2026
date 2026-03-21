@@ -1,6 +1,7 @@
 #include <utilities/ShooterTable.h>
 
-const double SPEED_SCALE = 0.96;
+// const double SPEED_SCALE = 0.96; AndyMark At GSD
+const double SPEED_SCALE = 1.0;
 
 ShooterTable::ShooterTable() {
     //Old data, probably can delete this
