@@ -76,10 +76,6 @@ class Kicker : public frc2::SubsystemBase {
   /// Set the command for the system.
   void SetCommand(Command cmd);
 
-  double GetVelocity();
-
-  double GetTargetVelocity();
-
   frc2::CommandPtr SpinToSpeed(units::meters_per_second_t velocity);
 
  private:

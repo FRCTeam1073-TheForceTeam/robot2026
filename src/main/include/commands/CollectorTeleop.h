@@ -50,6 +50,4 @@ class CollectorTeleop
    bool collect;
    bool last_trigger;
 
-  units::velocity::meters_per_second_t targetVelocity;
-
 };

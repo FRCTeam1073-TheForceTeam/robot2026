@@ -20,15 +20,15 @@ void SpindexerTeleop::Initialize() {
 void SpindexerTeleop::Execute() {
   bool AButton = m_OI->GetOperatorAButton();
 
-  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1 && abs(m_kicker->GetVelocity() - m_kicker->GetTargetVelocity()) <= 0.2) {
-    targetVelocity = 5.75_mps;
+  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1 && units::math::abs(m_kicker->GetFeedback().velocity) >= 3.0_mps) {
+    m_spindexer->SetCommand(5.75_mps);
 
   } else if (m_OI->GetOperatorBButton()) {
-    targetVelocity = -2_mps;
+    m_spindexer->SetCommand(-2.0_mps);
   } else {
-    targetVelocity = 0_mps;
+    m_spindexer->SetCommand(std::monostate());
   }
-  m_spindexer->SetCommand(targetVelocity);
+  
 }
 
 // Called once the command ends or is interrupted.

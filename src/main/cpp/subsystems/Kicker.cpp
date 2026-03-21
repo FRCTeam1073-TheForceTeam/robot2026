@@ -42,14 +42,6 @@ void Kicker::SetCommand(Command cmd) {
   _command = cmd;
 }
 
-double Kicker::GetVelocity() {
-  return _feedback.velocity.value();
-}
-
-double Kicker::GetTargetVelocity() {
-  return _limiter.LastValue().value();
-}
-
 void Kicker::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_kickerVelocitySig, _kickerCurrentSig);
