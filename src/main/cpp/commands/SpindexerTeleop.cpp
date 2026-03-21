@@ -4,11 +4,10 @@
 
 #include "commands/SpindexerTeleop.h"
 
-SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<OI>& OI) :
+SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<OI>& OI) :
   m_spindexer(spindexer), 
+  m_kicker(kicker),
   m_OI(OI) {
-  fasterSpin = false;
-  lastFastSpin = false;
   AddRequirements(m_spindexer.get());
 }
 
@@ -21,24 +20,15 @@ void SpindexerTeleop::Initialize() {
 void SpindexerTeleop::Execute() {
   bool AButton = m_OI->GetOperatorAButton();
 
-  if (AButton && !lastFastSpin) {
-    fasterSpin = !fasterSpin;
-  }
-  lastFastSpin = AButton;
-
-  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1) {
-    targetVelocity = 5.6_mps;
-
-    if (fasterSpin) {
-      targetVelocity *= 1.2;
-    }
+  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1 && units::math::abs(m_kicker->GetFeedback().velocity) >= 3.0_mps) {
+    m_spindexer->SetCommand(5.75_mps);
 
   } else if (m_OI->GetOperatorBButton()) {
-    targetVelocity = -2_mps;
+    m_spindexer->SetCommand(-2.0_mps);
   } else {
-    targetVelocity = 0_mps;
+    m_spindexer->SetCommand(std::monostate());
   }
-  m_spindexer->SetCommand(targetVelocity);
+  
 }
 
 // Called once the command ends or is interrupted.

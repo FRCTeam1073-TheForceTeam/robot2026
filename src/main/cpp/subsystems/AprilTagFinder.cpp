@@ -115,6 +115,8 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
             pose = estimator.EstimateLowestAmbiguityPose(result);
             if(!pose.has_value())
                 continue;
+            if(pose->targetsUsed.empty() || pose->targetsUsed[0].poseAmbiguity>ambiguityThreshold)
+                continue;
         }
         auto estimated_pose = pose.value();
         units::length::meter_t minDist = 100.0_m;
@@ -154,6 +156,7 @@ void AprilTagFinder::Periodic() {
         if (cam._isTurret) {
             // If the camera is the turrent but it is not zeroed/indexed skip it.
             if (!m_turret->GetFeedback().haveZero) {
+                frc::SmartDashboard::PutBoolean("AprilTagFinder/UsingTurretCam", false);
                 continue;
             }
 
@@ -175,7 +178,9 @@ void AprilTagFinder::Periodic() {
                 auto turretAngle = m_turret->GetFeedback().position - turretVelocity * averageLatency; //TODO: Tweak this number
                 transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + 
                             (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
+                frc::SmartDashboard::PutBoolean("AprilTagFinder/UsingTurretCam", true);
             } else {
+                frc::SmartDashboard::PutBoolean("AprilTagFinder/UsingTurretCam", false);
                 continue; // Skip turret if it's moving too fast.
             }
         } // End camera is turret.

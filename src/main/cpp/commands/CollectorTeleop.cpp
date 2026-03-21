@@ -16,31 +16,27 @@ CollectorTeleop::CollectorTeleop(std::shared_ptr<Collector>& collector, std::sha
 }
 
 // Called when the command is initially scheduled.
-void CollectorTeleop::Initialize() {
-
-  targetVelocity = 0_mps;
-}
+void CollectorTeleop::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void CollectorTeleop::Execute() {  
 
   // TODO: ASK SILLY DIRIVE TEAM!!
  if (std::abs(m_OI->GetDriverLeftTrigger()) >= 0.1) { // To eject fuel.
-    targetVelocity = -4.0_mps;
+    m_collector->SetCommand(-4.0_mps);
   }
   else if (std::abs(m_OI->GetDriverRightTrigger()) >= 0.1) {
-    targetVelocity = 3.5_mps + (0.1 * m_dt->GetChassisSpeeds().vx);
+    m_collector->SetCommand(3.5_mps + (0.1 * m_dt->GetChassisSpeeds().vx));
   }
   else {
-      targetVelocity = 0_mps;
+    m_collector->SetCommand(std::monostate());
   }
 
-  m_collector->SetCommand(targetVelocity);
+  
 }
 
 // Called once the command ends or is interrupted.
-void CollectorTeleop::End(bool interrupted) {
-  targetVelocity = 0_mps;
+void CollectorTeleop::End(bool interrupted) { 
   m_collector->SetCommand(std::monostate()); // Default no-command state.
 }
 

@@ -42,7 +42,7 @@ frc2::CommandPtr BasicAutoShot(std::shared_ptr<Spindexer>& spindexer, std::share
 frc2::CommandPtr HubAuto(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood){
     return
         frc2::cmd::Parallel(
-        shooterHood->SetPosition(0_rad),
+        shooterHood->SetPosition(69.2_deg),
         flywheel->SpinToSpeed(8_mps),
         turret->RotateToPos(0_rad),
         frc2::cmd::Sequence(frc2::cmd::Wait(2.0_s), 
