@@ -52,6 +52,10 @@ void ShooterHood::Zero() {
   _hasZero = true;
 }
 
+frc2::CommandPtr ShooterHood::RotateToPos(units::radian_t pos) {
+  return RunOnce([this, pos] {SetCommand(pos);});
+}
+
 void ShooterHood::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_hoodPositionSig, _hoodCurrentSig);
@@ -104,6 +108,11 @@ void ShooterHood::Periodic() {
 frc2::CommandPtr ShooterHood::SetHoodLevel(int level) {
     return RunOnce([this, level] {SetCommand(level * 0.1_rad);});
 }
+
+frc2::CommandPtr ShooterHood::SetPosition(units::angle::radian_t angle) {
+  return RunOnce([this, angle] {SetCommand(angle);});
+}
+
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool ShooterHood::ConfigureHardware() {

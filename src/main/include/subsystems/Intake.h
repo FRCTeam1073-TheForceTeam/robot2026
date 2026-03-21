@@ -78,6 +78,9 @@ class Intake : public frc2::SubsystemBase {
   /// Set the command for the system.
   void SetCommand(Command cmd);
 
+  frc2::CommandPtr SpinToPosition(units::angle::turn_t position);
+
+
   void Zero();
 
  private:

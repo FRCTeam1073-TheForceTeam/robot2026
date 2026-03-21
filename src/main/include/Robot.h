@@ -27,6 +27,8 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
   void SimulationInit() override;
   void SimulationPeriodic() override;
+
+  bool IsHubActive();
   
  private:
 
@@ -35,4 +37,11 @@ class Robot : public frc::TimedRobot {
 
   // Individual subsystems are constructed and managed here:
   std::unique_ptr<RobotContainer> m_container;
+
+  // Game data:
+  std::string gameData;
+
+  // Time left in shift:
+  units::time::second_t shiftTime;
+
 };

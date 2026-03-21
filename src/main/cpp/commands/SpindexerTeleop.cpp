@@ -4,8 +4,9 @@
 
 #include "commands/SpindexerTeleop.h"
 
-SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<OI>& OI) :
+SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<OI>& OI) :
   m_spindexer(spindexer), 
+  m_kicker(kicker),
   m_OI(OI) {
   AddRequirements(m_spindexer.get());
 }
@@ -16,18 +17,18 @@ void SpindexerTeleop::Initialize() {
 }
 
 // Called repeatedly when this Command is scheduled to run
-void SpindexerTeleop::Execute() {  
+void SpindexerTeleop::Execute() {
+  bool AButton = m_OI->GetOperatorAButton();
 
-  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1) {
-    targetVelocity = 4.2_mps;
+  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1 && abs(m_kicker->GetVelocity() - m_kicker->GetTargetVelocity()) <= 0.2) {
+    targetVelocity = 5.75_mps;
+
   } else if (m_OI->GetOperatorBButton()) {
     targetVelocity = -2_mps;
   } else {
     targetVelocity = 0_mps;
   }
-
   m_spindexer->SetCommand(targetVelocity);
-  frc::SmartDashboard::PutBoolean("Spindexer/AButton", m_OI->GetOperatorAButton());
 }
 
 // Called once the command ends or is interrupted.

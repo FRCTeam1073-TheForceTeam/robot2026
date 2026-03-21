@@ -7,7 +7,7 @@
 #include "subsystems/Turret.h"
 #include <ctre/phoenix6/controls/NeutralOut.hpp>
 
-using namespace ctre::phoenix6;
+using namespace ctre::phoenix6; 
 
 /**
  * You have to use initializer lists to build up the elements of the subsystem in the right order.
@@ -18,7 +18,7 @@ _rotaterMotor(RotaterMotorId, CANBus("rio")),
 _rotaterPositionSig(_rotaterMotor.GetPosition()),
 _rotaterVelocitySig(_rotaterMotor.GetVelocity()),
 _rotaterCurrentSig(_rotaterMotor.GetTorqueCurrent()),
-_limiter(4.6_rad / 1_s),
+_limiter(6.0_rad / 1_s),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
   // Extra implementation of subsystem constructor goes here.
@@ -50,7 +50,7 @@ void Turret::SetCommand(Command cmd) {
 }
 
 void Turret::Zero(){
-  _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
+  _rotaterMotor.SetPosition(maxPosition * TurretToMotorTurns);
   _haveZero = true;
 }
 
@@ -85,6 +85,10 @@ void Turret::Periodic() {
     _rotaterMotor.SetControl(controls::NeutralOut());
     _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
   }
+  auto Locked = false;
+  if (units::math::abs(turretAngle - _feedback.position) < 2_deg) {
+      Locked = true;
+  }
 
   frc::SmartDashboard::PutNumber("Turret/Position rad", _feedback.position.value());
   frc::SmartDashboard::PutNumber("Turret/Position deg", units::angle::degree_t(_feedback.position).value());
@@ -92,6 +96,7 @@ void Turret::Periodic() {
   frc::SmartDashboard::PutNumber("Turret/Target", turretAngle.value());
   frc::SmartDashboard::PutNumber("Turret/Torque", _feedback.torque.value());
   frc::SmartDashboard::PutBoolean("Turret/HaveZero", _feedback.haveZero);
+  frc::SmartDashboard::PutBoolean("Turret/LinedUp", Locked);
 
 }
 
@@ -113,11 +118,11 @@ configs::TalonFXConfiguration configs{};
 
     // Slot 0 for position control mode:
     configs.Slot0.kV = 0.153; // Motor constant.
-    configs.Slot0.kP = 2.4;
-    configs.Slot0.kI = 0.2;
-    configs.Slot0.kD = 0.05;
+    configs.Slot0.kP = 6;
+    configs.Slot0.kI = 1;
+    configs.Slot0.kD = 0.2;
     configs.Slot0.kA = 0.0;
-    configs.Slot0.kS = 0.1;
+    configs.Slot0.kS = 0.05;
 
     // Slot 1 is velocity
     configs.Slot1.kV = 0.153;
@@ -146,7 +151,7 @@ configs::TalonFXConfiguration configs{};
 
     // Depends on mechanism/subsystem design:
     // Optionally start out at zero after initialization:
-    _rotaterMotor.SetPosition(units::angle::degree_t(95.0) * TurretToMotorTurns);
+    _rotaterMotor.SetPosition(maxPosition * TurretToMotorTurns);
 
 
     // Log errors.

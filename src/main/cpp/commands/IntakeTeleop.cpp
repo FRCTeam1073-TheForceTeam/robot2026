@@ -36,10 +36,16 @@ void IntakeTeleop::Execute() {
   if (position_in) {  
     m_intake->SetCommand(-122.0_deg);
   } else {
-    m_intake->SetCommand(-0.1_deg);
+    if (units::math::abs(m_intake->GetFeedback().position) <= 0.2_rad) {
+      m_intake->SetCommand(std::monostate());
+    } else {
+      m_intake->SetCommand(-0.1_deg);
+    }
   }
 
   last_bumper_right = bumper_right; // Keep track of button for toggle.
+
+  
 
 }
 

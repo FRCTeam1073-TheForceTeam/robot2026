@@ -40,6 +40,4 @@ class TrackTurret
 
   units::angle::radian_t targetPosition;
   units::angle::radian_t position;//zeroed position is up against the hard stop
-  units::angle::radian_t maxPosition;
-  units::angle::radian_t minPosition;
 };

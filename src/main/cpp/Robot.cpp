@@ -10,6 +10,7 @@
 
 #include <frc2/command/CommandScheduler.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DriverStation.h>
 
 #include "grpl/CanBridge.h"
 
@@ -49,6 +50,29 @@ void Robot::RobotPeriodic() {
   } catch (...) {
     std::cerr << "SCHEDULER RUN THREW UNKNOWN EXCEPTION!" << std::endl;
   }
+
+  if (gameData.empty()) {
+    gameData = frc::DriverStation::GetGameSpecificMessage();
+  } else {
+    switch (gameData[0])
+    {
+      case 'B':
+        frc::SmartDashboard::PutString("Auto Winners", "Blue");
+        break;
+      case 'R':
+        frc::SmartDashboard::PutString("Auto Winners", "Red");
+        break;
+      default:
+        frc::SmartDashboard::PutString("Auto Winners", "Somethin Went Wrong");
+        break;
+    }
+
+    frc::SmartDashboard::PutBoolean("Hub Active", Robot::IsHubActive());
+    m_container->SetHubAcive(Robot::IsHubActive());
+    
+    int seconds = shiftTime.value();
+    frc::SmartDashboard::PutNumber("Shift Time", seconds);
+  }
 }
 
 /**
@@ -83,6 +107,7 @@ void Robot::DisabledPeriodic() {
  */
 void Robot::AutonomousInit() {
   std::cerr << "Autonomous Init..." << std::endl;
+  
 
   try {
     m_autonomousCommand = m_container->GetAutonomousCommand();
@@ -119,6 +144,56 @@ void Robot::TeleopInit() {
   m_container->TeleopInit(); // Let container schedule things at start of teleop.
 }
 
+bool Robot::IsHubActive() {
+  auto alliance = frc::DriverStation::GetAlliance();
+  if (!alliance.has_value()) return false;
+
+  if (frc::DriverStation::IsAutonomousEnabled()) {
+    return true;
+  }
+  if (!frc::DriverStation::IsTeleopEnabled()) {
+    return false;
+    //if we arent in teleop or auto at this point we can assume there is no hub
+  }
+  units::time::second_t matchTime = frc::DriverStation::GetMatchTime();
+
+
+  bool weInactiveFirst = false;
+  if (!gameData.empty()) {
+    if (gameData.at(0) == 'R' && alliance.value() == frc::DriverStation::Alliance::kBlue) {
+      weInactiveFirst == true;
+    } else if (gameData.at(0) == 'B' && alliance.value() == frc::DriverStation::Alliance::kRed) {
+      weInactiveFirst == true;
+    } 
+  } else {
+    // gamedata is invalid default to true
+    return true;
+  }
+
+  // We know if we're inactive first:
+
+  bool shift1Active = !weInactiveFirst;
+
+  if (matchTime > 130_s) {
+    shiftTime = matchTime - 130_s;
+    return true;
+  } else if (matchTime > 105_s) {
+    shiftTime = matchTime - 105_s;
+    return shift1Active;
+  }else if (matchTime > 80_s) {
+    shiftTime = matchTime - 80_s;
+    return !shift1Active;
+  } else if (matchTime > 55_s) {
+    shiftTime = matchTime - 55_s;
+    return shift1Active;
+  } else if (matchTime > 30_s) {
+    shiftTime = matchTime - 30_s;
+    return !shift1Active;
+  } else {
+    shiftTime = matchTime;
+    return true;
+  }
+}
 /**
  * This function is called periodically during operator control.
  */

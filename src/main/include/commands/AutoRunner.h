@@ -26,10 +26,13 @@
 #include "subsystems/Kicker.h"
 #include "subsystems/Climber.h"
 #include <utilities/ShooterTable.h>
+#include "subsystems/TargetFinder.h"
 
 #include "commands/DrivePath.h"
 #include "commands/SmartDashPrint.h"
 #include "commands/ZeroTurret.h"
+#include "commands/ZeroClimber.h"
+#include <frc2/command/WaitCommand.h>
 
 #include <choreo/Choreo.h>
 
@@ -49,7 +52,7 @@ class AutoRunner {
   explicit AutoRunner(
     std::shared_ptr<Drivetrain> drivetrain,
     std::shared_ptr<AprilTagFinder> Tags,
-    std::shared_ptr<Localizer> Localizer,
+    std::shared_ptr<Localizer> localizer,
     std::shared_ptr<Kicker> kicker,
     std::shared_ptr<Climber> climber,
     std::shared_ptr<Flywheel> flywheel,
@@ -58,7 +61,9 @@ class AutoRunner {
     std::shared_ptr<Turret> turret,
     std::shared_ptr<Collector> collector,
     std::shared_ptr<Intake> intake,
-    std::shared_ptr<LaserCan> laser
+    std::shared_ptr<LaserCan> laser,
+    std::shared_ptr<ShooterTable> table,
+    std::shared_ptr<TargetFinder> finder
   );
 
   frc2::CommandPtr Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
@@ -77,6 +82,10 @@ private:
   std::shared_ptr<Collector> m_collector;
   std::shared_ptr<Intake> m_intake;
   std::shared_ptr<LaserCan> m_laser;
+  std::shared_ptr<ShooterTable> m_shooterTable;
+  std::shared_ptr<TargetFinder> m_targetFinder;
+
+  frc2::CommandPtr Prep();
 
   frc2::CommandPtr EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 };

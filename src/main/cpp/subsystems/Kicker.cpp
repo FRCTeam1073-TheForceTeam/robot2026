@@ -42,6 +42,14 @@ void Kicker::SetCommand(Command cmd) {
   _command = cmd;
 }
 
+double Kicker::GetVelocity() {
+  return _feedback.velocity.value();
+}
+
+double Kicker::GetTargetVelocity() {
+  return _limiter.LastValue().value();
+}
+
 void Kicker::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_kickerVelocitySig, _kickerCurrentSig);
@@ -75,8 +83,8 @@ configs::TalonFXConfiguration configs{};
     configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A; 
 
-    configs.Voltage.PeakForwardVoltage = 8_V; // These are pretty typical values, adjust as needed.
-    configs.Voltage.PeakReverseVoltage = -8_V;
+    configs.Voltage.PeakForwardVoltage = 9_V; // These are pretty typical values, adjust as needed.
+    configs.Voltage.PeakReverseVoltage = -9_V;
 
     // Slot 0 for the velocity control loop:
     configs.Slot0.kV = 0.12;
@@ -88,7 +96,7 @@ configs::TalonFXConfiguration configs{};
   
 
     // Set whether motor control direction is inverted or not:
-    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
+    configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
 
     // Set the control configuration for the drive motor:
     auto status = _kickerMotor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.
