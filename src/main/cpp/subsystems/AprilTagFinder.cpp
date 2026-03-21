@@ -32,7 +32,7 @@ AprilTagFinder::VisionMeasurement::VisionMeasurement(frc::Pose2d pose, frc::Tran
     _stddevs(stddevs)
 {}
 
-std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getAllMeasurements() {
+const std::vector<AprilTagFinder::VisionMeasurement>& AprilTagFinder::getAllMeasurements() const {
     return _visionMeasurements;
 }
 
@@ -53,18 +53,19 @@ std::vector<photon::PhotonTrackedTarget> AprilTagFinder::getCamTargets(std::shar
     return targets;
 }
 
-frc::Transform2d AprilTagFinder::toTransform2d(frc::Transform3d t3d) {
+frc::Transform2d AprilTagFinder::toTransform2d(const frc::Transform3d& t3d) {
     return frc::Transform2d(t3d.X(), t3d.Y(), t3d.Rotation().ToRotation2d());
 }
 
-std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getCamMeasurements(std::vector<photon::PhotonPipelineResult> results, frc::Transform3d camTransform3d) {
+std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getCamMeasurements(const std::vector<photon::PhotonPipelineResult>& results, 
+                                                                                  const frc::Transform3d& camTransform3d) {
     std::vector<VisionMeasurement> measurements = std::vector<VisionMeasurement>();
-    for (auto& result : results){
+    for (const auto& result : results) {
         if (result.HasTargets()){
         // targets.addAll(result.getTargets());
         units::time::second_t result_timestamp = result.GetTimestamp(); // Adjusted for each result for time compensation.
 
-        for (auto& target : result.GetTargets()) {
+        for (const auto& target : result.GetTargets()) {
             
             if (FieldMap::fieldMap.GetTagPose(target.GetFiducialId()).has_value()){
                 if (target.GetPoseAmbiguity() != -1 && target.GetPoseAmbiguity() < ambiguityThreshold){
@@ -86,39 +87,43 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getCamMeasurement
                     }
                 }
             }
-        }
+        } // End loop over targets.
       }
     }
     return measurements;
 }
 
-frc::Transform3d AprilTagFinder::getRobotCam(int index) {
-    return _cameras[index]._transform;
+const frc::Transform3d& AprilTagFinder::getRobotCamTransform(int index) const {
+    return _cameras.at(index)._transform;
 }
 
-std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstimate(std::vector<photon::PhotonPipelineResult> results, photon::PhotonPoseEstimator& estimator, frc::Transform3d camTransform3d)
+std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstimate(const std::vector<photon::PhotonPipelineResult>& results, 
+                                                                                    photon::PhotonPoseEstimator& estimator, 
+                                                                                    const frc::Transform3d& camTransform3d)
 {
     estimator.SetRobotToCameraTransform(camTransform3d);
     std::vector<VisionMeasurement> measurements = std::vector<VisionMeasurement>();
-    for(auto& result : results)
+    for (const auto& result : results)
     {
         std::optional<photon::EstimatedRobotPose> pose = estimator.EstimateCoprocMultiTagPose(result);
-        if(pose.has_value())
+        if (pose.has_value())
         {
-            auto estimated_pose = pose.value();
+            const auto& estimated_pose = pose.value();
             units::length::meter_t minDist = 100.0_m;
-            for(auto& t : estimated_pose.targetsUsed)
+            for (const auto& t : estimated_pose.targetsUsed)
                 minDist = units::math::min(minDist,units::length::meter_t(
                     t.GetBestCameraToTarget().Translation().Norm()
                 ));
             
             auto std_devs = estimate_stddevs(minDist); //TODO: find the actual value
+
             // std::cout<<"Using april tags: " ;
             // for(auto& c : estimated_pose.targetsUsed)
             // {
             //     std::cout << c.fiducialId << ", ";
             // }
             // std::cout<<std::endl;
+
             hasAprilTags = true;
             measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
         }
@@ -134,32 +139,44 @@ void AprilTagFinder::Periodic() {
     hasAprilTags = false;
     auto turretVelocity = m_turret->GetFeedback().velocity;
     for (int i = 0; i<_cameras.size(); i++) {
-        if(i==4 && !m_turret->GetFeedback().haveZero)
-            continue;
-        auto& cam = _cameras[i];
+        const auto& cam = _cameras[i];
         auto& estimator = _estimators[i];
+
         std::vector<photon::PhotonPipelineResult> results = cam._camera->GetAllUnreadResults();
         frc::Transform3d transform = cam._transform;
-        //If the camera is the turrets camera, and the velocty of the turret is acceptable we will use it. And if not we will skip over using the camera.
-        //TODO: Revisit threshold
-        if (cam._isTurret && std::abs(turretVelocity.value()) < 1.0){
-            units::time::millisecond_t totalLatency = 0_ms;
-            float count = 0.0;
-            for (auto &result : results){
-                totalLatency += result.GetLatency();
-                count = count + 1.0;
-            }
-            units::time::millisecond_t averageLatency = 0_ms;
-            if(count > 0.0){
-                averageLatency = totalLatency / count;
+
+        // If the camera is the turrets camera, and the velocty of the turret is acceptable we will use it. And if not we will skip over using the camera.
+        if (cam._isTurret) {
+            // If the camera is the turrent but it is not zeroed/indexed skip it.
+            if (!m_turret->GetFeedback().haveZero) {
+                continue;
             }
 
-            auto turretAngle = m_turret->GetFeedback().position - turretVelocity * averageLatency; //TODO: Tweak this number
-            transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
-        }
+            // If the turret is moving too quickly then skip it otherwise try to use it.
+            // TODO: Revisit threshold
+            if (std::abs(turretVelocity.value()) < 1.0) {
+                units::time::millisecond_t totalLatency = 0_ms;
+                float count = 0.0;
+                for (auto &result : results) {
+                    totalLatency += result.GetLatency();
+                    count = count + 1.0;
+                }
+                units::time::millisecond_t averageLatency = 0_ms;
+                if (count > 0.0) {
+                    averageLatency = totalLatency / count;
+                }
 
-        //std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
-        estimator.AddHeadingData(m_drivetrain->GetPreviousUpdateTime(),m_drivetrain->GetGyroHeading());
+                // Estimate turrent angle at point of average latency from measurements:
+                auto turretAngle = m_turret->GetFeedback().position - turretVelocity * averageLatency; //TODO: Tweak this number
+                transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + 
+                            (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
+            } else {
+                continue; // Skip turret if it's moving too fast.
+            }
+        } // End camera is turret.
+
+        // std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
+        estimator.AddHeadingData(m_drivetrain->GetPreviousUpdateTime(), m_drivetrain->GetGyroHeading());
         std::vector<AprilTagFinder::VisionMeasurement> measurements = getMultiTagEstimate(results, estimator, transform);
         _visionMeasurements.insert(
             _visionMeasurements.end(),
