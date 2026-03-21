@@ -7,7 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-
+#include "utilities/BallisticShot.h"
 #include "subsystems/Flywheel.h"
 #include "subsystems/TargetFinder.h"
 #include "utilities/ShooterTable.h"
@@ -25,7 +25,7 @@ class FlywheelTeleop
    *
    * @param flywheel The subsystem used by this command.
    */
-  explicit FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st);
+  explicit FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<BallisticShot>& bs);
 
   void Initialize() override;
 
@@ -40,7 +40,7 @@ class FlywheelTeleop
   std::shared_ptr<Flywheel> m_flywheel;
   std::shared_ptr<OI> m_OI;
   std::shared_ptr<TargetFinder> m_hf;
-  std::shared_ptr<ShooterTable> m_st;
+  std::shared_ptr<BallisticShot> m_bs;
 
   bool XButton;
   bool DPadDown;

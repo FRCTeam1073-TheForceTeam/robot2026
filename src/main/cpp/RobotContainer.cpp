@@ -50,6 +50,7 @@ _operatorController(1)
   m_climber = std::make_shared<Climber>();
 
   m_shooterTable = std::make_shared<ShooterTable>();
+  m_ballisticShot = std::make_shared<BallisticShot>();
  std::cerr << "\tShooter table created..." << std::endl;
   m_intake = std::make_shared<Intake>();
    std::cerr << "\tIntake created..." << std::endl;
@@ -76,8 +77,8 @@ _operatorController(1)
   m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI, m_drivetrain).ToPtr());
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_OI).ToPtr());
   m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable, m_zoneFinder).ToPtr());
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable).ToPtr());
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_ballisticShot, m_zoneFinder).ToPtr());
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_ballisticShot).ToPtr());
   m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder).ToPtr());
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
 

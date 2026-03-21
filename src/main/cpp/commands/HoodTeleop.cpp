@@ -4,12 +4,12 @@
 
 #include "commands/HoodTeleop.h"
 
-HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<OI>&  OI, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<ZoneFinder>& zone) :
+HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<OI>&  OI, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<BallisticShot>& bs, std::shared_ptr<ZoneFinder>& zone) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_shooterHood(shooterHood),
   m_OI(OI),
   m_hf(hf),
-  m_st(st),
+  m_bs(bs),
   m_zone(zone) {
     level = 0;
     RightBumperPastState = false;
@@ -32,7 +32,8 @@ void HoodTeleop::Execute() {
   else if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) {
     // Use lookup table:
     auto range = m_hf->getFeedback().rangeToTarget;
-    auto angle = m_st->GetHoodAngle(range);
+    auto shot = m_bs->GetShot(range, 0.5_m);//TODO: find a good value for the height above the hub
+    auto angle = shot.HoodAngle;
     m_shooterHood->SetCommand(angle);
   } else if (m_OI->GetOperatorYButton()) {
     auto angle = 0.2188_rad; // Corner Shot

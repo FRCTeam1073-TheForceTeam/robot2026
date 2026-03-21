@@ -9,11 +9,11 @@
 #include <choreo/Choreo.h>
 #include <commands/Autos/TestAuto.h>
 
-FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
+FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<BallisticShot>& bs) :
   m_flywheel(flywheel),
   m_OI(oi),
   m_hf(hf),
-  m_st(st) {
+  m_bs(bs) {
   maxVel = 10_mps;
   scale = 1.0;
   level = 0;
@@ -33,7 +33,8 @@ void FlywheelTeleop::Execute() {
   if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) {
     // Using lookup table:
     auto range = m_hf->getFeedback().rangeToTarget;
-    auto speed = m_st->GetFlywheelVelocity(range);
+    auto shot = m_bs->GetShot(range, 0.5_m); //TODO: find a good value for the height above the hub
+    auto speed = shot.FlywheelSpeed;
     m_flywheel->SetCommand(speed);
   } else if (m_OI->GetOperatorYButton()) {
     auto speed = 11.0_mps; // Corner Shot
