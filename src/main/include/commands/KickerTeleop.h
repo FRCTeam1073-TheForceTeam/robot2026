@@ -35,7 +35,5 @@ class KickerTeleop
    std::shared_ptr<OI> m_OI;
 
    units::meters_per_second_t targetVelocity;
-
-   bool fasterSpin;
-   bool lastFastSpin;
+   
 };
