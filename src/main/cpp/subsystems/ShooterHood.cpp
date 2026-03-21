@@ -48,7 +48,7 @@ void ShooterHood::SetCommand(Command cmd) {
 }
 
 void ShooterHood::Zero() {
-  _hoodMotor.SetPosition(units::angle::turn_t(0));
+  _hoodMotor.SetPosition(units::angle::degree_t(69.2) * HoodToMotorGearRatio);
   _hasZero = true;
 }
 
@@ -133,13 +133,13 @@ bool ShooterHood::ConfigureHardware() {
 
   // Slot 1 for position control mode:
   configs.Slot1.kV = 0.153; // Motor constant.
-  configs.Slot1.kP = 2.2;
-  configs.Slot1.kI = 0.15;
+  configs.Slot1.kP = 2.5;
+  configs.Slot1.kI = 0.2;
   configs.Slot1.kD = 0.0;
   configs.Slot1.kA = 0.0;
   configs.Slot1.kS = 0.02;
   // Set whether motor control direction is inverted or not:
-  configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
+  configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
 
   // Set the control configuration for the drive motor:
   auto status = _hoodMotor.GetConfigurator().Apply(configs, 1_s ); // 1 Second configuration timeout.
@@ -149,7 +149,7 @@ bool ShooterHood::ConfigureHardware() {
       return false;
   }
 
-  _hoodMotor.SetPosition(units::angle::turn_t(0));
+  _hoodMotor.SetPosition(units::angle::degree_t(69.2) * HoodToMotorGearRatio);
 
   // Set our neutral mode to brake on:
   status = _hoodMotor.SetNeutralMode(signals::NeutralModeValue::Coast, 1_s);
