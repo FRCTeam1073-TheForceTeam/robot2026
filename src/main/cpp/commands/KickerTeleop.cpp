@@ -28,7 +28,7 @@ void KickerTeleop::Execute() {
   lastFastSpin = AButton;
 
   if (m_OI->GetOperatorRightTrigger() >= 0.1) {
-    targetVelocity = 5.6_mps;
+    targetVelocity = 5.7_mps;
 
     if (fasterSpin) {
       targetVelocity *= 1.2;

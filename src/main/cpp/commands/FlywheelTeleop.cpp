@@ -42,7 +42,7 @@ void FlywheelTeleop::Execute() {
     auto speed = 9.4_mps; // Tower Shot
     m_flywheel->SetCommand(speed);
   } else {
-    m_flywheel->SetCommand(0.0_mps);
+    m_flywheel->SetCommand(std::monostate());
   }
 
 /*
