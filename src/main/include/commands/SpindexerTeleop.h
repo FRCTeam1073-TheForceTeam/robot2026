@@ -10,6 +10,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "subsystems/Spindexer.h"
+#include "subsystems/Kicker.h"
 #include "subsystems/OI.h"
 
 /**
@@ -28,7 +29,7 @@ class SpindexerTeleop
    * @param spindexer The subsystem used by this command.
    */
 
-  explicit SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<OI>& OI);
+  explicit SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<OI>& OI);
 
   void Initialize() override;
 
@@ -40,11 +41,10 @@ class SpindexerTeleop
 
   private:
    std::shared_ptr<Spindexer> m_spindexer;
+   std::shared_ptr<Kicker> m_kicker;
    std::shared_ptr<OI> m_OI;
 
   units::velocity::meters_per_second_t velocity;
   units::velocity::meters_per_second_t targetVelocity;
 
-  bool fasterSpin;
-  bool lastFastSpin;
 };
