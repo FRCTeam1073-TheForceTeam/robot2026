@@ -33,7 +33,7 @@ void FlywheelTeleop::Execute() {
   if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) {
     // Using lookup table:
     auto range = m_hf->getFeedback().rangeToTarget;
-    auto shot = m_bs->GetShot(range, 0.5_m); //TODO: find a good value for the height above the hub
+    auto shot = m_bs->GetShot(range, 1_m); //TODO: find a good value for the height above the hub
     auto speed = shot.FlywheelSpeed;
     m_flywheel->SetCommand(speed);
   } else if (m_OI->GetOperatorYButton()) {
