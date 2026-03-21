@@ -106,27 +106,22 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
     for (const auto& result : results)
     {
         std::optional<photon::EstimatedRobotPose> pose = estimator.EstimateCoprocMultiTagPose(result);
-        if (pose.has_value())
+        if(!pose.has_value())
         {
-            const auto& estimated_pose = pose.value();
-            units::length::meter_t minDist = 100.0_m;
-            for (const auto& t : estimated_pose.targetsUsed)
-                minDist = units::math::min(minDist,units::length::meter_t(
-                    t.GetBestCameraToTarget().Translation().Norm()
-                ));
-            
-            auto std_devs = estimate_stddevs(minDist); //TODO: find the actual value
-
-            // std::cout<<"Using april tags: " ;
-            // for(auto& c : estimated_pose.targetsUsed)
-            // {
-            //     std::cout << c.fiducialId << ", ";
-            // }
-            // std::cout<<std::endl;
-
-            hasAprilTags = true;
-            measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
+            pose = estimator.EstimateLowestAmbiguityPose(result);
+            if(!pose.has_value())
+                continue;
         }
+        auto estimated_pose = pose.value();
+        units::length::meter_t minDist = 100.0_m;
+        for(auto& t : estimated_pose.targetsUsed)
+            minDist = units::math::min(minDist,units::length::meter_t(
+                t.GetBestCameraToTarget().Translation().Norm()
+            ));
+
+        auto std_devs = estimate_stddevs(minDist); //TODO: find the actual value
+        hasAprilTags = true;
+        measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
     }
     return measurements;
 }
