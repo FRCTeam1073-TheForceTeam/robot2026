@@ -86,17 +86,25 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           frc2::cmd::Parallel(
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
             frc2::cmd::Sequence(
-              frc2::cmd::Wait(1.0_s),
+              frc2::cmd::Wait(0.5_s),
               m_spindexer->SpinToSpeed(5.6_mps),
               m_kicker->SpinToSpeed(5.5_mps),
-              frc2::cmd::Wait(5.0_s),
+              frc2::cmd::Wait(2.5_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(1.0_s),
               m_intake->IntakeOut(),
               frc2::cmd::Wait(1.0_s),
               m_intake->IntakeIn()
             )
-          ).WithTimeout(12_s)
+          ).WithTimeout(10_s)
+        );
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            m_intake->IntakeOut(),
+            m_flywheel->SpinToSpeed(0.0_mps),
+            m_spindexer->SpinToSpeed(0.0_mps),
+            m_kicker->SpinToSpeed(0_mps)
+          )
         );
       }
       else if (eventType == "Shoot-Outpost") {
@@ -117,7 +125,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           ).WithTimeout(15_s)
         );
       }
-      else if (eventType == "Shoot-OutpostManual") { //TODO: test other one and remove this
+      else if (eventType == "Shoot-OutpostManual") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
             m_turret->RotateToPos(-140_deg),
@@ -160,13 +168,7 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
         DrivePath(m_drivetrain, m_localizer, split_traj).ToPtr(),
         EventParser(split_traj)
       );
-      SmartDashPrint("start of parts, about to move(part)");
       parts.emplace_back(std::move(part));
-      SmartDashPrint("just moved, about to print the ToPtr() thing");
-      SmartDashPrint(std::to_string(s)).ToPtr();
-      SmartDashPrint("about to wait one second");
-      parts.emplace_back(frc2::cmd::Wait(1_s));
-      SmartDashPrint("done waiting");
     }
 
     return frc2::cmd::Sequence(std::move(parts));
