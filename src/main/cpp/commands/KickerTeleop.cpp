@@ -8,8 +8,6 @@ KickerTeleop::KickerTeleop(std::shared_ptr<Kicker>& kicker, std::shared_ptr<OI>&
   // Use addRequirements() here to declare subsystem dependencies.
   m_kicker(kicker),
   m_OI(oi) {
-  fasterSpin = false;
-  lastFastSpin = false;
   AddRequirements({m_kicker.get()});
 }
 // Called when the command is initially scheduled.
@@ -22,17 +20,8 @@ void KickerTeleop::Execute() {
   auto BButton = m_OI->GetOperatorBButton();
   bool AButton = m_OI->GetOperatorAButton();
 
-  if (AButton && !lastFastSpin) {
-    fasterSpin = !fasterSpin;
-  }
-  lastFastSpin = AButton;
-
   if (m_OI->GetOperatorRightTrigger() >= 0.1) {
-    targetVelocity = 5.6_mps;
-
-    if (fasterSpin) {
-      targetVelocity *= 1.2;
-    }
+    targetVelocity = 5.85_mps;
 
   } else if (BButton) {
     targetVelocity = -1.65_mps;
@@ -41,8 +30,6 @@ void KickerTeleop::Execute() {
   }
   
   m_kicker->SetCommand(targetVelocity);
-  frc::SmartDashboard::PutBoolean("Kicker/Fast Shot", fasterSpin);
-  frc::SmartDashboard::PutBoolean("Kicker/Last Fast Shot", lastFastSpin);
 
 }
 

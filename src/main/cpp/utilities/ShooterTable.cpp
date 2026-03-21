@@ -1,6 +1,7 @@
 #include <utilities/ShooterTable.h>
 
-const double SPEED_SCALE = 0.96;
+// const double SPEED_SCALE = 0.96; AndyMark At GSD
+const double SPEED_SCALE = 1.0;
 
 ShooterTable::ShooterTable() {
     //Old data, probably can delete this
@@ -32,17 +33,18 @@ ShooterTable::ShooterTable() {
     // flywheelTable.insert(4.50_m, 10.5_mps);
     // flywheelTable.insert(5.47_m, 11.3_mps);
 
-    hoodTable.insert(1.00_m, 0.00_rad);
-    hoodTable.insert(1.50_m, 0.062_rad);
-    hoodTable.insert(2.00_m, 0.094_rad);
-    hoodTable.insert(2.30_m, 0.11_rad);
-    hoodTable.insert(2.72_m, 0.12_rad);
-    hoodTable.insert(3.00_m, 0.14_rad);
-    hoodTable.insert(3.38_m, 0.17_rad);
-    hoodTable.insert(3.85_m, 0.20_rad);
-    hoodTable.insert(4.20_m, 0.235_rad);
-    hoodTable.insert(4.76_m, 0.28_rad);
-    hoodTable.insert(198.64_in, 0.267_rad);
+    hoodTable.insert(1.00_m, 69.2_deg);
+    hoodTable.insert(1.50_m, 59.34_deg);
+    hoodTable.insert(2.00_m, 57.51_deg);
+    hoodTable.insert(2.30_m, 56.60_deg);
+    hoodTable.insert(2.72_m, 56.02_deg);
+    hoodTable.insert(3.00_m, 54.88_deg);
+    hoodTable.insert(3.38_m, 53.16_deg);
+    hoodTable.insert(3.85_m, 51.44_deg);
+    hoodTable.insert(4.20_m, 49.44_deg);
+    hoodTable.insert(4.76_m, 46.86_deg);
+    hoodTable.insert(198.64_in, 47.6_deg);
+    hoodTable.insert(6.00_m, 35.4_deg); // this is for passing
 
     flywheelTable.insert(1.00_m, 8.00_mps * SPEED_SCALE);
     flywheelTable.insert(1.50_m, 8.20_mps * SPEED_SCALE);
@@ -55,6 +57,7 @@ ShooterTable::ShooterTable() {
     flywheelTable.insert(4.20_m, 10.4_mps * SPEED_SCALE);
     flywheelTable.insert(4.76_m, 10.6_mps * SPEED_SCALE);
     flywheelTable.insert(198.64_in, 10.5_mps * SPEED_SCALE);
+    flywheelTable.insert(6.00_m, 11.0_mps); // this is for passing
 };
 
 units::angle::radian_t ShooterTable::GetHoodAngle(units::length::meter_t range){

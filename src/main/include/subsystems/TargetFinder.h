@@ -56,7 +56,7 @@ class TargetFinder  : public frc2::SubsystemBase {
     std::shared_ptr<ZoneFinder> _zonefinder;
 
     frc::Pose2d OurHub;
-    frc::Pose2d roboPos;
+    frc::Pose2d turretPos;
     frc::Pose2d VirtualHub;
 
     Feedback feedback;

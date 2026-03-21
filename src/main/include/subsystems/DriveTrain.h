@@ -45,11 +45,11 @@ class Drivetrain : public frc2::SubsystemBase {
   /// Set the debug mode
   void SetDebugMode(bool removeBug);
 
-  units::angle::degree_t GetGyroHeadingDegrees();
+  units::angle::degree_t GetGyroHeadingDegrees() const;
 
-  units::angle::radian_t GetGyroHeadingRadians();
+  units::angle::radian_t GetGyroHeadingRadians() const;
 
-  frc::Rotation2d GetGyroHeading();
+  frc::Rotation2d GetGyroHeading() const;
 
   /// Get the pitch of the chassis:
   units::angle::degree_t GetPitch() const { return _pitchSig.GetValue(); }
@@ -74,6 +74,7 @@ class Drivetrain : public frc2::SubsystemBase {
   const frc::SwerveDriveKinematics<4U>& GetKinematics() { return _kinematics;}
 
   const wpi::array<frc::SwerveModulePosition, 4U>& GetSwerveModulePositions() const {return _swerveModulePositions;}
+
   /// Return the state of drivetrain brakes.  
   bool GetParkingBrake() const { return _parkingBrake; }
 
@@ -107,6 +108,9 @@ class Drivetrain : public frc2::SubsystemBase {
 
   // Swerve drive odometry.
   frc::SwerveDriveOdometry<4> _odometry;
+
+  // Cached yaw angle.
+  units::angle::radian_t _yaw_angle;
 
   ctre::phoenix6::StatusSignal<units::angle::degree_t> _yawSig;
   ctre::phoenix6::StatusSignal<units::angle::degree_t> _pitchSig;
