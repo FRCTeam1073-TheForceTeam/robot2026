@@ -32,15 +32,17 @@ class TargetFinder  : public frc2::SubsystemBase {
     {
         units::angle::radian_t turretToTargetAngle;
         units::length::meter_t rangeToTarget;
+        std::string target;
     };
 
     TargetFinder(std::shared_ptr<Localizer>& localizer, std::shared_ptr<ZoneFinder>& zonefinder);
 
     frc::Pose2d getTargetPos();
-    frc::Pose2d target;
+    frc::Pose2d Target;
 
     frc::Pose2d getHubPos();
     frc::Pose2d TargetLoc;
+    frc::Pose2d OurHub;
 
     frc::Pose2d Pass();
     
@@ -55,7 +57,6 @@ class TargetFinder  : public frc2::SubsystemBase {
     std::shared_ptr<Localizer> _localizer;
     std::shared_ptr<ZoneFinder> _zonefinder;
 
-    frc::Pose2d OurHub;
     frc::Pose2d roboPos;
     frc::Pose2d VirtualHub;
 

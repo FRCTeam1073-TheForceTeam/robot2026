@@ -30,20 +30,17 @@ TargetFinder::TargetFinder(std::shared_ptr<Localizer>& localizer, std::shared_pt
 
 frc::Pose2d TargetFinder::getTargetPos()
 {
-    if(_zonefinder->GetZones().contains(OurZone))
+    if (_zonefinder->GetZones().contains(OurZone))
     {
-        target = getHubPos();
-    }
-    else if(_zonefinder->GetZones().contains("NEUTRALZONE"))
-    {
-        target = Pass();
+        feedback.target = "Hub";
+        Target = getHubPos();
     }
     else
     {
-        //TODO: figure out what to put here. Right now it's the center of the welded field
-        target = frc::Pose2d (325.61_in, 158.84_in, frc::Rotation2d());
+        feedback.target = "Pass";
+        Target = Pass();
     }
-    return target;
+    return Target;
 }
 
 frc::Pose2d TargetFinder::getHubPos()
@@ -64,7 +61,7 @@ frc::Pose2d TargetFinder::getHubPos()
     return TargetLoc.RelativeTo(roboPos);
 }
 
-//right and left are swapped for red alliance bc zones are from blue alliance perspective
+//right and left are swapped for red alliance bc zones in code are all from blue alliance perspective
 frc::Pose2d TargetFinder::Pass()
 {
     UpdateAlliance();
@@ -104,10 +101,10 @@ void TargetFinder::Periodic(){
 
 void TargetFinder::UpdateAlliance(){
     _alliance = frc::DriverStation::GetAlliance();
-
     if (_alliance.value() == frc::DriverStation::Alliance::kRed){
         OurHub = REDHUB;
         OurZone = "REDZONE";
+        
     }
     else if (_alliance.value() == frc::DriverStation::Alliance::kBlue){
         OurHub = BLUEHUB;
