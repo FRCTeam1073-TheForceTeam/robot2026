@@ -4,8 +4,9 @@
 
 #include "commands/SpindexerTeleop.h"
 
-SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<OI>& OI) :
+SpindexerTeleop::SpindexerTeleop(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<OI>& OI) :
   m_spindexer(spindexer), 
+  m_kicker(kicker),
   m_OI(OI) {
   fasterSpin = false;
   lastFastSpin = false;
@@ -26,7 +27,7 @@ void SpindexerTeleop::Execute() {
   }
   lastFastSpin = AButton;
 
-  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1) {
+  if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1 && abs(m_kicker->GetVelocity() - m_kicker->GetTargetVelocity()) <= 0.2) { //checks if the button is pressed and if the kciker is close enough to its target velocity
     targetVelocity = 5.6_mps;
 
     if (fasterSpin) {
