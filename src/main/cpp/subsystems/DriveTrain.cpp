@@ -68,6 +68,7 @@ Drivetrain::Drivetrain() :
     _targetSpeeds.omega = 0_rad_per_s;
     _previousTargetSpeeds = _targetSpeeds;
     _previousUpdateTime = frc::Timer::GetFPGATimestamp();
+    _yaw_angle = 0_rad;
 
     // Run hardware configuration:
     _hardwareConfigured = ConfigureHardware();
@@ -138,6 +139,7 @@ void Drivetrain::Periodic()  {
     _previousTargetSpeeds = _targetSpeeds;
      // We already sampled it above in this function.
     _previousUpdateTime = now;
+    _yaw_angle = yaw_angle.Radians();
 }
 
 /// Reset the odometry to a specific pose on the field.
@@ -176,12 +178,12 @@ units::force::newton_t Drivetrain::GetAverageLoad() const {
     return load / _swerveModules.size();
 }
 
-units::angle::degree_t Drivetrain::GetGyroHeadingDegrees(){
-    return _imu.GetYaw().Refresh().GetValue();
+units::angle::degree_t Drivetrain::GetGyroHeadingDegrees() const {
+    return _yaw_angle;
 }
 
-units::angle::radian_t Drivetrain::GetGyroHeadingRadians(){
-    return _imu.GetYaw().Refresh().GetValue();
+units::angle::radian_t Drivetrain::GetGyroHeadingRadians() const {
+    return _yaw_angle;
 }
 
 bool Drivetrain::ConfigureHardware() {
@@ -209,6 +211,6 @@ void Drivetrain::ZeroHeading(){
     _imu.SetYaw(0_deg);
 }
 
-frc::Rotation2d Drivetrain::GetGyroHeading(){
+frc::Rotation2d Drivetrain::GetGyroHeading() const {
     return _imu.GetRotation2d();
 }

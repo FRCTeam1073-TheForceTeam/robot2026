@@ -51,26 +51,26 @@ class AprilTagFinder : public frc2::SubsystemBase {
     
     static frc::Pose3d estimateFieldToRobotAprilTag(frc::Transform3d cameraToTarget, frc::Pose3d fieldRelativeTagPose, frc::Transform3d robotToCamera);
 
-    std::vector<VisionMeasurement> getAllMeasurements();
+    const std::vector<VisionMeasurement>& getAllMeasurements() const;
 
     std::vector<photon::PhotonTrackedTarget> getCamTargets(std::shared_ptr<photon::PhotonCamera> camera);
 
-    frc::Transform2d toTransform2d(frc::Transform3d t3d);
+    frc::Transform2d toTransform2d(const frc::Transform3d& t3d);
 
-    std::vector<VisionMeasurement> getCamMeasurements(std::vector<photon::PhotonPipelineResult> results, frc::Transform3d camTransform3d);
+    std::vector<VisionMeasurement> getCamMeasurements(const std::vector<photon::PhotonPipelineResult>& results, const frc::Transform3d& camTransform3d);
     
-    frc::Transform3d getRobotCam(int index);
+    const frc::Transform3d& getRobotCamTransform(int index) const;
 
 
-    std::vector<VisionMeasurement> getMultiTagEstimate(std::vector<photon::PhotonPipelineResult> results, photon::PhotonPoseEstimator& estimator, frc::Transform3d camTransform3d);
+    std::vector<VisionMeasurement> getMultiTagEstimate(const std::vector<photon::PhotonPipelineResult>& results, photon::PhotonPoseEstimator& estimator, const frc::Transform3d& camTransform3d);
 
     void clearMeasurements();
 
     void Periodic() override;
     
-    static std::vector<RobotCamera> _cameras;
-    
     private:
+
+        static std::vector<RobotCamera> _cameras;
 
         const double ambiguityThreshold = 0.28;
         bool hasAprilTags;
