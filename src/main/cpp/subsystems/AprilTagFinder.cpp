@@ -18,12 +18,17 @@ AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<
     //
     // The turrent height is to the center of the turrent rotation bearing plane. Turrent location is center of turret rotation bearing.
     //
+    // Center of pigeon height is 4.75in, offset from X,Y center of robot ()
+    //
+
+    const frc::Translation3d pigeon_offset(-1.0_in, 2.5_in, 4.75_in);
+
         _cameras = {
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Front"), frc::Transform3d(frc::Translation3d(-8.977_in, 8.448_in, 5.152_in),frc::Rotation3d(0_deg, -21_deg, 65_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-10.858_in, 7.855_in, 7.562_in),frc::Rotation3d(0_deg, -21_deg, 150_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Front"), frc::Transform3d(frc::Translation3d(-8.977_in, -13.448_in, 5.152_in),frc::Rotation3d(0_deg, -21_deg, -65_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-10.858_in, -12.855_in, 7.652_in),frc::Rotation3d(0_deg, -21_deg, -150_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Turret"), frc::Transform3d(frc::Translation3d(-4.373_in, -12.858_in, 18.35_in),frc::Rotation3d(0_deg, 0_deg, 0_deg)), true) 
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Front"), frc::Transform3d(frc::Translation3d(-8.977_in, 8.448_in, 5.152_in) + pigeon_offset, frc::Rotation3d(0_deg, -21_deg, 65_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-10.858_in, 7.855_in, 7.562_in) + pigeon_offset, frc::Rotation3d(0_deg, -21_deg, 150_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Front"), frc::Transform3d(frc::Translation3d(-8.977_in, -13.448_in, 5.152_in) + pigeon_offset,frc::Rotation3d(0_deg, -21_deg, -65_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-10.858_in, -12.855_in, 7.652_in) + pigeon_offset,frc::Rotation3d(0_deg, -21_deg, -150_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Turret"), frc::Transform3d(frc::Translation3d(-4.39_in, -7.409_in, 12.0_in) + pigeon_offset,frc::Rotation3d(0_deg, 0_deg, 0_deg)), true) 
     };
     for(auto& camera : _cameras)
     {
