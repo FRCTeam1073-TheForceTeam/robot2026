@@ -9,9 +9,9 @@ DrivePath::DrivePath(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<Lo
   m_drivetrain(drivetrain),
   m_localizer(localizer),
   trajectory(trajectory),
-  xController{4.8, 0, 0.01},
-  yController{4.8, 0, 0.01},
-  thetaController{1.5, 0.0, 0.01}
+  xController{5.0, 0, 0.01},
+  yController{5.0, 0, 0.01},
+  thetaController{2.0, 0.0, 0.01}
 {
   quit = false;
   thetaController.EnableContinuousInput(-std::numbers::pi, std::numbers::pi);
@@ -72,9 +72,9 @@ void DrivePath::Execute() {
 
       //v = PID(Tranfrom + Robot_Pose) + Forward_Velocity * alpha
       //velocity = feedback + feedforward
-      xVelocity = xController.Calculate(robotPose.X().value(), traj_sample.x.value()) * 1_mps + (trajectory_speeds.vx * 0.6);
-      yVelocity = yController.Calculate(robotPose.Y().value(), traj_sample.y.value()) * 1_mps + (trajectory_speeds.vy * 0.6); 
-      thetaVelocity = thetaController.Calculate(robotPose.Rotation().Radians().value(), traj_sample.heading.value()) * 1_rad_per_s + (trajectory_speeds.omega * 0.6);
+      xVelocity = xController.Calculate(robotPose.X().value(), traj_sample.x.value()) * 1_mps + (trajectory_speeds.vx * 0.7);
+      yVelocity = yController.Calculate(robotPose.Y().value(), traj_sample.y.value()) * 1_mps + (trajectory_speeds.vy * 0.7); 
+      thetaVelocity = thetaController.Calculate(robotPose.Rotation().Radians().value(), traj_sample.heading.value()) * 1_rad_per_s + (trajectory_speeds.omega * 0.7);
 
       xVelocity = std::clamp(xVelocity, -maxVelocity, maxVelocity);
       yVelocity = std::clamp(yVelocity, -maxVelocity, maxVelocity);

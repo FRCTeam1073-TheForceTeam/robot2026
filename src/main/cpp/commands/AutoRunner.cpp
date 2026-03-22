@@ -74,7 +74,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       }
       else if (eventType == "RetractIntake") {
         autoRoutine.emplace_back(m_intake->IntakeIn());
-      }
+      } 
       else if (eventType == "StartCollector") {
         autoRoutine.emplace_back(m_collector->CollectSpeed(3.5_mps +  (0.1 * m_drivetrain->GetChassisSpeeds().vx))); //TODO: maybe multiplier should be higher
       } 
@@ -87,27 +87,24 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(0.5_s),
-              m_spindexer->SpinToSpeed(5.6_mps),
-              m_kicker->SpinToSpeed(5.5_mps),
-              frc2::cmd::Wait(0.1_s),
+              m_spindexer->SpinToSpeed(5.75_mps),
+              m_kicker->SpinToSpeed(5.85_mps),
+              frc2::cmd::Wait(1.3_s),
               m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
+              frc2::cmd::Wait(1.3_s),
               m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
+              frc2::cmd::Wait(1.3_s),
               m_intake->IntakeIn()
             )
-          ).WithTimeout(6.0_s)
+          ).WithTimeout(5.5_s)
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
             m_intake->IntakeOut(),
             m_flywheel->SpinToSpeed(0.0_mps),
             m_spindexer->SpinToSpeed(0.0_mps),
-            m_kicker->SpinToSpeed(0_mps)
+            m_kicker->SpinToSpeed(0_mps),
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
           )
         );
       }
@@ -134,7 +131,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           frc2::cmd::Parallel(
             m_turret->RotateToPos(-140_deg),
             m_flywheel->SpinToSpeed(10.5_mps),
-            m_shooterHood->RotateToPos(0.267_rad),
+            m_shooterHood->SetHoodPosition(0.267_rad),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.0_s),
               m_spindexer->SpinToSpeed(5.6_mps),
