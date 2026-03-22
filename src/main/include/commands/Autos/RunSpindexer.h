@@ -11,14 +11,10 @@
 
 #include "subsystems/Spindexer.h"
 /**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
+ * Run the spindexer until interrupted. Does not finish on its own.
  */
-class SetSpindexer
-    : public frc2::CommandHelper<frc2::Command, SetSpindexer> {
+class RunSpindexer
+    : public frc2::CommandHelper<frc2::Command, RunSpindexer> {
  public:
  /**
    * Creates a new ExampleCommand.
@@ -26,7 +22,7 @@ class SetSpindexer
    * @param spindexer The subsystem used by this command.
    */
   
-  explicit SetSpindexer(std::shared_ptr<Spindexer>& spindexer);
+  explicit RunSpindexer(std::shared_ptr<Spindexer>& spindexer);
 
   void Initialize() override;
 
