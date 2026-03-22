@@ -49,7 +49,7 @@ class AprilTagFinder : public frc2::SubsystemBase {
         RobotCamera(std::shared_ptr<photon::PhotonCamera> camera, frc::Transform3d transform, bool isTurret = false) : _camera(camera), _transform(transform), _isTurret(isTurret){};
     };
     
-    static frc::Pose3d estimateFieldToRobotAprilTag(frc::Transform3d cameraToTarget, frc::Pose3d fieldRelativeTagPose, frc::Transform3d robotToCamera);
+    static frc::Pose3d estimateFieldToRobotAprilTag(const frc::Transform3d& cameraToTarget, const frc::Pose3d& fieldRelativeTagPose, const frc::Transform3d& robotToCamera);
 
     const std::vector<VisionMeasurement>& getAllMeasurements() const;
 
@@ -60,7 +60,6 @@ class AprilTagFinder : public frc2::SubsystemBase {
     std::vector<VisionMeasurement> getCamMeasurements(const std::vector<photon::PhotonPipelineResult>& results, const frc::Transform3d& camTransform3d);
     
     const frc::Transform3d& getRobotCamTransform(int index) const;
-
 
     std::vector<VisionMeasurement> getMultiTagEstimate(const std::vector<photon::PhotonPipelineResult>& results, photon::PhotonPoseEstimator& estimator, const frc::Transform3d& camTransform3d);
 
@@ -76,8 +75,8 @@ class AprilTagFinder : public frc2::SubsystemBase {
         bool hasAprilTags;
         // Base stddevs for measurements:
         wpi::array<double, 3U> base_stddevs = {0.5, 0.5, 0.5};
-        // Use tag range to estimate measurement errors:
-        wpi::array<double, 3U> estimate_stddevs(units::length::meter_t range);
+        // Use tag range to estimate measurement errors given measurement range and bearing:
+        wpi::array<double, 3U> estimate_stddevs(units::length::meter_t range, units::angle::radian_t bearing);
 
         // Ignore things farther away than this.
         units::meter_t max_range{3.5};

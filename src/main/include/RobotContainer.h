@@ -47,8 +47,6 @@
 #include "commands/ZeroTurret.h"
 #include "commands/ZeroHood.h"
 #include "commands/ZeroClimber.h"
-#include "commands/Autos/SetKicker.h"
-#include "commands/Autos/SetSpindexer.h"
 
 #include "commands/Autos.h"
 #include "commands/AutoRunner.h"

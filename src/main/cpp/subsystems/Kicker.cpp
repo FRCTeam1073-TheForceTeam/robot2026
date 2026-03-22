@@ -57,11 +57,12 @@ void Kicker::Periodic() {
     _kickerMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorVelocity));
   } else {
     _kickerMotor.SetControl(controls::NeutralOut());
-    _limiter.Reset(0.0_mps);
+    _limiter.Reset(_feedback.velocity); // Be ready to start from wherever we are.
   }
 
   frc::SmartDashboard::PutNumber("Kicker/Velocity(mps)", _feedback.velocity.value());
   frc::SmartDashboard::PutNumber("Kicker/TargetVelocity(mps)", _limiter.LastValue().value());
+  frc::SmartDashboard::PutNumber("Kicker/Current(A)", _kickerCurrentSig.GetValue().value());
 }
 
 frc2::CommandPtr Kicker::SpinToSpeed(units::meters_per_second_t velocity) {

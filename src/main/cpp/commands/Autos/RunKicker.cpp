@@ -2,29 +2,29 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/Autos/SetKicker.h"
+#include "commands/Autos/RunKicker.h"
 
-SetKicker::SetKicker(std::shared_ptr<Kicker>& kicker):
+RunKicker::RunKicker(std::shared_ptr<Kicker>& kicker):
   m_kicker(kicker) {
     AddRequirements(m_kicker.get());
   }
 
 // Called when the command is initially scheduled.`
-void SetKicker::Initialize() {
+void RunKicker::Initialize() {
   targetVelocity = 4.5_mps; 
 }
 
 // Called repeatedly when this Command is scheduled to run
-void SetKicker::Execute() {
+void RunKicker::Execute() {
   m_kicker->SetCommand(targetVelocity);
 }
 
 // Called once the command ends or is interrupted.
-void SetKicker::End(bool interrupted) {
+void RunKicker::End(bool interrupted) {
   m_kicker->SetCommand(std::monostate());
 }
 
 // Returns true when the command should end.
-bool SetKicker::IsFinished() {
+bool RunKicker::IsFinished() {
   return false;
 }

@@ -10,11 +10,7 @@
 #include "subsystems/Intake.h"
 
 /**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
+ * Zero the intake by driving into the hard stop, seeing current spike and resetting position.
  */
 class ZeroIntake
     : public frc2::CommandHelper<frc2::Command, ZeroIntake> {
