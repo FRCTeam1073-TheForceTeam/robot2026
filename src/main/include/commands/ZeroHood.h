@@ -10,11 +10,7 @@
 #include "subsystems/ShooterHood.h"
 
 /**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
+ * Zero the hood by driving into hard stop, seeing current spike and resetting the zero position.
  */
 class ZeroHood
     : public frc2::CommandHelper<frc2::Command, ZeroHood> {

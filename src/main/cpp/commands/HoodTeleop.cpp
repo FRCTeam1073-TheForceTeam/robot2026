@@ -43,7 +43,8 @@ void HoodTeleop::Execute() {
     units::angle::radian_t angle = 54.83_deg;
     m_shooterHood->SetCommand(angle);
   } else {
-    m_shooterHood->SetCommand(std::monostate());
+    // Put the hood "back" to be out of the way.
+    m_shooterHood->SetCommand(ShooterHood::maxPosition);
   }
 
   // Old Code

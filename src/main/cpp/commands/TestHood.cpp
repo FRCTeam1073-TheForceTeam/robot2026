@@ -36,9 +36,9 @@ void TestHood::Execute() {
 
   level = std::clamp(level, 0, MaxLevel);
 
-  m_shooterHood->SetCommand(level * ScaleFactor);
+  m_shooterHood->SetCommand(ShooterHood::maxPosition - level * ScaleFactor);
   frc::SmartDashboard::PutNumber("TestHood/level", level);
-  frc::SmartDashboard::PutNumber("TestHood/position", level * ScaleFactor.value());
+  frc::SmartDashboard::PutNumber("TestHood/position", (ShooterHood::maxPosition - level * ScaleFactor).value());
 
   lastLeftBumper = LeftBumper;
   lastRightBumper = RightBumper;

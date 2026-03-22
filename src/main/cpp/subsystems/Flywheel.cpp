@@ -63,13 +63,14 @@ void Flywheel::Periodic() {
         _leadFlywheelMotor.SetControl(controls::NeutralOut());
         _followFlywheelMotor.SetControl(controls::NeutralOut());
         // Reset the limiter:
-        _limiter.Reset(0.0_mps);
+        _limiter.Reset(_feedback.velocity); // Be ready to re-start from wherever we actually are...
     }
 
 
     frc::SmartDashboard::PutNumber("Flywheel/AngularVelocity (RPM)", (60.0_s*_flywheelVelocitySig.GetValue()).value());
     frc::SmartDashboard::PutNumber("Flywheel/TargetVelocity (mps)", _limiter.LastValue().value());
     frc::SmartDashboard::PutNumber("Flywheel/Velocity (mps)", _feedback.velocity.value());
+    frc::SmartDashboard::PutNumber("Flywheel/Current(A)", _flywheelCurrentSig.GetValue().value());
 }
 
 frc2::CommandPtr Flywheel::SpinToSpeed(units::meters_per_second_t velocity) {

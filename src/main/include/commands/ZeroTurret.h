@@ -10,11 +10,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 /**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
+ * Zero the turret by driving into the hard stop, seeing the current spike and resetting position.
  */
 class ZeroTurret
     : public frc2::CommandHelper<frc2::Command, ZeroTurret> {
