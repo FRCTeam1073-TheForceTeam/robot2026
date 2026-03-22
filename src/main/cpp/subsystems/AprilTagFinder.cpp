@@ -6,12 +6,29 @@ AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<
     _estimators({})
 {
     std::cout << "Creating April Tag Object" << std::endl;
-    _cameras = {
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Front"), frc::Transform3d(frc::Translation3d(-8.974_in, 8.454_in, 4.896_in),frc::Rotation3d(0_deg, -21_deg, 65_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-10.864_in, 7.858_in, 6.896_in),frc::Rotation3d(0_deg, -21_deg, 150_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Front"), frc::Transform3d(frc::Translation3d(-8.974_in, -13.454_in, 4.896_in),frc::Rotation3d(0_deg, -21_deg, -65_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-10.864_in, -10.235522_in, 6.896_in),frc::Rotation3d(0_deg, -21_deg, -150_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Turret"), frc::Transform3d(frc::Translation3d(-4.373_in, -12.858_in, 18.35_in),frc::Rotation3d(0_deg, 0_deg, 0_deg)), true) //TODO: Change Numbers
+    //
+    // Thesee are poses in robot coordinates:
+    //  
+    // Robot coordinates have +X forward, +Y out left of robot and +Z up (opposite of gravity)
+    // The origin of X,Y is the geometric center of the robot frame perimeter.
+    // The origin of Z is *ON THE FLOOR* it is a virtual point at zero field height that is not actually *inside* the robot. It is the
+    // projection of the X,Y geometric center onto the floor.
+    //
+    // Rotations are angles about these primary axes usign the right-hand-rule.
+    //
+    // The turrent height is to the center of the turrent rotation bearing plane. Turrent location is center of turret rotation bearing.
+    //
+    // Center of pigeon height is 4.75in, offset from X,Y center of robot ()
+    //
+
+    const frc::Translation3d pigeon_offset(-1.0_in, 2.5_in, 4.75_in);
+
+        _cameras = {
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Front"), frc::Transform3d(frc::Translation3d(-8.977_in, 8.448_in, 5.152_in) + pigeon_offset, frc::Rotation3d(0_deg, -21_deg, 65_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-10.858_in, 7.855_in, 7.562_in) + pigeon_offset, frc::Rotation3d(0_deg, -21_deg, 150_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Front"), frc::Transform3d(frc::Translation3d(-8.977_in, -13.448_in, 5.152_in) + pigeon_offset,frc::Rotation3d(0_deg, -21_deg, -65_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-10.858_in, -12.855_in, 7.652_in) + pigeon_offset,frc::Rotation3d(0_deg, -21_deg, -150_deg))),
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Turret"), frc::Transform3d(frc::Translation3d(-4.39_in, -7.409_in, 12.0_in) + pigeon_offset,frc::Rotation3d(0_deg, 0_deg, 0_deg)), true) 
     };
     for(auto& camera : _cameras)
     {
@@ -19,7 +36,7 @@ AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<
     }
 }
 
-frc::Pose3d AprilTagFinder::estimateFieldToRobotAprilTag(frc::Transform3d cameraToTarget, frc::Pose3d fieldRelativeTagPose, frc::Transform3d robotToCamera) {
+frc::Pose3d AprilTagFinder::estimateFieldToRobotAprilTag(const frc::Transform3d& cameraToTarget, const frc::Pose3d& fieldRelativeTagPose, const frc::Transform3d& robotToCamera) {
     return fieldRelativeTagPose+(cameraToTarget.Inverse())+(robotToCamera.Inverse());
 }
 
@@ -70,9 +87,11 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getCamMeasurement
             if (FieldMap::fieldMap.GetTagPose(target.GetFiducialId()).has_value()){
                 if (target.GetPoseAmbiguity() != -1 && target.GetPoseAmbiguity() < ambiguityThreshold){
                     frc::Transform3d best = target.GetBestCameraToTarget();
+                    // Field coordinates:
                     frc::Pose3d robotPose = estimateFieldToRobotAprilTag(best,
                         FieldMap::fieldMap.GetTagPose(target.GetFiducialId()).value(), 
                         camTransform3d);
+
                     // In robot coordinates:
                     frc::Transform2d relativePose = toTransform2d(camTransform3d+best);
                     units::length::meter_t range = relativePose.Translation().Norm();
@@ -80,7 +99,7 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getCamMeasurement
                     // Ignore things that are too far away:
                     if (range < max_range) {
                         // TODO: Estimated STD Deviations from Photon vision:
-                        auto std_devs = estimate_stddevs(range);
+                        auto std_devs = estimate_stddevs(range, relativePose.Rotation().Radians() + robotPose.Rotation().Z());
 
                         measurements.push_back(VisionMeasurement(robotPose.ToPose2d(), relativePose, result_timestamp, 
                                                                 target.GetFiducialId(), std_devs));
@@ -105,28 +124,33 @@ std::vector<AprilTagFinder::VisionMeasurement> AprilTagFinder::getMultiTagEstima
     std::vector<VisionMeasurement> measurements = std::vector<VisionMeasurement>();
     for (const auto& result : results)
     {
+        // In field coordinates:
         std::optional<photon::EstimatedRobotPose> pose = estimator.EstimateCoprocMultiTagPose(result);
-        if (pose.has_value())
+
+        if (!pose.has_value())
         {
-            const auto& estimated_pose = pose.value();
-            units::length::meter_t minDist = 100.0_m;
-            for (const auto& t : estimated_pose.targetsUsed)
-                minDist = units::math::min(minDist,units::length::meter_t(
-                    t.GetBestCameraToTarget().Translation().Norm()
-                ));
-            
-            auto std_devs = estimate_stddevs(minDist); //TODO: find the actual value
-
-            // std::cout<<"Using april tags: " ;
-            // for(auto& c : estimated_pose.targetsUsed)
-            // {
-            //     std::cout << c.fiducialId << ", ";
-            // }
-            // std::cout<<std::endl;
-
-            hasAprilTags = true;
-            measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
+            // TODO: This seems like redundant work if we're doing multi tag poses?
+            pose = estimator.EstimateLowestAmbiguityPose(result);
+            if (!pose.has_value())
+                 continue;
+            if (pose->targetsUsed.empty() || pose->targetsUsed[0].poseAmbiguity > ambiguityThreshold)
+                 continue;
         }
+        auto estimated_pose = pose.value();
+        units::length::meter_t minDist = 100.0_m;
+        units::angle::radian_t minAngle = 0.0_rad;
+        for(auto& t : estimated_pose.targetsUsed) {
+            const auto best = t.GetBestCameraToTarget();
+            const auto dist = best.Translation().Norm();
+            if (dist < minDist) {
+                minDist = dist;
+                minAngle = best.Rotation().Z(); // Yaw angle.
+            }
+        }
+
+        auto std_devs = estimate_stddevs(minDist,  minAngle); // TODO: find the actual value
+        hasAprilTags = true;
+        measurements.push_back(VisionMeasurement(estimated_pose.estimatedPose.ToPose2d(),frc::Transform2d(),estimated_pose.timestamp,0,std_devs));
     }
     return measurements;
 }
@@ -149,6 +173,7 @@ void AprilTagFinder::Periodic() {
         if (cam._isTurret) {
             // If the camera is the turrent but it is not zeroed/indexed skip it.
             if (!m_turret->GetFeedback().haveZero) {
+                frc::SmartDashboard::PutBoolean("AprilTagFinder/UsingTurretCam", false);
                 continue;
             }
 
@@ -170,7 +195,9 @@ void AprilTagFinder::Periodic() {
                 auto turretAngle = m_turret->GetFeedback().position - turretVelocity * averageLatency; //TODO: Tweak this number
                 transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + 
                             (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
+                frc::SmartDashboard::PutBoolean("AprilTagFinder/UsingTurretCam", true);
             } else {
+                frc::SmartDashboard::PutBoolean("AprilTagFinder/UsingTurretCam", false);
                 continue; // Skip turret if it's moving too fast.
             }
         } // End camera is turret.
@@ -187,8 +214,10 @@ void AprilTagFinder::Periodic() {
     frc::SmartDashboard::PutBoolean("AprilTagFinder/HasAprilTags", hasAprilTags);
 }
 
-wpi::array<double, 3U> AprilTagFinder::estimate_stddevs(units::length::meter_t range) {
+wpi::array<double, 3U> AprilTagFinder::estimate_stddevs(units::length::meter_t range, units::angle::radian_t bearing) {
     wpi::array<double, 3U> result(base_stddevs);
+
+    // TODO: Use bearing + range error model so that position errors are not symmertric.
 
     result[0] += 0.2 * range.value();
     result[1] += 0.2 * range.value();

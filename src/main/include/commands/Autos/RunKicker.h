@@ -11,14 +11,10 @@
 
 #include "subsystems/Kicker.h"
 /**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
+ * Run the kicker until interrupted. Does not finish on its own.
  */
-class SetKicker
-    : public frc2::CommandHelper<frc2::Command, SetKicker> {
+class RunKicker
+    : public frc2::CommandHelper<frc2::Command, RunKicker> {
  public:
  /**
    * Creates a new ExampleCommand.
@@ -26,7 +22,7 @@ class SetKicker
    * @param kicker The subsystem used by this command.
    */
   
-  explicit SetKicker(std::shared_ptr<Kicker>& kicker);
+  explicit RunKicker(std::shared_ptr<Kicker>& kicker);
 
   void Initialize() override;
 
