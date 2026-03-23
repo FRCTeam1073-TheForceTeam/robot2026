@@ -21,7 +21,7 @@ void SpindexerTeleop::Execute() {
   bool AButton = m_OI->GetOperatorAButton();
 
   if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1 && units::math::abs(m_kicker->GetFeedback().velocity) >= 3.0_mps) {
-    m_spindexer->SetCommand(5.75_mps);
+    m_spindexer->SetCommand(7.15_mps);//was 5.75
 
   } else if (m_OI->GetOperatorBButton()) {
     m_spindexer->SetCommand(-2.0_mps);

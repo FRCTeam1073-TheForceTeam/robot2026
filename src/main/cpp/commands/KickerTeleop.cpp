@@ -21,7 +21,7 @@ void KickerTeleop::Execute() {
   bool AButton = m_OI->GetOperatorAButton();
 
   if (m_OI->GetOperatorRightTrigger() >= 0.1) {
-    targetVelocity = 5.85_mps;
+    targetVelocity = 7.3_mps;//was 5.85
 
   } else if (BButton) {
     targetVelocity = -1.65_mps;
