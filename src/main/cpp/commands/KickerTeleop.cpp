@@ -18,19 +18,19 @@ void KickerTeleop::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void KickerTeleop::Execute() {
   auto BButton = m_OI->GetOperatorBButton();
-  bool AButton = m_OI->GetOperatorAButton();
 
   if (m_OI->GetOperatorRightTrigger() >= 0.1) {
-    targetVelocity = 5.85_mps;
+    // targetVelocity = 5.85_mps;
+    targetVelocity = 7.3_mps; //was 5.85
 
+    m_kicker->SetCommand(targetVelocity);
   } else if (BButton) {
     targetVelocity = -1.65_mps;
+    m_kicker->SetCommand(targetVelocity);
   } else {
     targetVelocity = 0.0_mps;
+    m_kicker->SetCommand(std::monostate());
   }
-  
-  m_kicker->SetCommand(targetVelocity);
-
 }
 
 // Called once the command ends or is interrupted.
