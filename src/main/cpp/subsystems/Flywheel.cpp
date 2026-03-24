@@ -45,14 +45,14 @@ void Flywheel::SetCommand(Command cmd){
 void Flywheel::Periodic() {
     BaseStatusSignal::RefreshAll(_flywheelVelocitySig, _flywheelCurrentSig);
 
-    _feedback.velocity = _flywheelVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
+    _feedback.velocity = _flywheelVelocitySig.GetValue() / (TurnsPerMeter * GearRatio); // Convert from hardare units to subsystem units.
     _feedback.force = _flywheelCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
 
     if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
 
         // Compute a rate-limited velocity:
         auto limited_velocity = _limiter.Calculate(std::get<units::velocity::meters_per_second_t>(_command)); 
-        auto motor_velocity = limited_velocity * TurnsPerMeter;
+        auto motor_velocity = limited_velocity * TurnsPerMeter * GearRatio;
 
         // Send commands to motors:
         _leadFlywheelMotor.SetControl(_flywheelVelocityVoltage.WithVelocity(motor_velocity));

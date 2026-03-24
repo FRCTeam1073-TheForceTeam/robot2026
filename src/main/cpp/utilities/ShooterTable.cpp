@@ -58,6 +58,8 @@ ShooterTable::ShooterTable() {
     flywheelTable.insert(4.76_m, 10.6_mps * SPEED_SCALE);
     flywheelTable.insert(198.64_in, 10.5_mps * SPEED_SCALE);
     flywheelTable.insert(6.00_m, 11.0_mps); // this is for passing
+    flywheelTable.insert(6.50_m, 14.0_mps); // this is for passing
+
 };
 
 units::angle::radian_t ShooterTable::GetHoodAngle(units::length::meter_t range){

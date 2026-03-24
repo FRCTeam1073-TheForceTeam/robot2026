@@ -9,7 +9,9 @@ OI::OI() :
 _driverController(0),
 _operatorController(1),
 hubActive(false),
-lastHubActive(false)
+lastHubActive(false),
+_ballisticShot(false),
+_lastOperatorAButton(false)
 {}
 
 // This method will be called once per scheduler run
@@ -22,6 +24,18 @@ void OI::Periodic() {
     //     // OperatorStopRumble();
     // }
     // lastHubActive = hubActive;
+    auto abutton = _operatorController.GetAButton();
+    if (abutton && !_lastOperatorAButton) {
+        _ballisticShot = !_ballisticShot;
+    }
+    _lastOperatorAButton = abutton;
+    
+    // Feedback on ballistic shot mode:
+    frc::SmartDashboard::PutBoolean("OI/BallisticShot", _ballisticShot);
+}
+
+bool OI::BallisticShotMode() const {
+    return _ballisticShot;
 }
 
 double OI::GetDriverLeftX() {

@@ -109,6 +109,9 @@ class OI : public frc2::SubsystemBase {
 
         void SetHubActive(bool active);
 
+        // Returns true for ballistic shot mode:
+        bool BallisticShotMode() const;
+
     private:
     
         Feedback _feedback;
@@ -129,4 +132,8 @@ class OI : public frc2::SubsystemBase {
 
         bool hubActive;
         bool lastHubActive;
+
+        // Top-level control of ballistic shot mode:
+        bool _ballisticShot;
+        bool _lastOperatorAButton;
 };

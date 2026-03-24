@@ -20,6 +20,7 @@
 
 class TargetFinder  : public frc2::SubsystemBase {
     public:
+    static const frc::Pose2d FIELD_CENTER;
     static const frc::Pose2d REDHUB;
     static const frc::Pose2d BLUEHUB;
     static const frc::Pose2d REDPASS_R;

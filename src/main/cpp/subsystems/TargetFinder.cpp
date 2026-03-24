@@ -1,5 +1,8 @@
 #include "subsystems/TargetFinder.h"
 
+// TODO: Fix.
+const frc::Pose2d TargetFinder::FIELD_CENTER = frc::Pose2d(291.00_in, 158.32_in, frc::Rotation2d());
+
 //AndyMark Perimeter
 const frc::Pose2d TargetFinder::BLUEHUB = frc::Pose2d(181.56_in, 158.32_in, frc::Rotation2d());
 const frc::Pose2d TargetFinder::REDHUB = frc::Pose2d(468.56_in, 158.32_in, frc::Rotation2d());
@@ -34,15 +37,11 @@ frc::Pose2d TargetFinder::getTargetPos()
     {
         target = getHubPos();
     }
-    else if(_zonefinder->GetZones().contains("NEUTRALZONE"))
+    else
     {
         target = Pass();
     }
-    else
-    {
-        //TODO: figure out what to put here. Right now it's the center of the welded field
-        target = frc::Pose2d (325.61_in, 158.84_in, frc::Rotation2d());
-    }
+    
     return target;
 }
 
@@ -60,9 +59,9 @@ frc::Pose2d TargetFinder::getHubPos()
     // auto time = (tempRange / 1.488_mps);
     // auto time = (tempRange / 2_mps);
     // auto time = (tempRange / 4_mps);
-    double A = 1.0/4.0;
+    double A = 0.1;
     double B = 0.0;
-    double C = 0.0;
+    double C = 1.5;
     double time = ((tempRange*A) + ((tempRange*tempRange)*B) + C); // Emperical Model
 
     velocityOffset = -velocityOffset * time;
@@ -92,6 +91,8 @@ frc::Pose2d TargetFinder::Pass()
     {
         return BLUEPASS_L.frc::Pose2d::RelativeTo(turretPos);
     }
+
+    return FIELD_CENTER.frc::Pose2d::RelativeTo(turretPos);
 }
 
 
