@@ -96,7 +96,7 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Right Joystick Y | GetOperatorRightY       |                                 |
 | Left Trigger     | GetOperatorLeftTrigger  | Auto Aim Flywheel and Turret    |
 | Right Trigger    | GetOperatorRightTrigger | Shoot, Spindexer + Kicker Foward|
-| A Button         | GetOperatorAButton      | Faster Kicker + Spindexer       |
+| A Button         | GetOperatorAButton      | Toggle Ballistic Shot           |
 | B Button         | GetOperatorBButton      | Spindexer + Kicker Backwards    |
 | X Button         | GetOperatorXButton      | Tower Set Shot                  |
 | Y Button         | GetOperatorYButton      | Corner Set Shot                 |

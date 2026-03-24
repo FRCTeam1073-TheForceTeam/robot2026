@@ -59,9 +59,9 @@ frc::Pose2d TargetFinder::getHubPos()
     // auto time = (tempRange / 1.488_mps);
     // auto time = (tempRange / 2_mps);
     // auto time = (tempRange / 4_mps);
-    double A = 1.0/4.0;
+    double A = 0.1;
     double B = 0.0;
-    double C = 0.0;
+    double C = 1.5;
     double time = ((tempRange*A) + ((tempRange*tempRange)*B) + C); // Emperical Model
 
     velocityOffset = -velocityOffset * time;

@@ -18,8 +18,6 @@ void SpindexerTeleop::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void SpindexerTeleop::Execute() {
-  bool AButton = m_OI->GetOperatorAButton();
-
   if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1 && units::math::abs(m_kicker->GetFeedback().velocity) >= 3.0_mps) {
     m_spindexer->SetCommand(5.75_mps);
 
@@ -28,7 +26,6 @@ void SpindexerTeleop::Execute() {
   } else {
     m_spindexer->SetCommand(std::monostate());
   }
-  
 }
 
 // Called once the command ends or is interrupted.
