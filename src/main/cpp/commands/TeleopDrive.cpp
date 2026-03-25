@@ -96,20 +96,14 @@ void TeleopDrive::Execute() {
     bool driverDPadRight = m_OI->GetDriverDPadRight();
     int driverDPadAngle = m_OI->GetDriverDPadAngle();
 
-    // double mult1 = 1.0 + (m_OI->GetDriverLeftTrigger() * ((std::sqrt(36)) - 1));
-    // double mult2 = 1.0 + (m_OI->GetDriverRightTrigger() * ((std::sqrt(36)) - 1));
-
-    double mult1 = 4.5;
-    double mult2 = 4.5;
-
     //set deadzones
     if (std::abs(leftY) < JOYSTICK_DEADZONE) {leftY = 0.0;}
     if (std::abs(leftX) < JOYSTICK_DEADZONE) {leftX = 0.0;}
     if (std::abs(rightX) < JOYSTICK_DEADZONE) {rightX = 0.0;}
 
-    auto vx = std::clamp((allianceSign * leftY * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
-    auto vy = std::clamp((allianceSign * leftX * maximumLinearVelocity / 25) * mult1 * mult2, -maximumLinearVelocity, maximumLinearVelocity);
-    auto omega = std::clamp((rightX * maximumRotationVelocity / 25) * mult1 * mult2, -maximumRotationVelocity, maximumRotationVelocity);
+    auto vx = std::clamp(allianceSign * ((leftY + 0.01) / std::abs(leftY + 0.01)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftY)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
+    auto vy = std::clamp(allianceSign * ((leftX + 0.01) / std::abs(leftX + 0.01)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftX)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
+    auto omega = std::clamp(((rightX + 0.01) / std::abs(rightX + 0.01)) * (maximumRotationVelocity / (maximumRotationVelocity.value() - 1)) * (std::pow(maximumRotationVelocity.value(), std::abs(rightX)) - 1), -maximumRotationVelocity, maximumRotationVelocity);
 
     if (!lastYPressed && m_OI->GetDriverYButton()) {
         slowMode = !slowMode;
@@ -119,7 +113,6 @@ void TeleopDrive::Execute() {
         vx *= 0.2;
         vy *= 0.2;
     }
-
 
 
     frc::SmartDashboard::PutBoolean("TeleopDrive/Slow Mode", slowMode);

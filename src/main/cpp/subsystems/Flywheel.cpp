@@ -83,12 +83,12 @@ bool Flywheel::ConfigureHardware() {
     configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A;
 
-    configs.Voltage.PeakForwardVoltage = 8_V; // These are pretty typical values, adjust as needed.
-    configs.Voltage.PeakReverseVoltage = -8_V;
+    configs.Voltage.PeakForwardVoltage = 9.5_V; // These are pretty typical values, adjust as needed.
+    configs.Voltage.PeakReverseVoltage = -9.5_V;
 
     // Slot 0 for the velocity control loop:
-    configs.Slot0.kV = 0.12 + 0.015; // Motor kV plus Boost for friction.
-    configs.Slot0.kP = 0.25;
+    configs.Slot0.kV = 0.12; // Motor kV plus Boost for friction.
+    configs.Slot0.kP = 0.3;
     configs.Slot0.kI = 0.0;
     configs.Slot0.kD = 0.015;
     configs.Slot0.kA = 0.0;

@@ -26,7 +26,8 @@ void CollectorTeleop::Execute() {
     m_collector->SetCommand(-4.0_mps);
   }
   else if (std::abs(m_OI->GetDriverRightTrigger()) >= 0.1) {
-    m_collector->SetCommand(3.5_mps + (0.1 * m_dt->GetChassisSpeeds().vx));
+    //m_collector->SetCommand(3.5_mps + (0.1 * m_dt->GetChassisSpeeds().vx));
+    m_collector->SetCommand(9.14_mps);
   }
   else {
     m_collector->SetCommand(std::monostate());
