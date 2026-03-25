@@ -101,13 +101,9 @@ void TeleopDrive::Execute() {
     if (std::abs(leftX) < JOYSTICK_DEADZONE) {leftX = 0.0;}
     if (std::abs(rightX) < JOYSTICK_DEADZONE) {rightX = 0.0;}
 
-    auto vx = std::clamp(allianceSign * leftX * maximumLinearVelocity, -maximumLinearVelocity, maximumLinearVelocity);
-    auto vy = std::clamp(allianceSign * leftY * maximumLinearVelocity, -maximumLinearVelocity, maximumLinearVelocity);
-    auto omega = std::clamp(allianceSign * rightX * maximumRotationVelocity, -maximumRotationVelocity, maximumRotationVelocity);
-
-    // auto vx = std::clamp(allianceSign * (leftX / std::abs(leftX)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftX)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
-    // auto vy = std::clamp(allianceSign * (leftY / std::abs(leftY)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftY)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
-    // auto omega = std::clamp(allianceSign * (rightX / std::abs(rightX)) * (maximumRotationVelocity / (maximumRotationVelocity.value() - 1)) * (std::pow(maximumRotationVelocity.value(), std::abs(rightX)) - 1), -maximumRotationVelocity, maximumRotationVelocity);
+    auto vx = std::clamp(allianceSign * ((leftY + 0.01) / std::abs(leftY + 0.01)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftY)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
+    auto vy = std::clamp(allianceSign * ((leftX + 0.01) / std::abs(leftX + 0.01)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftX)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
+    auto omega = std::clamp(((rightX + 0.01) / std::abs(rightX + 0.01)) * (maximumRotationVelocity / (maximumRotationVelocity.value() - 1)) * (std::pow(maximumRotationVelocity.value(), std::abs(rightX)) - 1), -maximumRotationVelocity, maximumRotationVelocity);
 
     if (!lastYPressed && m_OI->GetDriverYButton()) {
         slowMode = !slowMode;
