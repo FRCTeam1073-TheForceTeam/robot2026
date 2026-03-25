@@ -22,10 +22,11 @@ class BallisticShot {
   static Shot GetShot(units::length::meter_t range, units::length::meter_t heightAboveHub);
   
   BallisticShot();
+  
  private:
   static constexpr units::length::meter_t hubHeight = 1.829_m;
   static constexpr units::length::meter_t turretHeight = 0.40_m;
-  static constexpr double efficiency = 0.8;   // Calibration for transfer of flywheel velocity to fuel.
+  static constexpr double efficiency = 0.85;   // Calibration for transfer of flywheel velocity to fuel.
   static constexpr units::angle::radian_t hood_offset = -0.15_rad; // Calibration for shot exit vs. hood angle.
 
   static constexpr units::acceleration::meters_per_second_squared_t gravity = 9.8_mps_sq;
