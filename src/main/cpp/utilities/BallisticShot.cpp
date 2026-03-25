@@ -20,7 +20,7 @@ BallisticShot::Shot BallisticShot::GetShot(units::length::meter_t range, units::
 
     auto hoodAngle = units::math::atan2(yVel, xVel);
 
-    auto flywheelSpeed = units::math::sqrt((xVel * xVel + yVel * yVel)) / efficiency;
+    auto flywheelSpeed = units::math::sqrt((xVel * xVel + yVel * yVel)) / efficiency; //TODO: change efficiency
 
     shot.FlywheelSpeed = flywheelSpeed;
     shot.HoodAngle = hoodAngle + hood_offset;
