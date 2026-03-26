@@ -61,11 +61,12 @@ void Spindexer::Periodic() {
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _spindexerMotor.SetControl(controls::NeutralOut());
-    _limiter.Reset(0.0_mps);
+    _limiter.Reset(_feedback.velocity); // Be ready to restart from wherever we are.
   }
 
   frc::SmartDashboard::PutNumber("Spindexer/Velocity(mps)", _feedback.velocity.value());  
-  frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity(mps)", _limiter.LastValue().value());  
+  frc::SmartDashboard::PutNumber("Spindexer/TargetVelocity(mps)", _limiter.LastValue().value());
+  frc::SmartDashboard::PutNumber("Spindexer/Current(A)", _spindexerCurrentSig.GetValue().value());
 }
 
 frc2::CommandPtr Spindexer::SpinToSpeed(units::meters_per_second_t velocity) {

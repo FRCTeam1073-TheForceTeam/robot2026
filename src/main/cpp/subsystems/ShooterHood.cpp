@@ -52,7 +52,7 @@ void ShooterHood::Zero() {
   _hasZero = true;
 }
 
-frc2::CommandPtr ShooterHood::RotateToPos(units::radian_t pos) {
+frc2::CommandPtr ShooterHood::SetHoodPosition(units::radian_t pos) {
   return RunOnce([this, pos] {SetCommand(pos);});
 }
 

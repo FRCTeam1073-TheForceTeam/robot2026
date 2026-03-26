@@ -13,23 +13,16 @@ TurretTeleop::TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>&
   m_OI(oi),
   m_targetFinder(targetFinder) {
   lastError = 0,
-  isAlignedToHub = false,
-  angularVel = 0_rad_per_s,
   targetAngle = 0_rad,
-  targetPosition = 0_rad,
-  position = 0_rad,//zeroed position is touching the hard stop
-  minPosition = 0_rad,
-  maxPosition = 6_rad,//TODO: get maximum velocity form EM
   AddRequirements(m_turret.get());
 }
 
 void TurretTeleop::Initialize() {
-    std::cerr << "RotateTurret Init" << std::endl;
+    std::cerr << "TeleopTurret: Init" << std::endl;
   }
 
 // Called repeatedly when this Command is scheduled to run
 void TurretTeleop::Execute() {
-
 
   leftX = m_OI->GetOperatorLeftX();
   
@@ -46,19 +39,13 @@ void TurretTeleop::Execute() {
   
   m_turret->SetCommand(targetAngle);
 
-  frc::SmartDashboard::PutNumber("Turret/angularVel", angularVel.value());
-  frc::SmartDashboard::PutNumber("Turret/targetAngle", targetAngle.value());
-  frc::SmartDashboard::PutNumber("Turret/position", position.value());
-  frc::SmartDashboard::PutNumber("Turret/targetPosition", targetPosition.value());
-  frc::SmartDashboard::PutNumber("Turret/leftX", leftX);
-  frc::SmartDashboard::PutBoolean("TeleopDrive/isAlignedToHub", isAlignedToHub);
-
+  frc::SmartDashboard::PutNumber("TeleopTurret/targetAngle", targetAngle.value());
 }
 
 // Called once the command ends or is interrupted.
 void TurretTeleop::End(bool interrupted) {
   if (interrupted) {
-        std::cerr << "RotateTurret: Interrupted!" << std::endl;
+        std::cerr << "TeleopTurret: Interrupted!" << std::endl;
     }
     m_turret->SetCommand(std::monostate());
   }

@@ -23,6 +23,10 @@ const std::string RobotContainer::neutralLeftTrench = "NeutralLeftTrench";
 const std::string RobotContainer::halfNeutralRight = "HalfNeutralRight";
 const std::string RobotContainer::halfNeutralLeft = "HalfNeutralLeft";
 const std::string RobotContainer::doubleNeutralRight = "DoubleNeutralRight";
+
+const std::string RobotContainer::splitAuto = "SplitAuto";
+const std::string RobotContainer::rightDoubleHalf = "RightDoubleHalf";
+
 const std::string RobotContainer::cornerShotAuto = "CornerShotAuto";
 const std::string RobotContainer::cornerShotManual = "CornerShotManual";
 
@@ -77,8 +81,8 @@ _operatorController(1)
   m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI, m_drivetrain).ToPtr());
   m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_kicker, m_OI).ToPtr());
   m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_ballisticShot, m_zoneFinder).ToPtr());
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_ballisticShot).ToPtr());
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable, m_zoneFinder).ToPtr());
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable).ToPtr());
   m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder).ToPtr());
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
 
@@ -96,7 +100,9 @@ _operatorController(1)
   m_levelChooser.AddOption("Hub Auto", hubAuto);
   m_levelChooser.AddOption("Double Neutral Right", doubleNeutralRight);
   m_levelChooser.AddOption("Corner Shot Auto", cornerShotAuto);
-  m_levelChooser.AddOption("Corner Shot Manual", cornerShotManual);
+  m_levelChooser.AddOption("Split Path Auto", splitAuto);
+  // m_levelChooser.AddOption("Corner Shot Manual", cornerShotManual);
+  m_levelChooser.AddOption("Right Double Half", rightDoubleHalf);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -127,7 +133,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == halfNeutralLeft ||
       m_levelChooser.GetSelected() == doubleNeutralRight ||
       m_levelChooser.GetSelected() == cornerShotAuto ||
-      m_levelChooser.GetSelected() == cornerShotManual
+      m_levelChooser.GetSelected() == splitAuto ||
+      m_levelChooser.GetSelected() == cornerShotManual ||
+      m_levelChooser.GetSelected() == rightDoubleHalf
     ) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory);

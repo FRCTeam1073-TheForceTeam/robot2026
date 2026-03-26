@@ -25,7 +25,7 @@ class FlywheelTeleop
    *
    * @param flywheel The subsystem used by this command.
    */
-  explicit FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<BallisticShot>& bs);
+  explicit FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st);
 
   void Initialize() override;
 
@@ -40,7 +40,7 @@ class FlywheelTeleop
   std::shared_ptr<Flywheel> m_flywheel;
   std::shared_ptr<OI> m_OI;
   std::shared_ptr<TargetFinder> m_hf;
-  std::shared_ptr<BallisticShot> m_bs;
+  std::shared_ptr<ShooterTable> m_st;
 
   bool XButton;
   bool DPadDown;

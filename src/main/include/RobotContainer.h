@@ -47,8 +47,6 @@
 #include "commands/ZeroTurret.h"
 #include "commands/ZeroHood.h"
 #include "commands/ZeroClimber.h"
-#include "commands/Autos/SetKicker.h"
-#include "commands/Autos/SetSpindexer.h"
 
 #include "commands/Autos.h"
 #include "commands/AutoRunner.h"
@@ -93,6 +91,9 @@ class RobotContainer {
   static const std::string halfNeutralRight;
   static const std::string halfNeutralLeft;
   static const std::string doubleNeutralRight;
+
+  static const std::string splitAuto;
+  static const std::string rightDoubleHalf;
 
   static const std::string cornerShotAuto;
   static const std::string cornerShotManual;
