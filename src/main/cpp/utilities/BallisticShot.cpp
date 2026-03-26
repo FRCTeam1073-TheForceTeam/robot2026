@@ -25,4 +25,5 @@ BallisticShot::Shot BallisticShot::GetShot(units::length::meter_t range, units::
     shot.FlywheelSpeed = flywheelSpeed;
     shot.HoodAngle = hoodAngle + hood_offset;
     return shot;
+    
 }
