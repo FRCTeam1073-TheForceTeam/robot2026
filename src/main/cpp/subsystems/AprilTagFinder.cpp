@@ -194,7 +194,7 @@ void AprilTagFinder::Periodic() {
                 // Estimate turrent angle at point of average latency from measurements:
                 auto turretAngle = m_turret->GetFeedback().position - turretVelocity * averageLatency; //TODO: Tweak this number
                 transform = (transform + frc::Transform3d(frc::Translation3d(), frc::Rotation3d(0_deg, 0_deg, turretAngle))) + 
-                            (frc::Transform3d(frc::Translation3d(0_in, -6.250_in, 0_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
+                            (frc::Transform3d(frc::Translation3d(-0.136_in, -6.125_in, 5.187_in), frc::Rotation3d(0_deg, -15_deg, 0_deg)));
                 frc::SmartDashboard::PutBoolean("AprilTagFinder/UsingTurretCam", true);
             } else {
                 frc::SmartDashboard::PutBoolean("AprilTagFinder/UsingTurretCam", false);
