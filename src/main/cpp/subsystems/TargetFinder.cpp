@@ -53,24 +53,24 @@ frc::Pose2d TargetFinder::getHubPos()
     auto tempLoc = TargetLoc.RelativeTo(turretPos);
     auto tempRange = tempLoc.Translation().Norm().value();
 
-    // auto shot = BallisticShot::GetShot(tempRange, 1.5_m); new
-    // frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * shot.ShotTime, _localizer->getSpeeds().vy * shot.ShotTime); new
-    frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * 1_s, _localizer->getSpeeds().vy * 1_s);
+    auto shot = BallisticShot::GetShot(tempRange);
+    frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * shot.ShotTime, _localizer->getSpeeds().vy * shot.ShotTime); 
+    //frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * 1_s, _localizer->getSpeeds().vy * 1_s);
     
     //TODO: Fix scaling offset
     // auto time = (tempRange / 0.744_mps); Over Compenstated
     // auto time = (tempRange / 1.488_mps);
     // auto time = (tempRange / 2_mps);
     // auto time = (tempRange / 4_mps);
-    double A = 0.1;
-    double B = 0.0;
-    double C = 1.5;
-    double time = ((tempRange*A) + ((tempRange*tempRange)*B) + C); // Emperical Model
+    // double A = 0.1;
+    // double B = 0.0;
+    // double C = 1.5;
+    // double time = ((tempRange*A) + ((tempRange*tempRange)*B) + C); // Emperical Model
 
-    //velocityOffset = -velocityOffset * time;
+    // velocityOffset = -velocityOffset * time;
 
-    //TargetLoc = TargetLoc.TransformBy(frc::Transform2d(-velocityOffset, frc::Rotation2d())); new
-    TargetLoc = TargetLoc.TransformBy(frc::Transform2d(velocityOffset, frc::Rotation2d()));
+    TargetLoc = TargetLoc.TransformBy(frc::Transform2d(-velocityOffset, frc::Rotation2d()));
+    //TargetLoc = TargetLoc.TransformBy(frc::Transform2d(velocityOffset, frc::Rotation2d()));
 
     //turns into robo coordinates
     return TargetLoc.RelativeTo(turretPos);

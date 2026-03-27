@@ -52,6 +52,7 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Kicker Motor                   |    27    |    rio     |
 | Indexer LaserCAN               |    28    |    rio     |
 | Climber Motor                  |    29    |  Canivore  |
+| CANdle                         |    30    |    rio     |
 
 
 

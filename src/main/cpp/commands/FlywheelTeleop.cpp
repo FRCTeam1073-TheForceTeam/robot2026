@@ -33,7 +33,7 @@ void FlywheelTeleop::Execute() {
 
     if (m_OI->BallisticShotMode()) {
       // Use ballistic shot:
-      auto shot = BallisticShot::GetShot(range, 1.5_m); //TODO: change value
+      auto shot = BallisticShot::GetShot(range); 
       m_flywheel->SetCommand(shot.FlywheelSpeed);
     } else {
       // Using lookup table:
