@@ -7,7 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-
+#include "utilities/BallisticShot.h"
 #include "subsystems/Flywheel.h"
 #include "subsystems/TargetFinder.h"
 #include "utilities/ShooterTable.h"

@@ -84,8 +84,8 @@ class OI : public frc2::SubsystemBase {
         bool GetDriverDPadRight();
         bool GetDriverDPadLeft();
         bool GetDriverDPadDown();
-        bool DriverRumble();
-        bool DriverStopRumble();
+        void DriverRumble();
+        void DriverStopRumble();
         bool DriverLeftStickPress();
 
         bool GetOperatorAButton();
@@ -101,13 +101,16 @@ class OI : public frc2::SubsystemBase {
         bool GetOperatorDPadRight();
         bool GetOperatorDPadLeft();
         bool GetOperatorDPadDown();
-        bool OperatorRumble();
-        bool OperatorStopRumble();
+        void OperatorRumble();
+        void OperatorStopRumble();
 
         void ZeroDriverController();
         void ZeroOperatorController();
 
         void SetHubActive(bool active);
+
+        // Returns true for ballistic shot mode:
+        bool BallisticShotMode() const;
 
     private:
     
@@ -129,4 +132,8 @@ class OI : public frc2::SubsystemBase {
 
         bool hubActive;
         bool lastHubActive;
+
+        // Top-level control of ballistic shot mode:
+        bool _ballisticShot;
+        bool _lastOperatorAButton;
 };

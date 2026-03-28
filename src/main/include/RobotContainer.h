@@ -59,6 +59,7 @@
 
 #include <choreo/Choreo.h>
 #include <utilities/ShooterTable.h>
+#include <utilities/BallisticShot.h>
 
 #include "subsystems/Climber.h"
 #include "commands/ClimberTeleop.h"
@@ -90,6 +91,11 @@ class RobotContainer {
   static const std::string halfNeutralRight;
   static const std::string halfNeutralLeft;
   static const std::string doubleNeutralRight;
+
+  static const std::string splitAuto;
+  static const std::string rightDoubleHalf;
+
+  static const std::string centerTriple;
 
   static const std::string cornerShotAuto;
   static const std::string cornerShotManual;
@@ -138,6 +144,7 @@ class RobotContainer {
   std::shared_ptr<Intake> m_intake;
   std::shared_ptr<LaserCan> m_laser;
   std::shared_ptr<ShooterTable> m_shooterTable;
+  std::shared_ptr<BallisticShot> m_ballisticShot;
 
   std::shared_ptr<AutoRunner> m_autoRunner;
   

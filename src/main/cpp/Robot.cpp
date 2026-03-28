@@ -161,9 +161,9 @@ bool Robot::IsHubActive() {
   bool weInactiveFirst = false;
   if (!gameData.empty()) {
     if (gameData.at(0) == 'R' && alliance.value() == frc::DriverStation::Alliance::kBlue) {
-      weInactiveFirst == true;
+      weInactiveFirst = true;
     } else if (gameData.at(0) == 'B' && alliance.value() == frc::DriverStation::Alliance::kRed) {
-      weInactiveFirst == true;
+      weInactiveFirst = true;
     } 
   } else {
     // gamedata is invalid default to true

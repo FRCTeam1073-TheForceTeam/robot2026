@@ -16,26 +16,20 @@ class BallisticShot {
   {
     units::velocity::meters_per_second_t FlywheelSpeed;
     units::angle::radian_t HoodAngle;
+    units::time::second_t ShotTime;
   };
 
-  Shot GetShot(units::length::meter_t range, units::length::meter_t heightAboveHub);
+  static Shot GetShot(units::length::meter_t range);
   
   BallisticShot();
+  
  private:
-  units::length::meter_t maxHeight;
-  const units::length::meter_t hubHeight = 1.829_m;
-  const units::length::meter_t turretHeight = 0.41_m;
+  static constexpr units::length::meter_t heightAboveHub = 1.0_m;
+  static constexpr units::length::meter_t hubHeight = 1.829_m;
+  static constexpr units::length::meter_t turretHeight = 0.40_m;
+  static constexpr double efficiency = 0.80;   // Calibration for transfer of flywheel velocity to fuel.
+  static constexpr units::angle::radian_t hood_offset = -0.15_rad; // Calibration for shot exit vs. hood angle.
 
-  const units::acceleration::meters_per_second_squared_t gravity = 9.8_mps_sq;
-
-  units::velocity::meters_per_second_t xVel;
-  units::velocity::meters_per_second_t yVel;
-  units::time::second_t timeToMaxHeight;
-  units::time::second_t timeToFall;
-
-  units::velocity::meters_per_second_t flywheelSpeed;
-  units::angle::radian_t hoodAngle;
-
-  Shot shot;
+  static constexpr units::acceleration::meters_per_second_squared_t gravity = 9.81_mps_sq;
 
 };

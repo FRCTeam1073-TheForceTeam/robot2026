@@ -10,9 +10,11 @@
 #include "subsystems/ShooterHood.h"
 #include "subsystems/OI.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "utilities/BallisticShot.h"
 #include "utilities/ShooterTable.h"
 #include "subsystems/TargetFinder.h"
 #include "subsystems/ZoneFinder.h"
+
 
 /**
  * HoodTeleop command.

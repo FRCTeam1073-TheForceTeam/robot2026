@@ -15,9 +15,7 @@
 class ZeroTurret
     : public frc2::CommandHelper<frc2::Command, ZeroTurret> {
 public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
+
   explicit ZeroTurret(std::shared_ptr<Turret> turret);
 
   void Initialize() override;
@@ -29,6 +27,6 @@ public:
   bool IsFinished() override;
   
 private:
-  units::torque::newton_meter_t limit;
   std::shared_ptr<Turret> m_turret;
+  units::torque::newton_meter_t limit;
 };

@@ -5,9 +5,7 @@
 #include "commands/FlywheelTeleop.h"
 #include <frc/DriverStation.h>
 #include <iostream>
-
-#include <choreo/Choreo.h>
-#include <commands/Autos/TestAuto.h>
+#include "utilities/BallisticShot.h"
 
 FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
   m_flywheel(flywheel),
@@ -31,10 +29,17 @@ void FlywheelTeleop::Initialize() {
 void FlywheelTeleop::Execute() {
   
   if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) {
-    // Using lookup table:
     auto range = m_hf->getFeedback().rangeToTarget;
-    auto speed = m_st->GetFlywheelVelocity(range);
-    m_flywheel->SetCommand(speed);
+
+    if (m_OI->BallisticShotMode()) {
+      // Use ballistic shot:
+      auto shot = BallisticShot::GetShot(range); 
+      m_flywheel->SetCommand(shot.FlywheelSpeed);
+    } else {
+      // Using lookup table:
+      auto speed = m_st->GetFlywheelVelocity(range);
+      m_flywheel->SetCommand(speed);
+    }
   } else if (m_OI->GetOperatorYButton()) {
     auto speed = 11.0_mps; // Corner Shot
     m_flywheel->SetCommand(speed);
