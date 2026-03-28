@@ -71,7 +71,7 @@ class AprilTagFinder : public frc2::SubsystemBase {
 
         static std::vector<RobotCamera> _cameras;
 
-        const double ambiguityThreshold = 0.28;
+        const double ambiguityThreshold = 0.4;
         bool hasAprilTags;
         // Base stddevs for measurements:
         wpi::array<double, 3U> base_stddevs = {0.5, 0.5, 0.5};
