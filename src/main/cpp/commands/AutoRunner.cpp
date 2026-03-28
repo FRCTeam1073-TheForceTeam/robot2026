@@ -229,9 +229,16 @@ frc2::CommandPtr AutoRunner::Prep() {
   ).WithTimeout(3.0_s);
 }
 
-frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
+frc2::CommandPtr AutoRunner::PrepWithoutIntake() {
+  return frc2::cmd::Parallel(
+    ZeroTurret(m_turret).ToPtr(),
+    ZeroClimber(m_climber).ToPtr()
+  ).WithTimeout(3.0_s);
+}
+
+frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, bool putIntakeOut = true) {
    return frc2::cmd::Sequence(
-    Prep(),
+    putIntakeOut?Prep():PrepWithoutIntake(),
     frc2::cmd::Wait(0.5_s),
     PartGenerator(trajectory)
   );
