@@ -51,7 +51,7 @@ frc::Pose2d TargetFinder::getHubPos()
     frc::Pose2d TargetLoc = OurHub;
 
     auto tempLoc = TargetLoc.RelativeTo(turretPos);
-    auto tempRange = tempLoc.Translation().Norm().value();
+    auto tempRange = tempLoc.Translation().Norm();
 
     auto shot = BallisticShot::GetShot(tempRange);
     frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * shot.ShotTime, _localizer->getSpeeds().vy * shot.ShotTime); 

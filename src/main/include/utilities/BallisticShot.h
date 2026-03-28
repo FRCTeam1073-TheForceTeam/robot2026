@@ -30,6 +30,6 @@ class BallisticShot {
   static constexpr double efficiency = 0.80;   // Calibration for transfer of flywheel velocity to fuel.
   static constexpr units::angle::radian_t hood_offset = -0.15_rad; // Calibration for shot exit vs. hood angle.
 
-  static constexpr units::acceleration::meters_per_second_squared_t gravity = 9.8_mps_sq;
+  static constexpr units::acceleration::meters_per_second_squared_t gravity = 9.81_mps_sq;
 
 };

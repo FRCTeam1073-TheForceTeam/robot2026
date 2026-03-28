@@ -162,7 +162,7 @@ void AprilTagFinder::clearMeasurements() {
 void AprilTagFinder::Periodic() {
     hasAprilTags = false;
     auto turretVelocity = m_turret->GetFeedback().velocity;
-    for (int i = 0; i<_cameras.size(); i++) {
+    for (size_t i = 0; i < _cameras.size(); i++) {
         const auto& cam = _cameras[i];
         auto& estimator = _estimators[i];
 

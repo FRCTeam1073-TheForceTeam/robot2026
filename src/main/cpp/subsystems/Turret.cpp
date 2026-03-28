@@ -18,9 +18,9 @@ _rotaterMotor(RotaterMotorId, CANBus("rio")),
 _rotaterPositionSig(_rotaterMotor.GetPosition()),
 _rotaterVelocitySig(_rotaterMotor.GetVelocity()),
 _rotaterCurrentSig(_rotaterMotor.GetTorqueCurrent()),
-_limiter(6.0_rad / 1_s),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
-_commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)) {
+_commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)), 
+_limiter(6.0_rad / 1_s) {
   // Extra implementation of subsystem constructor goes here.
 
   _feedback.position = 0.0_rad;
