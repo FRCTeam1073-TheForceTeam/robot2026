@@ -202,9 +202,9 @@ void AprilTagFinder::Periodic() {
             }
         } // End camera is turret.
 
-        // std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
-        estimator.AddHeadingData(m_drivetrain->GetPreviousUpdateTime(), m_drivetrain->GetGyroHeading());
-        std::vector<AprilTagFinder::VisionMeasurement> measurements = getMultiTagEstimate(results, estimator, transform);
+        std::vector<AprilTagFinder::VisionMeasurement> measurements = getCamMeasurements(results, transform);
+        // estimator.AddHeadingData(m_drivetrain->GetPreviousUpdateTime(), m_drivetrain->GetGyroHeading());
+        // std::vector<AprilTagFinder::VisionMeasurement> measurements = getMultiTagEstimate(results, estimator, transform);
         _visionMeasurements.insert(
             _visionMeasurements.end(),
             measurements.begin(),
