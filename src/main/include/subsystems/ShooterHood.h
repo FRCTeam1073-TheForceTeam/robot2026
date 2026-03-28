@@ -42,8 +42,8 @@ class ShooterHood : public frc2::SubsystemBase {
   static constexpr double HoodToMotorGearRatio = (52.0 / 12.0) * (33.0 / 15.0) * (160.0 / 10.0);
   //static constexpr auto maxPosition = 0.49_rad; old positions
   //static constexpr auto minPosition = 0.00_rad;
-  static constexpr units::angle::radian_t maxPosition = 69.2_deg;
-  static constexpr units::angle::radian_t minPosition = 41.2_deg;
+  static constexpr units::angle::radian_t maxPosition = 69.0_deg;
+  static constexpr units::angle::radian_t minPosition = 42.0_deg;
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {

@@ -138,11 +138,11 @@ bool OI::GetDriverDPadDown() {
     return _driverController.GetPOV() == 180;
 }
 
-bool OI::DriverRumble() {
+void OI::DriverRumble() {
     _driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1.0);
 }
 
-bool OI::DriverStopRumble() {
+void OI::DriverStopRumble() {
     _driverController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0.0);
 }
 
@@ -202,11 +202,11 @@ bool OI::GetOperatorDPadDown() {
     return _operatorController.GetPOV() == 180;
 }
 
-bool OI::OperatorRumble() {
+void OI::OperatorRumble() {
     _operatorController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 1.0);
 }
 
-bool OI::OperatorStopRumble() {
+void OI::OperatorStopRumble() {
     _operatorController.SetRumble(frc::GenericHID::RumbleType::kBothRumble, 0.0);
 }
 

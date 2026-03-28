@@ -30,6 +30,8 @@ const std::string RobotContainer::rightDoubleHalf = "RightDoubleHalf";
 const std::string RobotContainer::cornerShotAuto = "CornerShotAuto";
 const std::string RobotContainer::cornerShotManual = "CornerShotManual";
 
+const std::string RobotContainer::centerTriple = "CenterTriple";
+
 const std::string RobotContainer::hubAuto = "Hub Auto";
 
 RobotContainer::RobotContainer() :
@@ -54,6 +56,7 @@ _operatorController(1)
   m_climber = std::make_shared<Climber>();
 
   m_shooterTable = std::make_shared<ShooterTable>();
+  m_ballisticShot = std::make_shared<BallisticShot>();
  std::cerr << "\tShooter table created..." << std::endl;
   m_intake = std::make_shared<Intake>();
    std::cerr << "\tIntake created..." << std::endl;
@@ -100,6 +103,7 @@ _operatorController(1)
   m_levelChooser.AddOption("Double Neutral Right", doubleNeutralRight);
   m_levelChooser.AddOption("Corner Shot Auto", cornerShotAuto);
   m_levelChooser.AddOption("Split Path Auto", splitAuto);
+  m_levelChooser.AddOption("Center Triple", centerTriple);
   // m_levelChooser.AddOption("Corner Shot Manual", cornerShotManual);
   m_levelChooser.AddOption("Right Double Half", rightDoubleHalf);
 
@@ -134,7 +138,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == cornerShotAuto ||
       m_levelChooser.GetSelected() == splitAuto ||
       m_levelChooser.GetSelected() == cornerShotManual ||
-      m_levelChooser.GetSelected() == rightDoubleHalf
+      m_levelChooser.GetSelected() == rightDoubleHalf ||
+      m_levelChooser.GetSelected() == centerTriple
     ) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory);

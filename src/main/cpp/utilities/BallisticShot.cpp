@@ -7,7 +7,7 @@
 
 BallisticShot::BallisticShot() = default;
 
-BallisticShot::Shot BallisticShot::GetShot(units::length::meter_t range, units::length::meter_t heightAboveHub){
+BallisticShot::Shot BallisticShot::GetShot(units::length::meter_t range){
     Shot shot;
     // hub is 6 feet tall or 1.829 meters
     auto maxHeight = heightAboveHub + hubHeight - turretHeight;
@@ -25,4 +25,5 @@ BallisticShot::Shot BallisticShot::GetShot(units::length::meter_t range, units::
     shot.FlywheelSpeed = flywheelSpeed;
     shot.HoodAngle = hoodAngle + hood_offset;
     return shot;
+    
 }
