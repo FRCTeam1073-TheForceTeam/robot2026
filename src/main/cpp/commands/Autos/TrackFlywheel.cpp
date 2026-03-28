@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/Autos/TrackFlywheel.h"
+#include "utilities/BallisticShot.h"
+
 
 TrackFlywheel::TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
  m_flywheel(flywheel),
@@ -19,8 +21,11 @@ void TrackFlywheel::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void TrackFlywheel::Execute() {
   units::length::meter_t range = m_hf -> getFeedback().rangeToTarget;
-  units::velocity::meters_per_second_t targetSpeed = m_st -> GetFlywheelVelocity(range);
-  m_flywheel -> SetCommand(targetSpeed);
+
+  auto shot = BallisticShot::GetShot(range); 
+  //units::velocity::meters_per_second_t targetSpeed = m_st -> GetFlywheelVelocity(range);
+
+  m_flywheel -> SetCommand(shot.FlywheelSpeed);
 
 
 }
