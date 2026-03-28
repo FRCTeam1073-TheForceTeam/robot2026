@@ -7,8 +7,9 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
-#include <ctre/phoenix6/TalonFX.hpp>
+
 #include <ctre/phoenix6/CANdle.hpp>
+
 
 #include <variant>
 
@@ -26,12 +27,12 @@
 class Bling : public frc2::SubsystemBase {
  public:
 
-  static constexpr int CANdleId = 37; //temp number
+  static constexpr int CANdleId = 30; //temp number
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
   };
 
-  using Command = std::variant<int>;
+  using Command = std::variant<std::string>;
   
   // Constructor for the subsystem.
   Bling();

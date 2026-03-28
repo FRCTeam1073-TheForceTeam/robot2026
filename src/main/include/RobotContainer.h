@@ -33,6 +33,7 @@
 #include "subsystems/Turret.h"
 #include "subsystems/Spindexer.h" 
 #include "subsystems/ZoneFinder.h" 
+#include "subsystems/Bling.h"
 
 #include "commands/FlywheelTeleop.h"
 #include "commands/HoodTeleop.h"
@@ -55,6 +56,8 @@
 #include "commands/Autos/BasicAuto.h"
 #include "commands/TestFlywheel.h"
 #include "commands/TestHood.h"
+
+#include "commands/BlingTeleop.h"
 
 
 #include <choreo/Choreo.h>
@@ -145,6 +148,7 @@ class RobotContainer {
   std::shared_ptr<LaserCan> m_laser;
   std::shared_ptr<ShooterTable> m_shooterTable;
   std::shared_ptr<BallisticShot> m_ballisticShot;
+  std::shared_ptr<Bling> m_bling;
 
   std::shared_ptr<AutoRunner> m_autoRunner;
   
