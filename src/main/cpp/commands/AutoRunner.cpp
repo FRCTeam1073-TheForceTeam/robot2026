@@ -57,10 +57,10 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
 
       previousTime = activeEvent.timestamp;
       if (eventType == "StartSpindexer") {
-        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(6.5_mps));
+        autoRoutine.emplace_back(m_spindexer->SpinToSpeed(Spindexer::ShotSpeed));
       }
       else if (eventType == "StartKicker") {
-        autoRoutine.emplace_back(m_kicker->SpinToSpeed(6.6_mps));
+        autoRoutine.emplace_back(m_kicker->SpinToSpeed(Kicker::ShotSpeed));
       }
       else if (eventType == "StopSpindexer") {
         autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0_mps));
@@ -80,14 +80,20 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       else if (eventType == "StopCollector") {
         autoRoutine.emplace_back(m_collector->CollectSpeed(0_mps));
       }
+      else if (eventType == "ZeroTurret") {
+        autoRoutine.emplace_back(ZeroTurret(m_turret).ToPtr());
+      }
+      else if (eventType == "ZeroClimber") {
+        autoRoutine.emplace_back(ZeroClimber(m_climber).ToPtr());
+      }
       else if (eventType == "Shoot") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.3_s),
-              m_spindexer->SpinToSpeed(6.5_mps),
-              m_kicker->SpinToSpeed(6.6_mps),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
               frc2::cmd::Wait(0.475_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(0.6_s),
@@ -185,11 +191,19 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           frc2::cmd::Parallel(
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
             frc2::cmd::Sequence(
-              frc2::cmd::Wait(0.5_s),
+              frc2::cmd::Wait(0.85_s),
               m_spindexer->SpinToSpeed(6.5_mps),
               m_kicker->SpinToSpeed(6.6_mps),
-              frc2::cmd::Wait(5.0_s),
-              m_intake->IntakeIn()
+              frc2::cmd::Wait(1.3_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(2.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(1.3_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeOut()
             )
           ).WithTimeout(60.0_s)
         );
@@ -277,7 +291,7 @@ frc2::CommandPtr AutoRunner::PrepWithoutIntake() {
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, bool putIntakeOut) {
 
    return frc2::cmd::Sequence(
-    putIntakeOut?Prep():PrepWithoutIntake(),
+    putIntakeOut ? Prep() : PrepWithoutIntake(),
     // frc2::cmd::Wait(0.01_s),
     PartGenerator(trajectory)
   );
