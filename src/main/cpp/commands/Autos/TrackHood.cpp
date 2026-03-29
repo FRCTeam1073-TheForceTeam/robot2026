@@ -5,10 +5,11 @@
 #include "utilities/BallisticShot.h"
 
 
-TrackHood::TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
+TrackHood::TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, bool shooterTable) :
 m_shooterHood(shooterHood),
 m_hf(hf),
-m_st(st) {
+m_st(st),
+m_shooterTable(shooterTable) {
   AddRequirements(m_shooterHood.get());
 }
 
@@ -19,10 +20,16 @@ void TrackHood::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void TrackHood::Execute() {
   units::length::meter_t range = m_hf->getFeedback().rangeToTarget;
-  auto shot = BallisticShot::GetShot(range); 
-  //units::angle::radian_t targetAngle = m_st->GetHoodAngle(range);
-
-  m_shooterHood->SetCommand(shot.HoodAngle);
+  if(m_shooterTable)
+  {
+    units::angle::radian_t targetAngle = m_st->GetHoodAngle(range);
+    m_shooterHood->SetCommand(targetAngle);
+  }
+  else
+  {
+    auto shot = BallisticShot::GetShot(range);
+    m_shooterHood->SetCommand(shot.HoodAngle);
+  }
 }
 
 // Called once the command ends or is interrupted.

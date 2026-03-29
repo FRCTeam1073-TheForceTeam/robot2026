@@ -26,7 +26,7 @@ class TrackFlywheel
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st);
+  TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, bool lookupTable = false);
 
   void Initialize() override;
 
@@ -42,6 +42,7 @@ class TrackFlywheel
   std::shared_ptr<Flywheel> m_flywheel;
   std::shared_ptr<TargetFinder> m_hf;
   std::shared_ptr<ShooterTable> m_st;
+  bool m_lookupTable;
 };
 
 

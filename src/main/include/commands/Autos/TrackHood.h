@@ -24,7 +24,7 @@ class TrackHood
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st);
+  TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, bool shooterTable = false);
 
   void Initialize() override;
 
@@ -38,4 +38,5 @@ class TrackHood
   std::shared_ptr<ShooterHood> m_shooterHood;
   std::shared_ptr<TargetFinder> m_hf;
   std::shared_ptr<ShooterTable> m_st;
+  bool m_shooterTable;
 };
