@@ -119,8 +119,8 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.0_s),
-              m_spindexer->SpinToSpeed(6.5_mps),
-              m_kicker->SpinToSpeed(6.6_mps),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
               frc2::cmd::Wait(6.0_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(1.0_s),
@@ -139,8 +139,8 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             m_shooterHood->SetHoodPosition(0.267_rad),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.0_s),
-              m_spindexer->SpinToSpeed(6.5_mps),
-              m_kicker->SpinToSpeed(6.6_mps),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
               frc2::cmd::Wait(6.0_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(1.0_s),
@@ -157,8 +157,8 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(0.5_s),
-              m_spindexer->SpinToSpeed(6.5_mps),
-              m_kicker->SpinToSpeed(6.6_mps),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
               frc2::cmd::Wait(1.3_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(1.3_s),
@@ -240,7 +240,7 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
   if (trajectory.has_value()) {
     auto &traj = trajectory.value();
 
-    for (int s = 0; s < traj.splits.size(); s++) {
+    for (size_t s = 0; s < traj.splits.size(); s++) {
       auto split_traj = traj.GetSplit(s);
 
       auto part = frc2::cmd::Parallel(
@@ -255,6 +255,7 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
   else {
     std::cerr << "Auto Runner Part Generator not have a trajectory" << std::endl;
     SmartDashPrint("No Trajectory");
+    return frc2::cmd::Idle(); // You have to return something!?
   }
 }
 

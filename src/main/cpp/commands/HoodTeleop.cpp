@@ -5,11 +5,11 @@
 #include "commands/HoodTeleop.h"
 #include "utilities/BallisticShot.h"
 
-HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<OI>&  OI, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<ZoneFinder>& zone) :
+HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<OI>&  OI, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<ZoneFinder>& zone) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_shooterHood(shooterHood),
   m_OI(OI),
-  m_hf(hf),
+  m_tf(tf),
   m_st(st),
   m_zone(zone) {
     level = 0;
@@ -31,15 +31,17 @@ void HoodTeleop::Execute() {
     // Put the hood "back" to be out of the way.
     m_shooterHood->SetCommand(ShooterHood::maxPosition);
   } else if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) {
-    auto range = m_hf->getFeedback().rangeToTarget;
+    auto feedback = m_tf->getFeedback();
 
-    if (m_OI->BallisticShotMode()) {
+    if (feedback.passing) {
+      m_shooterHood->SetCommand(ShooterHood::minPosition); 
+    } else if (m_OI->BallisticShotMode()) {
       // Use ballistic shot:
-      auto shot = BallisticShot::GetShot(range); 
+      auto shot = BallisticShot::ComputeShot(feedback.rangeToTarget); 
       m_shooterHood->SetCommand(shot.HoodAngle);
     } else {
       // Use lookup table:
-      auto angle = m_st->GetHoodAngle(range);
+      auto angle = m_st->GetHoodAngle(feedback.rangeToTarget);
       m_shooterHood->SetCommand(angle);
     }
   } else if (m_OI->GetOperatorYButton()) {

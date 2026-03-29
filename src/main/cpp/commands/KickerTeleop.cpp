@@ -20,13 +20,9 @@ void KickerTeleop::Execute() {
   auto BButton = m_OI->GetOperatorBButton();
 
   if (m_OI->GetOperatorRightTrigger() >= 0.1) {
-    // targetVelocity = 5.85_mps;
-    // targetVelocity = 7.3_mps; //was 5.85
-    targetVelocity = 6.4_mps;
-
-    m_kicker->SetCommand(targetVelocity);
+    m_kicker->SetCommand(Kicker::ShotSpeed);
   } else if (BButton) {
-    targetVelocity = -1.65_mps;
+    targetVelocity = -1.65_mps; // Jam clearing.
     m_kicker->SetCommand(targetVelocity);
   } else {
     targetVelocity = 0.0_mps;

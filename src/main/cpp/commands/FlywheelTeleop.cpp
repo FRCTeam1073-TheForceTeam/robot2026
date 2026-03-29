@@ -2,15 +2,16 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+#pragma once
 #include "commands/FlywheelTeleop.h"
 #include <frc/DriverStation.h>
 #include <iostream>
 #include "utilities/BallisticShot.h"
 
-FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
+FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st) :
   m_flywheel(flywheel),
   m_OI(oi),
-  m_hf(hf),
+  m_tf(tf),
   m_st(st) {
   maxVel = 10_mps;
   scale = 1.0;
@@ -29,15 +30,17 @@ void FlywheelTeleop::Initialize() {
 void FlywheelTeleop::Execute() {
   
   if (std::abs(m_OI->GetOperatorLeftTrigger()) >= 0.1) {
-    auto range = m_hf->getFeedback().rangeToTarget;
+    auto feedback = m_tf->getFeedback();
 
-    if (m_OI->BallisticShotMode()) {
+    if (feedback.passing) {
+      m_flywheel->SetCommand(13.0_mps);
+    } else if (m_OI->BallisticShotMode()) {
       // Use ballistic shot:
-      auto shot = BallisticShot::GetShot(range); 
+      auto shot = BallisticShot::ComputeShot(feedback.rangeToTarget); 
       m_flywheel->SetCommand(shot.FlywheelSpeed);
     } else {
       // Using lookup table:
-      auto speed = m_st->GetFlywheelVelocity(range);
+      auto speed = m_st->GetFlywheelVelocity(feedback.rangeToTarget);
       m_flywheel->SetCommand(speed);
     }
   } else if (m_OI->GetOperatorYButton()) {
@@ -49,23 +52,6 @@ void FlywheelTeleop::Execute() {
   } else {
     m_flywheel->SetCommand(std::monostate());
   }
-
-/*
-   if (m_OI->GetOperatorLeftTrigger()>= 0.1) {
-  //   // Use lookup table:
-     auto range = m_hf->getFeedback().rangeToTarget;
-     auto speed = m_st->GetFlywheelVelocity(range);
-     m_flywheel->SetCommand(speed);
-   } else if(m_OI->GetOperatorYButton()){
-      auto speed = 11_mps; //Corner shot
-      m_flywheel->SetCommand(speed);
-   }else if(m_OI->GetOperatorXButton()){
-      auto speed = 9.4_mps; //Tower shot
-      m_flywheel->SetCommand(speed);
-//    m_flywheel->SetCommand(level * scaleFactor);
-//    frc::SmartDashboard::PutNumber("Flywheel/Speed Level", level);
-//    frc::SmartDashboard::PutNumber("Flywheel/Speed", level * scaleFactor.value());
-*/
 }
 
 // Called once the command ends or is interrupted.

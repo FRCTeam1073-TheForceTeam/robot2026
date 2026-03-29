@@ -5,6 +5,7 @@
 
 #include "subsystems/Spindexer.h"
 #include <ctre/phoenix6/controls/NeutralOut.hpp>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace ctre::phoenix6;
 

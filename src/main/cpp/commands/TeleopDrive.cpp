@@ -110,8 +110,8 @@ void TeleopDrive::Execute() {
     }
     lastYPressed = m_OI->GetDriverYButton();
     if (slowMode) {
-        vx *= 0.2;
-        vy *= 0.2;
+        vx *= 0.4;
+        vy *= 0.4;
     }
 
 
