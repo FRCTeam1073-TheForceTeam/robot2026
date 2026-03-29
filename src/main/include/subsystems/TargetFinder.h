@@ -2,7 +2,7 @@
 
 #include <frc/DriverStation.h>
 #include <frc2/command/SubsystemBase.h>
-#include "frc/geometry/Pose2d.h"
+#include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/geometry/Rotation2d.h>
 #include <units/length.h>
@@ -10,13 +10,8 @@
 #include <iostream>
 #include <units/time.h>
 
-
 #include "subsystems/Localizer.h"
 #include "subsystems/ZoneFinder.h"
-#include "utilities/BallisticShot.h"
-
-
-
 
 
 class TargetFinder  : public frc2::SubsystemBase {
@@ -34,15 +29,17 @@ class TargetFinder  : public frc2::SubsystemBase {
     {
         units::angle::radian_t turretToTargetAngle;
         units::length::meter_t rangeToTarget;
+        bool passing; // Is this a passing target.
     };
 
     TargetFinder(std::shared_ptr<Localizer>& localizer, std::shared_ptr<ZoneFinder>& zonefinder);
 
     frc::Pose2d getTargetPos();
-    frc::Pose2d target;
+    frc::Pose2d _target;
+    bool _passing;
 
     frc::Pose2d getHubPos();
-    frc::Pose2d TargetLoc;
+    frc::Pose2d _targetLoc;
 
     frc::Pose2d Pass();
     
@@ -67,5 +64,4 @@ class TargetFinder  : public frc2::SubsystemBase {
     std::optional<frc::DriverStation::Alliance> _alliance;
     std::set<std::string> zone;
     std::string OurZone;
-
 };

@@ -56,7 +56,7 @@ _operatorController(1)
   m_climber = std::make_shared<Climber>();
 
   m_shooterTable = std::make_shared<ShooterTable>();
-  m_ballisticShot = std::make_shared<BallisticShot>();
+  m_ballisticShot = std::make_shared<BallisticShot>(m_targetFinder);
  std::cerr << "\tShooter table created..." << std::endl;
   m_intake = std::make_shared<Intake>();
    std::cerr << "\tIntake created..." << std::endl;

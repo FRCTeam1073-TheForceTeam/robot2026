@@ -1,16 +1,21 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
 
 #pragma once
+
+#include <frc2/command/SubsystemBase.h>
+#include "subsystems/TargetFinder.h"
 
 #include<units/velocity.h>
 #include<units/angle.h>
 #include<units/length.h>
 #include<units/acceleration.h>
 #include<math.h>
+#include<memory>
 
-class BallisticShot {
+/**
+ * This subsystem continuously updates a cached value for a best-shot using compensated
+ * ballistic trajectory.
+ */
+class BallisticShot : public frc2::SubsystemBase {
  public:
   struct Shot
   {
@@ -18,17 +23,28 @@ class BallisticShot {
     units::angle::radian_t HoodAngle;
     units::time::second_t ShotTime;
   };
-
-  static Shot GetShot(units::length::meter_t range);
   
-  BallisticShot();
+  BallisticShot(std::shared_ptr<TargetFinder>& tf);
+
+  // Update the current shot.
+  void Periodic() override;
+
+    // Access the currently cached/latest shot value:
+  const Shot& GetShot() { return m_currentShot; }
+
+  // Function to recompute shot:
+  static Shot ComputeShot(units::length::meter_t range);
   
  private:
+
+  std::shared_ptr<TargetFinder> m_tf;
+  Shot m_currentShot;
+
   static constexpr units::length::meter_t heightAboveHub = 1.0_m;
   static constexpr units::length::meter_t hubHeight = 1.829_m;
   static constexpr units::length::meter_t turretHeight = 0.40_m;
-  static constexpr double efficiency = 0.80;   // Calibration for transfer of flywheel velocity to fuel.
-  static constexpr units::angle::radian_t hood_offset = -0.15_rad; // Calibration for shot exit vs. hood angle.
+  static constexpr double efficiency = 0.78;   // Calibration for transfer of flywheel velocity to fuel.
+  static constexpr units::angle::radian_t hood_offset = -0.12_rad; // Calibration for shot exit vs. hood angle.
 
   static constexpr units::acceleration::meters_per_second_squared_t gravity = 9.81_mps_sq;
 
