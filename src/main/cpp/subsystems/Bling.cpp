@@ -32,7 +32,7 @@ void Bling::SetCommand(Command cmd) {
 }
 
 void Bling::Periodic() {
-  controls::SolidColor color(0, 7); //TODO: change which leds
+  controls::SolidColor color(0, 79);
   
       // // Process command:
    if (std::holds_alternative<std::string>(_command)) {
@@ -57,7 +57,7 @@ void Bling::Periodic() {
           }
       }
    }
-   _CANdle.SetControl (color);
+   _CANdle.SetControl(color);
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
