@@ -141,8 +141,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == rightDoubleHalf ||
       m_levelChooser.GetSelected() == centerTriple
     ) {
+      bool putIntakeOut = true;
+      if(m_levelChooser.GetSelected() == centerTriple)
+        putIntakeOut = false;
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
-      return m_autoRunner->Create(trajectory);
+      return m_autoRunner->Create(trajectory,putIntakeOut);
     }
   }
   catch (...) {
