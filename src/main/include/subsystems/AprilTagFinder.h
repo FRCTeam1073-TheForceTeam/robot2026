@@ -79,7 +79,7 @@ class AprilTagFinder : public frc2::SubsystemBase {
         wpi::array<double, 3U> estimate_stddevs(units::length::meter_t range, units::angle::radian_t bearing);
 
         // Ignore things farther away than this.
-        units::meter_t max_range{3.5};
+        static constexpr units::meter_t max_range = 4_m;
 
         std::vector<VisionMeasurement> _visionMeasurements;
         std::shared_ptr<Turret> m_turret;
