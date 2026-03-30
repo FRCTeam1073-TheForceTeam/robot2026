@@ -27,6 +27,7 @@ const std::string RobotContainer::rightTrenchHalfDouble = "RightTrenchHalfDouble
 const std::string RobotContainer::rightTrenchHalfOutpost = "RightTrenchHalfOutpost";
 const std::string RobotContainer::cornerShotManual = "CornerShotManual";
 
+const std::string RobotContainer::centerHub = "CenterHub";
 const std::string RobotContainer::centerDepotOutpost = "CenterDepotOutpost";
 
 RobotContainer::RobotContainer() :
