@@ -20,19 +20,22 @@
 #include <chrono>
 #include <frc/smartdashboard/SmartDashboard.h>
 
-#include "frc/estimator/PoseEstimator.h"
-#include "frc/geometry/Pose2d.h"
-#include "frc/geometry/Rotation2d.h"
-#include "frc/geometry/Rotation3d.h"
-#include "frc/geometry/Transform3d.h"
-#include "frc/kinematics/SwerveDriveKinematics.h"
-#include "frc/kinematics/SwerveModulePosition.h"
-#include "frc/kinematics/SwerveDriveOdometry.h"
+#include <frc/estimator/PoseEstimator.h>
+#include <frc/geometry/Pose2d.h>
+#include <frc/geometry/Rotation2d.h>
+#include <frc/geometry/Rotation3d.h>
+#include <frc/geometry/Transform3d.h>
+#include <frc/kinematics/SwerveDriveKinematics.h>
+#include <frc/kinematics/SwerveModulePosition.h>
+#include <frc/kinematics/SwerveDriveOdometry.h>
 
 #include "units/time.h"
 
 class Localizer : public frc2::SubsystemBase {
     public:
+
+    // Between 0.0 and 1.0:  1.0 is unfiltered, 0.0 is no updates.
+    static constexpr double VelocityFilterAlpha = 0.65;
 
     Localizer(std::shared_ptr<Drivetrain> driveTrain, std::shared_ptr<AprilTagFinder> finder);
     

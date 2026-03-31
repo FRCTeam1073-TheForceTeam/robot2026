@@ -19,10 +19,9 @@ void SpindexerTeleop::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void SpindexerTeleop::Execute() {
   if (std::abs(m_OI->GetOperatorRightTrigger()) >= 0.1 && units::math::abs(m_kicker->GetFeedback().velocity) >= 3.0_mps) {
-    // m_spindexer->SetCommand(7.15_mps);//was 5.75
-    m_spindexer->SetCommand(6.5_mps);
+    m_spindexer->SetCommand(Spindexer::ShotSpeed);
   } else if (m_OI->GetOperatorBButton()) {
-    m_spindexer->SetCommand(-2.0_mps);
+    m_spindexer->SetCommand(-2.0_mps); // Jam clearing.
   } else {
     m_spindexer->SetCommand(std::monostate());
   }

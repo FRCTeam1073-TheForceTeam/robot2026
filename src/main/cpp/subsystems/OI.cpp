@@ -10,7 +10,7 @@ _driverController(0),
 _operatorController(1),
 hubActive(false),
 lastHubActive(false),
-_ballisticShot(false),
+_ballisticShot(true),
 _lastOperatorAButton(false)
 {}
 

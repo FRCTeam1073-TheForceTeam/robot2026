@@ -5,9 +5,13 @@
 #include "utilities/BallisticShot.h"
 #include <units/math.h>
 
-BallisticShot::BallisticShot() = default;
+BallisticShot::BallisticShot(std::shared_ptr<TargetFinder>& tf) : m_tf(tf) {
+    m_currentShot.FlywheelSpeed = 0.0_mps;
+    m_currentShot.HoodAngle = 69.2_deg;
+    m_currentShot.ShotTime = 2.0_s;
+}
 
-BallisticShot::Shot BallisticShot::GetShot(units::length::meter_t range){
+BallisticShot::Shot BallisticShot::ComputeShot(units::length::meter_t range){
     Shot shot;
     // hub is 6 feet tall or 1.829 meters
     auto maxHeight = heightAboveHub + hubHeight - turretHeight;
@@ -24,6 +28,21 @@ BallisticShot::Shot BallisticShot::GetShot(units::length::meter_t range){
 
     shot.FlywheelSpeed = flywheelSpeed;
     shot.HoodAngle = hoodAngle + hood_offset;
+
+    // Special case for our mechanism limits:
+    if (range < 2.0_m) {
+        shot.FlywheelSpeed *= 0.9; // Downscale speed for very short shots.
+    }
+
+    if (range > 4.8_m) {
+        shot.FlywheelSpeed *= 1.1; // TODO Would like to remove this hack at some point.
+    }
+
     return shot;
     
 }
+
+ void BallisticShot::Periodic() {
+    auto range = m_tf->getFeedback().rangeToTarget;
+    m_currentShot = ComputeShot(range);     // Cache the computed shot value so we don't recompute it too often.
+ }

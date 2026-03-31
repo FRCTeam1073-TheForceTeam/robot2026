@@ -3,11 +3,14 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/Autos/TrackFlywheel.h"
+#include "utilities/BallisticShot.h"
 
-TrackFlywheel::TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st) :
+
+TrackFlywheel::TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, bool lookupTable) :
  m_flywheel(flywheel),
- m_hf(hf),
- m_st(st)
+ m_tf(hf),
+ m_st(st),
+ m_lookupTable(lookupTable)
   {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements(m_flywheel.get());
@@ -18,10 +21,18 @@ void TrackFlywheel::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void TrackFlywheel::Execute() {
-  units::length::meter_t range = m_hf -> getFeedback().rangeToTarget;
-  units::velocity::meters_per_second_t targetSpeed = m_st -> GetFlywheelVelocity(range);
-  m_flywheel -> SetCommand(targetSpeed);
+  units::length::meter_t range = m_tf -> getFeedback().rangeToTarget;
 
+  if (m_lookupTable)
+  {
+    units::velocity::meters_per_second_t targetSpeed = m_st -> GetFlywheelVelocity(range);
+      m_flywheel -> SetCommand(targetSpeed);
+  }
+  else
+  {
+    auto shot = BallisticShot::ComputeShot(range); 
+    m_flywheel -> SetCommand(shot.FlywheelSpeed);
+  }
 
 }
 

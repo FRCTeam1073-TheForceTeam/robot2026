@@ -15,24 +15,20 @@
 const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
 const std::string RobotContainer::noLevelAuto = "No Auto";
 const std::string RobotContainer::basicAuto = "Basic Auto";
-const std::string RobotContainer::basicShotAuto = "Basic Shot Auto";
+const std::string RobotContainer::startLine = "Basic Shot Auto";
 const std::string RobotContainer::exampleAuto = "Example_Auto";
 
-const std::string RobotContainer::neutralRightTrench = "NeutralRightTrench";
-const std::string RobotContainer::neutralLeftTrench = "NeutralLeftTrench";
-const std::string RobotContainer::halfNeutralRight = "HalfNeutralRight";
-const std::string RobotContainer::halfNeutralLeft = "HalfNeutralLeft";
-const std::string RobotContainer::doubleNeutralRight = "DoubleNeutralRight";
+const std::string RobotContainer::rightTrenchFull = "RightTrenchFull";
+const std::string RobotContainer::leftTrenchFull = "LeftTrenchFull";
+const std::string RobotContainer::rightTrenchHalf = "RightTrenchHalf";
+const std::string RobotContainer::leftTrenchHalf = "LeftTrenchHalf";
+const std::string RobotContainer::rightTrenchHalfDouble = "RightTrenchHalfDouble";
 
-const std::string RobotContainer::splitAuto = "SplitAuto";
-const std::string RobotContainer::rightDoubleHalf = "RightDoubleHalf";
-
-const std::string RobotContainer::cornerShotAuto = "CornerShotAuto";
+const std::string RobotContainer::rightTrenchHalfOutpost = "RightTrenchHalfOutpost";
 const std::string RobotContainer::cornerShotManual = "CornerShotManual";
 
-const std::string RobotContainer::centerTriple = "CenterTriple";
-
-const std::string RobotContainer::hubAuto = "Hub Auto";
+const std::string RobotContainer::centerHub = "CenterHub";
+const std::string RobotContainer::centerDepotOutpost = "CenterDepotOutpost";
 
 RobotContainer::RobotContainer() :
 _operatorController(1)
@@ -56,7 +52,7 @@ _operatorController(1)
   m_climber = std::make_shared<Climber>();
 
   m_shooterTable = std::make_shared<ShooterTable>();
-  m_ballisticShot = std::make_shared<BallisticShot>();
+  m_ballisticShot = std::make_shared<BallisticShot>(m_targetFinder);
  std::cerr << "\tShooter table created..." << std::endl;
   m_intake = std::make_shared<Intake>();
    std::cerr << "\tIntake created..." << std::endl;
@@ -94,20 +90,17 @@ _operatorController(1)
   std::cerr << "\tDefault commands assigned..." << std::endl;
 
   // Autonomous Chooser:
-
   m_levelChooser.SetDefaultOption("No Level", noLevelAuto);
-  m_levelChooser.AddOption("Basic Shot Auto", basicShotAuto);
-  m_levelChooser.AddOption("Neutral Right Trench", neutralRightTrench);
-  m_levelChooser.AddOption("Neutral Left Trench", neutralLeftTrench);
-  m_levelChooser.AddOption("Half Neutral Right", halfNeutralRight);
-  m_levelChooser.AddOption("Half Neutral Left", halfNeutralLeft);
-  m_levelChooser.AddOption("Hub Auto", hubAuto);
-  m_levelChooser.AddOption("Double Neutral Right", doubleNeutralRight);
-  m_levelChooser.AddOption("Corner Shot Auto", cornerShotAuto);
-  m_levelChooser.AddOption("Split Path Auto", splitAuto);
-  m_levelChooser.AddOption("Center Triple", centerTriple);
+  m_levelChooser.AddOption("Center_Hub", centerHub);
+  m_levelChooser.AddOption("Start_Line", startLine);
+  m_levelChooser.AddOption("Right_Trench_Full", rightTrenchFull);
+  m_levelChooser.AddOption("Left_Trench_Full", leftTrenchFull);
+  m_levelChooser.AddOption("Right_Trench_Half", rightTrenchHalf);
+  m_levelChooser.AddOption("Left_Trench_Half", leftTrenchHalf);
+  m_levelChooser.AddOption("Right_Trench_Half_Outpost", rightTrenchHalfOutpost);
+  m_levelChooser.AddOption("Center_Depot_Outpost", centerDepotOutpost);
   // m_levelChooser.AddOption("Corner Shot Manual", cornerShotManual);
-  m_levelChooser.AddOption("Right Double Half", rightDoubleHalf);
+  m_levelChooser.AddOption("Right_Trench_Half_Double", rightTrenchHalfDouble);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -124,24 +117,23 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     else if (m_levelChooser.GetSelected() == basicAuto){
       return BasicAuto::Create(m_drivetrain, m_localizer);
     }
-    else if (m_levelChooser.GetSelected() == basicShotAuto) {
+    else if (m_levelChooser.GetSelected() == startLine) {
       return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable);
     }
-    else if (m_levelChooser.GetSelected() == hubAuto) {
+    else if (m_levelChooser.GetSelected() == centerHub) {
       return Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood);
     }
     else if (
       m_levelChooser.GetSelected() == exampleAuto ||
-      m_levelChooser.GetSelected() == neutralRightTrench ||
-      m_levelChooser.GetSelected() == neutralLeftTrench ||
-      m_levelChooser.GetSelected() == halfNeutralRight ||
-      m_levelChooser.GetSelected() == halfNeutralLeft ||
-      m_levelChooser.GetSelected() == doubleNeutralRight ||
-      m_levelChooser.GetSelected() == cornerShotAuto ||
-      m_levelChooser.GetSelected() == splitAuto ||
+      m_levelChooser.GetSelected() == rightTrenchFull ||
+      m_levelChooser.GetSelected() == leftTrenchFull ||
+      m_levelChooser.GetSelected() == rightTrenchHalf ||
+      m_levelChooser.GetSelected() == leftTrenchHalf ||
+      m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
+      m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
       m_levelChooser.GetSelected() == cornerShotManual ||
-      m_levelChooser.GetSelected() == rightDoubleHalf ||
-      m_levelChooser.GetSelected() == centerTriple
+      m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
+      m_levelChooser.GetSelected() == centerDepotOutpost
     ) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory);

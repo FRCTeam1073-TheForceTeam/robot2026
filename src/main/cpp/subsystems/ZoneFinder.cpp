@@ -13,11 +13,11 @@ ZoneFinder::ZoneFinder(std::shared_ptr<Localizer>& localizer) : _localizer(local
     zones.push_back(Zone("LEFTHALF", frc::Rectangle2d(frc::Translation2d(0_in, 158.32_in), frc::Translation2d(650.12_in, 316.64_in))));
     
 
-    //added 35 in. (robot dimentions w/ bumpers) in x-dimention on either side to expand trench zones. -35 to first x-value, +35 to second x-value
-    zones.push_back(Zone("TRENCH", frc::Rectangle2d(frc::Translation2d(127.06_in, 0_in), frc::Translation2d(229.46_in, 49.86_in))));
-    zones.push_back(Zone("TRENCH", frc::Rectangle2d(frc::Translation2d(127.06_in, 266.78_in), frc::Translation2d(229.46_in, 316.64_in))));
-    zones.push_back(Zone("TRENCH", frc::Rectangle2d(frc::Translation2d(416.06_in, 0_in), frc::Translation2d(518.46_in, 49.86_in))));
-    zones.push_back(Zone("TRENCH", frc::Rectangle2d(frc::Translation2d(416.06_in, 266.78_in), frc::Translation2d(518.46_in, 316.64_in))));
+    //Previously: added 35 in. (robot dimentions w/ bumpers) in x-dimention on either side to expand trench zones. -35 to first x-value, +35 to second x-value
+    zones.push_back(Zone("TRENCH", frc::Rectangle2d(frc::Translation2d(139.06_in, 0_in), frc::Translation2d(229.46_in, 49.86_in))));
+    zones.push_back(Zone("TRENCH", frc::Rectangle2d(frc::Translation2d(139.06_in, 266.78_in), frc::Translation2d(229.46_in, 316.64_in))));
+    zones.push_back(Zone("TRENCH", frc::Rectangle2d(frc::Translation2d(416.06_in, 0_in), frc::Translation2d(506.46_in, 49.86_in))));
+    zones.push_back(Zone("TRENCH", frc::Rectangle2d(frc::Translation2d(416.06_in, 266.78_in), frc::Translation2d(506.46_in, 316.64_in))));
     
     zones.push_back(Zone("BUMP", frc::Rectangle2d(frc::Translation2d(156.06_in, 61.86_in), frc::Translation2d(200.46_in, 134.86_in))));
     zones.push_back(Zone("BUMP", frc::Rectangle2d(frc::Translation2d(156.06_in, 181.78_in), frc::Translation2d(200.46_in, 254.78_in))));

@@ -5,6 +5,7 @@
 
 #include "subsystems/Spindexer.h"
 #include <ctre/phoenix6/controls/NeutralOut.hpp>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 using namespace ctre::phoenix6;
 
@@ -60,7 +61,7 @@ void Spindexer::Periodic() {
 
   } else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
-    _spindexerMotor.SetControl(controls::NeutralOut());
+    _spindexerMotor.SetControl(controls::StaticBrake());
     _limiter.Reset(_feedback.velocity); // Be ready to restart from wherever we are.
   }
 
