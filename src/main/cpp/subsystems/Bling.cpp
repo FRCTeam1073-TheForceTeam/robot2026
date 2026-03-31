@@ -32,7 +32,7 @@ void Bling::SetCommand(Command cmd) {
 }
 
 void Bling::Periodic() {
-  controls::SolidColor color(0, 79);
+  controls::SolidColor color(8, 79);
   
       // // Process command:
    if (std::holds_alternative<std::string>(_command)) {
