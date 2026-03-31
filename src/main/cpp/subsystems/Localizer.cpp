@@ -45,7 +45,12 @@ void Localizer::Periodic() {
     _pose = _estimator->GetEstimatedPosition();
     // Compute speeds in fleid coordinates:
     auto speeds = _driveTrain->GetChassisSpeeds();
-    _speeds = frc::ChassisSpeeds::FromRobotRelativeSpeeds(speeds, _estimator->GetEstimatedPosition().Rotation());
+    auto field_speeds = frc::ChassisSpeeds::FromRobotRelativeSpeeds(speeds, _estimator->GetEstimatedPosition().Rotation());
+
+    // Simplistic IIR update of reported field-centric speeds:
+    _speeds.vx = (1.0 - VelocityFilterAlpha) * _speeds.vx + VelocityFilterAlpha * field_speeds.vx;
+    _speeds.vy = (1.0 - VelocityFilterAlpha) * _speeds.vy + VelocityFilterAlpha * field_speeds.vy;
+    _speeds.omega = (1.0 - VelocityFilterAlpha) * _speeds.omega + VelocityFilterAlpha * field_speeds.omega;
     
     if (counter >= 50) {
         frc::SmartDashboard::PutNumber("Localizer/PS", measurementCounter);

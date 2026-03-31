@@ -61,6 +61,7 @@ frc::Pose2d TargetFinder::getHubPos()
     auto shot = BallisticShot::ComputeShot(tempRange);
     frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * shot.ShotTime, _localizer->getSpeeds().vy * shot.ShotTime); 
    
+    // TODO: Use cross-product to compute relative velocity induced by rotation and add that term as well...
 
     TargetLoc = TargetLoc.TransformBy(frc::Transform2d(-velocityOffset, frc::Rotation2d()));
 
