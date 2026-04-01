@@ -67,7 +67,8 @@ _operatorController(1)
   m_flywheel = std::make_shared<Flywheel>();
    std::cerr << "\tFlywheel created..." << std::endl;
   //m_laser = std::make_shared<LaserCan>();
-
+  m_bling = std::make_shared<Bling>();
+   std::cerr << "\tBling created..." << std::endl;
   m_autoRunner = std::make_shared<AutoRunner>(m_drivetrain, m_tagFinder, m_localizer, m_kicker, m_climber, m_flywheel, m_shooterHood, m_spindexer, m_turret, m_collector, m_intake, m_laser, m_shooterTable, m_targetFinder);
 
   std::cerr << "Mechanisms created..." << std::endl;
@@ -83,6 +84,7 @@ _operatorController(1)
   m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable).ToPtr());
   m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder).ToPtr());
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
+  m_bling->SetDefaultCommand(BlingTeleop(m_bling, m_OI).ToPtr());
 
 
   std::cerr << "\tDefault commands assigned..." << std::endl;
