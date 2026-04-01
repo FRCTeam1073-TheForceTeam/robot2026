@@ -16,6 +16,7 @@ using namespace ctre::phoenix6;
  */
 Bling::Bling() :
   _hardwareConfigured(true),
+  _currentVoltage(0_V),
   _CANdle(CANdleId, CANBus::RoboRIO()) // Might not be roboRio figure out what it is if not
    {
   // Do hardware configuration and track if it succeeds:
@@ -32,7 +33,7 @@ void Bling::SetCommand(Command cmd) {
 }
 
 void Bling::Periodic() {
-  controls::SolidColor color(0, 79);
+  controls::SolidColor color(8, 79);
   
       // // Process command:
    if (std::holds_alternative<std::string>(_command)) {
@@ -47,11 +48,11 @@ void Bling::Periodic() {
   //     _CANdle.SetControl (color);
   //   }
       if (std::get<std::string>(_command) == "battery") {
-          auto volts = frc::RobotController::GetBatteryVoltage();
-          if (volts >= 12.4_V) {
-            color.WithColor(signals::RGBWColor (0, 255, 0));
-          } else if (volts >= 12.1_V) {
-            color.WithColor(signals::RGBWColor (255, 165, 0));
+          _currentVoltage = frc::RobotController::GetBatteryVoltage() * alpha + (1.0 - alpha) * _currentVoltage;
+          if (_currentVoltage >= 12.4_V) {
+            color.WithColor(signals::RGBWColor (0, 0, 255));
+          } else if (_currentVoltage >= 12.1_V) {
+            color.WithColor(signals::RGBWColor (255, 0, 165));
           } else {
             color.WithColor(signals::RGBWColor (255, 0, 0));
           }

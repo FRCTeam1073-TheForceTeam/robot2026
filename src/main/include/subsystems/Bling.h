@@ -48,6 +48,10 @@ class Bling : public frc2::SubsystemBase {
 
   ctre::phoenix6::hardware::CANdle _CANdle;
 
+  units::voltage::volt_t _currentVoltage;
+
+  static constexpr double alpha = 0.1; //TODO: tune alpha
+
   // Helper function for configuring hardware from within the constructor of the subsystem.
   bool ConfigureHardware();
 
