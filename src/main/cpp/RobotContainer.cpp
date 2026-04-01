@@ -134,7 +134,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == centerDepotOutpost
     ) {
       bool putIntakeOut = true;
-      if(m_levelChooser.GetSelected() == centerTriple)
+      if(m_levelChooser.GetSelected() == centerDepotOutpost)
         putIntakeOut = false;
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory,putIntakeOut);
