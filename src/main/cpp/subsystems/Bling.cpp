@@ -50,11 +50,11 @@ void Bling::Periodic() {
       if (std::get<std::string>(_command) == "battery") {
           _currentVoltage = frc::RobotController::GetBatteryVoltage() * alpha + (1.0 - alpha) * _currentVoltage;
           if (_currentVoltage >= 12.4_V) {
-            color.WithColor(signals::RGBWColor (0, 0, 255));
+            color.WithColor(signals::RGBWColor (0, 0, 127)); //Color is dimmer to conserve battery
           } else if (_currentVoltage >= 12.1_V) {
-            color.WithColor(signals::RGBWColor (255, 0, 165));
+            color.WithColor(signals::RGBWColor (127, 0, 82));
           } else {
-            color.WithColor(signals::RGBWColor (255, 0, 0));
+            color.WithColor(signals::RGBWColor (127, 0, 0));
           }
       }
    }
