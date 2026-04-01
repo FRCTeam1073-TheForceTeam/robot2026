@@ -66,7 +66,7 @@ components and start CANBus IDs for subsystem hardware at ID 5.
 | Left Joystick Y  | GetDriverLeftY        | Drivetrain                    |
 | Right Joystick X | GetDriverRightX       | Drivetrain                    |
 | Right Joystick Y | GetDriverRightY       |                               |
-| Left Trigger     | GetDriverLeftTrigger  | Collecter Reverse             |
+| Left Trigger     | GetDriverLeftTrigger  | Collector Reverse             |
 | Right Trigger    | GetDriverRightTrigger | Collector Spin                |
 | A Button         | GetDriverAButton      |                               |
 | B Button         | GetDriverBButton      |                               |
