@@ -21,6 +21,8 @@ const std::string RobotContainer::exampleAuto = "Example_Auto";
 const std::string RobotContainer::rightTrenchFull = "RightTrenchFull";
 const std::string RobotContainer::leftTrenchFull = "LeftTrenchFull";
 const std::string RobotContainer::rightTrenchHalf = "RightTrenchHalf";
+const std::string RobotContainer::leftTrenchHalfNEW = "LeftTrenchHalfNEW";
+
 const std::string RobotContainer::leftTrenchHalf = "LeftTrenchHalf";
 const std::string RobotContainer::rightTrenchHalfDouble = "RightTrenchHalfDouble";
 const std::string RobotContainer::rightTrenchHalfDoubleTest = "RightTrenchHalfDoubleTest";
