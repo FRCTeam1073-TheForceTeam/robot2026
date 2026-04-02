@@ -47,7 +47,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
 
     auto previousTime = 0_s;
   
-    for(size_t e = 0; e < events.size(); e++) {
+    for(int e = 0; e < events.size(); e++) {
       auto activeEvent = events.at(e);
       auto eventType = activeEvent.event;
 
@@ -91,22 +91,17 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           frc2::cmd::Parallel(
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
             frc2::cmd::Sequence(
-              frc2::cmd::Wait(1.3_s),
+              frc2::cmd::Wait(0.5_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
               m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(0.475_s),
+              frc2::cmd::Wait(1.3_s),
               m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.6_s),
+              frc2::cmd::Wait(1.3_s),
               m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.6_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.6_s),
-              m_collector->CollectSpeed(9.14_mps),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.4_s),
+              frc2::cmd::Wait(1.3_s),
               m_intake->IntakeIn()
             )
-          ).WithTimeout(6.0_s)
+          ).WithTimeout(5.5_s)
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
@@ -114,7 +109,6 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             m_flywheel->SpinToSpeed(0.0_mps),
             m_spindexer->SpinToSpeed(0.0_mps),
             m_kicker->SpinToSpeed(0.0_mps),
-            m_collector->CollectSpeed(0.0_mps),
             m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
           )
         );
@@ -238,6 +232,26 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           ).WithTimeout(15_s)
         );
       }
+      else if (eventType == "ShootDoublePath") {
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(1.3_s),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed)
+            )
+          ).WithTimeout(5_s)
+        );
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            m_flywheel->SpinToSpeed(0.0_mps),
+            m_spindexer->SpinToSpeed(0.0_mps),
+            m_kicker->SpinToSpeed(0_mps),
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
+          )
+        );
+      }
     }
 
     return frc2::cmd::Sequence(std::move(autoRoutine));
@@ -254,7 +268,7 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
   if (trajectory.has_value()) {
     auto &traj = trajectory.value();
 
-    for (size_t s = 0; s < traj.splits.size(); s++) {
+    for (int s = 0; s < traj.splits.size(); s++) {
       auto split_traj = traj.GetSplit(s);
 
       auto part = frc2::cmd::Parallel(
