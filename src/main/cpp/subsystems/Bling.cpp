@@ -33,39 +33,43 @@ void Bling::SetCommand(Command cmd) {
 }
 
 void Bling::Periodic() {
-  controls::SolidColor color(8, 79);
+  controls::SolidColor batColor(0, 7);// CANdle will display the battery status
+  controls::SolidColor neutralColor1(8, 42); //color that will display when the turret is not pointed in this direction
+  controls::SolidColor neutralColor2(45, 79); //Change the value of this color to save battery; it should be a dull but visible grey
+  //43-44 is the center of the front of the robot 
   
+
       // // Process command:
    if (std::holds_alternative<std::string>(_command)) {
   //   if (std::get<std::string>(_command) == "red") {
-  //     controls::SolidColor color(0, 7);
-  //     color.WithColor(signals::RGBWColor (255, 0, 0));
-  //     _CANdle.SetControl (color);
+  //     controls::SolidColor batColor(0, 7);
+  //     batColor.WithColor(signals::RGBWColor (255, 0, 0));
+  //     _CANdle.SetControl (batColor);
   //   }
   //   if (std::get<std::string>(_command) == "green") {
-  //     controls::SolidColor color(0, 7);
-  //     color.WithColor(signals::RGBWColor (0, 255, 0));
-  //     _CANdle.SetControl (color);
+  //     controls::SolidColor batColor(0, 7);
+  //     batColor.WithColor(signals::RGBWColor (0, 255, 0));
+  //     _CANdle.SetControl (batColor);
   //   }
       if (std::get<std::string>(_command) == "battery") {
           _currentVoltage = frc::RobotController::GetBatteryVoltage() * alpha + (1.0 - alpha) * _currentVoltage;
           if (_currentVoltage >= 12.4_V) {
-            color.WithColor(signals::RGBWColor (0, 0, 127)); //Color is dimmer to conserve battery
+            batColor.WithColor(signals::RGBWColor (0, 0, 127)); //Color is dimmer to conserve battery
           } else if (_currentVoltage >= 12.1_V) {
-            color.WithColor(signals::RGBWColor (127, 0, 82));
+            batColor.WithColor(signals::RGBWColor (127, 0, 82));
           } else {
-            color.WithColor(signals::RGBWColor (127, 0, 0));
+            batColor.WithColor(signals::RGBWColor (127, 0, 0));
           }
       }
    }
-   _CANdle.SetControl(color);
+   _CANdle.SetControl(batColor);
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool Bling::ConfigureHardware() {
   //_CANdle.ClearAllAnimations();
-  //controls::SolidColor color(0, 7);
-  //color.WithColor(signals::RGBWColor (0, 255, 0));
+  //controls::SolidColor batColor(0, 7);
+  //batColor.WithColor(signals::RGBWColor (0, 255, 0));
   //controls::ColorFlowAnimation flow(0, 7);
   //flow.WithColor(signals::RGBWColor (255, 0, 255));
   //controls::FireAnimation burnt(0, 7);
