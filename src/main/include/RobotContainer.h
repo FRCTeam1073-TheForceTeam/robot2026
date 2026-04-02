@@ -83,28 +83,26 @@ class RobotContainer {
   // static const std::string rightPosition;
   // static const std::string leftPosition;
   // static const std::string centerPosition;
-  static const std::string weekZeroAuto;
+  // static const std::string weekZeroAuto;
   static const std::string noLevelAuto;
-  static const std::string basicAuto;
+  // static const std::string basicAuto;
   static const std::string startLine;
-  static const std::string exampleAuto;
+  // static const std::string exampleAuto;
 
-  static const std::string rightTrenchFull;
-  static const std::string leftTrenchFull;
-  static const std::string rightTrenchHalf;
-  static const std::string leftTrenchHalf;
-  static const std::string leftTrenchHalfNEW;
+  // static const std::string rightTrenchFull;
+  // static const std::string leftTrenchFull;
+  // static const std::string rightTrenchHalf;
+  // static const std::string leftTrenchHalf;
   static const std::string rightTrenchHalfDouble;
   static const std::string rightTrenchHalfDoubleTest;
 
   static const std::string centerDepotOutpost;
 
   static const std::string rightTrenchHalfOutpost;
-  static const std::string cornerShotManual;
+  // static const std::string cornerShotManual;
 
   static const std::string centerHub;
-
-  static const std::string testSplit;
+  static const std::string leftTrenchHalfDouble;
   
   RobotContainer();
 
