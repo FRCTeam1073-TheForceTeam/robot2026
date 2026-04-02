@@ -31,7 +31,8 @@ const std::string RobotContainer::centerHub = "CenterHub";
 const std::string RobotContainer::centerDepotOutpost = "CenterDepotOutpost";
 
 RobotContainer::RobotContainer() :
-_operatorController(1)
+_operatorController(1),
+_controlBindings(false)
 {
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
@@ -165,10 +166,13 @@ void RobotContainer::TeleopInit() {
 
    // TODO: Consider moving this back to Configuire Bindings.
    // Moved here to de-conflict DPAD in test mode.
-  _operatorController.POVLeft().OnTrue(ZeroIntake(m_intake).ToPtr());
-  _operatorController.POVUp().OnTrue(ZeroTurret(m_turret).ToPtr());
-  _operatorController.POVRight().OnTrue(ZeroHood(m_shooterHood).ToPtr());
-  _operatorController.POVDown().OnTrue(ZeroClimber(m_climber).ToPtr());
+  if (!_controlBindings) {
+    _operatorController.POVLeft().OnTrue(ZeroIntake(m_intake).ToPtr());
+    _operatorController.POVUp().OnTrue(ZeroTurret(m_turret).ToPtr());
+    _operatorController.POVRight().OnTrue(ZeroHood(m_shooterHood).ToPtr());
+    _operatorController.POVDown().OnTrue(ZeroClimber(m_climber).ToPtr());
+    _controlBindings = true;
+  }
 
 }
 

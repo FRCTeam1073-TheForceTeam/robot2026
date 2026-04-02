@@ -14,7 +14,9 @@ ZeroTurret::ZeroTurret(std::shared_ptr<Turret> turret) :
 
 
 // Called when the command is initially scheduled.
-void ZeroTurret::Initialize() {}
+void ZeroTurret::Initialize() {
+  std::cerr << "Zero Turret" << std::endl;
+}
 
 // Called repeatedly when this Command is scheduled to run
 void ZeroTurret::Execute() {
@@ -24,6 +26,7 @@ void ZeroTurret::Execute() {
 
 // Called once the command ends or is interrupted.
 void ZeroTurret::End(bool interrupted) {
+  std::cerr << "Finished Zero Turret" << std::endl;
   m_turret->Zero();
   m_turret->SetCommand(std::monostate());
 }

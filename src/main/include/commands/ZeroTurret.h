@@ -8,6 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/Turret.h"
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <iostream>
 
 /**
  * Zero the turret by driving into the hard stop, seeing the current spike and resetting position.

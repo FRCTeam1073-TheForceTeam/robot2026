@@ -158,4 +158,6 @@ class RobotContainer {
   // Just used for launching test commands, separate from OI and other controls.
   frc2::CommandXboxController _operatorController;
 
+  bool _controlBindings;
+
 };
