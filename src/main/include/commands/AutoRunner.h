@@ -66,7 +66,7 @@ class AutoRunner {
     std::shared_ptr<TargetFinder> finder
   );
 
-  frc2::CommandPtr Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
+  frc2::CommandPtr Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, bool putIntakeOut = true);
 
 
 private:
@@ -86,6 +86,8 @@ private:
   std::shared_ptr<TargetFinder> m_targetFinder;
 
   frc2::CommandPtr Prep();
+
+  frc2::CommandPtr PrepWithoutIntake();
 
   frc2::CommandPtr EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 

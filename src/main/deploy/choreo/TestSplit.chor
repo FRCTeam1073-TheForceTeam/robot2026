@@ -1,5 +1,5 @@
 {
- "name":"CornerShotAuto",
+ "name":"TestSplit",
  "version":2,
  "type":"Swerve",
  "variables":{

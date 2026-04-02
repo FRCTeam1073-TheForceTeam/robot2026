@@ -21,14 +21,19 @@ const std::string RobotContainer::exampleAuto = "Example_Auto";
 const std::string RobotContainer::rightTrenchFull = "RightTrenchFull";
 const std::string RobotContainer::leftTrenchFull = "LeftTrenchFull";
 const std::string RobotContainer::rightTrenchHalf = "RightTrenchHalf";
+const std::string RobotContainer::leftTrenchHalfNEW = "LeftTrenchHalfNEW";
+
 const std::string RobotContainer::leftTrenchHalf = "LeftTrenchHalf";
 const std::string RobotContainer::rightTrenchHalfDouble = "RightTrenchHalfDouble";
+const std::string RobotContainer::rightTrenchHalfDoubleTest = "RightTrenchHalfDoubleTest";
 
 const std::string RobotContainer::rightTrenchHalfOutpost = "RightTrenchHalfOutpost";
 const std::string RobotContainer::cornerShotManual = "CornerShotManual";
 
 const std::string RobotContainer::centerHub = "CenterHub";
 const std::string RobotContainer::centerDepotOutpost = "CenterDepotOutpost";
+
+const std::string RobotContainer::testSplit = "TestSplit";
 
 RobotContainer::RobotContainer() :
 _operatorController(1),
@@ -102,6 +107,8 @@ _controlBindings(false)
   m_levelChooser.AddOption("Center_Depot_Outpost", centerDepotOutpost);
   // m_levelChooser.AddOption("Corner Shot Manual", cornerShotManual);
   m_levelChooser.AddOption("Right_Trench_Half_Double", rightTrenchHalfDouble);
+  m_levelChooser.AddOption("Right_Trench_Half_Double_Test", rightTrenchHalfDoubleTest);
+  m_levelChooser.AddOption("Test_Split", testSplit);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -134,10 +141,15 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
       m_levelChooser.GetSelected() == cornerShotManual ||
       m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
-      m_levelChooser.GetSelected() == centerDepotOutpost
+      m_levelChooser.GetSelected() == centerDepotOutpost ||
+      m_levelChooser.GetSelected() == rightTrenchHalfDoubleTest ||
+      m_levelChooser.GetSelected() == testSplit
     ) {
+      bool putIntakeOut = true;
+      if(m_levelChooser.GetSelected() == centerDepotOutpost)
+        putIntakeOut = false;
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
-      return m_autoRunner->Create(trajectory);
+      return m_autoRunner->Create(trajectory,putIntakeOut);
     }
   }
   catch (...) {

@@ -93,7 +93,9 @@ class RobotContainer {
   static const std::string leftTrenchFull;
   static const std::string rightTrenchHalf;
   static const std::string leftTrenchHalf;
+  static const std::string leftTrenchHalfNEW;
   static const std::string rightTrenchHalfDouble;
+  static const std::string rightTrenchHalfDoubleTest;
 
   static const std::string centerDepotOutpost;
 
@@ -101,6 +103,8 @@ class RobotContainer {
   static const std::string cornerShotManual;
 
   static const std::string centerHub;
+
+  static const std::string testSplit;
   
   RobotContainer();
 
