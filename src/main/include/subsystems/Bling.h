@@ -7,6 +7,8 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
+#include <subsystems/Turret.h>
+
 
 #include <ctre/phoenix6/CANdle.hpp>
 
@@ -57,6 +59,9 @@ class Bling : public frc2::SubsystemBase {
 
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
+
+  int turretDirection; //The smallest led that the turret is pointing near; turretDirection and turretDirection + 1 will be displayed on the
+  int turretAngle; //The current angle the turret is pointing at, returned by its subsystem
 
   // Cached feedback:
   Feedback _feedback;

@@ -61,6 +61,12 @@ void Bling::Periodic() {
             batColor.WithColor(signals::RGBWColor (127, 0, 0));
           }
       }
+
+      if (std::get<std::string>(_command) == "turret") {
+        //Insert code here to find the angle of the turret and use it to set turretDirection
+        
+      }
+
    }
    _CANdle.SetControl(batColor);
 }
