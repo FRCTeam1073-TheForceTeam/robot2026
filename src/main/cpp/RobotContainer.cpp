@@ -21,6 +21,8 @@ const std::string RobotContainer::exampleAuto = "Example_Auto";
 const std::string RobotContainer::rightTrenchFull = "RightTrenchFull";
 const std::string RobotContainer::leftTrenchFull = "LeftTrenchFull";
 const std::string RobotContainer::rightTrenchHalf = "RightTrenchHalf";
+const std::string RobotContainer::leftTrenchHalfNEW = "LeftTrenchHalfNEW";
+
 const std::string RobotContainer::leftTrenchHalf = "LeftTrenchHalf";
 const std::string RobotContainer::rightTrenchHalfDouble = "RightTrenchHalfDouble";
 
@@ -101,7 +103,7 @@ _operatorController(1)
   m_levelChooser.AddOption("Center_Depot_Outpost", centerDepotOutpost);
   // m_levelChooser.AddOption("Corner Shot Manual", cornerShotManual);
   m_levelChooser.AddOption("Right_Trench_Half_Double", rightTrenchHalfDouble);
-
+  m_levelChooser.AddOption("Left_Trench_Half_NEW", leftTrenchHalfNEW);
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
   // Configure the button bindings
@@ -133,7 +135,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
       m_levelChooser.GetSelected() == cornerShotManual ||
       m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
-      m_levelChooser.GetSelected() == centerDepotOutpost
+      m_levelChooser.GetSelected() == centerDepotOutpost ||
+      m_levelChooser.GetSelected() == leftTrenchHalfNEW
     ) {
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory);
