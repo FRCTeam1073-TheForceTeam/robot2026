@@ -26,7 +26,7 @@ class BallisticShot : public frc2::SubsystemBase {
   
   BallisticShot(std::shared_ptr<TargetFinder>& tf);
 
-  // Update the current shot.
+  // Update the currentstate shot.
   void Periodic() override;
 
     // Access the currently cached/latest shot value:
