@@ -52,7 +52,7 @@ void FlywheelTeleop::Execute() {
     auto speed = 11.0_mps; // Corner Shot
     m_flywheel->SetCommand(speed);
   } else if(m_OI->GetOperatorXButton()) {
-    auto speed = 9.4_mps; // Tower Shot
+    auto speed = 9.2_mps; // Tower Shot
     m_flywheel->SetCommand(speed);
   } else {
     m_flywheel->SetCommand(std::monostate());

@@ -37,7 +37,7 @@ void HoodTeleop::Execute() {
       if ((feedback.rangeToTarget) < 290_in) {
         m_shooterHood->SetCommand(ShooterHood::minPosition); 
       } else {
-        m_shooterHood->SetCommand((ShooterHood::minPosition) + 10_deg); 
+        m_shooterHood->SetCommand((ShooterHood::minPosition) + 5_deg); 
       }
     } else if (m_OI->BallisticShotMode()) {
       // Use ballistic shot:
@@ -51,12 +51,12 @@ void HoodTeleop::Execute() {
   } else if (m_OI->GetOperatorYButton()) {
     // Corner shot:
     //auto angle = 0.2188_rad; // Corner Shot old
-    units::angle::radian_t angle = 56.66_deg;
+    units::angle::radian_t angle = 53.15_deg;
     m_shooterHood->SetCommand(angle);
   } else if (m_OI->GetOperatorXButton()) {
     // Tower shot:
     //auto angle = 0.1408_rad; // Tower Shot old
-    units::angle::radian_t angle = 54.83_deg;
+    units::angle::radian_t angle = 60.00_deg;
     m_shooterHood->SetCommand(angle);
   } else {
     // Put the hood "back" to be out of the way.
