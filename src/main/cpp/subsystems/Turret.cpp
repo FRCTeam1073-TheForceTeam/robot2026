@@ -64,6 +64,7 @@ void Turret::Periodic() {
   _feedback.torque = _rotaterCurrentSig.GetValue() / AmpsPerNewtonMeter; // Convert from hardware units to subsystem units.
   _feedback.position = _rotaterPositionSig.GetValue() / TurretToMotorTurns; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
   _feedback.velocity = _rotaterVelocitySig.GetValue()/ TurretToMotorTurns;
+  _feedback.time = _rotaterPositionSig.GetTimestamp().GetTime();
   _feedback.haveZero = _haveZero;
 
   // // Process command:

@@ -47,6 +47,7 @@ class Turret: public frc2::SubsystemBase {
       units::angle::radian_t position;
       units::angular_velocity::radians_per_second_t velocity;
       units::torque::newton_meter_t torque;
+      units::time::second_t time;
       bool haveZero;
   };
 
