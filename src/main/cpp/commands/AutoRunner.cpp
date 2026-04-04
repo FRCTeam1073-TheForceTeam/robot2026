@@ -263,6 +263,52 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           )
         );
       }
+      else if (eventType == "ShootBumpAuto") {
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(1.3_s),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+              frc2::cmd::Wait(6.0_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn()
+            )
+          ).WithTimeout(16_s)
+        );
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            m_flywheel->SpinToSpeed(0.0_mps),
+            m_spindexer->SpinToSpeed(0.0_mps),
+            m_kicker->SpinToSpeed(0_mps),
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
+          )
+        );
+      }  
     }
 
     return frc2::cmd::Sequence(std::move(autoRoutine));
