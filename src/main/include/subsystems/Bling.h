@@ -7,9 +7,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 
-
 #include <ctre/phoenix6/CANdle.hpp>
-
 
 #include <variant>
 
@@ -32,7 +30,7 @@ class Bling : public frc2::SubsystemBase {
   struct Feedback {
   };
 
-  using Command = std::variant<std::string>;
+  using Command = std::variant<std::monostate, ctre::phoenix6::controls::SolidColor>;
   
   // Constructor for the subsystem.
   Bling();
@@ -42,6 +40,10 @@ class Bling : public frc2::SubsystemBase {
   const Feedback& GetFeedback() const { return _feedback; }
 
   void SetCommand(Command cmd);
+
+  frc2::CommandPtr blingWhite();
+
+  frc2::CommandPtr blingPurple();
   
 
  private:

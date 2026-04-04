@@ -6,9 +6,6 @@
 
 #include "subsystems/Bling.h"
 
-#include <frc/RobotController.h>
-
-
 using namespace ctre::phoenix6;
 
 /**
@@ -32,33 +29,25 @@ void Bling::SetCommand(Command cmd) {
   _command = cmd;
 }
 
-void Bling::Periodic() {
-  controls::SolidColor color(8, 79);
-  
+void Bling::Periodic() {  
       // // Process command:
-   if (std::holds_alternative<std::string>(_command)) {
-  //   if (std::get<std::string>(_command) == "red") {
-  //     controls::SolidColor color(0, 7);
-  //     color.WithColor(signals::RGBWColor (255, 0, 0));
-  //     _CANdle.SetControl (color);
-  //   }
-  //   if (std::get<std::string>(_command) == "green") {
-  //     controls::SolidColor color(0, 7);
-  //     color.WithColor(signals::RGBWColor (0, 255, 0));
-  //     _CANdle.SetControl (color);
-  //   }
-      if (std::get<std::string>(_command) == "battery") {
-          _currentVoltage = frc::RobotController::GetBatteryVoltage() * alpha + (1.0 - alpha) * _currentVoltage;
-          if (_currentVoltage >= 12.4_V) {
-            color.WithColor(signals::RGBWColor (0, 0, 127)); //Color is dimmer to conserve battery
-          } else if (_currentVoltage >= 12.1_V) {
-            color.WithColor(signals::RGBWColor (127, 0, 82));
-          } else {
-            color.WithColor(signals::RGBWColor (127, 0, 0));
-          }
-      }
+   if (std::holds_alternative<controls::SolidColor>(_command)) {
+      auto color = std::get<controls::SolidColor>(_command);
+      _CANdle.SetControl(color);
    }
-   _CANdle.SetControl(color);
+   else {
+    _CANdle.SetControl(controls::SolidColor(8, 20).WithColor(signals::RGBWColor (255, 255, 255)));
+   }
+}
+
+frc2::CommandPtr Bling::blingWhite() {
+  return RunOnce([this] {SetCommand(controls::SolidColor(8, 20).WithColor(signals::RGBWColor (255, 255, 255)));});
+}
+
+//TODO: change these commands to on and off
+
+frc2::CommandPtr Bling::blingPurple() {
+  return RunOnce([this] {SetCommand(controls::SolidColor(8, 20).WithColor(signals::RGBWColor (147, 112, 219)));});
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.

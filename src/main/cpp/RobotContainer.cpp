@@ -73,7 +73,7 @@ _controlBindings(false)
   //m_laser = std::make_shared<LaserCan>();
   m_bling = std::make_shared<Bling>();
    std::cerr << "\tBling created..." << std::endl;
-  m_autoRunner = std::make_shared<AutoRunner>(m_drivetrain, m_tagFinder, m_localizer, m_kicker, m_climber, m_flywheel, m_shooterHood, m_spindexer, m_turret, m_collector, m_intake, m_laser, m_shooterTable, m_targetFinder);
+  m_autoRunner = std::make_shared<AutoRunner>(m_drivetrain, m_tagFinder, m_localizer, m_kicker, m_climber, m_flywheel, m_shooterHood, m_spindexer, m_turret, m_collector, m_intake, m_laser, m_shooterTable, m_targetFinder, m_bling);
 
   std::cerr << "Mechanisms created..." << std::endl;
 

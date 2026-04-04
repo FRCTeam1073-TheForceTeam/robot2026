@@ -19,7 +19,8 @@ AutoRunner::AutoRunner(
   std::shared_ptr<Intake> intake,
   std::shared_ptr<LaserCan> laser,
   std::shared_ptr<ShooterTable> table,
-  std::shared_ptr<TargetFinder> finder
+  std::shared_ptr<TargetFinder> finder,
+  std::shared_ptr<Bling> bling
 ) :
 m_drivetrain(drivetrain),
 m_Tags(Tags),
@@ -34,7 +35,8 @@ m_collector(collector),
 m_intake(intake),
 m_laser(laser),
 m_targetFinder(finder),
-m_shooterTable(table)
+m_shooterTable(table),
+m_bling(bling)
 {}
 
 
@@ -218,16 +220,25 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(1.3_s),
               m_spindexer->SpinToSpeed(6.5_mps),
               m_kicker->SpinToSpeed(6.6_mps),
-              frc2::cmd::Wait(1.0_s),
+              frc2::cmd::Wait(0.5_s),
+              m_bling->blingPurple(), //purple: about to go in
+              frc2::cmd::Wait(0.5_s),
               m_intake->IntakeIn(),
+              m_bling->blingWhite(),
               frc2::cmd::Wait(1.0_s),
               m_intake->IntakeOut(),
-              frc2::cmd::Wait(4.0_s),
+              frc2::cmd::Wait(3.5_s),
+              m_bling->blingPurple(),
+              frc2::cmd::Wait(0.5_s),
               m_intake->IntakeIn(),
+              m_bling->blingWhite(),
               frc2::cmd::Wait(2.0_s),
               m_intake->IntakeOut(),
-              frc2::cmd::Wait(2.0_s),
-              m_intake->IntakeIn()
+              frc2::cmd::Wait(1.5_s),
+              m_bling->blingPurple(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              m_bling->blingWhite()
             )
           ).WithTimeout(15_s)
         );

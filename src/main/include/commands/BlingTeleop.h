@@ -8,6 +8,10 @@
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/OI.h"
 #include "subsystems/Bling.h"
+#include <frc2/command/CommandPtr.h>
+
+#include <frc/RobotController.h>
+
 
 /**
  * An example command.
@@ -38,6 +42,7 @@ class BlingTeleop
    std::shared_ptr<Bling> m_bling;
    std::shared_ptr<OI> m_OI;
 
-   bool LeftBumper;
-   bool RightBumper;
+  units::voltage::volt_t _currentVoltage;
+
+  static constexpr double alpha = 0.1; //TODO: tune alpha
 };
