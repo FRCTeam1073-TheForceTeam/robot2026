@@ -32,7 +32,7 @@ void TurretTeleop::Execute() {
     targetAngle = units::angle::radian_t(330_deg) * leftX;
   }
   else if(m_OI->GetOperatorLeftTrigger() >= 0.1) {
-    targetAngle = units::radian_t(m_targetFinder->getFeedback().turretToTargetAngle.value()) - m_drivetrain->GetChassisSpeeds().omega*0.1_s;
+    targetAngle = units::radian_t(m_targetFinder->getFeedback().turretToTargetAngle.value()) - m_drivetrain->GetChassisSpeeds().omega*0.0_s;
   }
   else {
     targetAngle = 0_rad;
