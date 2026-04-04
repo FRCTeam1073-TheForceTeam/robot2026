@@ -179,7 +179,7 @@ void AprilTagFinder::Periodic() {
 
             // If the turret is moving too quickly then skip it otherwise try to use it.
             // TODO: Revisit threshold
-            if (std::abs(turretVelocity.value()) < 1.0 && (units::math::abs(m_turret->GetFeedback().time - frc::Timer::GetFPGATimestamp()) < 1.0_s)) {
+            if (std::abs(turretVelocity.value()) < 1.0) {
                 units::time::millisecond_t totalLatency = 0_ms;
                 float count = 0.0;
                 for (auto &result : results) {

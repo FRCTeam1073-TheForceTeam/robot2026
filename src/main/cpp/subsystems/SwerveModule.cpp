@@ -168,6 +168,9 @@ bool SwerveModule::ConfigureDriveHardware() {
     configs.Voltage.PeakForwardVoltage = SwerveControlConfig::DriveVoltageLimit;
     configs.Voltage.PeakReverseVoltage = -SwerveControlConfig::DriveVoltageLimit;
 
+    configs.CurrentLimits.SupplyCurrentLimit = 67_A;
+    configs.CurrentLimits.SupplyCurrentLimitEnable = true;
+
     // Slot zero for the normal control loop:
     configs.Slot0 = SwerveControlConfig::GetDriveControlConfig();
 

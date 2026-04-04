@@ -13,11 +13,15 @@ BallisticShot::BallisticShot(std::shared_ptr<TargetFinder>& tf) : m_tf(tf) {
 
 BallisticShot::Shot BallisticShot::ComputeShot(units::length::meter_t range){
     Shot shot;
+    auto tempHeightAboveHub = heightAboveHub;
+    if (range > 4_m) {
+        tempHeightAboveHub += 0.5_m;
+    }
     // hub is 6 feet tall or 1.829 meters
-    auto maxHeight = heightAboveHub + hubHeight - turretHeight;
+    auto maxHeight = tempHeightAboveHub + hubHeight - turretHeight;
     auto yVel = units::math::sqrt((maxHeight * 2 * gravity));
     auto timeToMaxHeight = yVel / gravity;
-    auto timeToFall = units::math::sqrt((2 * heightAboveHub / gravity));
+    auto timeToFall = units::math::sqrt((2 * tempHeightAboveHub / gravity));
     shot.ShotTime = timeToMaxHeight + timeToFall;
 
     auto xVel = range / (shot.ShotTime);
@@ -34,9 +38,9 @@ BallisticShot::Shot BallisticShot::ComputeShot(units::length::meter_t range){
         shot.FlywheelSpeed *= 0.9; // Downscale speed for very short shots.
     }
 
-    if (range > 4.8_m) {
-        shot.FlywheelSpeed *= 1.1; // TODO Would like to remove this hack at some point.
-    }
+    //if (range > 4.8_m) {
+    //    shot.FlywheelSpeed *= 1.1; // TODO Would like to remove this hack at some point.
+    //}
 
     return shot;
     
