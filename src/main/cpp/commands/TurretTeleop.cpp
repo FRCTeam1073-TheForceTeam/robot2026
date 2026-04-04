@@ -8,10 +8,11 @@
 
 //TODO: finish the command; it is not complete yet
 
-TurretTeleop::TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& targetFinder) :
+TurretTeleop::TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& targetFinder, std::shared_ptr<Drivetrain>& drivetrain) :
   m_turret(turret),
   m_OI(oi),
-  m_targetFinder(targetFinder) {
+  m_targetFinder(targetFinder),
+  m_drivetrain(drivetrain) {
   lastError = 0,
   targetAngle = 0_rad,
   AddRequirements(m_turret.get());
@@ -31,7 +32,7 @@ void TurretTeleop::Execute() {
     targetAngle = units::angle::radian_t(330_deg) * leftX;
   }
   else if(m_OI->GetOperatorLeftTrigger() >= 0.1) {
-    targetAngle = units::radian_t(m_targetFinder->getFeedback().turretToTargetAngle.value());
+    targetAngle = units::radian_t(m_targetFinder->getFeedback().turretToTargetAngle.value()) - m_drivetrain->GetChassisSpeeds().omega*0.1_s;
   }
   else {
     targetAngle = 0_rad;

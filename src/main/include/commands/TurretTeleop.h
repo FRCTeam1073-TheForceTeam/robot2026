@@ -10,6 +10,7 @@
 #include "subsystems/Turret.h"
 #include "subsystems/OI.h"
 #include "subsystems/TargetFinder.h"
+#include "subsystems/DriveTrain.h"
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <cmath>
@@ -32,7 +33,7 @@ class TurretTeleop
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
 
-  explicit TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>& oi,  std::shared_ptr<TargetFinder>& targetFinder);
+  explicit TurretTeleop(std::shared_ptr<Turret>& turret, std::shared_ptr<OI>& oi,  std::shared_ptr<TargetFinder>& targetFinder, std::shared_ptr<Drivetrain>& drivetrain);
 
   void Initialize() override;
   void Execute() override;
@@ -44,7 +45,7 @@ class TurretTeleop
     std::shared_ptr<Turret> m_turret;
     std::shared_ptr<OI> m_OI;
     std::shared_ptr<TargetFinder> m_targetFinder;
-
+    std::shared_ptr<Drivetrain> m_drivetrain;
     double lastError;
 
     double leftX;
