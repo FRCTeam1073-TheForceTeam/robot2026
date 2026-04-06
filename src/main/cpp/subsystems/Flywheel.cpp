@@ -13,7 +13,6 @@ Flywheel::Flywheel():
     _followFlywheelMotor(FollowMotorId, CANBus::RoboRIO()),
     _flywheelVelocitySig(_leadFlywheelMotor.GetVelocity()),
     _flywheelCurrentSig(_leadFlywheelMotor.GetTorqueCurrent()),
-    _followerFlywheelVelocitySig(_followFlywheelMotor.GetVelocity()),
     _followerFlywheelCurrentSig(_followFlywheelMotor.GetTorqueCurrent()),
 
     _flywheelVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
@@ -45,12 +44,12 @@ void Flywheel::SetCommand(Command cmd){
 
 // This method will be called once per scheduler run
 void Flywheel::Periodic() {
-    BaseStatusSignal::RefreshAll(_flywheelVelocitySig, _flywheelCurrentSig, _followerFlywheelCurrentSig, _followerFlywheelVelocitySig);
+    BaseStatusSignal::RefreshAll(_flywheelVelocitySig, _flywheelCurrentSig, _followerFlywheelCurrentSig);
 
     _feedback.velocity = _flywheelVelocitySig.GetValue() / (TurnsPerMeter * GearRatio); // Convert from hardare units to subsystem units.
     _feedback.followerVelocity = _flywheelVelocitySig.GetValue() / (TurnsPerMeter * GearRatio);
-    _feedback.force = _followerFlywheelCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
-    _feedback.followerForce = _followerFlywheelCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
+    _feedback.current = _flywheelCurrentSig.GetValue();
+    _feedback.followerCurrent = _followerFlywheelCurrentSig.GetValue();
 
     if (std::holds_alternative<units::velocity::meters_per_second_t>(_command)) {
 
@@ -74,9 +73,8 @@ void Flywheel::Periodic() {
     frc::SmartDashboard::PutNumber("Flywheel/AngularVelocity (RPM)", (60.0_s*_flywheelVelocitySig.GetValue()).value());
     frc::SmartDashboard::PutNumber("Flywheel/TargetVelocity (mps)", _limiter.LastValue().value());
     frc::SmartDashboard::PutNumber("Flywheel/Velocity (mps)", _feedback.velocity.value());
-    frc::SmartDashboard::PutNumber("Flywheel/Current(A)", _flywheelCurrentSig.GetValue().value());
-    frc::SmartDashboard::PutNumber("Flywheel/FollowerVelocity (mps)", _feedback.followerVelocity.value());
-    frc::SmartDashboard::PutNumber("Flywheel/FollowerCurrent(A)", _followerFlywheelCurrentSig.GetValue().value());
+    frc::SmartDashboard::PutNumber("Flywheel/Current(A)", _feedback.current.value());
+    frc::SmartDashboard::PutNumber("Flywheel/FollowerCurrent(A)", _feedback.followerCurrent.value());
 }
 
 frc2::CommandPtr Flywheel::SpinToSpeed(units::meters_per_second_t velocity) {

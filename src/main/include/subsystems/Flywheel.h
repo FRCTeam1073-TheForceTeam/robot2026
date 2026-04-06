@@ -33,9 +33,9 @@ class Flywheel : public frc2::SubsystemBase {
 
  struct Feedback {
       units::velocity::meters_per_second_t velocity; // TODO: Add other stuff to feedback
-      units::force::newton_t force;
+      units::current::ampere_t current;
       units::velocity::meters_per_second_t followerVelocity; // TODO: Add other stuff to feedback
-      units::force::newton_t followerForce;
+      units::current::ampere_t followerCurrent;
 
   };
 
@@ -68,7 +68,6 @@ class Flywheel : public frc2::SubsystemBase {
   // CTRE hardware feedback signals:
   ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _flywheelVelocitySig;
   ctre::phoenix6::StatusSignal<units::current::ampere_t> _flywheelCurrentSig;
-  ctre::phoenix6::StatusSignal<units::angular_velocity::turns_per_second_t> _followerFlywheelVelocitySig;
   ctre::phoenix6::StatusSignal<units::current::ampere_t> _followerFlywheelCurrentSig;
 
   //  velocity and position controls:
