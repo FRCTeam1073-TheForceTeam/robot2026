@@ -40,8 +40,8 @@ class Collector : public frc2::SubsystemBase {
   static constexpr auto GearRatio = units::angle::turn_t(2) / units::angle::turn_t(1);
   static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / (wheelDiameter * std::numbers::pi);
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
+  static constexpr auto CurrentLimit = units::current::ampere_t(50.0);
 
-  
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
       units::velocity::meters_per_second_t velocity;

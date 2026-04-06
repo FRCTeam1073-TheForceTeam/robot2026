@@ -118,7 +118,8 @@ configs::TalonFXConfiguration configs{};
     configs.Voltage.PeakForwardVoltage = 8_V; // These are pretty typical values, adjust as needed.
     configs.Voltage.PeakReverseVoltage = -8_V;
 
-  
+    configs.CurrentLimits.SupplyCurrentLimit = CurrentLimit;
+    configs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
     // Slot 0 for position control mode:
     configs.Slot0.kV = 0.153; // Motor constant.

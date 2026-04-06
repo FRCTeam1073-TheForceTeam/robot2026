@@ -41,8 +41,10 @@ class Climber : public frc2::SubsystemBase {
   static constexpr auto GearRatio = units::angle::turn_t(32.0) / units::angle::turn_t(1.0);
   static constexpr auto TurnsPerMeter = units::angle::turn_t(1.0) / units::meter_t(0.75_in * std::numbers::pi) ;
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
-  units::length::meter_t minPosition = units::length::meter_t(0);
-  units::length::meter_t maxPosition = units::length::meter_t(0.07);
+  static constexpr auto CurrentLimit = units::current::ampere_t(67.0);
+
+  static constexpr units::length::meter_t minPosition = units::length::meter_t(0);
+  static constexpr units::length::meter_t maxPosition = units::length::meter_t(0.07);
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {

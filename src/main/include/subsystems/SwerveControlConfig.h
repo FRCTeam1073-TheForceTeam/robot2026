@@ -19,16 +19,17 @@ class SwerveControlConfig {
     static constexpr units::length::meter_t DriveWheelDiameter = 4_in;
     static constexpr auto DriveGearRatio = units::angle::turn_t(6.03)/ units::angle::turn_t(1.0);
     static constexpr auto DriveMetersPerMotorTurn = DriveWheelDiameter * units::constants::pi / (units::angle::turn_t(1.0) * DriveGearRatio);
-    static constexpr units::current::ampere_t DriveCurrentLimit = 33.0_A; //should be 30
+    static constexpr units::current::ampere_t DriveCurrentLimit = 67.0_A;
     static constexpr units::voltage::volt_t DriveVoltageLimit = 8.5_V;
     static constexpr units::velocity::meters_per_second_t MaxModuleSpeed = 4.75_m/1.0_s; //4.85 mps
     // TODO: This is not yet calibrated.
     static constexpr auto DriveAmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
 
 
+
     // Steer Constants:
     static constexpr auto SteerGearRatio = (units::angle::turn_t(287.0)/units::angle::turn_t(11.0));
-    static constexpr units::current::ampere_t SteerCurrentLimit = 20.0_A;
+    static constexpr units::current::ampere_t SteerCurrentLimit = 25.0_A;
     static constexpr units::voltage::volt_t SteerVoltageLimit = 8.5_V;
 
     // Controller Configurations:

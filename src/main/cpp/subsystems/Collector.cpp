@@ -84,6 +84,9 @@ bool Collector::ConfigureHardware() {
 
   configs.Voltage.PeakForwardVoltage = 9_V; // These are pretty typical values, adjust as needed.
   configs.Voltage.PeakReverseVoltage = -9_V;
+  
+  configs.CurrentLimits.SupplyCurrentLimit = CurrentLimit;
+  configs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
   // Slot 0 for the velocity control loop:
   configs.Slot0.kV = 0.123;

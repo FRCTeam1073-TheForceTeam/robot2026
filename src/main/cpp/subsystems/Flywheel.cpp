@@ -91,6 +91,9 @@ bool Flywheel::ConfigureHardware() {
 
     configs.Voltage.PeakForwardVoltage = 9.5_V; // These are pretty typical values, adjust as needed.
     configs.Voltage.PeakReverseVoltage = -9.5_V;
+    
+    configs.CurrentLimits.SupplyCurrentLimit = CurrentLimit;
+    configs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
     // Slot 0 for the velocity control loop:
     configs.Slot0.kV = 0.12; // Motor kV plus Boost for friction.
@@ -114,6 +117,9 @@ bool Flywheel::ConfigureHardware() {
 
     configs::TalonFXConfiguration followerConfigs{};
     followerConfigs.MotorOutput.WithInverted(signals::InvertedValue::CounterClockwise_Positive); //change this if directions are the same.
+    followerConfigs.CurrentLimits.SupplyCurrentLimit = CurrentLimit;
+    followerConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+    
     status = _followFlywheelMotor.GetConfigurator().Apply(followerConfigs, 1_s ); // 1 Second configuration timeout.
 
     if (!status.IsOK()) {
