@@ -46,7 +46,7 @@ class Kicker : public frc2::SubsystemBase {
 
 
   // Standard shot speed:
-  static constexpr auto ShotSpeed = 6.4_mps;
+  static constexpr auto ShotSpeed = 6.9_mps;
 
   
   // The feedback for this subsystem provided as a struct.
