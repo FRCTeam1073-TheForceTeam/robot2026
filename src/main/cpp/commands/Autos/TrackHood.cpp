@@ -2,10 +2,11 @@
 #include "commands/Autos/TrackHood.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
-TrackHood::TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st, bool shooterTable) :
+TrackHood::TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st, bool shooterTable, std::shared_ptr<BallisticShot>& bs) :
 m_shooterHood(shooterHood),
 m_tf(tf),
 m_st(st),
+m_bs(bs),
 m_shooterTable(shooterTable) {
   AddRequirements(m_shooterHood.get());
 }
@@ -23,7 +24,7 @@ void TrackHood::Execute() {
   }
   else
   {
-    auto shot = BallisticShot::ComputeShot(range);
+    auto shot = m_bs->GetShot();
     m_shooterHood->SetCommand(shot.HoodAngle);
   }
 }

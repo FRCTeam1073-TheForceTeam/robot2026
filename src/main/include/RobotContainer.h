@@ -62,7 +62,7 @@
 
 #include <choreo/Choreo.h>
 #include <utilities/ShooterTable.h>
-#include <utilities/BallisticShot.h>
+#include "subsystems/BallisticShot.h"
 
 #include "subsystems/Climber.h"
 #include "commands/ClimberTeleop.h"

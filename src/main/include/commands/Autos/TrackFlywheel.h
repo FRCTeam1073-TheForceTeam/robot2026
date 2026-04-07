@@ -24,7 +24,7 @@ class TrackFlywheel
     : public frc2::CommandHelper<frc2::Command, TrackFlywheel> {
  public:
 
-  TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, bool lookupTable = false);
+  TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, bool lookupTable = false, std::shared_ptr<BallisticShot>& bs);
 
   void Initialize() override;
 
@@ -40,6 +40,7 @@ class TrackFlywheel
   std::shared_ptr<Flywheel> m_flywheel;
   std::shared_ptr<TargetFinder> m_tf;
   std::shared_ptr<ShooterTable> m_st;
+  std::shared_ptr<BallisticShot> m_bs;
   bool m_lookupTable;
 };
 

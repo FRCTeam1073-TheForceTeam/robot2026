@@ -34,6 +34,9 @@ class TargetFinder  : public frc2::SubsystemBase {
 
     TargetFinder(std::shared_ptr<Localizer>& localizer, std::shared_ptr<ZoneFinder>& zonefinder);
 
+    void SetBallisticShot(std::shared_ptr<BallisticShot>& ballisticShot);
+
+    
     frc::Pose2d getTargetPos();
     frc::Pose2d _target;
     bool _passing;
@@ -53,6 +56,7 @@ class TargetFinder  : public frc2::SubsystemBase {
     private:
     std::shared_ptr<Localizer> _localizer;
     std::shared_ptr<ZoneFinder> _zonefinder;
+    std::shared_ptr<BallisticShot> _ballisticShot;
 
     frc::Pose2d OurHub;
     frc::Pose2d turretPos;
