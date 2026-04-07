@@ -168,7 +168,7 @@ bool SwerveModule::ConfigureDriveHardware() {
     configs.Voltage.PeakForwardVoltage = SwerveControlConfig::DriveVoltageLimit;
     configs.Voltage.PeakReverseVoltage = -SwerveControlConfig::DriveVoltageLimit;
 
-    configs.CurrentLimits.SupplyCurrentLimit = 67_A;
+    configs.CurrentLimits.SupplyCurrentLimit = SwerveControlConfig::DriveCurrentLimit;
     configs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
     // Slot zero for the normal control loop:
@@ -223,6 +223,9 @@ bool SwerveModule::ConfigureSteerHardware() {
 
     configs.Voltage.PeakForwardVoltage = SwerveControlConfig::SteerVoltageLimit;
     configs.Voltage.PeakReverseVoltage = -SwerveControlConfig::SteerVoltageLimit;
+
+    configs.CurrentLimits.SupplyCurrentLimit = SwerveControlConfig::SteerCurrentLimit;
+    configs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
     // Slot zero for the normal control loop.
     configs.Slot0 = SwerveControlConfig::GetSteerControlConfig();
