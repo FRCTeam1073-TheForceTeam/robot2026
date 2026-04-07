@@ -43,7 +43,9 @@ class Spindexer : public frc2::SubsystemBase {
 
 
   // Standard shot speed:
-  static constexpr auto ShotSpeed = 6.3_mps;
+  // static constexpr auto ShotSpeed = 6.3_mps;
+  static constexpr auto ShotSpeed = 4_mps;
+
 
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
