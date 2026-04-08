@@ -9,6 +9,7 @@
 #include <string>
 #include <iostream>
 #include <units/time.h>
+#include "subsystems/BallisticShot.h"
 
 #include "subsystems/Localizer.h"
 #include "subsystems/ZoneFinder.h"
