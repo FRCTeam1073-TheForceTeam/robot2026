@@ -50,9 +50,6 @@ private:
     bool fieldCentric;
     // bool parked;
 
-    double last_error;
-    double last_snap_time;
-
     // bool lastParkingBreakButton;
     bool lastFieldCentricButton;
     bool slowMode;
@@ -60,6 +57,9 @@ private:
 
     static constexpr units::velocity::meters_per_second_t maximumLinearVelocity = 3.5_mps;
     static constexpr units::angular_velocity::radians_per_second_t maximumRotationVelocity = 4.0_rad_per_s;
+
+    units::angle::radian_t heading;
+    frc::PIDController thetaController;
     
     units::time::second_t currentTime;
 

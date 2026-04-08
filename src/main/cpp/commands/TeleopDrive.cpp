@@ -14,38 +14,37 @@
 TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi, std::shared_ptr<Localizer>& localizer) : 
     m_drivetrain(drivetrain), 
     m_OI(oi),
-    m_localizer(localizer)
+    m_localizer(localizer),
+    thetaController{2.5, 0.0, 0.3}
     {
     allianceSign = 0;
     fieldCentric = true;
     // lastParkingBreakButton = false;
     lastFieldCentricButton = true;
     // parked = false;
-    last_error = 0;
-    last_snap_time = 0;
     angle_tolerance = 0.05_rad;
     torqueGate = 65_N;
     slowMode = false;
     lastYPressed = false;
+    heading = 0_rad;
     // TODO: chassisspeeds and speeds appear in the java drivetrain; determine if these are necessary for the c++ file
     // TODO: pointAtTarget boolean, localizer, lidar and aprilTagFinder appears in the java drivetrain, but it might be a better idea to put these in the localize file
 
     // Register that this command requires the subsystem.
+    thetaController.EnableContinuousInput(-std::numbers::pi, std::numbers::pi);
     AddRequirements(m_drivetrain.get());
 }
 
 
 TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi) : 
     m_drivetrain(drivetrain), 
-    m_OI(oi) {
-        
+    m_OI(oi),
+    thetaController{2.5, 0.0, 0.3} {
     allianceSign = 0;
     fieldCentric = true;
     // lastParkingBreakButton = false;
     lastFieldCentricButton = true;
     // parked = false;
-    last_error = 0;
-    last_snap_time = 0;
     angle_tolerance = 0.05_rad;
     torqueGate = 65_N;
     // TODO: chassisspeeds and speeds appear in the java drivetrain; determine if these are necessary for the c++ file
@@ -58,6 +57,8 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
 void TeleopDrive::Initialize() {
     std::cerr << "TeleopDrive Init" << std::endl;
     setAlliance();  // Set the alliance sign.
+    heading = m_localizer->getPose().Rotation().Radians();
+    thetaController.Reset();
 }
 
 
@@ -103,7 +104,11 @@ void TeleopDrive::Execute() {
 
     auto vx = std::clamp(allianceSign * ((leftY + 0.01) / std::abs(leftY + 0.01)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftY)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
     auto vy = std::clamp(allianceSign * ((leftX + 0.01) / std::abs(leftX + 0.01)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftX)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
-    auto omega = std::clamp(((rightX + 0.01) / std::abs(rightX + 0.01)) * (maximumRotationVelocity / (maximumRotationVelocity.value() - 1)) * (std::pow(maximumRotationVelocity.value(), std::abs(rightX)) - 1), -maximumRotationVelocity, maximumRotationVelocity);
+    
+    heading += frc::AngleModulus(
+        std::clamp(((rightX + 0.01) / std::abs(rightX + 0.01)) * (maximumRotationVelocity / (maximumRotationVelocity.value() - 1)) * (std::pow(maximumRotationVelocity.value(), std::abs(rightX)) - 1), -maximumRotationVelocity, maximumRotationVelocity) * units::second_t(1/50)
+    );
+    auto omega = (thetaController.Calculate(m_localizer->getPose().Rotation().Radians().value(), heading.value()) * 1_rad_per_s);
 
     if (!lastYPressed && m_OI->GetDriverYButton()) {
         slowMode = !slowMode;
