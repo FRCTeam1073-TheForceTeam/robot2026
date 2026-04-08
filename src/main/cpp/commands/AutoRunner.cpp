@@ -88,6 +88,12 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       else if (eventType == "ZeroClimber") {
         autoRoutine.emplace_back(ZeroClimber(m_climber).ToPtr());
       }
+      else if (eventType == "BringUpClimber") {
+        autoRoutine.emplace_back(m_climber->ClimberPosition(0.0582_m));
+      }
+      else if (eventType == "BringDownClimber") {
+        autoRoutine.emplace_back(m_climber->ClimberPosition(0.00_m));
+      }
       else if (eventType == "Shoot") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(

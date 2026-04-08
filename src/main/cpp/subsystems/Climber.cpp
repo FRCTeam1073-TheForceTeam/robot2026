@@ -104,6 +104,10 @@ void Climber::Periodic() {
   frc::SmartDashboard::PutNumber("Climber/Position", _feedback.position.value());
 }
 
+frc2::CommandPtr Climber::ClimberPosition(units::meter_t position) {
+  return RunOnce([this, position] {SetCommand(position);});
+}
+
 // Helper function for configuring hardware from within the constructor of the subsystem.
 bool Climber::ConfigureHardware() {
   configs::TalonFXConfiguration configs{};
