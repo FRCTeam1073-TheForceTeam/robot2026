@@ -32,6 +32,7 @@ const std::string RobotContainer::rightTrenchHalfOutpost = "RightTrenchHalfOutpo
 const std::string RobotContainer::centerHub = "CenterHub";
 const std::string RobotContainer::centerDepotOutpost = "CenterDepotOutpost";
 const std::string RobotContainer::leftBumpFull = "LeftBumpFull";
+const std::string RobotContainer::rightTrenchHalfDoubleBumb = "RightTrenchHalfDoubleBumb";
 
 // const std::string RobotConta÷iner::testSplit = "TestSplit";
 
@@ -110,6 +111,7 @@ _controlBindings(false)
   m_levelChooser.AddOption("Left_Trench_Half_Double", leftTrenchHalfDouble);
   m_levelChooser.AddOption("Outliers_Right", leftBumpFull);
   m_levelChooser.AddOption("Center_Depot_Oupost_Climb", centerDepotOutpostClimb);
+  m_levelChooser.AddOption("Right_Trench_Half_Double_Bumb", rightTrenchHalfDoubleBumb);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -145,7 +147,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == centerDepotOutpost ||
       m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
       m_levelChooser.GetSelected() == leftBumpFull ||
-      m_levelChooser.GetSelected() == centerDepotOutpostClimb
+      m_levelChooser.GetSelected() == centerDepotOutpostClimb ||
+      m_levelChooser.GetSelected() == rightTrenchHalfDoubleBumb
     ) {
       bool putIntakeOut = true;
       if(m_levelChooser.GetSelected() == centerDepotOutpost) {

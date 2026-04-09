@@ -105,6 +105,7 @@ class RobotContainer {
   static const std::string leftTrenchHalfDouble;
   static const std::string leftBumpFull;
   static const std::string centerDepotOutpostClimb;
+  static const std::string rightTrenchHalfDoubleBumb;
   
   RobotContainer();
 

@@ -277,7 +277,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(1.3_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
               m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(6.0_s),
+              frc2::cmd::Wait(1.0_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(0.5_s),
               m_intake->IntakeOut(),
@@ -314,6 +314,27 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
           )
         );
+      } 
+      else if (eventType == "ShootBumb") {
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(1.2_s),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed)
+            )
+          ).WithTimeout(4.0_s)
+        );
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            m_intake->IntakeOut(),
+            m_flywheel->SpinToSpeed(0.0_mps),
+            m_spindexer->SpinToSpeed(0.0_mps),
+            m_kicker->SpinToSpeed(0.0_mps),
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
+          )
+        ); 
       }  
     }
 
