@@ -12,29 +12,23 @@
 #include "subsystems/LaserCan.h"
 #include "commands/Autos/TestAuto.h"
 
-// const std::string RobotContainer::weekZeroAuto = "Week Zero Auto";
-const std::string RobotContainer::noLevelAuto = "No Auto";
 // const std::string RobotContainer::basicAuto = "Basic Auto";
-const std::string RobotContainer::startLine = "Start Line";
-// const std::string RobotContainer::exampleAuto = "Example_Auto";
-
 // const std::string RobotContainer::rightTrenchFull = "RightTrenchFull";
 // const std::string RobotContainer::leftTrenchFull = "LeftTrenchFull";
 // const std::string RobotContainer::rightTrenchHalf = "RightTrenchHalf";
 // const std::string RobotContainer::leftTrenchHalf = "LeftTrenchHalf";
-const std::string RobotContainer::rightTrenchHalfDouble = "RightTrenchHalfDouble";
-const std::string RobotContainer::leftTrenchHalfDouble = "LeftTrenchHalfDouble";
-const std::string RobotContainer::centerDepotOutpostClimb = "CenterDepotOutpostClimb";
 
-const std::string RobotContainer::rightTrenchHalfOutpost = "RightTrenchHalfOutpost";
-// const std::string RobotContainer::cornerShotManual = "CornerShotManual";
-
+const std::string RobotContainer::noLevelAuto = "No Auto";
+const std::string RobotContainer::startLine = "Start Line";
 const std::string RobotContainer::centerHub = "CenterHub";
 const std::string RobotContainer::centerDepotOutpost = "CenterDepotOutpost";
+const std::string RobotContainer::centerDepotOutpostClimb = "CenterDepotOutpostClimb";
+const std::string RobotContainer::rightBumpSteal = "RightBumpSteal";
+const std::string RobotContainer::rightTrenchHalfOutpost = "RightTrenchHalfOutpost";
+const std::string RobotContainer::rightTrenchHalfDouble = "RightTrenchHalfDouble";
+const std::string RobotContainer::rightTrenchHalfDoubleBump = "RightTrenchHalfDoubleBump";
+const std::string RobotContainer::leftTrenchHalfDouble = "LeftTrenchHalfDouble";
 const std::string RobotContainer::leftBumpFull = "LeftBumpFull";
-const std::string RobotContainer::rightTrenchHalfDoubleBumb = "RightTrenchHalfDoubleBumb";
-
-// const std::string RobotConta÷iner::testSplit = "TestSplit";
 
 RobotContainer::RobotContainer() :
 _operatorController(1),
@@ -93,25 +87,26 @@ _controlBindings(false)
   m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
   m_bling->SetDefaultCommand(BlingTeleop(m_bling, m_OI).ToPtr());
 
-
   std::cerr << "\tDefault commands assigned..." << std::endl;
 
   // Autonomous Chooser:
-  m_levelChooser.SetDefaultOption("No Level", noLevelAuto);
-  m_levelChooser.AddOption("Center_Hub", centerHub);
-  m_levelChooser.AddOption("Start_Line", startLine);
+
   // m_levelChooser.AddOption("Right_Trench_Full", rightTrenchFull);
   // m_levelChooser.AddOption("Left_Trench_Full", leftTrenchFull);
   // m_levelChooser.AddOption("Right_Trench_Half", rightTrenchHalf);
   // m_levelChooser.AddOption("Left_Trench_Half", leftTrenchHalf);
-  m_levelChooser.AddOption("Right_Trench_Half_Outpost", rightTrenchHalfOutpost);
+
+  m_levelChooser.SetDefaultOption("No Level", noLevelAuto);
+  m_levelChooser.AddOption("Start_Line", startLine);
+  m_levelChooser.AddOption("Center_Hub", centerHub);
   m_levelChooser.AddOption("Center_Depot_Outpost", centerDepotOutpost);
-  // m_levelChooser.AddOption("Corner Shot Manual", cornerShotManual);
+  m_levelChooser.AddOption("Center_Depot_Oupost_Climb", centerDepotOutpostClimb);
+  m_levelChooser.AddOption("Right_Bump_Steal", rightBumpSteal);
+  m_levelChooser.AddOption("Right_Trench_Half_Outpost", rightTrenchHalfOutpost);
   m_levelChooser.AddOption("Right_Trench_Half_Double", rightTrenchHalfDouble);
+  m_levelChooser.AddOption("Right_Trench_Half_Double_Bump", rightTrenchHalfDoubleBump);
   m_levelChooser.AddOption("Left_Trench_Half_Double", leftTrenchHalfDouble);
   m_levelChooser.AddOption("Outliers_Right", leftBumpFull);
-  m_levelChooser.AddOption("Center_Depot_Oupost_Climb", centerDepotOutpostClimb);
-  m_levelChooser.AddOption("Right_Trench_Half_Double_Bumb", rightTrenchHalfDoubleBumb);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -122,44 +117,56 @@ _controlBindings(false)
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   try {
+
     // if(m_levelChooser.GetSelected() == weekZeroAuto) {
     //   return WeekZeroAuto::Create(m_spindexer, m_kicker, m_flywheel, m_shooterHood, m_turret);
     // }
     // else if (m_levelChooser.GetSelected() == basicAuto){
     //   return BasicAuto::Create(m_drivetrain, m_localizer);
     // }
+
     if (m_levelChooser.GetSelected() == startLine) {
       return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable);
     }
     else if (m_levelChooser.GetSelected() == centerHub) {
       return Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood);
     }
+
     else if (
+
       // m_levelChooser.GetSelected() == exampleAuto ||
       // m_levelChooser.GetSelected() == rightTrenchFull ||
       // m_levelChooser.GetSelected() == leftTrenchFull ||
       // m_levelChooser.GetSelected() == rightTrenchHalf ||
       // m_levelChooser.GetSelected() == leftTrenchHalf ||
-      m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
-      m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
-      // m_levelChooser.GetSelected() == cornerShotManual ||
-      m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
+
       m_levelChooser.GetSelected() == centerDepotOutpost ||
-      m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
-      m_levelChooser.GetSelected() == leftBumpFull ||
       m_levelChooser.GetSelected() == centerDepotOutpostClimb ||
-      m_levelChooser.GetSelected() == rightTrenchHalfDoubleBumb
+      m_levelChooser.GetSelected() == rightBumpSteal ||
+      m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
+      m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
+      m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump ||
+      m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
+      m_levelChooser.GetSelected() == leftBumpFull 
+
     ) {
+      
       bool putIntakeOut = true;
-      if(m_levelChooser.GetSelected() == centerDepotOutpost) {
+
+      if (m_levelChooser.GetSelected() == centerDepotOutpost) {
         putIntakeOut = false;
-      }
-      if(m_levelChooser.GetSelected() == leftBumpFull) {
+
+      } else if (m_levelChooser.GetSelected() == leftBumpFull) {
         putIntakeOut = false;
-      }
-      if(m_levelChooser.GetSelected() == centerDepotOutpostClimb) {
+
+      } else if (m_levelChooser.GetSelected() == centerDepotOutpostClimb) {
         putIntakeOut = false;
+
+      } else if (m_levelChooser.GetSelected() == rightBumpSteal) {
+        putIntakeOut = false;
+
       }
+
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory,putIntakeOut);
     }

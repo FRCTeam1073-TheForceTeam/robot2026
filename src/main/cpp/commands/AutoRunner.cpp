@@ -304,7 +304,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(0.5_s),
               m_intake->IntakeIn()
             )
-          ).WithTimeout(16_s)
+          ).WithTimeout(10_s)
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
@@ -322,7 +322,15 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.2_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
-              m_kicker->SpinToSpeed(Kicker::ShotSpeed)
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+              frc2::cmd::Wait(1.2_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut()
             )
           ).WithTimeout(4.0_s)
         );

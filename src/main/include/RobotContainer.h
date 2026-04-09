@@ -56,9 +56,7 @@
 #include "commands/Autos/BasicAuto.h"
 #include "commands/TestFlywheel.h"
 #include "commands/TestHood.h"
-
 #include "commands/BlingTeleop.h"
-
 
 #include <choreo/Choreo.h>
 #include <utilities/ShooterTable.h>
@@ -79,34 +77,24 @@
 class RobotContainer {
  public:
 
-  // static const std::string noPosition;
-  // static const std::string rightPosition;
-  // static const std::string leftPosition;
-  // static const std::string centerPosition;
-  // static const std::string weekZeroAuto;
-  static const std::string noLevelAuto;
   // static const std::string basicAuto;
-  static const std::string startLine;
-  // static const std::string exampleAuto;
-
   // static const std::string rightTrenchFull;
   // static const std::string leftTrenchFull;
   // static const std::string rightTrenchHalf;
   // static const std::string leftTrenchHalf;
-  static const std::string rightTrenchHalfDouble;
-  static const std::string rightTrenchHalfDoubleTest;
 
-  static const std::string centerDepotOutpost;
-
-  static const std::string rightTrenchHalfOutpost;
-  // static const std::string cornerShotManual;
-
+  static const std::string noLevelAuto;
+  static const std::string startLine;
   static const std::string centerHub;
+  static const std::string centerDepotOutpost;
+  static const std::string centerDepotOutpostClimb;
+  static const std::string rightBumpSteal;
+  static const std::string rightTrenchHalfOutpost;
+  static const std::string rightTrenchHalfDouble;
+  static const std::string rightTrenchHalfDoubleBump;
   static const std::string leftTrenchHalfDouble;
   static const std::string leftBumpFull;
-  static const std::string centerDepotOutpostClimb;
-  static const std::string rightTrenchHalfDoubleBumb;
-  
+
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
