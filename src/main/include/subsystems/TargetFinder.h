@@ -1,4 +1,7 @@
-#pragma once
+#ifndef _TARGET_FINDER_
+#define _TARGET_FINDER_
+
+class BallisticShot;
 
 #include <frc/DriverStation.h>
 #include <frc2/command/SubsystemBase.h>
@@ -70,3 +73,4 @@ class TargetFinder  : public frc2::SubsystemBase {
     std::set<std::string> zone;
     std::string OurZone;
 };
+#endif

@@ -1,5 +1,7 @@
+#ifndef _BALLISTIC_SHOT_
+#define _BALLISTIC_SHOT_
 
-#pragma once
+class TargetFinder;
 
 #include <frc2/command/SubsystemBase.h>
 #include "subsystems/TargetFinder.h"
@@ -49,3 +51,5 @@ class BallisticShot : public frc2::SubsystemBase {
   static constexpr units::acceleration::meters_per_second_squared_t gravity = 9.81_mps_sq;
 
 };
+
+#endif
