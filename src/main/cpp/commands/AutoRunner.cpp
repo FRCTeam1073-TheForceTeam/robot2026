@@ -320,7 +320,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       else if (eventType == "ShootBumb") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.2_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
