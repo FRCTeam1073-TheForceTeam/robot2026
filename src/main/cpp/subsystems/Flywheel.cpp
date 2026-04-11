@@ -59,7 +59,7 @@ void Flywheel::Periodic() {
 
         // Send commands to motors:
         _leadFlywheelMotor.SetControl(_flywheelVelocityVoltage.WithVelocity(motor_velocity));
-        _followFlywheelMotor.SetControl(controls::StrictFollower{_leadFlywheelMotor.GetDeviceID()});
+        _followFlywheelMotor.SetControl(controls::Follower(_leadFlywheelMotor.GetDeviceID(), signals::MotorAlignmentValue::Aligned));
 
     } else {
         // Send commands to motors:
@@ -117,6 +117,9 @@ bool Flywheel::ConfigureHardware() {
     followerConfigs.MotorOutput.WithInverted(signals::InvertedValue::CounterClockwise_Positive); //change this if directions are the same.
     followerConfigs.CurrentLimits.SupplyCurrentLimit = CurrentLimit;
     followerConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+    followerConfigs.Voltage.PeakForwardVoltage = 10.0_V; // These are pretty typical values, adjust as needed.
+    followerConfigs.Voltage.PeakReverseVoltage = -10.0_V;
+    
     
     status = _followFlywheelMotor.GetConfigurator().Apply(followerConfigs, 1_s ); // 1 Second configuration timeout.
 
