@@ -15,7 +15,7 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
     m_drivetrain(drivetrain), 
     m_OI(oi),
     m_localizer(localizer),
-    thetaController{2.5, 0.0, 0.3}
+    thetaController{3.0, 0.2, 0.3}
     {
     allianceSign = 0;
     fieldCentric = true;
@@ -39,7 +39,7 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
 TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi) : 
     m_drivetrain(drivetrain), 
     m_OI(oi),
-    thetaController{2.5, 0.0, 0.3} {
+    thetaController{3.0, 0.2, 0.3} {
     allianceSign = 0;
     fieldCentric = true;
     // lastParkingBreakButton = false;
@@ -104,27 +104,34 @@ void TeleopDrive::Execute() {
 
     auto vx = std::clamp(allianceSign * ((leftY + 0.01) / std::abs(leftY + 0.01)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftY)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
     auto vy = std::clamp(allianceSign * ((leftX + 0.01) / std::abs(leftX + 0.01)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftX)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
+    auto omega = std::clamp(((rightX + 0.01) / std::abs(rightX + 0.01)) * (maximumRotationVelocity / (maximumRotationVelocity.value() - 1)) * (std::pow(maximumRotationVelocity.value(), std::abs(rightX)) - 1), -maximumRotationVelocity, maximumRotationVelocity);
     
-    heading += frc::AngleModulus(
-        std::clamp(((rightX + 0.01) / std::abs(rightX + 0.01)) * (maximumRotationVelocity / (maximumRotationVelocity.value() - 1)) * (std::pow(maximumRotationVelocity.value(), std::abs(rightX)) - 1), -maximumRotationVelocity, maximumRotationVelocity) * units::second_t(1/50)
-    );
-    auto omega = (thetaController.Calculate(m_localizer->getPose().Rotation().Radians().value(), heading.value()) * 1_rad_per_s);
+    if (slowMode) {
+        vx *= 0.4;
+        vy *= 0.4;
+        omega *= 0.4;
+    }
+
+    auto delta = omega * 0.02_s;
+
+    heading += frc::AngleModulus(delta);
+    auto heading_omega = std::clamp(thetaController.Calculate(m_localizer->getPose().Rotation().Radians().value(), heading.value()), -maximumRotationVelocity.value(), maximumRotationVelocity.value()) * 1_rad_per_s;
 
     if (!lastYPressed && m_OI->GetDriverYButton()) {
         slowMode = !slowMode;
     }
     lastYPressed = m_OI->GetDriverYButton();
-    if (slowMode) {
-        vx *= 0.4;
-        vy *= 0.4;
-    }
+
 
 
     frc::SmartDashboard::PutBoolean("TeleopDrive/Slow Mode", slowMode);
-
     frc::SmartDashboard::PutNumber("TeleopDrive/vx", vx.value());
     frc::SmartDashboard::PutNumber("TeleopDrive/vy", vy.value());
     frc::SmartDashboard::PutNumber("TeleopDrive/omega", omega.value());
+    frc::SmartDashboard::PutNumber("TeleopDrive/Heading Omega", heading_omega.value());
+    frc::SmartDashboard::PutNumber("TeleopDrive/Heading", frc::AngleModulus(heading).value());
+    frc::SmartDashboard::PutNumber("Heading Delta", delta.value());
+    frc::SmartDashboard::PutNumber("TeleopDrive/RightX", rightX);
     frc::SmartDashboard::PutNumber("TeleopDrive/AvgTorque", avgTorque.value());
     frc::SmartDashboard::PutBoolean("TeleopDrive/FieldCentric", fieldCentric);
     frc::SmartDashboard::PutNumber("TeleopDrive/leftX", leftX);
@@ -145,7 +152,7 @@ void TeleopDrive::Execute() {
             rotation = m_drivetrain->GetGyroHeading();
         }
 
-        speeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(vx, vy, omega, rotation);
+        speeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(vx, vy, heading_omega, rotation);
         m_drivetrain->SetChassisSpeeds(speeds);
     }
     else { // robot centric drive
