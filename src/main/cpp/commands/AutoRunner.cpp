@@ -381,25 +381,27 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
   }
 }
 
-frc2::CommandPtr AutoRunner::Prep() {
+frc2::CommandPtr AutoRunner::Prep(units::time::second_t delay) {
   return frc2::cmd::Parallel(
+    frc2::cmd::Wait(delay),
     ZeroTurret(m_turret).ToPtr(),
     ZeroClimber(m_climber).ToPtr(),
     m_intake->IntakeOut()
-  );//.WithTimeout(0.1_s);
+  ).WithTimeout(5.0_s); // Absolute maximum time...
 }
 
-frc2::CommandPtr AutoRunner::PrepWithoutIntake() {
+frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay) {
   return frc2::cmd::Parallel(
-    ZeroTurret(m_turret).ToPtr(),
-    ZeroClimber(m_climber).ToPtr()
-  ).WithTimeout(3.0_s);
+      frc2::cmd::Wait(delay),
+      ZeroTurret(m_turret).ToPtr(),
+      ZeroClimber(m_climber).ToPtr())
+  .WithTimeout(5.0_s); // Absolute maximum time...
 }
 
-frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, bool putIntakeOut) {
+frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut) {
 
    return frc2::cmd::Sequence(
-    putIntakeOut ? Prep() : PrepWithoutIntake(),
+    putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
     // frc2::cmd::Wait(0.01_s),
     PartGenerator(trajectory)
   );

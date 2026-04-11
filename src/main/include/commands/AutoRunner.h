@@ -71,7 +71,7 @@ class AutoRunner {
     std::shared_ptr<BallisticShot> bs
   );
 
-  frc2::CommandPtr Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, bool putIntakeOut = true);
+  frc2::CommandPtr Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut = true);
 
 
 private:
@@ -92,9 +92,11 @@ private:
   std::shared_ptr<Bling> m_bling;
   std::shared_ptr<BallisticShot> m_bs;
 
-  frc2::CommandPtr Prep();
+  // Prep with a delay before continuing. 5-second delay max.
+  frc2::CommandPtr Prep(units::time::second_t delay = 0.0_s);
 
-  frc2::CommandPtr PrepWithoutIntake();
+  // Prep with a delay before continuing. 5-second delay max.
+  frc2::CommandPtr PrepWithoutIntake(units::time::second_t delay = 0.0_s);
 
   frc2::CommandPtr EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 
