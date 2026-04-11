@@ -29,7 +29,7 @@ class TargetFinder  : public frc2::SubsystemBase {
     {
         units::angle::radian_t turretToTargetAngle;
         units::length::meter_t rangeToTarget;
-        bool passing; // Is this a passing target.
+        bool passing; // Is this a passing target?
     };
 
     TargetFinder(std::shared_ptr<Localizer>& localizer, std::shared_ptr<ZoneFinder>& zonefinder);
