@@ -21,6 +21,7 @@ AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<
     // Center of pigeon height is 4.75in, offset from X,Y center of robot ()
     //
 
+    // We have coordinates from EM in "pigeon offset coordinates" not robot coordinates.
     const frc::Translation3d pigeon_offset(-1.0_in, 2.5_in, 4.75_in);
 
         _cameras = {
