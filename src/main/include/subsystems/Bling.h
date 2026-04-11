@@ -30,7 +30,14 @@ class Bling : public frc2::SubsystemBase {
   struct Feedback {
   };
 
-  using Command = std::variant<std::monostate, ctre::phoenix6::controls::SolidColor>;
+  struct colorNumberLED{
+    //signals::RGBWColor color;
+    //TODO: un-comment the above line of code when it doesn't throw an error
+    int startNum;
+    int endNum;
+  };
+
+  using Command = std::variant<std::monostate, ctre::phoenix6::controls::SolidColor, Bling::colorNumberLED>;
   
   // Constructor for the subsystem.
   Bling();

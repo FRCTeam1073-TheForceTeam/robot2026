@@ -19,8 +19,14 @@ void BlingTeleop::Initialize() {
 }
 
 // Called repeatedly when this Command is scheduled to run
+
+//CANdle has 8 LEDs (0-7)
+//Front of robot has 36 LEDs
+//Right and Left side of the robot TBD
 void BlingTeleop::Execute() {
-  controls::SolidColor color(8, 20);
+
+  //CANdle color: battery status
+  controls::SolidColor color(0, 7);
   _currentVoltage = frc::RobotController::GetBatteryVoltage() * alpha + (1.0 - alpha) * _currentVoltage;
   if (_currentVoltage >= 12.4_V) {
     color.WithColor(signals::RGBWColor (0, 0, 127)); //Color is dimmer to conserve battery
@@ -29,6 +35,9 @@ void BlingTeleop::Execute() {
   } else {
     color.WithColor(signals::RGBWColor (127, 0, 0));
   }
+
+  //LED strip color: turret status
+  //Lights track turret orientation and turn red when it is close to the dead zone
 
   m_bling->SetCommand(color);
 }

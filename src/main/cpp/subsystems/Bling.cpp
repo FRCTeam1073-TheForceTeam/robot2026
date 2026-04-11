@@ -29,25 +29,33 @@ void Bling::SetCommand(Command cmd) {
   _command = cmd;
 }
 
+//CANdle has 8 LEDs (0-7)
+//Front of robot has 36 LEDs
+//Right and Left side of the robot TBD
+
 void Bling::Periodic() {  
       // // Process command:
    if (std::holds_alternative<controls::SolidColor>(_command)) {
       auto color = std::get<controls::SolidColor>(_command);
       _CANdle.SetControl(color);
    }
+   else if(std::holds_alternative<Bling::colorNumberLED>(_command)){
+    
+
+   }
    else {
-    _CANdle.SetControl(controls::SolidColor(8, 20).WithColor(signals::RGBWColor (255, 255, 255)));
+    _CANdle.SetControl(controls::SolidColor(0, 7).WithColor(signals::RGBWColor (255, 255, 255)));
    }
 }
 
 frc2::CommandPtr Bling::blingWhite() {
-  return RunOnce([this] {SetCommand(controls::SolidColor(8, 20).WithColor(signals::RGBWColor (255, 255, 255)));});
+  return RunOnce([this] {SetCommand(controls::SolidColor(0, 7).WithColor(signals::RGBWColor (255, 255, 255)));});
 }
 
 //TODO: change these commands to on and off
 
 frc2::CommandPtr Bling::blingPurple() {
-  return RunOnce([this] {SetCommand(controls::SolidColor(8, 20).WithColor(signals::RGBWColor (147, 112, 219)));});
+  return RunOnce([this] {SetCommand(controls::SolidColor(0, 7).WithColor(signals::RGBWColor (147, 112, 219)));});
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.
