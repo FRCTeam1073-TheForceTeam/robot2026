@@ -87,8 +87,8 @@ bool Flywheel::ConfigureHardware() {
     configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A;
 
-    configs.Voltage.PeakForwardVoltage = 9.5_V; // These are pretty typical values, adjust as needed.
-    configs.Voltage.PeakReverseVoltage = -9.5_V;
+    configs.Voltage.PeakForwardVoltage = 10.0_V; // These are pretty typical values, adjust as needed.
+    configs.Voltage.PeakReverseVoltage = -10.0_V;
     
     configs.CurrentLimits.SupplyCurrentLimit = CurrentLimit;
     configs.CurrentLimits.SupplyCurrentLimitEnable = true;
