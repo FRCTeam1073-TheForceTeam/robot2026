@@ -100,5 +100,5 @@ private:
 
   frc2::CommandPtr EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 
-  frc2::CommandPtr PartGenerator(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
+  frc2::CommandPtr PartGenerator(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t delay);
 };
