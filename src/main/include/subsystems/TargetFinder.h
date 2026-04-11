@@ -1,4 +1,7 @@
-#pragma once
+#ifndef _TARGET_FINDER_
+#define _TARGET_FINDER_
+
+class BallisticShot;
 
 #include <frc/DriverStation.h>
 #include <frc2/command/SubsystemBase.h>
@@ -9,6 +12,7 @@
 #include <string>
 #include <iostream>
 #include <units/time.h>
+#include "subsystems/BallisticShot.h"
 
 #include "subsystems/Localizer.h"
 #include "subsystems/ZoneFinder.h"
@@ -34,6 +38,9 @@ class TargetFinder  : public frc2::SubsystemBase {
 
     TargetFinder(std::shared_ptr<Localizer>& localizer, std::shared_ptr<ZoneFinder>& zonefinder);
 
+    void SetBallisticShot(std::shared_ptr<BallisticShot>& ballisticShot);
+
+    
     frc::Pose2d getTargetPos();
     frc::Pose2d _target;
     bool _passing;
@@ -53,6 +60,7 @@ class TargetFinder  : public frc2::SubsystemBase {
     private:
     std::shared_ptr<Localizer> _localizer;
     std::shared_ptr<ZoneFinder> _zonefinder;
+    std::shared_ptr<BallisticShot> _ballisticShot;
 
     frc::Pose2d OurHub;
     frc::Pose2d turretPos;
@@ -65,3 +73,4 @@ class TargetFinder  : public frc2::SubsystemBase {
     std::set<std::string> zone;
     std::string OurZone;
 };
+#endif
