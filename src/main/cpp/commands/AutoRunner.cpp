@@ -276,7 +276,8 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           frc2::cmd::Parallel(
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
-              frc2::cmd::Wait(1.3_s),
+              m_collector->CollectSpeed(0.0_mps),
+              frc2::cmd::Wait(1.2_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
               m_kicker->SpinToSpeed(Kicker::ShotSpeed),
               frc2::cmd::Wait(1.0_s),
@@ -310,14 +311,14 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            m_flywheel->SpinToSpeed(0.0_mps),
+            m_flywheel->SpinToSpeed(0.01_mps),
             m_spindexer->SpinToSpeed(0.0_mps),
             m_kicker->SpinToSpeed(0_mps),
             m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
           )
         );
       } 
-      else if (eventType == "ShootBumb") {
+      else if (eventType == "ShootBump") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
@@ -327,14 +328,20 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               m_kicker->SpinToSpeed(Kicker::ShotSpeed),
               frc2::cmd::Wait(1.2_s),
               m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
+              frc2::cmd::Wait(0.6_s),
               m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
+              frc2::cmd::Wait(0.6_s),
               m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut()
+              frc2::cmd::Wait(0.6_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.6_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.6_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.6_s),
+              m_intake->IntakeIn()
             )
-          ).WithTimeout(4.0_s)
+          ).WithTimeout(5.0_s)
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
@@ -342,7 +349,8 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             m_flywheel->SpinToSpeed(0.0_mps),
             m_spindexer->SpinToSpeed(0.0_mps),
             m_kicker->SpinToSpeed(0.0_mps),
-            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition),
+            m_collector->CollectSpeed(9.14_mps)
           )
         ); 
       }  
@@ -356,9 +364,13 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
   }  
 }
 
-frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
+frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t delay) {
   std::vector<frc2::CommandPtr> parts;
   
+  if (delay > 0.0_s) {
+    parts.emplace_back(std::move(frc2::cmd::Wait(delay))); // If we have a delay add it to the 1st part.
+  }
+
   if (trajectory.has_value()) {
     auto &traj = trajectory.value();
 
@@ -381,26 +393,28 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
   }
 }
 
-frc2::CommandPtr AutoRunner::Prep() {
+frc2::CommandPtr AutoRunner::Prep(units::time::second_t delay) {
   return frc2::cmd::Parallel(
+    frc2::cmd::Wait(delay + 0.01_s),
     ZeroTurret(m_turret).ToPtr(),
     ZeroClimber(m_climber).ToPtr(),
     m_intake->IntakeOut()
-  );//.WithTimeout(0.1_s);
+  ).WithTimeout(5.0_s); // Absolute maximum time...
 }
 
-frc2::CommandPtr AutoRunner::PrepWithoutIntake() {
+frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay) {
   return frc2::cmd::Parallel(
-    ZeroTurret(m_turret).ToPtr(),
-    ZeroClimber(m_climber).ToPtr()
-  ).WithTimeout(3.0_s);
+      frc2::cmd::Wait(delay + 0.01_s),
+      ZeroTurret(m_turret).ToPtr(),
+      ZeroClimber(m_climber).ToPtr())
+  .WithTimeout(5.0_s); // Absolute maximum time...
 }
 
-frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, bool putIntakeOut) {
+frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut) {
 
    return frc2::cmd::Sequence(
-    putIntakeOut ? Prep() : PrepWithoutIntake(),
+    putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
     // frc2::cmd::Wait(0.01_s),
-    PartGenerator(trajectory)
-  );
+    PartGenerator(trajectory, start_delay)
+  ).WithTimeout(30.0_s); // Absolute maximumtime... real auto is 20s.
 }

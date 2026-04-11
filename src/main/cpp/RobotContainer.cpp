@@ -31,8 +31,9 @@ const std::string RobotContainer::leftTrenchHalfDouble = "LeftTrenchHalfDouble";
 const std::string RobotContainer::leftBumpFull = "LeftBumpFull";
 
 RobotContainer::RobotContainer() :
-_operatorController(1),
-_controlBindings(false)
+m_operatorController(1),
+m_controlBindings(false),
+m_startDelaySeconds(0.0)
 {
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
@@ -112,6 +113,7 @@ _controlBindings(false)
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
+  frc::SmartDashboard::PutNumber("Start Delay(s)", m_startDelaySeconds);
   // Configure the button bindings
   ConfigureBindings();
   std::cerr << "Controller bindings configured..." << std::endl;
@@ -120,18 +122,14 @@ _controlBindings(false)
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   try {
 
-    // if(m_levelChooser.GetSelected() == weekZeroAuto) {
-    //   return WeekZeroAuto::Create(m_spindexer, m_kicker, m_flywheel, m_shooterHood, m_turret);
-    // }
-    // else if (m_levelChooser.GetSelected() == basicAuto){
-    //   return BasicAuto::Create(m_drivetrain, m_localizer);
-    // }
+    // Grab our delay in seconds:
+    auto delay = units::time::second_t(frc::SmartDashboard::GetNumber("Start Delay", 0.0));
 
     if (m_levelChooser.GetSelected() == startLine) {
-      return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_ballisticShot);
+      return frc2::cmd::Sequence(frc2::cmd::Wait(delay), Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_ballisticShot));
     }
     else if (m_levelChooser.GetSelected() == centerHub) {
-      return Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood);
+      return frc2::cmd::Sequence(frc2::cmd::Wait(delay), Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood));
     }
 
     else if (
@@ -170,7 +168,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       }
 
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
-      return m_autoRunner->Create(trajectory,putIntakeOut);
+      return m_autoRunner->Create(trajectory, delay, putIntakeOut);
     }
   }
   catch (...) {
@@ -199,12 +197,12 @@ void RobotContainer::TeleopInit() {
 
    // TODO: Consider moving this back to Configuire Bindings.
    // Moved here to de-conflict DPAD in test mode.
-  if (!_controlBindings) {
-    _operatorController.POVLeft().OnTrue(ZeroIntake(m_intake).ToPtr());
-    _operatorController.POVUp().OnTrue(ZeroTurret(m_turret).ToPtr());
-    _operatorController.POVRight().OnTrue(ZeroHood(m_shooterHood).ToPtr());
-    _operatorController.POVDown().OnTrue(ZeroClimber(m_climber).ToPtr());
-    _controlBindings = true;
+  if (!m_controlBindings) {
+    m_operatorController.POVLeft().OnTrue(ZeroIntake(m_intake).ToPtr());
+    m_operatorController.POVUp().OnTrue(ZeroTurret(m_turret).ToPtr());
+    m_operatorController.POVRight().OnTrue(ZeroHood(m_shooterHood).ToPtr());
+    m_operatorController.POVDown().OnTrue(ZeroClimber(m_climber).ToPtr());
+    m_controlBindings = true;
   }
 
 }

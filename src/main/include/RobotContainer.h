@@ -149,8 +149,10 @@ class RobotContainer {
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 
   // Just used for launching test commands, separate from OI and other controls.
-  frc2::CommandXboxController _operatorController;
+  frc2::CommandXboxController m_operatorController;
 
-  bool _controlBindings;
+  bool m_controlBindings;
+
+  double m_startDelaySeconds;
 
 };
