@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "subsystems/BallisticShot.h"
 
 #include "subsystems/Flywheel.h"
 #include "subsystems/TargetFinder.h"
@@ -24,7 +25,7 @@ class TrackFlywheel
     : public frc2::CommandHelper<frc2::Command, TrackFlywheel> {
  public:
 
-  TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, bool lookupTable = false, std::shared_ptr<BallisticShot>& bs);
+  TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<BallisticShot>& bs, bool lookupTable = false);
 
   void Initialize() override;
 

@@ -20,7 +20,8 @@ AutoRunner::AutoRunner(
   std::shared_ptr<LaserCan> laser,
   std::shared_ptr<ShooterTable> table,
   std::shared_ptr<TargetFinder> finder,
-  std::shared_ptr<Bling> bling
+  std::shared_ptr<Bling> bling,
+  std::shared_ptr<BallisticShot> bs
 ) :
 m_drivetrain(drivetrain),
 m_Tags(Tags),
@@ -36,7 +37,8 @@ m_intake(intake),
 m_laser(laser),
 m_targetFinder(finder),
 m_shooterTable(table),
-m_bling(bling)
+m_bling(bling),
+m_bs(bs)
 {}
 
 
@@ -91,7 +93,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       else if (eventType == "Shoot") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(0.5_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
@@ -118,7 +120,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       else if (eventType == "Shoot-Outpost") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.0_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
@@ -156,7 +158,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       else if (eventType == "CenterShoot") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(0.5_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
@@ -185,7 +187,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       else if (eventType == "CenterShootOutpost") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(0.85_s),
               m_spindexer->SpinToSpeed(6.5_mps),
@@ -215,7 +217,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       else if (eventType == "ShootMovingOutpost") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.3_s),
               m_spindexer->SpinToSpeed(6.5_mps),
@@ -246,7 +248,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       else if (eventType == "ShootDoublePath") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.3_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
@@ -266,7 +268,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       else if (eventType == "ShootBumpAuto") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable),
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(1.3_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),

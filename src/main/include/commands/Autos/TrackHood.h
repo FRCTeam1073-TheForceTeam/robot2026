@@ -16,7 +16,7 @@ class TrackHood
     : public frc2::CommandHelper<frc2::Command, TrackHood> {
  public:
 
-  TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st, bool shooterTable = false, std::shared_ptr<BallisticShot>& bs);
+  TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<BallisticShot>& bs, bool shooterTable = false);
 
   void Initialize() override;
 

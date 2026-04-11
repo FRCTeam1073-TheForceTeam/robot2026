@@ -3,10 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/Autos/TrackFlywheel.h"
-#include "subsystems/BallisticShot.h"
 
 
-TrackFlywheel::TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, bool lookupTable, std::shared_ptr<BallisticShot>& bs) :
+TrackFlywheel::TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<BallisticShot>& bs, bool lookupTable) :
  m_flywheel(flywheel),
  m_tf(hf),
  m_st(st),

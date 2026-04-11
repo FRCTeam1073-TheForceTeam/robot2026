@@ -76,7 +76,7 @@ _controlBindings(false)
   //m_laser = std::make_shared<LaserCan>();
   m_bling = std::make_shared<Bling>();
    std::cerr << "\tBling created..." << std::endl;
-  m_autoRunner = std::make_shared<AutoRunner>(m_drivetrain, m_tagFinder, m_localizer, m_kicker, m_climber, m_flywheel, m_shooterHood, m_spindexer, m_turret, m_collector, m_intake, m_laser, m_shooterTable, m_targetFinder, m_bling);
+  m_autoRunner = std::make_shared<AutoRunner>(m_drivetrain, m_tagFinder, m_localizer, m_kicker, m_climber, m_flywheel, m_shooterHood, m_spindexer, m_turret, m_collector, m_intake, m_laser, m_shooterTable, m_targetFinder, m_bling, m_ballisticShot);
 
   std::cerr << "Mechanisms created..." << std::endl;
 
@@ -127,7 +127,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     //   return BasicAuto::Create(m_drivetrain, m_localizer);
     // }
     if (m_levelChooser.GetSelected() == startLine) {
-      return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable);
+      return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_ballisticShot);
     }
     else if (m_levelChooser.GetSelected() == centerHub) {
       return Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood);
