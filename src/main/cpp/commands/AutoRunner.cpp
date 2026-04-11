@@ -404,9 +404,8 @@ frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay) {
 
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut) {
 
-   return frc2::cmd::Parallel(
+   return frc2::cmd::Sequence(
     putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
-    // frc2::cmd::Wait(0.01_s),
     PartGenerator(trajectory, start_delay)
   ).WithTimeout(30.0_s); // Absolute maximumtime... real auto is 20s.
 }
