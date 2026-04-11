@@ -7,7 +7,7 @@ AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<
 {
     std::cout << "Creating April Tag Object" << std::endl;
     //
-    // Thesee are poses in robot coordinates:
+    // Thesee are poses in *ROBOT* coordinates:
     //  
     // Robot coordinates have +X forward, +Y out left of robot and +Z up (opposite of gravity)
     // The origin of X,Y is the geometric center of the robot frame perimeter.
@@ -21,6 +21,7 @@ AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<
     // Center of pigeon height is 4.75in, offset from X,Y center of robot ()
     //
 
+    // We have coordinates from EM in "pigeon offset coordinates" not robot coordinates.
     const frc::Translation3d pigeon_offset(-1.0_in, 2.5_in, 4.75_in);
 
         _cameras = {
@@ -28,7 +29,7 @@ AprilTagFinder::AprilTagFinder(std::shared_ptr<Turret> &turret, std::shared_ptr<
         RobotCamera(std::make_shared<photon::PhotonCamera>("Left_Back"), frc::Transform3d(frc::Translation3d(-10.858_in, 7.855_in, 7.562_in) + pigeon_offset, frc::Rotation3d(0_deg, -21_deg, 150_deg))),
         RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Front"), frc::Transform3d(frc::Translation3d(-8.977_in, -13.448_in, 5.152_in) + pigeon_offset,frc::Rotation3d(0_deg, -21_deg, -65_deg))),
         RobotCamera(std::make_shared<photon::PhotonCamera>("Right_Back"), frc::Transform3d(frc::Translation3d(-10.858_in, -12.855_in, 7.652_in) + pigeon_offset,frc::Rotation3d(0_deg, -21_deg, -150_deg))),
-        RobotCamera(std::make_shared<photon::PhotonCamera>("Turret"), frc::Transform3d(frc::Translation3d(-4.39_in, -7.409_in, 12.0_in) + pigeon_offset,frc::Rotation3d(0_deg, 0_deg, 0_deg)), true) 
+        RobotCamera(std::make_shared<photon::PhotonCamera>("Turret"), frc::Transform3d(frc::Translation3d(-3.47_in, -7.51_in, 12.0_in) + pigeon_offset, frc::Rotation3d(0_deg, 0_deg, 0_deg)), true) 
     };
     for(auto& camera : _cameras)
     {
