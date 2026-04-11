@@ -97,7 +97,7 @@ bool Spindexer::ConfigureHardware() {
 
   
   // Set whether motor control direction is inverted or not:
-  configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::CounterClockwise_Positive);
+  configs.MotorOutput.WithInverted(ctre::phoenix6::signals::InvertedValue::Clockwise_Positive);
 
   // Set the control configuration for the drive motor:
   auto status = _spindexerMotor.GetConfigurator().Apply(configs, 1_s); // 1 Second configuration timeout.
