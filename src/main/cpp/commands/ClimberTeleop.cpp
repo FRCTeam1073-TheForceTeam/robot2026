@@ -45,6 +45,7 @@ void ClimberTeleop::Execute() {
   {
     commandedPosition = 0_m;
   }
+
   m_climber->SetCommand(commandedPosition);
 
 

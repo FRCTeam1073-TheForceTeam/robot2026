@@ -149,7 +149,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
       m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump ||
       m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
-      m_levelChooser.GetSelected() == leftBumpFull 
+      m_levelChooser.GetSelected() == leftBumpFull
 
     ) {
       

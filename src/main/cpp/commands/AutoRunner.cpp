@@ -94,7 +94,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
         autoRoutine.emplace_back(m_climber->ClimberPosition(0.0582_m));
       }
       else if (eventType == "BringDownClimber") {
-        autoRoutine.emplace_back(m_climber->ClimberPosition(0.00_m));
+        autoRoutine.emplace_back(m_climber->HoldDown());//TODO: change line of code
       }
       else if (eventType == "Shoot") {
         autoRoutine.emplace_back(
@@ -209,7 +209,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(1.0_s),
               m_intake->IntakeOut()
             )
-          ).WithTimeout(60.0_s)
+          ).WithTimeout(6.0_s)//TODO: find the optimal timeout for the autos
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
