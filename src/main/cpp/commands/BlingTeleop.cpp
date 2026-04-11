@@ -31,6 +31,19 @@ void BlingTeleop::Execute() {
   }
 
   m_bling->SetCommand(color);
+
+  // code for changing bling color based on proximity to dead spot on turret
+  // controls::SolidColor color(0, 8);
+  // _currentVoltage = frc::RobotController::GetBatteryVoltage() * alpha + (1.0 - alpha) * _currentVoltage;
+  // if ([get the turret angle feedback] <= -150_deg or [get the turret angle feedback] >= 141_deg) {
+  //   color.WithColor(signals::RGBWColor (127, 0, 0)); //Color is dimmer to conserve battery
+  // } else if ([get the turret angle feedback] <= -90_deg or [get the turret angle feedback] >= 78_deg) {
+  //   color.WithColor(signals::RGBWColor (82, 0, 127));
+  // } else {
+  //   color.WithColor(signals::RGBWColor (0, 0, 127));
+  // }
+
+  // m_bling->SetCommand(color);
 }
 
 // Called once the command ends or is interrupted.
