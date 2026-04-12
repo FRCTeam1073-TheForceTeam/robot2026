@@ -32,8 +32,7 @@ class Kicker : public frc2::SubsystemBase {
  public:
 
   // CANBusID for the motor.
-  static constexpr int LoadMotorId = 27; // TODO: Get motor id 
-  static constexpr int laserCANId = 28;
+  static constexpr int LoadMotorId = 27;
   
   const double GearRatio = 2.0; // Gear ratio from EM
 
@@ -41,7 +40,7 @@ class Kicker : public frc2::SubsystemBase {
   static constexpr units::meter_t diameter = units::inch_t(2.0);
   static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(diameter * units::constants::pi);
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
-  static constexpr auto CurrentLimit = units::current::ampere_t(50.0);
+  static constexpr auto CurrentLimit = units::current::ampere_t(45.0);
 
 
   // Standard shot speed:

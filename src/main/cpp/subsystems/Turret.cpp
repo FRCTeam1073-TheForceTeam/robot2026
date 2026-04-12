@@ -23,9 +23,12 @@ _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
 _limiter(6.0_rad / 1_s) {
   // Extra implementation of subsystem constructor goes here.
 
+  _feedback.targetPosition = 0.0_rad;
   _feedback.position = 0.0_rad;
   _feedback.velocity = 0.0_rad_per_s;
   _feedback.torque = 0.0_Nm;
+  _feedback.haveZero = false;
+  _feedback.locked = false;
 
   _haveZero = false; // We have not seen zero yet.
 
@@ -47,6 +50,11 @@ void Turret::SetCommand(Command cmd) {
   // Sometimes you need to do something immediate to the hardware.
   // We can just set our target internal value.
   _command = cmd;
+
+  if (std::holds_alternative<units::radian_t>(_command)) {
+    // Update target position for feedback.
+    _feedback.targetPosition = std::get<units::angle::radian_t>(_command);
+  }
 }
 
 void Turret::Zero() {
@@ -88,18 +96,19 @@ void Turret::Periodic() {
     _limiter.Reset(_feedback.position); // Keep the limiter in sync in other control mode.
   }
 
-  auto Locked = false;
-  if (units::math::abs(turretAngle - _feedback.position) < 2_deg) {
-      Locked = true;
+  if (units::math::abs(_feedback.targetPosition - _feedback.position) < 2_deg) {
+      _feedback.locked = true;
+  } else {
+    _feedback.locked = false;
   }
 
   frc::SmartDashboard::PutNumber("Turret/Position rad", _feedback.position.value());
   frc::SmartDashboard::PutNumber("Turret/Position deg", units::angle::degree_t(_feedback.position).value());
   frc::SmartDashboard::PutNumber("Turret/Velocity (Rad_s))", _feedback.velocity.value());
-  frc::SmartDashboard::PutNumber("Turret/Target", turretAngle.value());
+  frc::SmartDashboard::PutNumber("Turret/Target", _feedback.targetPosition.value());
   frc::SmartDashboard::PutNumber("Turret/Torque", _feedback.torque.value());
   frc::SmartDashboard::PutBoolean("Turret/HaveZero", _feedback.haveZero);
-  frc::SmartDashboard::PutBoolean("Turret/LinedUp", Locked);
+  frc::SmartDashboard::PutBoolean("Turret/LinedUp", _feedback.locked);
 
 
 }
