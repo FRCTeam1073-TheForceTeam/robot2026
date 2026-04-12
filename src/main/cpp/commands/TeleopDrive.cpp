@@ -95,6 +95,9 @@ void TeleopDrive::Execute() {
     bool driverDPadLeft = m_OI->GetDriverDPadLeft();
     bool driverDPadRight = m_OI->GetDriverDPadRight();
     int driverDPadAngle = m_OI->GetDriverDPadAngle();
+    double driverRightTrigger = m_OI->GetDriverRightTrigger();
+
+    units::angular_velocity::radians_per_second_t multRotationVelocity = (1.0 + (driverRightTrigger / 4)) * maximumRotationVelocity;
 
     //set deadzones
     if (std::abs(leftY) < JOYSTICK_DEADZONE) {leftY = 0.0;}
@@ -103,7 +106,7 @@ void TeleopDrive::Execute() {
 
     auto vx = std::clamp(allianceSign * ((leftY + 0.01) / std::abs(leftY + 0.01)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftY)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
     auto vy = std::clamp(allianceSign * ((leftX + 0.01) / std::abs(leftX + 0.01)) * (maximumLinearVelocity / (maximumLinearVelocity.value() - 1)) * (std::pow(maximumLinearVelocity.value(), std::abs(leftX)) - 1), -maximumLinearVelocity, maximumLinearVelocity);
-    auto omega = std::clamp(((rightX + 0.01) / std::abs(rightX + 0.01)) * (maximumRotationVelocity / (maximumRotationVelocity.value() - 1)) * (std::pow(maximumRotationVelocity.value(), std::abs(rightX)) - 1), -maximumRotationVelocity, maximumRotationVelocity);
+    auto omega = std::clamp(((rightX + 0.01) / std::abs(rightX + 0.01)) * (multRotationVelocity / (multRotationVelocity.value() - 1)) * (std::pow(multRotationVelocity.value(), std::abs(rightX)) - 1), -multRotationVelocity, multRotationVelocity);
 
     if (!lastYPressed && m_OI->GetDriverYButton()) {
         slowMode = !slowMode;
@@ -113,7 +116,6 @@ void TeleopDrive::Execute() {
         vx *= 0.4;
         vy *= 0.4;
     }
-
 
     frc::SmartDashboard::PutBoolean("TeleopDrive/Slow Mode", slowMode);
 

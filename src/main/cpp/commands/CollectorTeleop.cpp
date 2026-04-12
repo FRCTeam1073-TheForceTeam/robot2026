@@ -22,7 +22,7 @@ void CollectorTeleop::Initialize() {}
 void CollectorTeleop::Execute() {  
 
   // TODO: ASK SILLY DIRIVE TEAM!!
- if (std::abs(m_OI->GetDriverLeftTrigger()) >= 0.1) { // To eject fuel.
+ if (std::abs(m_OI->GetDriverAButton()) >= 0.1) { // To eject fuel.
     m_collector->SetCommand(-4.0_mps);
   }
   else if (std::abs(m_OI->GetDriverRightTrigger()) >= 0.1) {

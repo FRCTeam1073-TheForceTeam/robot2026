@@ -59,7 +59,7 @@ private:
     bool lastYPressed;
 
     static constexpr units::velocity::meters_per_second_t maximumLinearVelocity = 3.5_mps;
-    static constexpr units::angular_velocity::radians_per_second_t maximumRotationVelocity = 4.0_rad_per_s;
+    static constexpr units::angular_velocity::radians_per_second_t maximumRotationVelocity = 3.5_rad_per_s;
     
     units::time::second_t currentTime;
 
