@@ -154,24 +154,24 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
     ) {
       
-      bool putIntakeOut = true;
+      // bool putIntakeOut = true;
 
-      if (m_levelChooser.GetSelected() == centerDepotOutpost) {
-        putIntakeOut = false;
+      // if (m_levelChooser.GetSelected() == centerDepotOutpost) {
+      //   putIntakeOut = false;
 
-      } else if (m_levelChooser.GetSelected() == leftBumpFull) {
-        putIntakeOut = false;
+      // } else if (m_levelChooser.GetSelected() == leftBumpFull) {
+      //   putIntakeOut = false;
 
-      } else if (m_levelChooser.GetSelected() == centerDepotOutpostClimb) {
-        putIntakeOut = false;
+      // } else if (m_levelChooser.GetSelected() == centerDepotOutpostClimb) {
+      //   putIntakeOut = false;
 
-      } else if (m_levelChooser.GetSelected() == rightBumpSteal) {
-        putIntakeOut = false;
+      // } else if (m_levelChooser.GetSelected() == rightBumpSteal) {
+      //   putIntakeOut = false;
 
-      }
+      // }
 
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
-      return m_autoRunner->Create(trajectory, delay, putIntakeOut);
+      // return m_autoRunner->Create(trajectory, delay, putIntakeOut);
     }
   }
   catch (...) {
