@@ -38,7 +38,7 @@ void HoodTeleop::Execute() {
       if ((feedback.rangeToTarget) < 270_in) {
         m_shooterHood->SetCommand(ShooterHood::minPosition); 
       } else {
-        m_shooterHood->SetCommand((ShooterHood::minPosition) + 8_deg); 
+        m_shooterHood->SetCommand((ShooterHood::minPosition) + 10_deg); 
       }
     } else if (m_OI->BallisticShotMode()) {
       // Use ballistic shot:

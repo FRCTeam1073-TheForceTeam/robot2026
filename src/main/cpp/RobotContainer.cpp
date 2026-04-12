@@ -79,16 +79,16 @@ m_startDelaySeconds(0.0)
 
   // Assign default commands here after all subssytems are created to avoid using
   // uninitialized subsystems in default commands.
-  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_localizer).ToPtr());
-  m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI, m_zoneFinder).ToPtr());
-  m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI, m_drivetrain).ToPtr());
-  m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_kicker, m_OI).ToPtr());
-  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable, m_zoneFinder, m_ballisticShot).ToPtr());
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable, m_ballisticShot).ToPtr());
-  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder, m_drivetrain).ToPtr());
-  m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
-  m_bling->SetDefaultCommand(BlingTeleop(m_bling, m_OI).ToPtr());
+  // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_localizer).ToPtr());
+  // m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI, m_zoneFinder).ToPtr());
+  // m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI, m_drivetrain).ToPtr());
+  // m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_kicker, m_OI).ToPtr());
+  // m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
+  // m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable, m_zoneFinder, m_ballisticShot).ToPtr());
+  // m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable, m_ballisticShot).ToPtr());
+  // m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder, m_drivetrain).ToPtr());
+  // m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
+  // m_bling->SetDefaultCommand(BlingTeleop(m_bling, m_OI).ToPtr());
 
   std::cerr << "\tDefault commands assigned..." << std::endl;
 
@@ -154,24 +154,26 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
     ) {
       
-      // bool putIntakeOut = true;
+      bool putIntakeOut = true;
 
-      // if (m_levelChooser.GetSelected() == centerDepotOutpost) {
-      //   putIntakeOut = false;
+      if (m_levelChooser.GetSelected() == centerDepotOutpost) {
+        putIntakeOut = false;
 
-      // } else if (m_levelChooser.GetSelected() == leftBumpFull) {
-      //   putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == leftBumpFull) {
+        putIntakeOut = false;
 
-      // } else if (m_levelChooser.GetSelected() == centerDepotOutpostClimb) {
-      //   putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == centerDepotOutpostClimb) {
+        putIntakeOut = false;
 
-      // } else if (m_levelChooser.GetSelected() == rightBumpSteal) {
-      //   putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == rightBumpSteal) {
+        putIntakeOut = false;
 
-      // }
+      } else if (m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump) {
+        putIntakeOut = false;
+      }
 
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
-      // return m_autoRunner->Create(trajectory, delay, putIntakeOut);
+      return m_autoRunner->Create(trajectory, delay, putIntakeOut);
     }
   }
   catch (...) {
@@ -192,6 +194,18 @@ bool RobotContainer::DisabledPeriodic() {
 }
 
 void RobotContainer::TeleopInit() {
+
+  // uninitialized subsystems in default commands.
+  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_localizer).ToPtr());
+  m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI, m_zoneFinder).ToPtr());
+  m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI, m_drivetrain).ToPtr());
+  m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_kicker, m_OI).ToPtr());
+  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable, m_zoneFinder, m_ballisticShot).ToPtr());
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable, m_ballisticShot).ToPtr());
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder, m_drivetrain).ToPtr());
+  m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
+  m_bling->SetDefaultCommand(BlingTeleop(m_bling, m_OI).ToPtr());
 
   // If the turret has not yet seen zero, zero it now.
   if (!m_turret->GetFeedback().haveZero) {
