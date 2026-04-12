@@ -22,7 +22,7 @@ void BlingTeleop::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void BlingTeleop::Execute() {
   // Set LEDs on the CANdle itself for battery...
-  controls::SolidColor color(0, 8);
+  controls::SolidColor color(0, 20);
   _batteryVoltage = frc::RobotController::GetBatteryVoltage() * alpha + (1.0 - alpha) * _batteryVoltage; // Filtered battery vol;tage.
   if (_batteryVoltage >= 12.4_V) {
     color.WithColor(signals::RGBWColor (0, 0, 127)); // Color is dimmer to conserve battery
