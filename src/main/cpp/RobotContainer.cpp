@@ -28,6 +28,7 @@ const std::string RobotContainer::rightTrenchHalfOutpost = "RightTrenchHalfOutpo
 const std::string RobotContainer::rightTrenchHalfDouble = "RightTrenchHalfDouble";
 const std::string RobotContainer::rightTrenchHalfDoubleBump = "RightTrenchHalfDoubleBump";
 const std::string RobotContainer::leftTrenchHalfDouble = "LeftTrenchHalfDouble";
+const std::string RobotContainer::leftTrenchHalfDoubleBump = "LeftTrenchHalfDoubleBump";
 const std::string RobotContainer::leftBumpFull = "LeftBumpFull";
 
 RobotContainer::RobotContainer() :
@@ -109,6 +110,7 @@ m_startDelaySeconds(0.0)
   m_levelChooser.AddOption("Right_Trench_Half_Double", rightTrenchHalfDouble);
   m_levelChooser.AddOption("Right_Trench_Half_Double_Bump", rightTrenchHalfDoubleBump);
   m_levelChooser.AddOption("Left_Trench_Half_Double", leftTrenchHalfDouble);
+  m_levelChooser.AddOption("Left_Trench_Half_Double_Bump", leftTrenchHalfDoubleBump);
   m_levelChooser.AddOption("Outliers_Right", leftBumpFull);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
@@ -150,6 +152,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
       m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump ||
       m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
+      m_levelChooser.GetSelected() == leftTrenchHalfDoubleBump ||
       m_levelChooser.GetSelected() == leftBumpFull 
 
     ) {
@@ -169,6 +172,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
         putIntakeOut = false;
 
       } else if (m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump) {
+        putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == leftTrenchHalfDouble) {
+        putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == leftTrenchHalfDoubleBump) {
         putIntakeOut = false;
       }
 
