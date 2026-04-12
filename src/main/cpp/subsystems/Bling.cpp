@@ -65,5 +65,5 @@ bool Bling::ConfigureHardware() {
   // star.WithColor(signals::RGBWColor (255, 0, 0));
   // _CANdle.SetControl (star);
     // Log errors.
-    return true;
+  return true;
 }
