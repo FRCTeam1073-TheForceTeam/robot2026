@@ -124,12 +124,15 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
     // Grab our delay in seconds:
     auto delay = units::time::second_t(frc::SmartDashboard::GetNumber("Start Delay", 0.0));
+    std::cerr << "**Auto Start Delay(s): " << delay.value() << std::endl;
 
     if (m_levelChooser.GetSelected() == startLine) {
-      return frc2::cmd::Sequence(frc2::cmd::Wait(delay), Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_ballisticShot));
+      return frc2::cmd::Sequence(frc2::cmd::Wait(delay), ZeroTurret(m_turret).ToPtr(), ZeroClimber(m_climber).ToPtr(), 
+                            Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_ballisticShot));
     }
     else if (m_levelChooser.GetSelected() == centerHub) {
-      return frc2::cmd::Sequence(frc2::cmd::Wait(delay), Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood));
+      return frc2::cmd::Sequence(frc2::cmd::Wait(delay), ZeroTurret(m_turret).ToPtr(), ZeroClimber(m_climber).ToPtr(), 
+                                Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood));
     }
 
     else if (
@@ -225,7 +228,6 @@ void RobotContainer::TestInit() {
   // Launch some commands for test mode:
   frc2::CommandScheduler::GetInstance().Schedule(TestFlywheel(m_flywheel, m_OI).ToPtr());
   frc2::CommandScheduler::GetInstance().Schedule(TestHood(m_shooterHood, m_OI).ToPtr());
-
 
 }
 
