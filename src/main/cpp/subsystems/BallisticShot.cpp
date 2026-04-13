@@ -14,8 +14,8 @@ BallisticShot::BallisticShot(std::shared_ptr<TargetFinder>& tf) : m_tf(tf) {
 BallisticShot::Shot BallisticShot::ComputeShot(units::length::meter_t range){
     Shot shot;
     auto tempHeightAboveHub = heightAboveHub;
-    if (range > 4_m) {
-        tempHeightAboveHub += 0.5_m;
+    if (range > 3_m) {
+        tempHeightAboveHub += (range - 3.0_m) * 0.5;
     }
     // hub is 6 feet tall or 1.829 meters
     auto maxHeight = tempHeightAboveHub + hubHeight - turretHeight;
@@ -34,13 +34,9 @@ BallisticShot::Shot BallisticShot::ComputeShot(units::length::meter_t range){
     shot.HoodAngle = hoodAngle + hood_offset;
 
     // Special case for our mechanism limits:
-    if (range < 2.0_m) {
-        shot.FlywheelSpeed *= 0.9; // Downscale speed for very short shots.
+    if (range < 1.5_m) {
+        shot.FlywheelSpeed *= 0.95; // Downscale speed for very short shots.
     }
-
-    //if (range > 4.8_m) {
-    //    shot.FlywheelSpeed *= 1.1; // TODO Would like to remove this hack at some point.
-    //}
 
     return shot;
     

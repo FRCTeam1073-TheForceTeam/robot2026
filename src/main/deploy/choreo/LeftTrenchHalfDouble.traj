@@ -523,13 +523,11 @@
   "splits":[0,198]
  },
  "events":[
-   {"name":"ZeroTurret", "from":{"target":0, "targetTimestamp":null, "offset":{"exp":"0.1 s", "val":0.1}}, "event":null},
-   {"name":"ZeroClimber", "from":{"target":0, "targetTimestamp":null, "offset":{"exp":"0.1 s", "val":0.1}}, "event":null},
-   {"name":"DeployIntake", "from":{"target":1, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"StartCollector", "from":{"target":1, "targetTimestamp":null, "offset":{"exp":"0.3 s", "val":0.3}}, "event":null},
-   {"name":"StopCollector", "from":{"target":5, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Shoot", "from":{"target":6, "targetTimestamp":null, "offset":{"exp":"-0.1 s", "val":-0.1}}, "event":null},
-   {"name":"StartCollector", "from":{"target":7, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"StopCollector", "from":{"target":11, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"Shoot", "from":{"target":12, "targetTimestamp":null, "offset":{"exp":"-1 s", "val":-1.0}}, "event":null}]
+   {"name":"DeployIntake", "from":{"target":1, "targetTimestamp":0.7507, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"StartCollector", "from":{"target":1, "targetTimestamp":0.7507, "offset":{"exp":"0.3 s", "val":0.3}}, "event":null},
+   {"name":"StopCollector", "from":{"target":5, "targetTimestamp":4.0572, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Shoot", "from":{"target":6, "targetTimestamp":5.44568, "offset":{"exp":"-0.1 s", "val":-0.1}}, "event":null},
+   {"name":"StartCollector", "from":{"target":7, "targetTimestamp":6.82655, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"StopCollector", "from":{"target":11, "targetTimestamp":9.96588, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"Shoot", "from":{"target":12, "targetTimestamp":11.27013, "offset":{"exp":"-1 s", "val":-1.0}}, "event":null}]
 }

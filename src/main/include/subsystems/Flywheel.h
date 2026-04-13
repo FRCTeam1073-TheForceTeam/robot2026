@@ -31,7 +31,7 @@ class Flywheel : public frc2::SubsystemBase {
   static constexpr units::meter_t wheelDiameter = units::inch_t(3.0);
   static constexpr auto TurnsPerMeter = units::turn_t(1) / (wheelDiameter * units::constants::pi); 
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0); // TODO: Get amps per newton
-  static constexpr auto CurrentLimit = units::current::ampere_t(35.0);
+  static constexpr auto CurrentLimit = units::current::ampere_t(60.0);
 
  struct Feedback {
       units::velocity::meters_per_second_t velocity; // TODO: Add other stuff to feedback

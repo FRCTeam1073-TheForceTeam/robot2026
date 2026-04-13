@@ -19,7 +19,7 @@ class SwerveControlConfig {
     static constexpr units::length::meter_t DriveWheelDiameter = 4_in;
     static constexpr auto DriveGearRatio = units::angle::turn_t(6.03)/ units::angle::turn_t(1.0);
     static constexpr auto DriveMetersPerMotorTurn = DriveWheelDiameter * units::constants::pi / (units::angle::turn_t(1.0) * DriveGearRatio);
-    static constexpr units::current::ampere_t DriveCurrentLimit = 60.0_A;
+    static constexpr units::current::ampere_t DriveCurrentLimit = 40.0_A;
     static constexpr units::voltage::volt_t DriveVoltageLimit = 8.5_V;
     static constexpr units::velocity::meters_per_second_t MaxModuleSpeed = 4.75_m/1.0_s; //4.85 mps
     // TODO: This is not yet calibrated.
