@@ -15,7 +15,7 @@ BallisticShot::Shot BallisticShot::ComputeShot(units::length::meter_t range){
     Shot shot;
     auto tempHeightAboveHub = heightAboveHub;
     if (range > 3_m) {
-        tempHeightAboveHub += (range - 3.0_m) * 0.6;
+        tempHeightAboveHub += (range - 3.0_m) * 0.5;
     }
     // hub is 6 feet tall or 1.829 meters
     auto maxHeight = tempHeightAboveHub + hubHeight - turretHeight;

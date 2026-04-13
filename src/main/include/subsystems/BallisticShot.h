@@ -45,9 +45,9 @@ class BallisticShot : public frc2::SubsystemBase {
   static constexpr units::length::meter_t heightAboveHub = 1.0_m;
   static constexpr units::length::meter_t hubHeight = 1.829_m;
   static constexpr units::length::meter_t turretHeight = 0.40_m;
-  static constexpr double efficiency = 0.81;   // Calibration for transfer of flywheel velocity to fuel.
+  static constexpr double efficiency = 0.80;   // Calibration for transfer of flywheel velocity to fuel.
   // static constexpr units::angle::radian_t hood_offset = -0.12_rad; // Calibration for shot exit vs. hood angle.
-  static constexpr units::angle::radian_t hood_offset = -0.18_rad; // Calibration for shot exit vs. hood angle.
+  static constexpr units::angle::radian_t hood_offset = -0.14_rad; // Calibration for shot exit vs. hood angle.
 
   static constexpr units::acceleration::meters_per_second_squared_t gravity = 9.81_mps_sq;
 

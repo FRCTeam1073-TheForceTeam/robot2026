@@ -20,7 +20,7 @@ _rotaterVelocitySig(_rotaterMotor.GetVelocity()),
 _rotaterCurrentSig(_rotaterMotor.GetTorqueCurrent()),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)), 
-_limiter(6.0_rad / 1_s) {
+_limiter(8.0_rad / 1_s) {
   // Extra implementation of subsystem constructor goes here.
 
   _feedback.targetPosition = 0.0_rad;

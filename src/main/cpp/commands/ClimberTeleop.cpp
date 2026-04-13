@@ -39,7 +39,15 @@ void ClimberTeleop::Execute() {
     input = 0.0;
   }
   
-  commandedPosition = currentPosition + (input * 0.1_m);
+  if(m_OI->GetOperatorViewButton()) {
+    commandedPosition = 0.0582_m;
+    currentPosition = commandedPosition;
+  } else if (m_OI->GetOperatorMenuButton()) {
+    commandedPosition = 0.0_m;
+    currentPosition = commandedPosition;
+  } else {
+    commandedPosition = currentPosition + (input * 0.1_m);
+  }
   
   if(m_zone->GetZones().contains("TRENCH"))
   {
