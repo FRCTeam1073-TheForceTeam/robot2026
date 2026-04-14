@@ -220,6 +220,81 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           )
         );
       }
+      else if (eventType == "CenterDepotToOutpostShoot") {
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(0.7_s),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+              frc2::cmd::Wait(1.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut()
+            )
+          ).WithTimeout(6.0_s)//TODO: find the optimal timeout for the autos
+        );
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            m_flywheel->SpinToSpeed(0.0_mps),
+            m_spindexer->SpinToSpeed(0.0_mps),
+            m_kicker->SpinToSpeed(0_mps),
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
+          )
+        );
+      }
+      else if (eventType == "OutpostPause") {
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(2.0_s)
+            )
+          ).WithTimeout(2.0_s)//TODO: find the optimal timeout for the autos
+        );
+      }
+      else if (eventType == "CenterOutpostToClimbShoot") {
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(0.7_s),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+              frc2::cmd::Wait(1.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn()
+            )
+          ).WithTimeout(3.5_s)//TODO: find the optimal timeout for the autos
+        );
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            m_flywheel->SpinToSpeed(0.0_mps),
+            m_spindexer->SpinToSpeed(0.0_mps),
+            m_kicker->SpinToSpeed(0_mps),
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
+          )
+        );
+      }
       else if (eventType == "ShootMovingOutpost") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
