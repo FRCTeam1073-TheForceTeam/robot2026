@@ -34,10 +34,10 @@ void FlywheelTeleop::Execute() {
     auto feedback = m_tf->getFeedback();
 
     if (feedback.passing) {
-      if ((feedback.rangeToTarget) < 290_in) {
+      if ((feedback.rangeToTarget) < 270_in) {
         m_flywheel->SetCommand(9.0_mps);
       } else {
-        m_flywheel->SetCommand(16.0_mps);
+        m_flywheel->SetCommand(15.0_mps);
       }
 
     } else if (m_OI->BallisticShotMode()) {

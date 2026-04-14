@@ -93,6 +93,7 @@ class RobotContainer {
   static const std::string rightTrenchHalfDouble;
   static const std::string rightTrenchHalfDoubleBump;
   static const std::string leftTrenchHalfDouble;
+  static const std::string leftTrenchHalfDoubleBump;
   static const std::string leftBumpFull;
 
   RobotContainer();

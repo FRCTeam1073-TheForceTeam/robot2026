@@ -386,7 +386,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            m_flywheel->SpinToSpeed(0.01_mps),
+            m_flywheel->SpinToSpeed(0.0_mps),
             m_spindexer->SpinToSpeed(0.0_mps),
             m_kicker->SpinToSpeed(0_mps),
             m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
@@ -416,7 +416,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(0.6_s),
               m_intake->IntakeIn()
             )
-          ).WithTimeout(5.0_s)
+          ).WithTimeout(5.4_s)
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
@@ -486,7 +486,6 @@ frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay) {
 }
 
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut) {
-
    return frc2::cmd::Sequence(
     putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
     // frc2::cmd::Wait(0.01_s),

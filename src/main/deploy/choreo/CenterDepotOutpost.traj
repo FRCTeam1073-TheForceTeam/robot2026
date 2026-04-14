@@ -337,8 +337,10 @@
   "splits":[0]
  },
  "events":[
-   {"name":"StartCollector", "from":{"target":2, "targetTimestamp":1.83991, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"DeployIntake", "from":{"target":2, "targetTimestamp":1.83991, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"StopCollector", "from":{"target":5, "targetTimestamp":5.43064, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"CenterShootOutpost", "from":{"target":7, "targetTimestamp":7.73677, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"ZeroTurret", "from":{"target":0, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"ZeroClimber", "from":{"target":0, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"StartCollector", "from":{"target":2, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"DeployIntake", "from":{"target":2, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"StopCollector", "from":{"target":5, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"CenterShootOutpost", "from":{"target":7, "targetTimestamp":null, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
