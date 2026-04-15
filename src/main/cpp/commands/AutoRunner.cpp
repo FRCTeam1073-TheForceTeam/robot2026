@@ -6,52 +6,53 @@
 #include "commands/Autos.h"
 
 AutoRunner::AutoRunner(
-  std::shared_ptr<Drivetrain> drivetrain,
-  std::shared_ptr<AprilTagFinder> Tags,
-  std::shared_ptr<Localizer> localizer,
-  std::shared_ptr<Kicker> kicker,
-  std::shared_ptr<Climber> climber,
-  std::shared_ptr<Flywheel> flywheel,
-  std::shared_ptr<ShooterHood> shooterHood,
-  std::shared_ptr<Spindexer> spindexer,
-  std::shared_ptr<Turret> turret,
-  std::shared_ptr<Collector> collector,
-  std::shared_ptr<Intake> intake,
-  std::shared_ptr<LaserCan> laser,
-  std::shared_ptr<ShooterTable> table,
-  std::shared_ptr<TargetFinder> finder,
-  std::shared_ptr<Bling> bling,
-  std::shared_ptr<BallisticShot> bs
-) :
-m_drivetrain(drivetrain),
-m_Tags(Tags),
-m_localizer(localizer),
-m_kicker(kicker),
-m_climber(climber),
-m_flywheel(flywheel),
-m_shooterHood(shooterHood),
-m_spindexer(spindexer),
-m_turret(turret),
-m_collector(collector),
-m_intake(intake),
-m_laser(laser),
-m_targetFinder(finder),
-m_shooterTable(table),
-m_bling(bling),
-m_bs(bs)
-{}
+    std::shared_ptr<Drivetrain> drivetrain,
+    std::shared_ptr<AprilTagFinder> Tags,
+    std::shared_ptr<Localizer> localizer,
+    std::shared_ptr<Kicker> kicker,
+    std::shared_ptr<Climber> climber,
+    std::shared_ptr<Flywheel> flywheel,
+    std::shared_ptr<ShooterHood> shooterHood,
+    std::shared_ptr<Spindexer> spindexer,
+    std::shared_ptr<Turret> turret,
+    std::shared_ptr<Collector> collector,
+    std::shared_ptr<Intake> intake,
+    std::shared_ptr<LaserCan> laser,
+    std::shared_ptr<ShooterTable> table,
+    std::shared_ptr<TargetFinder> finder,
+    std::shared_ptr<Bling> bling,
+    std::shared_ptr<BallisticShot> bs) : m_drivetrain(drivetrain),
+                                         m_Tags(Tags),
+                                         m_localizer(localizer),
+                                         m_kicker(kicker),
+                                         m_climber(climber),
+                                         m_flywheel(flywheel),
+                                         m_shooterHood(shooterHood),
+                                         m_spindexer(spindexer),
+                                         m_turret(turret),
+                                         m_collector(collector),
+                                         m_intake(intake),
+                                         m_laser(laser),
+                                         m_targetFinder(finder),
+                                         m_shooterTable(table),
+                                         m_bling(bling),
+                                         m_bs(bs)
+{
+}
 
-
-frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
+frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory)
+{
   std::vector<frc2::CommandPtr> autoRoutine;
 
-  if (trajectory.has_value()) {
+  if (trajectory.has_value())
+  {
     auto &traj = trajectory.value();
     auto events = traj.events;
 
     auto previousTime = 0_s;
-  
-    for(int e = 0; e < events.size(); e++) {
+
+    for (int e = 0; e < events.size(); e++)
+    {
       auto activeEvent = events.at(e);
       auto eventType = activeEvent.event;
 
@@ -60,429 +61,429 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       autoRoutine.emplace_back(SmartDashPrint(eventType).ToPtr());
 
       previousTime = activeEvent.timestamp;
-      if (eventType == "StartSpindexer") {
+      if (eventType == "StartSpindexer")
+      {
         autoRoutine.emplace_back(m_spindexer->SpinToSpeed(Spindexer::ShotSpeed));
       }
-      else if (eventType == "StartKicker") {
+      else if (eventType == "StartKicker")
+      {
         autoRoutine.emplace_back(m_kicker->SpinToSpeed(Kicker::ShotSpeed));
       }
-      else if (eventType == "StopSpindexer") {
+      else if (eventType == "StopSpindexer")
+      {
         autoRoutine.emplace_back(m_spindexer->SpinToSpeed(0_mps));
       }
-      else if (eventType == "StopKicker") {
+      else if (eventType == "StopKicker")
+      {
         autoRoutine.emplace_back(m_kicker->SpinToSpeed(0_mps));
       }
-      else if (eventType == "DeployIntake") {
+      else if (eventType == "DeployIntake")
+      {
         autoRoutine.emplace_back(m_intake->IntakeOut());
       }
-      else if (eventType == "RetractIntake") {
+      else if (eventType == "RetractIntake")
+      {
         autoRoutine.emplace_back(m_intake->IntakeIn());
-      } 
-      else if (eventType == "StartCollector") {
-        autoRoutine.emplace_back(m_collector->CollectSpeed(9.14_mps)); //TODO: maybe multiplier should be higher
-      } 
-      else if (eventType == "StopCollector") {
+      }
+      else if (eventType == "StartCollector")
+      {
+        autoRoutine.emplace_back(m_collector->CollectSpeed(9.14_mps)); // TODO: maybe multiplier should be higher
+      }
+      else if (eventType == "StopCollector")
+      {
         autoRoutine.emplace_back(m_collector->CollectSpeed(0_mps));
       }
-      else if (eventType == "ZeroTurret") {
+      else if (eventType == "ZeroTurret")
+      {
         autoRoutine.emplace_back(ZeroTurret(m_turret).ToPtr());
       }
-      else if (eventType == "ZeroClimber") {
+      else if (eventType == "ZeroClimber")
+      {
         autoRoutine.emplace_back(ZeroClimber(m_climber).ToPtr());
       }
-      else if (eventType == "BringUpClimber") {
+      else if (eventType == "BringUpClimber")
+      {
         autoRoutine.emplace_back(m_climber->ClimberPosition(0.0582_m));
       }
-      else if (eventType == "BringDownClimber") {
-        autoRoutine.emplace_back(m_climber->HoldDown());//TODO: change line of code
+      else if (eventType == "BringDownClimber")
+      {
+        autoRoutine.emplace_back(m_climber->HoldDown()); // TODO: change line of code
       }
-      else if (eventType == "Shoot") {
+      else if (eventType == "Shoot")
+      {
         autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(0.5_s),
-              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
-              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(1.3_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(1.3_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(1.3_s),
-              m_intake->IntakeIn()
-            )
-          ).WithTimeout(5.5_s)
+            frc2::cmd::Parallel(
+                Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+                frc2::cmd::Sequence(
+                    frc2::cmd::Wait(0.5_s),
+                    m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+                    m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+                    frc2::cmd::Wait(1.3_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(1.3_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(1.3_s),
+                    m_intake->IntakeIn()))
+                .WithTimeout(5.5_s));
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                m_intake->IntakeOut(),
+                m_flywheel->SpinToSpeed(0.0_mps),
+                m_spindexer->SpinToSpeed(0.0_mps),
+                m_kicker->SpinToSpeed(0.0_mps),
+                m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)));
+      }
+      else if (eventType == "Shoot-Outpost")
+      {
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+                frc2::cmd::Sequence(
+                    frc2::cmd::Wait(1.0_s),
+                    m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+                    m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+                    frc2::cmd::Wait(6.0_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(1.0_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(2.0_s),
+                    m_intake->IntakeIn()))
+                .WithTimeout(15_s));
+      }
+      else if (eventType == "Shoot-OutpostManual")
+      {
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                m_turret->RotateToPos(-140_deg),
+                m_flywheel->SpinToSpeed(10.5_mps),
+                m_shooterHood->SetHoodPosition(0.267_rad),
+                frc2::cmd::Sequence(
+                    frc2::cmd::Wait(1.0_s),
+                    m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+                    m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+                    frc2::cmd::Wait(6.0_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(1.0_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(2.0_s),
+                    m_intake->IntakeIn()))
+                .WithTimeout(15_s));
+      }
+      else if (eventType == "CenterShoot")
+      {
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+                frc2::cmd::Sequence(
+                    frc2::cmd::Wait(0.5_s),
+                    m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+                    m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+                    frc2::cmd::Wait(1.3_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(1.3_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(1.3_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(1.0_s),
+                    m_intake->IntakeOut()
+
+                        ))
+                .WithTimeout(6.75_s));
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                m_flywheel->SpinToSpeed(0.0_mps),
+                m_spindexer->SpinToSpeed(0.0_mps),
+                m_kicker->SpinToSpeed(0_mps),
+                m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)));
+      }
+      else if (eventType == "CenterShootOutpost")
+      {
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+                frc2::cmd::Sequence(
+                    frc2::cmd::Wait(0.85_s),
+                    m_spindexer->SpinToSpeed(6.5_mps),
+                    m_kicker->SpinToSpeed(6.6_mps),
+                    frc2::cmd::Wait(1.3_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(1.0_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(2.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(1.3_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(1.0_s),
+                    m_intake->IntakeOut()))
+                .WithTimeout(6.0_s) // TODO: find the optimal timeout for the autos
         );
         autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            m_intake->IntakeOut(),
-            m_flywheel->SpinToSpeed(0.0_mps),
-            m_spindexer->SpinToSpeed(0.0_mps),
-            m_kicker->SpinToSpeed(0.0_mps),
-            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
-          )
+            frc2::cmd::Parallel(
+                m_flywheel->SpinToSpeed(0.0_mps),
+                m_spindexer->SpinToSpeed(0.0_mps),
+                m_kicker->SpinToSpeed(0_mps),
+                m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)));
+      }
+      else if (eventType == "CenterDepotToOutpostShoot")
+      {
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+                frc2::cmd::Sequence(
+                    frc2::cmd::Wait(0.7_s),
+                    m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+                    m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+                    frc2::cmd::Wait(0.8_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut(),
+                    m_spindexer->SpinToSpeed(0.0_mps),
+                    m_kicker->SpinToSpeed(0.0_mps),
+                    frc2::cmd::Wait(0.5_s)))
+                .WithTimeout(6.6_s) // TODO: find the optimal timeout for the autos
+        );
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                m_flywheel->SpinToSpeed(0.0_mps),
+                m_spindexer->SpinToSpeed(0.0_mps),
+                m_kicker->SpinToSpeed(0_mps)
+              ));
+      }
+      else if (eventType == "CenterOutpostToClimbShoot")
+      {
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+                frc2::cmd::Sequence(
+                    frc2::cmd::Wait(1.0_s),
+                    m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+                    m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+                    frc2::cmd::Wait(1.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut()))
+                .WithTimeout(4.2_s));
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                m_flywheel->SpinToSpeed(0.0_mps),
+                m_spindexer->SpinToSpeed(0.0_mps),
+                m_kicker->SpinToSpeed(0_mps),
+                m_shooterHood->SetHoodPosition(ShooterHood::maxPosition),
+                ZeroHood(m_shooterHood).ToPtr()
+              ));
+      }
+      else if (eventType == "ShootMovingOutpost")
+      {
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+                frc2::cmd::Sequence(
+                    frc2::cmd::Wait(1.3_s),
+                    m_spindexer->SpinToSpeed(6.5_mps),
+                    m_kicker->SpinToSpeed(6.6_mps),
+                    frc2::cmd::Wait(0.5_s),
+                    m_bling->blingPurple(), // purple: about to go in
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    m_bling->blingWhite(),
+                    frc2::cmd::Wait(1.0_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(3.5_s),
+                    m_bling->blingPurple(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    m_bling->blingWhite(),
+                    frc2::cmd::Wait(2.0_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(1.5_s),
+                    m_bling->blingPurple(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    m_bling->blingWhite()))
+                .WithTimeout(15_s));
+      }
+      else if (eventType == "ShootDoublePath")
+      {
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+                frc2::cmd::Sequence(
+                    frc2::cmd::Wait(1.3_s),
+                    m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+                    m_kicker->SpinToSpeed(Kicker::ShotSpeed)))
+                .WithTimeout(5_s));
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                m_flywheel->SpinToSpeed(0.0_mps),
+                m_spindexer->SpinToSpeed(0.0_mps),
+                m_kicker->SpinToSpeed(0_mps),
+                m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)));
+      }
+      else if (eventType == "ShootBumpAuto")
+      {
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+                frc2::cmd::Sequence(
+                    m_collector->CollectSpeed(0.0_mps),
+                    frc2::cmd::Wait(1.2_s),
+                    m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+                    m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+                    frc2::cmd::Wait(1.0_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.5_s),
+                    m_intake->IntakeIn()))
+                .WithTimeout(10_s));
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                m_flywheel->SpinToSpeed(0.0_mps),
+                m_spindexer->SpinToSpeed(0.0_mps),
+                m_kicker->SpinToSpeed(0_mps),
+                m_shooterHood->SetHoodPosition(ShooterHood::maxPosition),
+                ZeroHood(m_shooterHood).ToPtr()
+            )
         );
       }
-      else if (eventType == "Shoot-Outpost") {
+      else if (eventType == "ShootBump")
+      {
         autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(1.0_s),
-              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
-              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(6.0_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(1.0_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(2.0_s),
-              m_intake->IntakeIn()
+            frc2::cmd::Parallel(
+                Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+                frc2::cmd::Sequence(
+                    frc2::cmd::Wait(1.2_s),
+                    m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+                    m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+                    frc2::cmd::Wait(1.2_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.6_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.6_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.6_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.6_s),
+                    m_intake->IntakeIn(),
+                    frc2::cmd::Wait(0.6_s),
+                    m_intake->IntakeOut(),
+                    frc2::cmd::Wait(0.6_s),
+                    m_intake->IntakeIn()))
+                .WithTimeout(5.4_s));
+        autoRoutine.emplace_back(
+            frc2::cmd::Parallel(
+                m_intake->IntakeOut(),
+                m_flywheel->SpinToSpeed(0.0_mps),
+                m_spindexer->SpinToSpeed(0.0_mps),
+                m_kicker->SpinToSpeed(0.0_mps),
+                m_shooterHood->SetHoodPosition(ShooterHood::maxPosition),
+                m_collector->CollectSpeed(9.14_mps),
+                ZeroHood(m_shooterHood).ToPtr()
             )
-          ).WithTimeout(15_s)
-        );
+          );
       }
-      else if (eventType == "Shoot-OutpostManual") {
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            m_turret->RotateToPos(-140_deg),
-            m_flywheel->SpinToSpeed(10.5_mps),
-            m_shooterHood->SetHoodPosition(0.267_rad),
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(1.0_s),
-              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
-              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(6.0_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(1.0_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(2.0_s),
-              m_intake->IntakeIn()
-            )
-          ).WithTimeout(15_s)
-        );
-      }
-      else if (eventType == "CenterShoot") {
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(0.5_s),
-              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
-              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(1.3_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(1.3_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(1.3_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(1.0_s),
-              m_intake->IntakeOut()
-              
-            )
-          ).WithTimeout(6.75_s)
-        );
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            m_flywheel->SpinToSpeed(0.0_mps),
-            m_spindexer->SpinToSpeed(0.0_mps),
-            m_kicker->SpinToSpeed(0_mps),
-            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
-          )
-        );
-      }
-      else if (eventType == "CenterShootOutpost") {
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(0.85_s),
-              m_spindexer->SpinToSpeed(6.5_mps),
-              m_kicker->SpinToSpeed(6.6_mps),
-              frc2::cmd::Wait(1.3_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(1.0_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(2.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(1.3_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(1.0_s),
-              m_intake->IntakeOut()
-            )
-          ).WithTimeout(6.0_s)//TODO: find the optimal timeout for the autos
-        );
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            m_flywheel->SpinToSpeed(0.0_mps),
-            m_spindexer->SpinToSpeed(0.0_mps),
-            m_kicker->SpinToSpeed(0_mps),
-            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
-          )
-        );
-      }
-      else if (eventType == "CenterDepotToOutpostShoot") {
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(0.7_s),
-              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
-              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(1.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut()
-            )
-          ).WithTimeout(3.8_s)//TODO: find the optimal timeout for the autos
-        );
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            m_flywheel->SpinToSpeed(0.0_mps),
-            m_spindexer->SpinToSpeed(0.0_mps),
-            m_kicker->SpinToSpeed(0_mps),
-            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
-          )
-        );
-      }
-      else if (eventType == "Pause") {
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            frc2::cmd::Sequence()
-          ).WithTimeout(0.5_s)//TODO: find the optimal timeout for the autos
-        );
-      }
-      else if (eventType == "CenterOutpostToClimbShoot") {
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(1.0_s),
-              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
-              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(1.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut()
-            )
-          ).WithTimeout(4.2_s)
-        );
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            m_flywheel->SpinToSpeed(0.0_mps),
-            m_spindexer->SpinToSpeed(0.0_mps),
-            m_kicker->SpinToSpeed(0_mps),
-            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
-          )
-        );
-      }
-      else if (eventType == "ShootMovingOutpost") {
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(1.3_s),
-              m_spindexer->SpinToSpeed(6.5_mps),
-              m_kicker->SpinToSpeed(6.6_mps),
-              frc2::cmd::Wait(0.5_s),
-              m_bling->blingPurple(), //purple: about to go in
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              m_bling->blingWhite(),
-              frc2::cmd::Wait(1.0_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(3.5_s),
-              m_bling->blingPurple(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              m_bling->blingWhite(),
-              frc2::cmd::Wait(2.0_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(1.5_s),
-              m_bling->blingPurple(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              m_bling->blingWhite()
-            )
-          ).WithTimeout(15_s)
-        );
-      }
-      else if (eventType == "ShootDoublePath") {
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(1.3_s),
-              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
-              m_kicker->SpinToSpeed(Kicker::ShotSpeed)
-            )
-          ).WithTimeout(5_s)
-        );
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            m_flywheel->SpinToSpeed(0.0_mps),
-            m_spindexer->SpinToSpeed(0.0_mps),
-            m_kicker->SpinToSpeed(0_mps),
-            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
-          )
-        );
-      }
-      else if (eventType == "ShootBumpAuto") {
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
-            frc2::cmd::Sequence(
-              m_collector->CollectSpeed(0.0_mps),
-              frc2::cmd::Wait(1.2_s),
-              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
-              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(1.0_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn()
-            )
-          ).WithTimeout(10_s)
-        );
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            m_flywheel->SpinToSpeed(0.0_mps),
-            m_spindexer->SpinToSpeed(0.0_mps),
-            m_kicker->SpinToSpeed(0_mps),
-            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
-          )
-        );
-      } 
-      else if (eventType == "ShootBump") {
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(1.2_s),
-              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
-              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(1.2_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.6_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.6_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.6_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.6_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.6_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.6_s),
-              m_intake->IntakeIn()
-            )
-          ).WithTimeout(5.4_s)
-        );
-        autoRoutine.emplace_back(
-          frc2::cmd::Parallel(
-            m_intake->IntakeOut(),
-            m_flywheel->SpinToSpeed(0.0_mps),
-            m_spindexer->SpinToSpeed(0.0_mps),
-            m_kicker->SpinToSpeed(0.0_mps),
-            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition),
-            m_collector->CollectSpeed(9.14_mps)
-          )
-        ); 
-      }  
     }
 
     return frc2::cmd::Sequence(std::move(autoRoutine));
   }
-  else {
+  else
+  {
     std::cerr << "Error: returning Idle Command" << std::endl;
     return frc2::cmd::Idle();
-  }  
+  }
 }
 
-frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t delay) {
+frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t delay)
+{
   std::vector<frc2::CommandPtr> parts;
-  
-  if (delay > 0.0_s) {
+
+  if (delay > 0.0_s)
+  {
     parts.emplace_back(std::move(frc2::cmd::Wait(delay))); // If we have a delay add it to the 1st part.
   }
 
-  if (trajectory.has_value()) {
+  if (trajectory.has_value())
+  {
     auto &traj = trajectory.value();
 
-    for (int s = 0; s < traj.splits.size(); s++) {
+    for (int s = 0; s < traj.splits.size(); s++)
+    {
       auto split_traj = traj.GetSplit(s);
 
       auto part = frc2::cmd::Parallel(
-        DrivePath(m_drivetrain, m_localizer, split_traj).ToPtr(),
-        EventParser(split_traj)
-      );
+          DrivePath(m_drivetrain, m_localizer, split_traj).ToPtr(),
+          EventParser(split_traj));
       parts.emplace_back(std::move(part));
     }
 
     return frc2::cmd::Sequence(std::move(parts));
   }
-  else {
+  else
+  {
     std::cerr << "Auto Runner Part Generator not have a trajectory" << std::endl;
     SmartDashPrint("No Trajectory");
     return frc2::cmd::Idle(); // You have to return something!?
   }
 }
 
-frc2::CommandPtr AutoRunner::Prep(units::time::second_t delay) {
+frc2::CommandPtr AutoRunner::Prep(units::time::second_t delay)
+{
   return frc2::cmd::Parallel(
-    frc2::cmd::Wait(delay + 0.01_s),
-    ZeroTurret(m_turret).ToPtr(),
-    ZeroClimber(m_climber).ToPtr(),
-    m_intake->IntakeOut()
-  ).WithTimeout(5.0_s); // Absolute maximum time...
+             frc2::cmd::Wait(delay + 0.01_s),
+             ZeroTurret(m_turret).ToPtr(),
+             ZeroClimber(m_climber).ToPtr(),
+             m_intake->IntakeOut())
+      .WithTimeout(5.0_s); // Absolute maximum time...
 }
 
-frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay) {
+frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay)
+{
   return frc2::cmd::Parallel(
-      frc2::cmd::Wait(delay + 0.01_s),
-      ZeroTurret(m_turret).ToPtr(),
-      ZeroClimber(m_climber).ToPtr()
-    ).WithTimeout(5.0_s); // Absolute maximum time...
+             frc2::cmd::Wait(delay + 0.01_s),
+             ZeroTurret(m_turret).ToPtr(),
+             ZeroClimber(m_climber).ToPtr())
+      .WithTimeout(5.0_s); // Absolute maximum time...
 }
 
-frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut) {
-   return frc2::cmd::Sequence(
-    putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
-    // frc2::cmd::Wait(0.01_s),
-    PartGenerator(trajectory, start_delay)
-  ).WithTimeout(30.0_s); // Absolute maximumtime... real auto is 20s.
+frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut)
+{
+  return frc2::cmd::Sequence(
+             putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
+             // frc2::cmd::Wait(0.01_s),
+             PartGenerator(trajectory, start_delay))
+      .WithTimeout(30.0_s); // Absolute maximumtime... real auto is 20s.
 }

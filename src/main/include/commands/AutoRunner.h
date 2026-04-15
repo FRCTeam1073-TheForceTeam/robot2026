@@ -35,6 +35,7 @@
 #include "commands/SmartDashPrint.h"
 #include "commands/ZeroTurret.h"
 #include "commands/ZeroClimber.h"
+#include "commands/ZeroHood.h"
 #include <frc2/command/WaitCommand.h>
 
 #include <choreo/Choreo.h>
