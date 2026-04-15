@@ -243,7 +243,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(0.5_s),
               m_intake->IntakeOut()
             )
-          ).WithTimeout(6.0_s)//TODO: find the optimal timeout for the autos
+          ).WithTimeout(3.8_s)//TODO: find the optimal timeout for the autos
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
@@ -254,13 +254,11 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           )
         );
       }
-      else if (eventType == "OutpostPause") {
+      else if (eventType == "Pause") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
-            frc2::cmd::Sequence(
-              frc2::cmd::Wait(2.0_s)
-            )
-          ).WithTimeout(2.0_s)//TODO: find the optimal timeout for the autos
+            frc2::cmd::Sequence()
+          ).WithTimeout(0.5_s)//TODO: find the optimal timeout for the autos
         );
       }
       else if (eventType == "CenterOutpostToClimbShoot") {
@@ -268,7 +266,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           frc2::cmd::Parallel(
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
-              frc2::cmd::Wait(0.7_s),
+              frc2::cmd::Wait(1.0_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
               m_kicker->SpinToSpeed(Kicker::ShotSpeed),
               frc2::cmd::Wait(1.5_s),
@@ -278,13 +276,9 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(0.5_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn()
+              m_intake->IntakeOut()
             )
-          ).WithTimeout(3.5_s)//TODO: find the optimal timeout for the autos
+          ).WithTimeout(4.2_s)
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
@@ -481,8 +475,8 @@ frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay) {
   return frc2::cmd::Parallel(
       frc2::cmd::Wait(delay + 0.01_s),
       ZeroTurret(m_turret).ToPtr(),
-      ZeroClimber(m_climber).ToPtr())
-  .WithTimeout(5.0_s); // Absolute maximum time...
+      ZeroClimber(m_climber).ToPtr()
+    ).WithTimeout(5.0_s); // Absolute maximum time...
 }
 
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut) {

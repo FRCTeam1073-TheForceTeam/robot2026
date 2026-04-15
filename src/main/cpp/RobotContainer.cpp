@@ -177,8 +177,11 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
         putIntakeOut = false;
       } else if (m_levelChooser.GetSelected() == leftTrenchHalfDoubleBump) {
         putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == rightTrenchHalfDouble) {
+        putIntakeOut = false;
       }
 
+      frc::SmartDashboard::PutBoolean("Autos/Put Intake Out", putIntakeOut);
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory, delay, putIntakeOut);
     }
