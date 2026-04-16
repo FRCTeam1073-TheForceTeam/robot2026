@@ -24,7 +24,7 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
     last_error = 0;
     last_snap_time = 0;
     angle_tolerance = 0.05_rad;
-    maximumRotationVelocity = 4.0_rad_per_s;
+    maximumRotationVelocity = 4.75_rad_per_s;
     torqueGate = 65_N;
     slowMode = false;
     lastYPressed = false;
@@ -117,12 +117,12 @@ void TeleopDrive::Execute() {
     }
 
     if (m_OI->GetDriverXButton()) {
-        maximumRotationVelocity = 4.75_rad_per_s;
+        maximumRotationVelocity = 5.5_rad_per_s;
     } else {
-        maximumRotationVelocity = 4.0_rad_per_s;
+        maximumRotationVelocity = 4.75_rad_per_s;
     }
 
-    if (maximumRotationVelocity == 4.75_rad_per_s) {
+    if (maximumRotationVelocity == 5.5_rad_per_s) {
         fastRotation = true;
     } else {
         fastRotation = false;

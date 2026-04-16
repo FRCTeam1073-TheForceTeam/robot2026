@@ -35,7 +35,7 @@
     {"x":{"exp":"0.3 m", "val":0.3}, "y":{"exp":"5.993967056274414 m", "val":5.993967056274414}, "heading":{"exp":"270 deg", "val":4.71238898038469}, "intervals":38, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"0.9182084202766418 m", "val":0.9182084202766418}, "y":{"exp":"5.073375701904297 m", "val":5.073375701904297}, "heading":{"exp":"-0.33929301249260796 rad", "val":-0.33929301249260796}, "intervals":34, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"2.1 m", "val":2.1}, "y":{"exp":"4.103022575378418 m", "val":4.103022575378418}, "heading":{"exp":"-1.3360739199223772 rad", "val":-1.3360739199223772}, "intervals":56, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"0.6693999171257019 m", "val":0.6693999171257019}, "y":{"exp":"0.7694648265838623 m", "val":0.7694648265838623}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":9, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"1.0693999171257018 m", "val":1.0693999171257018}, "y":{"exp":"0.7694648265838623 m", "val":0.7694648265838623}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":9, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"0.1790318 m", "val":0.1790318}, "y":{"exp":"0.7694648265838623 m", "val":0.7694648265838623}, "heading":{"exp":"180 deg", "val":3.141592653589793}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -341,6 +341,5 @@
    {"name":"StartCollector", "from":{"target":2, "targetTimestamp":1.87578, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"DeployIntake", "from":{"target":2, "targetTimestamp":1.87578, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"StopCollector", "from":{"target":5, "targetTimestamp":5.46679, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"TurretRotaton(-150)", "from":{"target":5, "targetTimestamp":5.46679, "offset":{"exp":"0.1 s", "val":0.1}}, "event":null},
    {"name":"CenterShootOutpost", "from":{"target":7, "targetTimestamp":7.77292, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }
