@@ -109,8 +109,10 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
       {
         autoRoutine.emplace_back(m_climber->HoldDown()); // TODO: change line of code
       }
-      else if (eventType == "Shoot")
-      {
+      else if (eventType == "TurretRotaton(-150)") {
+        autoRoutine.emplace_back(m_turret->RotateToPos(-150_deg));
+      }
+      else if (eventType == "Shoot") {
         autoRoutine.emplace_back(
             frc2::cmd::Parallel(
                 Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
