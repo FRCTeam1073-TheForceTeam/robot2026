@@ -59,7 +59,7 @@ void Flywheel::Periodic() {
 
         // Send commands to motors:
         _leadFlywheelMotor.SetControl(_flywheelVelocityVoltage.WithVelocity(motor_velocity));
-        _followFlywheelMotor.SetControl(controls::Follower(_leadFlywheelMotor.GetDeviceID(), signals::MotorAlignmentValue::Aligned));
+        _followFlywheelMotor.SetControl(controls::StrictFollower{_leadFlywheelMotor.GetDeviceID()});
 
     } else {
         // Send commands to motors:
@@ -87,17 +87,17 @@ bool Flywheel::ConfigureHardware() {
     configs.TorqueCurrent.PeakForwardTorqueCurrent = 10.0_A; // Set current limits to keep from breaking things.
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -10.0_A;
 
-    configs.Voltage.PeakForwardVoltage = 10.0_V; // These are pretty typical values, adjust as needed.
-    configs.Voltage.PeakReverseVoltage = -10.0_V;
+    configs.Voltage.PeakForwardVoltage = 9.5_V; // These are pretty typical values, adjust as needed.
+    configs.Voltage.PeakReverseVoltage = -9.5_V;
     
     configs.CurrentLimits.SupplyCurrentLimit = CurrentLimit;
     configs.CurrentLimits.SupplyCurrentLimitEnable = true;
 
     // Slot 0 for the velocity control loop:
     configs.Slot0.kV = 0.12; // Motor kV plus Boost for friction.
-    configs.Slot0.kP = 0.35;
+    configs.Slot0.kP = 0.3;
     configs.Slot0.kI = 0.0;
-    configs.Slot0.kD = 0.01;
+    configs.Slot0.kD = 0.015;
     configs.Slot0.kA = 0.0;
     configs.Slot0.kS = 0.02;
 
@@ -117,9 +117,6 @@ bool Flywheel::ConfigureHardware() {
     followerConfigs.MotorOutput.WithInverted(signals::InvertedValue::CounterClockwise_Positive); //change this if directions are the same.
     followerConfigs.CurrentLimits.SupplyCurrentLimit = CurrentLimit;
     followerConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-    followerConfigs.Voltage.PeakForwardVoltage = 10.0_V; // These are pretty typical values, adjust as needed.
-    followerConfigs.Voltage.PeakReverseVoltage = -10.0_V;
-    
     
     status = _followFlywheelMotor.GetConfigurator().Apply(followerConfigs, 1_s ); // 1 Second configuration timeout.
 

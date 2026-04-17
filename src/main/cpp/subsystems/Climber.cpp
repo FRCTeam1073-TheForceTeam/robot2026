@@ -20,9 +20,8 @@ _climberPositionSig(_climberMotor.GetPosition()),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
 _commandPositionVoltage(units::angle::turn_t(0.0)),
 _command(std::monostate()),
-_lastCommand(std::monostate()),
 _limiter(10.0_mps/1.0_s),
-_positionLimiter(0.3_m/1.0_s)
+_positionLimiter(0.104_m/1.0_s)
 {
   // Extra implementation of subsystem constructor goes here.
 
@@ -30,9 +29,6 @@ _positionLimiter(0.3_m/1.0_s)
   _commandVelocityVoltage.WithSlot(0);  // Velocity control loop uses these gains.
   _commandPositionVoltage.WithSlot(1); 
 
-  _feedback.position = 0.0_m;
-  _feedback.velocity = 0.0_mps;
-  _feedback.force = 0.0_N;
   // Do hardware configuration and track if it succeeds:
   _hardwareConfigured = ConfigureHardware();
   if (!_hardwareConfigured) {
@@ -46,11 +42,7 @@ _positionLimiter(0.3_m/1.0_s)
 void Climber::SetCommand(Command cmd) {
   // Sometimes you need to do something immediate to the hardware.
   // We can just set our target internal value.
-  _lastCommand = _command;
   _command = cmd;
-  if (std::holds_alternative<units::length::meter_t>(_command)){
-    frc::SmartDashboard::PutNumber("Climber/CommandedPosition", std::get<units::length::meter_t>(_command).value());
-  }
 }
 
 void Climber::Zero() {
@@ -70,6 +62,8 @@ void Climber::Periodic() {
   // Sample the hardware:
   BaseStatusSignal::RefreshAll(_climberVelocitySig, _climberCurrentSig, _climberPositionSig);
 
+  units::length::meter_t climberPosition(0_m);
+
   // Populate feedback cache:
   _feedback.force = _climberCurrentSig.GetValue() / AmpsPerNewton; // Convert from hardware units to subsystem units.
   _feedback.velocity = _climberVelocitySig.GetValue() / (TurnsPerMeter * GearRatio); // Convert from hardware units to subsystem units. 
@@ -83,7 +77,7 @@ void Climber::Periodic() {
     auto motorVel = limitedVel * TurnsPerMeter * GearRatio;
 
     _climberMotor.SetControl(_commandVelocityVoltage.WithVelocity(motorVel));
-    _positionLimiter.Reset(_feedback.position);
+
 
   } else if (std::holds_alternative<units::length::meter_t>(_command)) {
     auto limitedPos = _positionLimiter.Calculate(std::get<units::length::meter_t>(_command));
@@ -96,14 +90,12 @@ void Climber::Periodic() {
     _climberMotor.SetControl(_commandPositionVoltage.WithPosition(motorPosition));
 
     frc::SmartDashboard::PutNumber("Climber/TargetPostion", clamped_command.value());
-    frc::SmartDashboard::PutNumber("Climber/LastCommand", clamped_command.value());
 
   }
     else {
       // No command, so send a "null" neutral output command if there is no position or velocity provided as a command:
     _climberMotor.SetControl(controls::NeutralOut());
     _limiter.Reset(0.0_mps);
-    _positionLimiter.Reset(_feedback.position);
   }
 
   frc::SmartDashboard::PutNumber("Climber/Velocity(mps)", _feedback.velocity.value());  
@@ -114,10 +106,6 @@ void Climber::Periodic() {
 
 frc2::CommandPtr Climber::ClimberPosition(units::meter_t position) {
   return RunOnce([this, position] {SetCommand(position);});
-}
-
-frc2::CommandPtr Climber::HoldDown() {
-  return Run([this] {SetCommand(0.0_m);});
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.

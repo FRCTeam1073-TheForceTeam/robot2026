@@ -60,7 +60,7 @@
 
 #include <choreo/Choreo.h>
 #include <utilities/ShooterTable.h>
-#include "subsystems/BallisticShot.h"
+#include <utilities/BallisticShot.h>
 
 #include "subsystems/Climber.h"
 #include "commands/ClimberTeleop.h"
@@ -93,7 +93,6 @@ class RobotContainer {
   static const std::string rightTrenchHalfDouble;
   static const std::string rightTrenchHalfDoubleBump;
   static const std::string leftTrenchHalfDouble;
-  static const std::string leftTrenchHalfDoubleBump;
   static const std::string leftBumpFull;
 
   RobotContainer();
@@ -150,10 +149,8 @@ class RobotContainer {
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 
   // Just used for launching test commands, separate from OI and other controls.
-  frc2::CommandXboxController m_operatorController;
+  frc2::CommandXboxController _operatorController;
 
-  bool m_controlBindings;
-
-  double m_startDelaySeconds;
+  bool _controlBindings;
 
 };

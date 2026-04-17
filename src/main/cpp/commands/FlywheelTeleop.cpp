@@ -6,13 +6,12 @@
 #include "commands/FlywheelTeleop.h"
 #include <frc/DriverStation.h>
 #include <iostream>
-#include "subsystems/BallisticShot.h"
+#include "utilities/BallisticShot.h"
 
-FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<BallisticShot>& bs) :
+FlywheelTeleop::FlywheelTeleop(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<OI>& oi, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st) :
   m_flywheel(flywheel),
   m_OI(oi),
   m_tf(tf),
-  m_bs(bs),
   m_st(st) {
   maxVel = 10_mps;
   scale = 1.0;
@@ -34,15 +33,15 @@ void FlywheelTeleop::Execute() {
     auto feedback = m_tf->getFeedback();
 
     if (feedback.passing) {
-      if ((feedback.rangeToTarget) < 270_in) {
+      if ((feedback.rangeToTarget) < 290_in) {
         m_flywheel->SetCommand(9.0_mps);
       } else {
-        m_flywheel->SetCommand(15.0_mps);
+        m_flywheel->SetCommand(16.0_mps);
       }
 
     } else if (m_OI->BallisticShotMode()) {
       // Use ballistic shot:
-      auto shot = m_bs->GetShot();
+      auto shot = BallisticShot::ComputeShot(feedback.rangeToTarget); 
       m_flywheel->SetCommand(shot.FlywheelSpeed);
     } else {
       // Using lookup table:

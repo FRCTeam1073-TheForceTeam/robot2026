@@ -3,13 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/Autos/TrackFlywheel.h"
+#include "utilities/BallisticShot.h"
 
 
-TrackFlywheel::TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<BallisticShot>& bs, bool lookupTable) :
+TrackFlywheel::TrackFlywheel(std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, bool lookupTable) :
  m_flywheel(flywheel),
  m_tf(hf),
  m_st(st),
- m_bs(bs),
  m_lookupTable(lookupTable)
   {
   // Use addRequirements() here to declare subsystem dependencies.
@@ -30,7 +30,7 @@ void TrackFlywheel::Execute() {
   }
   else
   {
-    auto shot = m_bs->GetShot(); 
+    auto shot = BallisticShot::ComputeShot(range); 
     m_flywheel -> SetCommand(shot.FlywheelSpeed);
   }
 

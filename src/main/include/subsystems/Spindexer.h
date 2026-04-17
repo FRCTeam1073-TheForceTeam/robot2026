@@ -39,12 +39,12 @@ class Spindexer : public frc2::SubsystemBase {
   static constexpr auto GearRatio = units::angle::turn_t(3) / units::angle::turn_t(1);
   static constexpr auto TurnsPerMeter = units::angle::turn_t(1) / units::length::meter_t(0.1524 * std::numbers::pi);
   static constexpr auto AmpsPerNewton = units::current::ampere_t(10.0) / units::force::newton_t(1.0);
-  static constexpr auto CurrentLimit = units::current::ampere_t(35.0);
+  static constexpr auto CurrentLimit = units::current::ampere_t(50.0);
 
 
   // Standard shot speed:
   // static constexpr auto ShotSpeed = 6.3_mps;
-  static constexpr auto ShotSpeed = 3.7_mps;   // Smoother stream at lower speed, less popcorn.
+  static constexpr auto ShotSpeed = 4_mps;
 
 
   // The feedback for this subsystem provided as a struct.

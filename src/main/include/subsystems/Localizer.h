@@ -35,7 +35,7 @@ class Localizer : public frc2::SubsystemBase {
     public:
 
     // Between 0.0 and 1.0:  1.0 is unfiltered, 0.0 is no updates.
-    static constexpr double VelocityFilterAlpha = 0.7;
+    static constexpr double VelocityFilterAlpha = 0.65;
 
     Localizer(std::shared_ptr<Drivetrain> driveTrain, std::shared_ptr<AprilTagFinder> finder);
     

@@ -1,5 +1,5 @@
 #include "subsystems/TargetFinder.h"
-#include "subsystems/BallisticShot.h"
+#include "utilities/BallisticShot.h"
 
 // TODO: Fix.
 const frc::Pose2d TargetFinder::FIELD_CENTER = frc::Pose2d(291.00_in, 158.32_in, frc::Rotation2d());
@@ -23,10 +23,7 @@ const frc::Pose2d TargetFinder::BLUEPASS_R = frc::Pose2d(91_in, 80_in, frc::Rota
 const frc::Pose2d TargetFinder::BLUEPASS_L = frc::Pose2d(91_in, 237.5_in, frc::Rotation2d());
 
 
-void TargetFinder::SetBallisticShot(std::shared_ptr<BallisticShot>& m_ballisticShot)
-{
-    _ballisticShot = m_ballisticShot;
-}
+
 
 TargetFinder::TargetFinder(std::shared_ptr<Localizer>& localizer, std::shared_ptr<ZoneFinder>& zonefinder):
     _localizer(localizer), 
@@ -61,12 +58,11 @@ frc::Pose2d TargetFinder::getHubPos()
     auto tempLoc = TargetLoc.RelativeTo(turretPos);
     auto tempRange = tempLoc.Translation().Norm();
 
-    auto shot = _ballisticShot->GetShot();
-    frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * (shot.ShotTime), _localizer->getSpeeds().vy * (shot.ShotTime)); 
+    auto shot = BallisticShot::ComputeShot(tempRange);
+    frc::Translation2d velocityOffset (_localizer->getSpeeds().vx * shot.ShotTime, _localizer->getSpeeds().vy * shot.ShotTime); 
    
     // TODO: Use cross-product to compute relative velocity induced by rotation and add that term as well...
-    auto rotationOffset = tempLoc.Translation() * _localizer->getSpeeds().omega.value();
-    velocityOffset.operator+(rotationOffset) * 1.0;
+
     TargetLoc = TargetLoc.TransformBy(frc::Transform2d(-velocityOffset, frc::Rotation2d()));
 
     //turns into robo coordinates

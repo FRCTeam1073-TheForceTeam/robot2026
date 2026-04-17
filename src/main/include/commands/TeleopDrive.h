@@ -54,7 +54,6 @@ private:
     bool lastFieldCentricButton;
     bool slowMode;
     bool lastYPressed;
-    bool fastRotation;
 
     static constexpr units::velocity::meters_per_second_t maximumLinearVelocity = 3.5_mps;
     units::angular_velocity::radians_per_second_t maximumRotationVelocity;
