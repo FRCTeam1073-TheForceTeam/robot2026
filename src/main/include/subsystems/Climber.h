@@ -60,6 +60,8 @@ class Climber : public frc2::SubsystemBase {
 
   frc2::CommandPtr ClimberPosition(units::meter_t position);
 
+  frc2::CommandPtr HoldDown();
+
   // Constructor for the subsystem.
   Climber();
 

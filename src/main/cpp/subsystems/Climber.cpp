@@ -53,6 +53,9 @@ bool Climber::IsHooked() {
   return m_ClimberOnInput.Get();
 }
 
+frc2::CommandPtr Climber::HoldDown() {
+  return Run([this] {SetCommand(0.0_m);});
+}
 
 units::meter_t Climber::getClimberPosition() {
   return _feedback.position;
