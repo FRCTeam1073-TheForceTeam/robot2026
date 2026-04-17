@@ -29,11 +29,13 @@
 #include <utilities/ShooterTable.h>
 #include "subsystems/TargetFinder.h"
 #include "subsystems/Bling.h"
+#include "subsystems/BallisticShot.h"
 
 #include "commands/DrivePath.h"
 #include "commands/SmartDashPrint.h"
 #include "commands/ZeroTurret.h"
 #include "commands/ZeroClimber.h"
+#include "commands/ZeroHood.h"
 #include <frc2/command/WaitCommand.h>
 
 #include <choreo/Choreo.h>
@@ -66,10 +68,11 @@ class AutoRunner {
     std::shared_ptr<LaserCan> laser,
     std::shared_ptr<ShooterTable> table,
     std::shared_ptr<TargetFinder> finder,
-    std::shared_ptr<Bling> bling
+    std::shared_ptr<Bling> bling,
+    std::shared_ptr<BallisticShot> bs
   );
 
-  frc2::CommandPtr Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, bool putIntakeOut = true);
+  frc2::CommandPtr Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut = true);
 
 
 private:
@@ -88,12 +91,15 @@ private:
   std::shared_ptr<ShooterTable> m_shooterTable;
   std::shared_ptr<TargetFinder> m_targetFinder;
   std::shared_ptr<Bling> m_bling;
+  std::shared_ptr<BallisticShot> m_bs;
 
-  frc2::CommandPtr Prep();
+  // Prep with a delay before continuing. 5-second delay max.
+  frc2::CommandPtr Prep(units::time::second_t delay = 0.0_s);
 
-  frc2::CommandPtr PrepWithoutIntake();
+  // Prep with a delay before continuing. 5-second delay max.
+  frc2::CommandPtr PrepWithoutIntake(units::time::second_t delay = 0.0_s);
 
   frc2::CommandPtr EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
 
-  frc2::CommandPtr PartGenerator(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory);
+  frc2::CommandPtr PartGenerator(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t delay);
 };

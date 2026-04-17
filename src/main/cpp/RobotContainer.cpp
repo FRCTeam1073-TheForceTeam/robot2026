@@ -28,11 +28,13 @@ const std::string RobotContainer::rightTrenchHalfOutpost = "RightTrenchHalfOutpo
 const std::string RobotContainer::rightTrenchHalfDouble = "RightTrenchHalfDouble";
 const std::string RobotContainer::rightTrenchHalfDoubleBump = "RightTrenchHalfDoubleBump";
 const std::string RobotContainer::leftTrenchHalfDouble = "LeftTrenchHalfDouble";
+const std::string RobotContainer::leftTrenchHalfDoubleBump = "LeftTrenchHalfDoubleBump";
 const std::string RobotContainer::leftBumpFull = "LeftBumpFull";
 
 RobotContainer::RobotContainer() :
-_operatorController(1),
-_controlBindings(false)
+m_operatorController(1),
+m_controlBindings(false),
+m_startDelaySeconds(0.0)
 {
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
@@ -49,12 +51,14 @@ _controlBindings(false)
   m_fieldDisplay = std::make_shared<FieldMapDisplay>(m_drivetrain, m_localizer, m_fieldMap);
   m_zoneFinder = std::make_shared<ZoneFinder>(m_localizer);
   m_targetFinder = std::make_shared<TargetFinder>(m_localizer, m_zoneFinder);
+  m_ballisticShot = std::make_shared<BallisticShot>(m_targetFinder);
+
+  m_targetFinder->SetBallisticShot(m_ballisticShot);
 
   m_climber = std::make_shared<Climber>();
 
   m_shooterTable = std::make_shared<ShooterTable>();
-  m_ballisticShot = std::make_shared<BallisticShot>(m_targetFinder);
- std::cerr << "\tShooter table created..." << std::endl;
+  std::cerr << "\tShooter table created..." << std::endl;
   m_intake = std::make_shared<Intake>();
    std::cerr << "\tIntake created..." << std::endl;
   m_collector = std::make_shared<Collector>();
@@ -70,22 +74,22 @@ _controlBindings(false)
   //m_laser = std::make_shared<LaserCan>();
   m_bling = std::make_shared<Bling>();
    std::cerr << "\tBling created..." << std::endl;
-  m_autoRunner = std::make_shared<AutoRunner>(m_drivetrain, m_tagFinder, m_localizer, m_kicker, m_climber, m_flywheel, m_shooterHood, m_spindexer, m_turret, m_collector, m_intake, m_laser, m_shooterTable, m_targetFinder, m_bling);
+  m_autoRunner = std::make_shared<AutoRunner>(m_drivetrain, m_tagFinder, m_localizer, m_kicker, m_climber, m_flywheel, m_shooterHood, m_spindexer, m_turret, m_collector, m_intake, m_laser, m_shooterTable, m_targetFinder, m_bling, m_ballisticShot);
 
   std::cerr << "Mechanisms created..." << std::endl;
 
   // Assign default commands here after all subssytems are created to avoid using
   // uninitialized subsystems in default commands.
-  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_localizer).ToPtr());
-  m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI, m_zoneFinder).ToPtr());
-  m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI, m_drivetrain).ToPtr());
-  m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_kicker, m_OI).ToPtr());
-  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
-  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable, m_zoneFinder).ToPtr());
-  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable).ToPtr());
-  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder, m_drivetrain).ToPtr());
-  m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
-  m_bling->SetDefaultCommand(BlingTeleop(m_bling, m_OI).ToPtr());
+  // m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_localizer).ToPtr());
+  // m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI, m_zoneFinder).ToPtr());
+  // m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI, m_drivetrain).ToPtr());
+  // m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_kicker, m_OI).ToPtr());
+  // m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
+  // m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable, m_zoneFinder, m_ballisticShot).ToPtr());
+  // m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable, m_ballisticShot).ToPtr());
+  // m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder, m_drivetrain).ToPtr());
+  // m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
+  // m_bling->SetDefaultCommand(BlingTeleop(m_bling, m_OI).ToPtr());
 
   std::cerr << "\tDefault commands assigned..." << std::endl;
 
@@ -106,10 +110,12 @@ _controlBindings(false)
   m_levelChooser.AddOption("Right_Trench_Half_Double", rightTrenchHalfDouble);
   m_levelChooser.AddOption("Right_Trench_Half_Double_Bump", rightTrenchHalfDoubleBump);
   m_levelChooser.AddOption("Left_Trench_Half_Double", leftTrenchHalfDouble);
+  m_levelChooser.AddOption("Left_Trench_Half_Double_Bump", leftTrenchHalfDoubleBump);
   m_levelChooser.AddOption("Outliers_Right", leftBumpFull);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
+  frc::SmartDashboard::PutNumber("Start Delay(s)", m_startDelaySeconds);
   // Configure the button bindings
   ConfigureBindings();
   std::cerr << "Controller bindings configured..." << std::endl;
@@ -118,18 +124,17 @@ _controlBindings(false)
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   try {
 
-    // if(m_levelChooser.GetSelected() == weekZeroAuto) {
-    //   return WeekZeroAuto::Create(m_spindexer, m_kicker, m_flywheel, m_shooterHood, m_turret);
-    // }
-    // else if (m_levelChooser.GetSelected() == basicAuto){
-    //   return BasicAuto::Create(m_drivetrain, m_localizer);
-    // }
+    // Grab our delay in seconds:
+    auto delay = units::time::second_t(frc::SmartDashboard::GetNumber("Start Delay", 0.0));
+    std::cerr << "**Auto Start Delay(s): " << delay.value() << std::endl;
 
     if (m_levelChooser.GetSelected() == startLine) {
-      return Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable);
+      return frc2::cmd::Sequence(frc2::cmd::Wait(delay), ZeroTurret(m_turret).ToPtr(), ZeroClimber(m_climber).ToPtr(), 
+                            Autos::BasicAutoShot(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_ballisticShot));
     }
     else if (m_levelChooser.GetSelected() == centerHub) {
-      return Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood);
+      return frc2::cmd::Sequence(frc2::cmd::Wait(delay), ZeroTurret(m_turret).ToPtr(), ZeroClimber(m_climber).ToPtr(), 
+                                Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood));
     }
 
     else if (
@@ -147,6 +152,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
       m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump ||
       m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
+      m_levelChooser.GetSelected() == leftTrenchHalfDoubleBump ||
       m_levelChooser.GetSelected() == leftBumpFull 
 
     ) {
@@ -165,10 +171,19 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       } else if (m_levelChooser.GetSelected() == rightBumpSteal) {
         putIntakeOut = false;
 
+      } else if (m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump) {
+        putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == leftTrenchHalfDouble) {
+        putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == leftTrenchHalfDoubleBump) {
+        putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == rightTrenchHalfDouble) {
+        putIntakeOut = false;
       }
 
+      frc::SmartDashboard::PutBoolean("Autos/Put Intake Out", putIntakeOut);
       trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
-      return m_autoRunner->Create(trajectory,putIntakeOut);
+      return m_autoRunner->Create(trajectory, delay, putIntakeOut);
     }
   }
   catch (...) {
@@ -190,6 +205,18 @@ bool RobotContainer::DisabledPeriodic() {
 
 void RobotContainer::TeleopInit() {
 
+  // uninitialized subsystems in default commands.
+  m_drivetrain->SetDefaultCommand(TeleopDrive(m_drivetrain, m_OI, m_localizer).ToPtr());
+  m_intake->SetDefaultCommand(IntakeTeleop(m_intake, m_OI, m_zoneFinder).ToPtr());
+  m_collector->SetDefaultCommand(CollectorTeleop(m_collector, m_OI, m_drivetrain).ToPtr());
+  m_spindexer->SetDefaultCommand(SpindexerTeleop(m_spindexer, m_kicker, m_OI).ToPtr());
+  m_kicker->SetDefaultCommand(KickerTeleop(m_kicker, m_OI).ToPtr());
+  m_shooterHood->SetDefaultCommand(HoodTeleop(m_shooterHood, m_OI, m_targetFinder, m_shooterTable, m_zoneFinder, m_ballisticShot).ToPtr());
+  m_flywheel->SetDefaultCommand(FlywheelTeleop(m_flywheel,m_OI, m_targetFinder, m_shooterTable, m_ballisticShot).ToPtr());
+  m_turret->SetDefaultCommand(TurretTeleop(m_turret, m_OI, m_targetFinder, m_drivetrain).ToPtr());
+  m_climber->SetDefaultCommand(ClimberTeleop(m_climber, m_OI, m_zoneFinder).ToPtr());
+  m_bling->SetDefaultCommand(BlingTeleop(m_bling, m_OI).ToPtr());
+
   // If the turret has not yet seen zero, zero it now.
   if (!m_turret->GetFeedback().haveZero) {
      frc2::CommandScheduler::GetInstance().Schedule(ZeroTurret(m_turret).ToPtr());
@@ -197,12 +224,12 @@ void RobotContainer::TeleopInit() {
 
    // TODO: Consider moving this back to Configuire Bindings.
    // Moved here to de-conflict DPAD in test mode.
-  if (!_controlBindings) {
-    _operatorController.POVLeft().OnTrue(ZeroIntake(m_intake).ToPtr());
-    _operatorController.POVUp().OnTrue(ZeroTurret(m_turret).ToPtr());
-    _operatorController.POVRight().OnTrue(ZeroHood(m_shooterHood).ToPtr());
-    _operatorController.POVDown().OnTrue(ZeroClimber(m_climber).ToPtr());
-    _controlBindings = true;
+  if (!m_controlBindings) {
+    m_operatorController.POVLeft().OnTrue(ZeroIntake(m_intake).ToPtr());
+    m_operatorController.POVUp().OnTrue(ZeroTurret(m_turret).ToPtr());
+    m_operatorController.POVRight().OnTrue(ZeroHood(m_shooterHood).ToPtr());
+    m_operatorController.POVDown().OnTrue(ZeroClimber(m_climber).ToPtr());
+    m_controlBindings = true;
   }
 
 }
@@ -225,7 +252,6 @@ void RobotContainer::TestInit() {
   // Launch some commands for test mode:
   frc2::CommandScheduler::GetInstance().Schedule(TestFlywheel(m_flywheel, m_OI).ToPtr());
   frc2::CommandScheduler::GetInstance().Schedule(TestHood(m_shooterHood, m_OI).ToPtr());
-
 
 }
 

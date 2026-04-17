@@ -42,7 +42,7 @@ class BlingTeleop
    std::shared_ptr<Bling> m_bling;
    std::shared_ptr<OI> m_OI;
 
-  units::voltage::volt_t _currentVoltage;
+  units::voltage::volt_t _batteryVoltage;
 
-  static constexpr double alpha = 0.1; //TODO: tune alpha
+  static constexpr double alpha = 0.025; // TODO: tune alpha
 };

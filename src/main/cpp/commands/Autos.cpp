@@ -18,19 +18,20 @@ namespace Autos {
 frc2::CommandPtr TrackHub(std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, 
     std::shared_ptr<ShooterHood>& shooterHood, 
     std::shared_ptr<TargetFinder>& hf, 
-    std::shared_ptr<ShooterTable>& st){
+    std::shared_ptr<ShooterTable>& st,
+    std::shared_ptr<BallisticShot>& bs){
     return frc2::cmd::Parallel(
-        TrackHood(shooterHood, hf, st).ToPtr(),
-        TrackFlywheel(flywheel, hf, st).ToPtr(),
+        TrackHood(shooterHood, hf, st, bs).ToPtr(),
+        TrackFlywheel(flywheel, hf, st, bs).ToPtr(),
         TrackTurret(turret, hf).ToPtr()
     );
 }
 
-frc2::CommandPtr BasicAutoShot(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st){
+frc2::CommandPtr BasicAutoShot(std::shared_ptr<Spindexer>& spindexer, std::shared_ptr<Kicker>& kicker, std::shared_ptr<Turret>& turret, std::shared_ptr<Flywheel>& flywheel, std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& hf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<BallisticShot>& bs){
     return
         frc2::cmd::Parallel(
-        TrackHood(shooterHood, hf, st).ToPtr(),
-        TrackFlywheel(flywheel, hf, st).ToPtr(),
+        TrackHood(shooterHood, hf, st, bs).ToPtr(),
+        TrackFlywheel(flywheel, hf, st, bs).ToPtr(),
         TrackTurret(turret, hf).ToPtr(),
         frc2::cmd::Sequence(frc2::cmd::Wait(2.0_s), 
         frc2::cmd::Parallel(

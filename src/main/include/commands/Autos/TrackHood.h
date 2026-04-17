@@ -6,7 +6,7 @@
 #include "subsystems/ShooterHood.h"
 #include "utilities/ShooterTable.h"
 #include "subsystems/TargetFinder.h"
-#include "utilities/BallisticShot.h"
+#include "subsystems/BallisticShot.h"
 
 
 /**
@@ -16,7 +16,7 @@ class TrackHood
     : public frc2::CommandHelper<frc2::Command, TrackHood> {
  public:
 
-  TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st, bool shooterTable = false);
+  TrackHood(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<BallisticShot>& bs, bool shooterTable = false);
 
   void Initialize() override;
 
@@ -30,5 +30,6 @@ class TrackHood
   std::shared_ptr<ShooterHood> m_shooterHood;
   std::shared_ptr<TargetFinder> m_tf;
   std::shared_ptr<ShooterTable> m_st;
+  std::shared_ptr<BallisticShot> m_bs;
   bool m_shooterTable;
 };

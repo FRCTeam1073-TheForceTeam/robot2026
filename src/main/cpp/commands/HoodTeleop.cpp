@@ -3,14 +3,15 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/HoodTeleop.h"
-#include "utilities/BallisticShot.h"
+#include "subsystems/BallisticShot.h"
 
-HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<OI>&  OI, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<ZoneFinder>& zone) :
+HoodTeleop::HoodTeleop(std::shared_ptr<ShooterHood>& shooterHood, std::shared_ptr<OI>&  OI, std::shared_ptr<TargetFinder>& tf, std::shared_ptr<ShooterTable>& st, std::shared_ptr<ZoneFinder>& zone, std::shared_ptr<BallisticShot>& bs) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_shooterHood(shooterHood),
   m_OI(OI),
   m_tf(tf),
   m_st(st),
+  m_bs(bs),
   m_zone(zone) {
     level = 0;
     RightBumperPastState = false;
@@ -34,14 +35,14 @@ void HoodTeleop::Execute() {
     auto feedback = m_tf->getFeedback();
 
     if (feedback.passing) {
-      if ((feedback.rangeToTarget) < 290_in) {
+      if ((feedback.rangeToTarget) < 270_in) {
         m_shooterHood->SetCommand(ShooterHood::minPosition); 
       } else {
-        m_shooterHood->SetCommand((ShooterHood::minPosition) + 5_deg); 
+        m_shooterHood->SetCommand((ShooterHood::minPosition) + 13_deg); 
       }
     } else if (m_OI->BallisticShotMode()) {
       // Use ballistic shot:
-      auto shot = BallisticShot::ComputeShot(feedback.rangeToTarget); 
+      auto shot = m_bs->GetShot(); 
       m_shooterHood->SetCommand(shot.HoodAngle);
     } else {
       // Use lookup table:
