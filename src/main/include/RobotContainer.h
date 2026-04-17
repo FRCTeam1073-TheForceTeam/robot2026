@@ -96,6 +96,8 @@ class RobotContainer {
   static const std::string leftTrenchHalfDoubleBump;
   static const std::string leftBumpFull;
 
+  bool haveTraj;
+
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
@@ -103,6 +105,8 @@ class RobotContainer {
   // Called from Robot
   void DisabledInit();
   bool DisabledPeriodic();
+
+  bool LoadTrajectory();
 
   // Called from Robot
   void TeleopInit();

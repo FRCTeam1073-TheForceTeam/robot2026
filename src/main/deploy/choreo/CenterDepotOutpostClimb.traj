@@ -532,5 +532,5 @@
    {"name":"StopCollector", "from":{"target":7, "targetTimestamp":6.6952, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"DeployIntake", "from":{"target":8, "targetTimestamp":7.2347, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"CenterOutpostToClimbShoot", "from":{"target":10, "targetTimestamp":8.54909, "offset":{"exp":"0.5 s", "val":0.5}}, "event":null},
-   {"name":"BringDownClimber", "from":{"target":12, "targetTimestamp":15.08048, "offset":{"exp":"-0.2 s", "val":-0.2}}, "event":null}]
+   {"name":"BringDownClimber", "from":{"target":11, "targetTimestamp":12.31342, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
 }

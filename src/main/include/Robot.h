@@ -43,5 +43,6 @@ class Robot : public frc::TimedRobot {
 
   // Time left in shift:
   units::time::second_t shiftTime;
+  bool firstInit;
 
 };

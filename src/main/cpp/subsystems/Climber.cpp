@@ -116,8 +116,8 @@ frc2::CommandPtr Climber::ClimberPosition(units::meter_t position) {
   return RunOnce([this, position] {SetCommand(position);});
 }
 
-frc2::CommandPtr Climber::HoldDown() {
-  return Run([this] {SetCommand(0.0_m);});
+frc2::CommandPtr Climber::HoldVelocity(units::velocity::meters_per_second_t v) {
+  return Run([this, v] {SetCommand(v);});
 }
 
 // Helper function for configuring hardware from within the constructor of the subsystem.

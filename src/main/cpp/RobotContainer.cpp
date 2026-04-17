@@ -36,6 +36,8 @@ m_operatorController(1),
 m_controlBindings(false),
 m_startDelaySeconds(0.0)
 {
+  haveTraj = false;
+
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
   m_drivetrain = std::make_shared<Drivetrain>();
@@ -137,25 +139,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
                                 Autos::HubAuto(m_spindexer, m_kicker, m_turret, m_flywheel, m_shooterHood));
     }
 
-    else if (
-
-      // m_levelChooser.GetSelected() == exampleAuto ||
-      // m_levelChooser.GetSelected() == rightTrenchFull ||
-      // m_levelChooser.GetSelected() == leftTrenchFull ||
-      // m_levelChooser.GetSelected() == rightTrenchHalf ||
-      // m_levelChooser.GetSelected() == leftTrenchHalf ||
-
-      m_levelChooser.GetSelected() == centerDepotOutpost ||
-      m_levelChooser.GetSelected() == centerDepotOutpostClimb ||
-      m_levelChooser.GetSelected() == rightBumpSteal ||
-      m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
-      m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
-      m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump ||
-      m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
-      m_levelChooser.GetSelected() == leftTrenchHalfDoubleBump ||
-      m_levelChooser.GetSelected() == leftBumpFull 
-
-    ) {
+    else if (trajectory.has_value()) {
       
       bool putIntakeOut = true;
 
@@ -182,7 +166,6 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       }
 
       frc::SmartDashboard::PutBoolean("Autos/Put Intake Out", putIntakeOut);
-      trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
       return m_autoRunner->Create(trajectory, delay, putIntakeOut);
     }
   }
@@ -196,11 +179,29 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
 // Called from Robot
 void RobotContainer::DisabledInit() {
-
+  haveTraj = false;
 }
 
 bool RobotContainer::DisabledPeriodic() {
-  return false; // TODO: Fix return value.
+  frc::SmartDashboard::PutBoolean("Have Trajectory", haveTraj);
+  return LoadTrajectory();
+}
+
+bool RobotContainer::LoadTrajectory() {
+  if (!haveTraj &&
+      (m_levelChooser.GetSelected() == centerDepotOutpost ||
+      m_levelChooser.GetSelected() == centerDepotOutpostClimb ||
+      m_levelChooser.GetSelected() == rightBumpSteal ||
+      m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
+      m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
+      m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump ||
+      m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
+      m_levelChooser.GetSelected() == leftTrenchHalfDoubleBump ||
+      m_levelChooser.GetSelected() == leftBumpFull) 
+  ) {
+    trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
+  }
+  return trajectory.has_value();
 }
 
 void RobotContainer::TeleopInit() {

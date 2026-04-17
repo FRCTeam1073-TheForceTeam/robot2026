@@ -94,7 +94,13 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
         autoRoutine.emplace_back(m_climber->ClimberPosition(0.0582_m));
       }
       else if (eventType == "BringDownClimber") {
-        autoRoutine.emplace_back(m_climber->HoldDown());//TODO: change line of code
+        autoRoutine.emplace_back(
+          frc2::cmd::Sequence(
+            m_climber->HoldVelocity(-0.67_mps),
+            frc2::cmd::Wait(0.1_s),
+            m_climber->HoldVelocity(0.0_mps)
+          )
+        );
       }
       // else if (eventType == "TurretRotaton(-150)") {
       //   autoRoutine.emplace_back(m_turret->RotateToPos(-150_deg));
@@ -231,12 +237,6 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(0.7_s),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
               m_kicker->SpinToSpeed(Kicker::ShotSpeed),
-              frc2::cmd::Wait(1.5_s),
-              m_intake->IntakeIn(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut(),
-              frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeIn(),
               frc2::cmd::Wait(0.5_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(0.5_s),
@@ -244,7 +244,10 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(0.5_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut()
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s)
             )
           ).WithTimeout(3.8_s)//TODO: find the optimal timeout for the autos
         );
@@ -279,7 +282,9 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(0.5_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(0.5_s),
-              m_intake->IntakeOut()
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn()
             )
           ).WithTimeout(4.2_s)
         );
