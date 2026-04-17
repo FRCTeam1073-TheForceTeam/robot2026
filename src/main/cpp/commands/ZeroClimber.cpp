@@ -4,7 +4,6 @@
 
 #include "commands/ZeroClimber.h"
 #include <units/math.h>
-#include <iostream>
 
 ZeroClimber::ZeroClimber(std::shared_ptr<Climber> climber) :
   // Use addRequirements() here to declare subsystem dependencies.
@@ -13,10 +12,7 @@ ZeroClimber::ZeroClimber(std::shared_ptr<Climber> climber) :
 }
 
 // Called when the command is initially scheduled.
-void ZeroClimber::Initialize() {
-  std::cerr << "Zero Climber" << std::endl;
-
-}
+void ZeroClimber::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void ZeroClimber::Execute() {
@@ -29,8 +25,6 @@ void ZeroClimber::Execute() {
 void ZeroClimber::End(bool interrupted) {
   m_climber->Zero();
   m_climber->SetCommand(std::monostate());
-  std::cerr << "Zero Climber Finish" << std::endl;
-
 }
 
 // Returns true when the command should end.

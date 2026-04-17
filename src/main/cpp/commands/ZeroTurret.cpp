@@ -10,7 +10,6 @@ ZeroTurret::ZeroTurret(std::shared_ptr<Turret> turret) :
   m_turret(turret), 
   limit(3.5_Nm)  {
   AddRequirements({m_turret.get()});
-  
 }
 
 
