@@ -97,8 +97,10 @@ void Robot::DisabledInit() {
 void Robot::DisabledPeriodic() {
     // TODO: Integrate CppTrace library to speed up debugging
   try {
+    frc::SmartDashboard::PutBoolean("Autos/Have Trajectory", m_container->haveTraj);
+    frc::SmartDashboard::PutString("Autos/Trajectory", m_container->autoTraj);
     // Delegate to container function:
-    if(!m_container->haveTraj && firstInit) {
+    if(m_container->m_levelChooser.GetSelected() != m_container->autoTraj) {
       m_container->haveTraj = m_container->DisabledPeriodic();
     }
   } catch (std::exception& e) {

@@ -96,7 +96,12 @@ class RobotContainer {
   static const std::string leftTrenchHalfDoubleBump;
   static const std::string leftBumpFull;
 
+  static const std::string basicTest;
+
+  frc::SendableChooser<std::string> m_levelChooser;
+
   bool haveTraj;
+  std::string autoTraj;
 
   RobotContainer();
 
@@ -148,8 +153,6 @@ class RobotContainer {
   std::shared_ptr<AutoRunner> m_autoRunner;
   
   bool haveInitStartPos;
-
-  frc::SendableChooser<std::string> m_levelChooser;
 
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 

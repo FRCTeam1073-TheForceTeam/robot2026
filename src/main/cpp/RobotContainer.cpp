@@ -31,12 +31,15 @@ const std::string RobotContainer::leftTrenchHalfDouble = "LeftTrenchHalfDouble";
 const std::string RobotContainer::leftTrenchHalfDoubleBump = "LeftTrenchHalfDoubleBump";
 const std::string RobotContainer::leftBumpFull = "LeftBumpFull";
 
+const std::string RobotContainer::basicTest = "BasicTest";
+
 RobotContainer::RobotContainer() :
 m_operatorController(1),
 m_controlBindings(false),
 m_startDelaySeconds(0.0)
 {
   haveTraj = false;
+  autoTraj = "none";
 
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
@@ -114,6 +117,7 @@ m_startDelaySeconds(0.0)
   m_levelChooser.AddOption("Left_Trench_Half_Double", leftTrenchHalfDouble);
   m_levelChooser.AddOption("Left_Trench_Half_Double_Bump", leftTrenchHalfDoubleBump);
   m_levelChooser.AddOption("Outliers_Right", leftBumpFull);
+  m_levelChooser.AddOption("Basic Test", basicTest);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -163,9 +167,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
         putIntakeOut = false;
       } else if (m_levelChooser.GetSelected() == rightTrenchHalfDouble) {
         putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == basicTest) {
+        putIntakeOut = false;
       }
 
       frc::SmartDashboard::PutBoolean("Autos/Put Intake Out", putIntakeOut);
+      frc::SmartDashboard::PutNumber("Autos/Start Auto", frc::Timer::GetFPGATimestamp().value());
       return m_autoRunner->Create(trajectory, delay, putIntakeOut);
     }
   }
@@ -183,13 +190,12 @@ void RobotContainer::DisabledInit() {
 }
 
 bool RobotContainer::DisabledPeriodic() {
-  frc::SmartDashboard::PutBoolean("Have Trajectory", haveTraj);
   return LoadTrajectory();
 }
 
 bool RobotContainer::LoadTrajectory() {
-  if (!haveTraj &&
-      (m_levelChooser.GetSelected() == centerDepotOutpost ||
+  if (
+      m_levelChooser.GetSelected() == centerDepotOutpost ||
       m_levelChooser.GetSelected() == centerDepotOutpostClimb ||
       m_levelChooser.GetSelected() == rightBumpSteal ||
       m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
@@ -197,8 +203,11 @@ bool RobotContainer::LoadTrajectory() {
       m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump ||
       m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
       m_levelChooser.GetSelected() == leftTrenchHalfDoubleBump ||
-      m_levelChooser.GetSelected() == leftBumpFull) 
+      m_levelChooser.GetSelected() == leftBumpFull ||
+      m_levelChooser.GetSelected() == basicTest
   ) {
+    autoTraj = m_levelChooser.GetSelected();
+    frc::SmartDashboard::PutNumber("Autos/Grabed Choreo", frc::Timer::GetFPGATimestamp().value());
     trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
   }
   return trajectory.has_value();
