@@ -96,6 +96,8 @@ class RobotContainer {
   static const std::string leftTrenchHalfDoubleBump;
   static const std::string leftBumpFull;
 
+  static const std::string basicAuto;
+
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
