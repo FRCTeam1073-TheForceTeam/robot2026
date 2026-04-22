@@ -30,6 +30,8 @@ const std::string RobotContainer::rightTrenchHalfDoubleBump = "RightTrenchHalfDo
 const std::string RobotContainer::leftTrenchHalfDouble = "LeftTrenchHalfDouble";
 const std::string RobotContainer::leftTrenchHalfDoubleBump = "LeftTrenchHalfDoubleBump";
 const std::string RobotContainer::leftBumpFull = "LeftBumpFull";
+const std::string RobotContainer::rightBumpFollow = "RightBumpFollow";
+
 
 const std::string RobotContainer::basicAuto = "BasicAuto";
 
@@ -115,6 +117,7 @@ m_startDelaySeconds(0.0)
   m_levelChooser.AddOption("Left_Trench_Half_Double_Bump", leftTrenchHalfDoubleBump);
   m_levelChooser.AddOption("Outliers_Right", leftBumpFull);
   m_levelChooser.AddOption("Basic Auto", basicAuto);
+  m_levelChooser.AddOption("Right_Bump_Follow", rightBumpFollow);
 
   frc::SmartDashboard::PutData("Level Chooser", &m_levelChooser);
 
@@ -157,7 +160,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
       m_levelChooser.GetSelected() == leftTrenchHalfDoubleBump ||
       m_levelChooser.GetSelected() == leftBumpFull ||
-      m_levelChooser.GetSelected() == basicAuto
+      m_levelChooser.GetSelected() == basicAuto ||
+      m_levelChooser.GetSelected() == rightBumpFollow
     ) {
       
       bool putIntakeOut = true;
