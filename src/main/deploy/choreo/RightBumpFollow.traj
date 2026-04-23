@@ -432,5 +432,8 @@
  },
  "events":[
    {"name":"StartCollector", "from":{"target":1, "targetTimestamp":1.0101, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
-   {"name":"StopCollector", "from":{"target":6, "targetTimestamp":5.2027, "offset":{"exp":"0 s", "val":0.0}}, "event":null}]
+   {"name":"StopCollector", "from":{"target":6, "targetTimestamp":5.2027, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"CenterShoot", "from":{"target":7, "targetTimestamp":6.22241, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"BringUpClimber", "from":{"target":8, "targetTimestamp":8.85032, "offset":{"exp":"-0.3 s", "val":-0.3}}, "event":null},
+   {"name":"BringDownClimber", "from":{"target":9, "targetTimestamp":11.34313, "offset":{"exp":"-0.1 s", "val":-0.1}}, "event":null}]
 }
