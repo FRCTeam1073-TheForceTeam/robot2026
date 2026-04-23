@@ -38,8 +38,11 @@ m_laser(laser),
 m_targetFinder(finder),
 m_shooterTable(table),
 m_bling(bling),
-m_bs(bs)
-{}
+m_bs(bs),
+firstPart(frc2::cmd::Sequence())
+{
+  hasFirstPart = false;
+}
 
 
 frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
@@ -458,7 +461,15 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
         DrivePath(m_drivetrain, m_localizer, split_traj).ToPtr(),
         EventParser(split_traj)
       );
-      parts.emplace_back(std::move(part));
+
+      if(!hasFirstPart) {
+        hasFirstPart = true;
+        firstPart = std::move(part);
+      }
+      else {
+        frc::SmartDashboard::PutNumber("Autos/ Auto S", s);
+        parts.emplace_back(std::move(part));
+      }
     }
 
     return frc2::cmd::Sequence(std::move(parts));
@@ -488,9 +499,13 @@ frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay) {
 }
 
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut) {
-   return frc2::cmd::Sequence(
-    putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
-    // frc2::cmd::Wait(0.01_s),
-    PartGenerator(trajectory, start_delay)
+  auto partsList = PartGenerator(trajectory, start_delay);
+
+  return frc2::cmd::Sequence(
+    frc2::cmd::Parallel(
+      putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
+      frc2::cmd::Sequence(std::move(firstPart))
+    ),
+    frc2::cmd::Sequence(std::move(partsList))
   ).WithTimeout(30.0_s); // Absolute maximumtime... real auto is 20s.
 }

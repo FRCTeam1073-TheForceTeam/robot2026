@@ -92,6 +92,9 @@ private:
   std::shared_ptr<Bling> m_bling;
   std::shared_ptr<BallisticShot> m_bs;
 
+  frc2::CommandPtr firstPart;
+  bool hasFirstPart;
+
   // Prep with a delay before continuing. 5-second delay max.
   frc2::CommandPtr Prep(units::time::second_t delay = 0.0_s);
 
