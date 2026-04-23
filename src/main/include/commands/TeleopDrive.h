@@ -58,7 +58,7 @@ private:
     bool slowMode;
     bool lastYPressed;
     bool lastXPressed;
-    bool fastRotation;
+    bool slowRotation;
 
     static constexpr units::velocity::meters_per_second_t maximumLinearVelocity = 4.5_mps;
     static constexpr units::angular_velocity::radians_per_second_t maximumRotationVelocity = 2_rad_per_s * std::numbers::pi;
