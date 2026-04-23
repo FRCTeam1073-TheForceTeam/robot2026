@@ -39,9 +39,13 @@ m_targetFinder(finder),
 m_shooterTable(table),
 m_bling(bling),
 m_bs(bs),
-firstPart(frc2::cmd::Sequence())
+// Create prep commands:
+m_zeroTurret(ZeroTurret(m_turret).ToPtr()),
+m_zeroClimber(ZeroClimber(m_climber).ToPtr()),
+m_intakeOut(m_intake->IntakeOut())
 {
-  hasFirstPart = false;
+
+
 }
 
 
@@ -461,15 +465,8 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
         DrivePath(m_drivetrain, m_localizer, split_traj).ToPtr(),
         EventParser(split_traj)
       );
-
-      if(!hasFirstPart) {
-        hasFirstPart = true;
-        firstPart = std::move(part);
-      }
-      else {
-        frc::SmartDashboard::PutNumber("Autos/ Auto S", s);
-        parts.emplace_back(std::move(part));
-      }
+      
+      parts.emplace_back(std::move(part));
     }
 
     return frc2::cmd::Sequence(std::move(parts));
@@ -484,17 +481,17 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
 frc2::CommandPtr AutoRunner::Prep(units::time::second_t delay) {
   return frc2::cmd::Parallel(
     frc2::cmd::Wait(delay + 0.01_s),
-    ZeroTurret(m_turret).ToPtr(),
-    ZeroClimber(m_climber).ToPtr(),
-    m_intake->IntakeOut()
+    frc2::ScheduleCommand(m_zeroTurret.get()).ToPtr(),
+    frc2::ScheduleCommand(m_zeroClimber.get()).ToPtr(),
+    frc2::ScheduleCommand(m_intakeOut.get()).ToPtr()
   ).WithTimeout(5.0_s); // Absolute maximum time...
 }
 
 frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay) {
   return frc2::cmd::Parallel(
       frc2::cmd::Wait(delay + 0.01_s),
-      ZeroTurret(m_turret).ToPtr(),
-      ZeroClimber(m_climber).ToPtr()
+    frc2::ScheduleCommand(m_zeroTurret.get()).ToPtr(),
+    frc2::ScheduleCommand(m_zeroClimber.get()).ToPtr()
     ).WithTimeout(5.0_s); // Absolute maximum time...
 }
 
@@ -502,10 +499,7 @@ frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::Swe
   auto partsList = PartGenerator(trajectory, start_delay);
 
   return frc2::cmd::Sequence(
-    frc2::cmd::Parallel(
-      putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
-      frc2::cmd::Sequence(std::move(firstPart))
-    ),
+    putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
     frc2::cmd::Sequence(std::move(partsList))
   ).WithTimeout(30.0_s); // Absolute maximumtime... real auto is 20s.
 }

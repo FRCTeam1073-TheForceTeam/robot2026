@@ -36,6 +36,7 @@
 #include "commands/ZeroTurret.h"
 #include "commands/ZeroClimber.h"
 #include <frc2/command/WaitCommand.h>
+#include <frc2/command/ScheduleCommand.h>
 
 #include <choreo/Choreo.h>
 
@@ -92,8 +93,10 @@ private:
   std::shared_ptr<Bling> m_bling;
   std::shared_ptr<BallisticShot> m_bs;
 
-  frc2::CommandPtr firstPart;
-  bool hasFirstPart;
+  // Prep commands:
+  frc2::CommandPtr m_zeroTurret;
+  frc2::CommandPtr m_zeroClimber;
+  frc2::CommandPtr m_intakeOut;
 
   // Prep with a delay before continuing. 5-second delay max.
   frc2::CommandPtr Prep(units::time::second_t delay = 0.0_s);
