@@ -238,7 +238,7 @@ void RobotContainer::TeleopInit() {
     m_operatorController.POVDown().OnTrue(ZeroClimber(m_climber).ToPtr());
     m_controlBindings = true;
   }
-
+  m_climber->Zero();
 }
 
 
