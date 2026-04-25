@@ -10,26 +10,20 @@
 #include "subsystems/Climber.h"
 
 /**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
+ * Zero climber command.
  */
 class ZeroClimber
     : public frc2::CommandHelper<frc2::Command, ZeroClimber> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
 
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new ZeroClimber command.
    *
    * @param climber The subsystem used by this command.
+   * @param unsafe If unsafe, don't require the subsystem. Use only for auto prep.
    */
 
-  explicit ZeroClimber(std::shared_ptr<Climber> climber);
+  explicit ZeroClimber(std::shared_ptr<Climber> climber, bool unsafe = false);
 
   void Initialize() override;
 

@@ -5,12 +5,13 @@
 #include "commands/ZeroTurret.h"
 #include <units/math.h>
 
-ZeroTurret::ZeroTurret(std::shared_ptr<Turret> turret) :
+ZeroTurret::ZeroTurret(std::shared_ptr<Turret> turret, bool unsafe) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_turret(turret), 
   limit(3.5_Nm)  {
-  AddRequirements({m_turret.get()});
-  
+    if (!unsafe) {
+      AddRequirements({m_turret.get()});
+    }
 }
 
 
@@ -27,7 +28,12 @@ void ZeroTurret::Execute() {
 
 // Called once the command ends or is interrupted.
 void ZeroTurret::End(bool interrupted) {
-  std::cerr << "Finished Zero Turret" << std::endl;
+  
+  if (interrupted) {
+    std::cerr << "ZeroTurret Interrupted!! " << std::endl;
+  } else {
+    std::cerr << "ZeroTurret Finished" << std::endl;
+  }
   m_turret->Zero();
   m_turret->SetCommand(std::monostate());
 }

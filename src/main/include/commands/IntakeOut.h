@@ -6,24 +6,24 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include "subsystems/Turret.h"
+#include "subsystems/Intake.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <iostream>
 
 /**
- * Zero the turret by driving into the hard stop, seeing the current spike and resetting position.
+ * Puts the intake out but can do it unsafely. Used for auto prep.
  */
-class ZeroTurret
-    : public frc2::CommandHelper<frc2::Command, ZeroTurret> {
+class IntakeOut
+    : public frc2::CommandHelper<frc2::Command, IntakeOut> {
 public:
 
       /**
-       * Create a ZeroTurret Command
+       * Create a IntakeOut Command
        * 
-       * @param turret - the subsystem handle.
+       * @param intake - the subsystem handle.
        * @param unsafe - Don't require the subsystem. Don't use except in auto prep!
        */
-  explicit ZeroTurret(std::shared_ptr<Turret> turret, bool unsafe = false);
+  explicit IntakeOut(std::shared_ptr<Intake> intake, bool unsafe = false);
 
   void Initialize() override;
 
@@ -34,6 +34,5 @@ public:
   bool IsFinished() override;
   
 private:
-  std::shared_ptr<Turret> m_turret;
-  units::torque::newton_meter_t limit;
+  std::shared_ptr<Intake> m_intake;
 };

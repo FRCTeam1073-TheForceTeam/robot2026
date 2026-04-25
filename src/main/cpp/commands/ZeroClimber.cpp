@@ -6,10 +6,12 @@
 #include <units/math.h>
 #include <iostream>
 
-ZeroClimber::ZeroClimber(std::shared_ptr<Climber> climber) :
+ZeroClimber::ZeroClimber(std::shared_ptr<Climber> climber, bool unsafe) :
   // Use addRequirements() here to declare subsystem dependencies.
   m_climber(climber) {
-  AddRequirements({m_climber.get()});
+    if (!unsafe) {
+      AddRequirements({m_climber.get()});
+    }
 }
 
 // Called when the command is initially scheduled.
@@ -27,10 +29,13 @@ void ZeroClimber::Execute() {
 
 // Called once the command ends or is interrupted.
 void ZeroClimber::End(bool interrupted) {
+  if (interrupted) {
+    std::cerr << "Zero Climber Interrupted" << std::endl;
+  } else {
+    std::cerr << "Zero Climber Finished" << std::endl;
+  }
   m_climber->Zero();
   m_climber->SetCommand(std::monostate());
-  std::cerr << "Zero Climber Finish" << std::endl;
-
 }
 
 // Returns true when the command should end.

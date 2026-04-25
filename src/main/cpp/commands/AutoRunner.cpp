@@ -39,10 +39,10 @@ m_targetFinder(finder),
 m_shooterTable(table),
 m_bling(bling),
 m_bs(bs),
-// Create prep commands:
-m_zeroTurret(ZeroTurret(m_turret).ToPtr()),
-m_zeroClimber(ZeroClimber(m_climber).ToPtr()),
-m_intakeOut(m_intake->IntakeOut())
+// Create prep commands: Unsafe versionsjust run in parallel with no requirements!!
+m_zeroTurret(ZeroTurret(m_turret, true).ToPtr()),     // Unsafe version of command.
+m_zeroClimber(ZeroClimber(m_climber, true).ToPtr()),  // Unsafe version of command.
+m_intakeOut(IntakeOut(m_intake, true).ToPtr())       // Unsafe version of command.
 {
 
 
@@ -481,17 +481,17 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
 frc2::CommandPtr AutoRunner::Prep(units::time::second_t delay) {
   return frc2::cmd::Parallel(
     frc2::cmd::Wait(delay + 0.01_s),
-    frc2::ScheduleCommand(m_zeroTurret.get()).ToPtr(),
-    frc2::ScheduleCommand(m_zeroClimber.get()).ToPtr(),
-    frc2::ScheduleCommand(m_intakeOut.get()).ToPtr()
+    frc2::ScheduleCommand(m_zeroTurret.get()).ToPtr(),  // Unsafe command
+    frc2::ScheduleCommand(m_zeroClimber.get()).ToPtr(), // Unsafe command
+    frc2::ScheduleCommand(m_intakeOut.get()).ToPtr()    // Unsafe command
   ).WithTimeout(5.0_s); // Absolute maximum time...
 }
 
 frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay) {
   return frc2::cmd::Parallel(
       frc2::cmd::Wait(delay + 0.01_s),
-    frc2::ScheduleCommand(m_zeroTurret.get()).ToPtr(),
-    frc2::ScheduleCommand(m_zeroClimber.get()).ToPtr()
+    frc2::ScheduleCommand(m_zeroTurret.get()).ToPtr(), // Unsafe command  
+    frc2::ScheduleCommand(m_zeroClimber.get()).ToPtr() // Unsafe command
     ).WithTimeout(5.0_s); // Absolute maximum time...
 }
 
