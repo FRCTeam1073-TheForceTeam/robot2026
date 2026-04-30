@@ -19,7 +19,7 @@ _kickerCurrentSig(_kickerMotor.GetTorqueCurrent()),
 _commandVelocityVoltage(units::angular_velocity::turns_per_second_t(0.0)),
 _command(0.0_mps),
 _hardwareConfigured(true),
-_limiter(10.0_mps/1.0_s) {
+_limiter(10.99_mps/1.0_s) {
   // Extra implementation of subsystem constructor goes here.
 
   // Assign gain slots for the commands to use:
