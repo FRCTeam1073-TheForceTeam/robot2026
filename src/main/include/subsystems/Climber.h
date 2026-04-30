@@ -59,7 +59,7 @@ class Climber : public frc2::SubsystemBase {
   using Command = std::variant<std::monostate, units::velocity::meters_per_second_t, units::length::meter_t>;
 
   frc2::CommandPtr ClimberPosition(units::meter_t position);
-  frc2::CommandPtr HoldDown();
+  frc2::CommandPtr HoldVelocity(units::velocity::meters_per_second_t v);
 
   // Constructor for the subsystem.
   Climber();

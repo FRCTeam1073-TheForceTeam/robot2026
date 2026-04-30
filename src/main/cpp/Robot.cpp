@@ -17,6 +17,7 @@
 Robot::Robot() {
   // Required to support laser-can debugging and configuration.
   grpl::start_can_bridge();
+  firstInit = true;
 
   // Scheduler instance debugging:
   // frc::SmartDashboard::PutData("Scheduler", frc2::CommandScheduler::GetInstance());
@@ -85,7 +86,9 @@ void Robot::DisabledInit() {
     // TODO: Integrate CppTrace library to speed up debugging
   try {
     // Delegate to container function:
-    m_container->DisabledInit();
+    if(firstInit) {
+      m_container->DisabledInit();
+    }
   } catch (std::exception& e) {
     std::cerr << "CONTAINER DISABLEDINIT THREW EXCEPTION!: " << e.what() << std::endl;
   }
@@ -94,8 +97,12 @@ void Robot::DisabledInit() {
 void Robot::DisabledPeriodic() {
     // TODO: Integrate CppTrace library to speed up debugging
   try {
+    frc::SmartDashboard::PutBoolean("Autos/Have Trajectory", m_container->haveTraj);
+    frc::SmartDashboard::PutString("Autos/Trajectory", m_container->autoTraj);
     // Delegate to container function:
-    m_container->DisabledPeriodic();
+    if(m_container->m_levelChooser.GetSelected() != m_container->autoTraj) {
+      m_container->haveTraj = m_container->DisabledPeriodic();
+    }
   } catch (std::exception& e) {
     std::cerr << "CONTAINER DISABLEDPERIODIC THREW EXCEPTION!: " << e.what() << std::endl;
   }
@@ -110,6 +117,7 @@ void Robot::AutonomousInit() {
   
 
   try {
+    firstInit = false;
     m_autonomousCommand = m_container->GetAutonomousCommand();
 
     if (m_autonomousCommand) {

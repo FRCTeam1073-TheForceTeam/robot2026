@@ -38,8 +38,15 @@ m_laser(laser),
 m_targetFinder(finder),
 m_shooterTable(table),
 m_bling(bling),
-m_bs(bs)
-{}
+m_bs(bs),
+// Create prep commands: Unsafe versionsjust run in parallel with no requirements!!
+m_zeroTurret(ZeroTurret(m_turret, true).ToPtr()),     // Unsafe version of command.
+m_zeroClimber(ZeroClimber(m_climber, true).ToPtr()),  // Unsafe version of command.
+m_intakeOut(IntakeOut(m_intake, true).ToPtr())       // Unsafe version of command.
+{
+
+
+}
 
 
 frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) {
@@ -562,24 +569,25 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
 frc2::CommandPtr AutoRunner::Prep(units::time::second_t delay) {
   return frc2::cmd::Parallel(
     frc2::cmd::Wait(delay + 0.01_s),
-    ZeroTurret(m_turret).ToPtr(),
-    ZeroClimber(m_climber).ToPtr(),
-    m_intake->IntakeOut()
+    frc2::ScheduleCommand(m_zeroTurret.get()).ToPtr(),  // Unsafe command
+    frc2::ScheduleCommand(m_zeroClimber.get()).ToPtr(), // Unsafe command
+    frc2::ScheduleCommand(m_intakeOut.get()).ToPtr()    // Unsafe command
   ).WithTimeout(5.0_s); // Absolute maximum time...
 }
 
 frc2::CommandPtr AutoRunner::PrepWithoutIntake(units::time::second_t delay) {
   return frc2::cmd::Parallel(
       frc2::cmd::Wait(delay + 0.01_s),
-      ZeroTurret(m_turret).ToPtr(),
-      ZeroClimber(m_climber).ToPtr()
+    frc2::ScheduleCommand(m_zeroTurret.get()).ToPtr(), // Unsafe command  
+    frc2::ScheduleCommand(m_zeroClimber.get()).ToPtr() // Unsafe command
     ).WithTimeout(5.0_s); // Absolute maximum time...
 }
 
 frc2::CommandPtr AutoRunner::Create(std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory, units::time::second_t start_delay, bool putIntakeOut) {
-   return frc2::cmd::Sequence(
+  auto partsList = PartGenerator(trajectory, start_delay);
+
+  return frc2::cmd::Sequence(
     putIntakeOut ? Prep(start_delay) : PrepWithoutIntake(start_delay),
-    // frc2::cmd::Wait(0.01_s),
-    PartGenerator(trajectory, start_delay)
+    frc2::cmd::Sequence(std::move(partsList))
   ).WithTimeout(30.0_s); // Absolute maximumtime... real auto is 20s.
 }

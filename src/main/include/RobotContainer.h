@@ -100,6 +100,13 @@ class RobotContainer {
 
   static const std::string basicAuto;
 
+  static const std::string basicTest;
+
+  frc::SendableChooser<std::string> m_levelChooser;
+
+  bool haveTraj;
+  std::string autoTraj;
+
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
@@ -107,6 +114,8 @@ class RobotContainer {
   // Called from Robot
   void DisabledInit();
   bool DisabledPeriodic();
+
+  bool LoadTrajectory();
 
   // Called from Robot
   void TeleopInit();
@@ -148,8 +157,6 @@ class RobotContainer {
   std::shared_ptr<AutoRunner> m_autoRunner;
   
   bool haveInitStartPos;
-
-  frc::SendableChooser<std::string> m_levelChooser;
 
   std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory;
 

@@ -35,11 +35,16 @@ const std::string RobotContainer::leftBumpFollow = "LeftBumpFollow";
 
 const std::string RobotContainer::basicAuto = "BasicAuto";
 
+const std::string RobotContainer::basicTest = "BasicTest";
+
 RobotContainer::RobotContainer() :
 m_operatorController(1),
 m_controlBindings(false),
 m_startDelaySeconds(0.0)
 {
+  haveTraj = false;
+  autoTraj = "none";
+
   // Create these subsystems first!
   m_OI = std::make_shared<OI>();
   m_drivetrain = std::make_shared<Drivetrain>();
@@ -188,10 +193,12 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
         putIntakeOut = false;
       } else if (m_levelChooser.GetSelected() == rightTrenchHalfDouble) {
         putIntakeOut = false;
+      } else if (m_levelChooser.GetSelected() == basicTest) {
+        putIntakeOut = false;
       }
 
       frc::SmartDashboard::PutBoolean("Autos/Put Intake Out", putIntakeOut);
-      trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
+      frc::SmartDashboard::PutNumber("Autos/Start Auto", frc::Timer::GetFPGATimestamp().value());
       return m_autoRunner->Create(trajectory, delay, putIntakeOut);
     }
   }
@@ -205,11 +212,31 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
 // Called from Robot
 void RobotContainer::DisabledInit() {
-
+  haveTraj = false;
 }
 
 bool RobotContainer::DisabledPeriodic() {
-  return false; // TODO: Fix return value.
+  return LoadTrajectory();
+}
+
+bool RobotContainer::LoadTrajectory() {
+  if (
+      m_levelChooser.GetSelected() == centerDepotOutpost ||
+      m_levelChooser.GetSelected() == centerDepotOutpostClimb ||
+      m_levelChooser.GetSelected() == rightBumpSteal ||
+      m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
+      m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
+      m_levelChooser.GetSelected() == rightTrenchHalfDoubleBump ||
+      m_levelChooser.GetSelected() == leftTrenchHalfDouble ||
+      m_levelChooser.GetSelected() == leftTrenchHalfDoubleBump ||
+      m_levelChooser.GetSelected() == leftBumpFull ||
+      m_levelChooser.GetSelected() == basicTest
+  ) {
+    autoTraj = m_levelChooser.GetSelected();
+    frc::SmartDashboard::PutNumber("Autos/Grabed Choreo", frc::Timer::GetFPGATimestamp().value());
+    trajectory = choreo::Choreo::LoadTrajectory<choreo::SwerveSample>(m_levelChooser.GetSelected());
+  }
+  return trajectory.has_value();
 }
 
 void RobotContainer::TeleopInit() {
