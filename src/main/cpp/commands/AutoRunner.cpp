@@ -109,9 +109,6 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           )
         );
       }
-      else if (eventType == "TurretRotation130") {
-        autoRoutine.emplace_back(m_turret->RotateToPos(130_deg));
-      }
       // else if (eventType == "TurretRotaton(-150)") {
       //   autoRoutine.emplace_back(m_turret->RotateToPos(-150_deg));
       // }

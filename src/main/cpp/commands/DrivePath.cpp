@@ -5,13 +5,13 @@
 #include "commands/DrivePath.h"
 
 DrivePath::DrivePath(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<Localizer>& localizer, 
-                     std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) :
+                    std::optional<choreo::Trajectory<choreo::SwerveSample>> trajectory) :
   m_drivetrain(drivetrain),
   m_localizer(localizer),
   trajectory(trajectory),
   xController{5.5, 0, 0.3},
   yController{5.5, 0, 0.3},
-  thetaController{2.6, 0.0, 0.0}
+  thetaController{2.5, 0.0, 0.3}
 {
   quit = false;
   thetaController.EnableContinuousInput(-std::numbers::pi, std::numbers::pi);

@@ -29,7 +29,7 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
     slowMode = false;
     lastYPressed = false;
     lastXPressed = false;
-    slowRotation = false;
+    fastRotation = true;
     // TODO: chassisspeeds and speeds appear in the java drivetrain; determine if these are necessary for the c++ file
     // TODO: pointAtTarget boolean, localizer, lidar and aprilTagFinder appears in the java drivetrain, but it might be a better idea to put these in the localize file
 
@@ -118,10 +118,10 @@ void TeleopDrive::Execute() {
     }
 
     if (!lastXPressed && m_OI->GetDriverXButton()) {
-        slowRotation = !slowRotation;
+        fastRotation = !fastRotation;
     }
 
-    if(slowRotation) {
+    if(!fastRotation) {
         omega *= 0.4;
     }
 
@@ -140,7 +140,7 @@ void TeleopDrive::Execute() {
     frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Left", driverDPadLeft);
     frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Right", driverDPadRight);
     frc::SmartDashboard::PutNumber("TeleopDrive/Maximum Rotation Velocity", maximumRotationVelocity.value());
-    frc::SmartDashboard::PutBoolean("TeleopDrive/Slow Rotation", slowRotation);
+    frc::SmartDashboard::PutBoolean("TeleopDrive/Fast Rotation", fastRotation);
 
     // odometry centric drive
     if (fieldCentric) {
