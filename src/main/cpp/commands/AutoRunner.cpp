@@ -109,6 +109,15 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           )
         );
       }
+      else if (eventType == "TurretRotation125") {
+        autoRoutine.emplace_back(m_turret->RotateToPos(125_deg));
+      }
+      else if (eventType == "TurretRotation90") {
+        autoRoutine.emplace_back(m_turret->RotateToPos(90_deg));
+      }
+      else if (eventType == "TurretRotation70") {
+        autoRoutine.emplace_back(m_turret->RotateToPos(70_deg));
+      }
       // else if (eventType == "TurretRotaton(-150)") {
       //   autoRoutine.emplace_back(m_turret->RotateToPos(-150_deg));
       // }
@@ -438,6 +447,88 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           )
         ); 
       }  
+      else if (eventType == "ShootFollow") {
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(0.5_s),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn()
+            )
+          ).WithTimeout(5.0_s)
+        );
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            m_flywheel->SpinToSpeed(0.0_mps),
+            m_spindexer->SpinToSpeed(0.0_mps),
+            m_kicker->SpinToSpeed(0_mps),
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
+          )
+        );
+      }
+      else if (eventType == "ShootLeftFollow") {
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(0.5_s),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeOut()
+            )
+          ).WithTimeout(5.2_s)
+        );
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            m_flywheel->SpinToSpeed(0.0_mps),
+            m_spindexer->SpinToSpeed(0.0_mps),
+            m_kicker->SpinToSpeed(0_mps),
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
+          )
+        );
+      }  
+      else if (eventType == "ShootLeftFollow") {
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
+            frc2::cmd::Sequence(
+              frc2::cmd::Wait(0.5_s),
+              m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
+              m_kicker->SpinToSpeed(Kicker::ShotSpeed),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(0.5_s),
+              m_climber->ClimberPosition(0.0582_m),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn()
+            )
+          ).WithTimeout(2.5_s)
+        );
+        autoRoutine.emplace_back(
+          frc2::cmd::Parallel(
+            m_flywheel->SpinToSpeed(0.0_mps),
+            m_spindexer->SpinToSpeed(0.0_mps),
+            m_kicker->SpinToSpeed(0_mps),
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition),
+            m_intake->IntakeIn()
+          )
+        );
+      }   
     }
 
     return frc2::cmd::Sequence(std::move(autoRoutine));

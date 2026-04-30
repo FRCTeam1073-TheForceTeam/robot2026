@@ -1,6 +1,6 @@
 #include <subsystems/FieldMap.h>
 
-const frc::AprilTagFieldLayout FieldMap::fieldMap = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2026RebuiltAndyMark);
+const frc::AprilTagFieldLayout FieldMap::fieldMap = frc::AprilTagFieldLayout::LoadField(frc::AprilTagField::k2026RebuiltWelded);
 
 units::meter_t FieldMap::findDistance(frc::Pose2d robot2DPose, int tagID) {
 
