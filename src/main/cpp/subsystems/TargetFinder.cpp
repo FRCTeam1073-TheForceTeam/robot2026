@@ -5,14 +5,13 @@
 const frc::Pose2d TargetFinder::FIELD_CENTER = frc::Pose2d(291.00_in, 158.32_in, frc::Rotation2d());
 
 // AndyMark Perimeter
-const frc::Pose2d TargetFinder::BLUEHUB = frc::Pose2d(181.56_in, 158.32_in, frc::Rotation2d());
-const frc::Pose2d TargetFinder::REDHUB = frc::Pose2d(468.56_in, 158.32_in, frc::Rotation2d());
+// const frc::Pose2d TargetFinder::BLUEHUB = frc::Pose2d(181.56_in, 158.32_in, frc::Rotation2d());
+// const frc::Pose2d TargetFinder::REDHUB = frc::Pose2d(468.56_in, 158.32_in, frc::Rotation2d());
 
 //Welded Perimeter
-/*
 const frc::Pose2d TargetFinder::BLUEHUB = frc::Pose2d(182.11_in, 158.84_in, frc::Rotation2d());
 const frc::Pose2d TargetFinder::REDHUB = frc::Pose2d(469.11_in, 158.84_in, frc::Rotation2d());
-*/
+
 
 const frc::Transform2d TargetFinder::ROBOTOTURRET = frc::Transform2d(-4.391_in, -7.409_in, frc::Rotation2d());
 

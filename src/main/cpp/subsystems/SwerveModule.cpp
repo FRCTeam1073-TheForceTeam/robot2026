@@ -249,7 +249,7 @@ bool SwerveModule::ConfigureSteerHardware() {
     }
 
     // Set our neutral mode to brake on:
-    status = _driveMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
+    status = _steerMotor.SetNeutralMode(signals::NeutralModeValue::Brake, 1_s);
 
     if (!status.IsOK()) {
         std::cerr << "Steer Hardware Neutral Mode Error: SwerveModule[" << _ids.number << "]" << std::endl;
