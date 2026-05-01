@@ -493,7 +493,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           )
         );
       }  
-      else if (eventType == "ShootLeftFollow") {
+      else if (eventType == "ShootLeftClimb") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
