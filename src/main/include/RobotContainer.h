@@ -87,7 +87,7 @@ class RobotContainer {
   static const std::string startLine;
   static const std::string centerHub;
   static const std::string centerDepotOutpost;
-  static const std::string centerDepotOutpostClimb;
+  static const std::string centerDepotClimb;
   static const std::string rightBumpSteal;
   static const std::string rightTrenchHalfOutpost;
   static const std::string rightTrenchHalfDouble;

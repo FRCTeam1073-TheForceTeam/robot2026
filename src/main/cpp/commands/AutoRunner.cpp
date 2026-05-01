@@ -296,20 +296,31 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(0.5_s),
               m_intake->IntakeOut(),
               frc2::cmd::Wait(0.5_s),
+              m_collector->CollectSpeed(0_mps),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(0.5_s),
               m_intake->IntakeOut(),
               frc2::cmd::Wait(0.5_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeIn(),
+              frc2::cmd::Wait(1.0_s),
+              m_intake->IntakeOut(),
+              frc2::cmd::Wait(1.0_s),
               m_intake->IntakeIn()
             )
-          ).WithTimeout(4.2_s)
+          //).WithTimeout(4.2_s)
+          ).WithTimeout(7.8_s)
         );
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
             m_flywheel->SpinToSpeed(0.0_mps),
             m_spindexer->SpinToSpeed(0.0_mps),
             m_kicker->SpinToSpeed(0_mps),
-            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition)
+            m_shooterHood->SetHoodPosition(ShooterHood::maxPosition),
+            m_intake->IntakeIn()
           )
         );
       }

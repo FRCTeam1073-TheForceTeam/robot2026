@@ -22,7 +22,7 @@ const std::string RobotContainer::noLevelAuto = "No Auto";
 const std::string RobotContainer::startLine = "Start Line";
 const std::string RobotContainer::centerHub = "CenterHub";
 const std::string RobotContainer::centerDepotOutpost = "CenterDepotOutpost";
-const std::string RobotContainer::centerDepotOutpostClimb = "CenterDepotOutpostClimb";
+const std::string RobotContainer::centerDepotClimb = "CenterDepotClimb";
 const std::string RobotContainer::rightBumpSteal = "RightBumpSteal";
 const std::string RobotContainer::rightTrenchHalfOutpost = "RightTrenchHalfOutpost";
 const std::string RobotContainer::rightTrenchHalfDouble = "RightTrenchHalfDouble";
@@ -113,7 +113,7 @@ m_startDelaySeconds(0.0)
   m_levelChooser.AddOption("Start_Line", startLine);
   m_levelChooser.AddOption("Center_Hub", centerHub);
   m_levelChooser.AddOption("Center_Depot_Outpost", centerDepotOutpost);
-  m_levelChooser.AddOption("Center_Depot_Oupost_Climb", centerDepotOutpostClimb);
+  m_levelChooser.AddOption("Center_Depot_Climb", centerDepotClimb);
   m_levelChooser.AddOption("Right_Bump_Steal", rightBumpSteal);
   m_levelChooser.AddOption("Right_Trench_Half_Outpost", rightTrenchHalfOutpost);
   m_levelChooser.AddOption("Right_Trench_Half_Double", rightTrenchHalfDouble);
@@ -159,7 +159,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       // m_levelChooser.GetSelected() == leftTrenchHalf ||
 
       m_levelChooser.GetSelected() == centerDepotOutpost ||
-      m_levelChooser.GetSelected() == centerDepotOutpostClimb ||
+      m_levelChooser.GetSelected() == centerDepotClimb ||
       m_levelChooser.GetSelected() == rightBumpSteal ||
       m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
       m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
@@ -180,7 +180,7 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       } else if (m_levelChooser.GetSelected() == leftBumpFull) {
         putIntakeOut = false;
 
-      } else if (m_levelChooser.GetSelected() == centerDepotOutpostClimb) {
+      } else if (m_levelChooser.GetSelected() == centerDepotClimb) {
         putIntakeOut = false;
 
       } else if (m_levelChooser.GetSelected() == rightBumpSteal) {
@@ -223,7 +223,7 @@ bool RobotContainer::DisabledPeriodic() {
 bool RobotContainer::LoadTrajectory() {
   if (
       m_levelChooser.GetSelected() == centerDepotOutpost ||
-      m_levelChooser.GetSelected() == centerDepotOutpostClimb ||
+      m_levelChooser.GetSelected() == centerDepotClimb ||
       m_levelChooser.GetSelected() == rightBumpSteal ||
       m_levelChooser.GetSelected() == rightTrenchHalfOutpost ||
       m_levelChooser.GetSelected() == rightTrenchHalfDouble ||
