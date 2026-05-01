@@ -453,6 +453,7 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(0.5_s),
+              m_climber->ClimberPosition(0.0582_m),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
               m_kicker->SpinToSpeed(Kicker::ShotSpeed),
               frc2::cmd::Wait(1.0_s),
@@ -501,12 +502,13 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
           )
         );
       }  
-      else if (eventType == "ShootLeftFollow") {
+      else if (eventType == "ShootLeftClimb") {
         autoRoutine.emplace_back(
           frc2::cmd::Parallel(
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(0.5_s),
+              m_climber->ClimberPosition(0.0582_m),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
               m_kicker->SpinToSpeed(Kicker::ShotSpeed),
               frc2::cmd::Wait(1.0_s),
@@ -572,8 +574,8 @@ frc2::CommandPtr AutoRunner::PartGenerator(std::optional<choreo::Trajectory<chor
 frc2::CommandPtr AutoRunner::Prep(units::time::second_t delay) {
   return frc2::cmd::Parallel(
     frc2::cmd::Wait(delay + 0.01_s),
-    ZeroTurret(m_turret).ToPtr(),
-    ZeroClimber(m_climber).ToPtr(),
+    frc2::ScheduleCommand(m_zeroTurret.get()).ToPtr(), // Unsafe command  
+    frc2::ScheduleCommand(m_zeroClimber.get()).ToPtr(), // Unsafe command
     m_intake->IntakeOut()
   ).WithTimeout(5.0_s); // Absolute maximum time...
 }
