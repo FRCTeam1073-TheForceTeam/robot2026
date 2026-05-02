@@ -592,6 +592,7 @@
  },
  "events":[
    {"name":"StartCollector", "from":{"target":1, "targetTimestamp":1.00373, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
+   {"name":"BringUpClimber", "from":{"target":6, "targetTimestamp":4.73447, "offset":{"exp":"-0.1 s", "val":-0.1}}, "event":null},
    {"name":"StopCollector", "from":{"target":6, "targetTimestamp":4.73447, "offset":{"exp":"0 s", "val":0.0}}, "event":null},
    {"name":"TurretRotation90", "from":{"target":6, "targetTimestamp":4.73447, "offset":{"exp":"0.1 s", "val":0.1}}, "event":null},
    {"name":"ShootLeftFollow", "from":{"target":7, "targetTimestamp":5.82055, "offset":{"exp":"-0.3 s", "val":-0.3}}, "event":null},

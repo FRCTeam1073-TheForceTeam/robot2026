@@ -444,7 +444,6 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
             Autos::TrackHub(m_turret, m_flywheel, m_shooterHood, m_targetFinder, m_shooterTable, m_bs),
             frc2::cmd::Sequence(
               frc2::cmd::Wait(0.5_s),
-              m_climber->ClimberPosition(0.0582_m),
               m_spindexer->SpinToSpeed(Spindexer::ShotSpeed),
               m_kicker->SpinToSpeed(Kicker::ShotSpeed),
               frc2::cmd::Wait(1.0_s),
@@ -504,7 +503,6 @@ frc2::CommandPtr AutoRunner::EventParser(std::optional<choreo::Trajectory<choreo
               frc2::cmd::Wait(1.0_s),
               m_intake->IntakeIn(),
               frc2::cmd::Wait(0.5_s),
-              m_climber->ClimberPosition(0.0582_m),
               m_intake->IntakeOut(),
               frc2::cmd::Wait(0.5_s),
               m_intake->IntakeIn()
