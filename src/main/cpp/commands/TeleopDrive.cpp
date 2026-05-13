@@ -119,9 +119,9 @@ void TeleopDrive::Execute() {
     heading += frc::AngleModulus(delta);
     auto heading_omega = std::clamp(thetaController.Calculate(m_localizer->getPose().Rotation().Radians().value(), heading.value()), -maximumRotationVelocity.value(), maximumRotationVelocity.value()) * 1_rad_per_s;
 
-    if (units::math::abs(heading_omega) < 0.05_rad_per_s) {
-        heading_omega = 0_rad_per_s;
-    }
+    // if (units::math::abs(heading_omega) < 0.05_rad_per_s) {
+    // heading_omega = 0_rad_per_s;
+    // }
 
     if (!lastYPressed && m_OI->GetDriverYButton()) {
         slowMode = !slowMode;
