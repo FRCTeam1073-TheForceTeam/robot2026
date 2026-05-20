@@ -92,6 +92,11 @@ class ShooterHood : public frc2::SubsystemBase {
 
   // Did we successfully configure the hardware?
   bool _hardwareConfigured;
+
+  // Stall detection
+  static constexpr units::current::ampere_t STALL_CURRENT_THRESHOLD = units::current::ampere_t(18.0);
+  static constexpr int STALL_COUNT_THRESHOLD = 15; // ~150ms at 100Hz loop rate
+  int _stallCounter = 0;
   
   units::angle::radian_t TargetPosition;
   units::angle::radian_t Position;

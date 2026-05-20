@@ -68,7 +68,22 @@ void ShooterHood::Periodic() {
   _feedback.position = _hoodPositionSig.GetValue() / HoodToMotorGearRatio; // Convert from hardare units to subsystem units. Divide by conversion to produce feedback.
   //_feedback.velocity = _exampleVelocitySig.GetValue() / TurnsPerMeter; // Convert from hardare units to subsystem units.
   _feedback.hasZero = _hasZero; // Track if we've been indexed.
-  
+
+  // Stall detection: cut power if motor draws high current with a position command
+  units::current::ampere_t current = _hoodCurrentSig.GetValue();
+  bool hasPositionCommand = std::holds_alternative<units::angle::radian_t>(_command);
+
+  if (hasPositionCommand && current > STALL_CURRENT_THRESHOLD) {
+    _stallCounter++;
+    if (_stallCounter >= STALL_COUNT_THRESHOLD) {
+      _hoodMotor.SetControl(controls::NeutralOut());
+      frc::SmartDashboard::PutBoolean("Hood/Stalled", true);
+      return; // Exit early, don't send command this cycle
+    }
+  } else {
+    _stallCounter = 0;
+    frc::SmartDashboard::PutBoolean("Hood/Stalled", false);
+  }
 
   // Process command:
   if (std::holds_alternative<units::angular_velocity::radians_per_second_t>(_command)) {
@@ -103,6 +118,8 @@ void ShooterHood::Periodic() {
   frc::SmartDashboard::PutNumber("Hood/Angle", _feedback.position.value());
   frc::SmartDashboard::PutNumber("Hood/Torque", _feedback.torque.value());
   frc::SmartDashboard::PutNumber("Hood/Target", targetAngle.value());
+  frc::SmartDashboard::PutNumber("Hood/Current", current.value());
+  frc::SmartDashboard::PutNumber("Hood/StallCounter", _stallCounter);
 }
 
 frc2::CommandPtr ShooterHood::SetHoodLevel(int level) {
