@@ -14,7 +14,8 @@
 TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi, std::shared_ptr<Localizer>& localizer) : 
     m_drivetrain(drivetrain), 
     m_OI(oi),
-    m_localizer(localizer)
+    m_localizer(localizer),
+    thetaController{7.0, 0.0, 0.02}
     {
     allianceSign = 0;
     fieldCentric = true;
@@ -23,7 +24,6 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
     // parked = false;
     last_error = 0;
     last_snap_time = 0;
-    
     angle_tolerance = 0.05_rad;
     torqueGate = 65_N;
     slowMode = false;
@@ -34,14 +34,15 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
     // TODO: pointAtTarget boolean, localizer, lidar and aprilTagFinder appears in the java drivetrain, but it might be a better idea to put these in the localize file
 
     // Register that this command requires the subsystem.
+    thetaController.EnableContinuousInput(-std::numbers::pi, std::numbers::pi);
     AddRequirements(m_drivetrain.get());
 }
 
 
 TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi) : 
     m_drivetrain(drivetrain), 
-    m_OI(oi) {
-        
+    m_OI(oi),
+    thetaController{7.0, 0.0, 0.02} {
     allianceSign = 0;
     fieldCentric = true;
     // lastParkingBreakButton = false;
@@ -56,6 +57,8 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
 
     // Register that this command requires the subsystem.
     AddRequirements(m_drivetrain.get());
+    heading = m_localizer->getPose().Rotation().Radians();
+    thetaController.Reset();
 }
 
 void TeleopDrive::Initialize() {
@@ -117,6 +120,15 @@ void TeleopDrive::Execute() {
         vy *= 0.4;
     }
 
+    auto delta = omega * 0.02_s;
+
+    heading += frc::AngleModulus(delta);
+    auto heading_omega = std::clamp(thetaController.Calculate(m_localizer->getPose().Rotation().Radians().value(), heading.value()), -maximumRotationVelocity.value(), maximumRotationVelocity.value()) * 1_rad_per_s;
+
+    // if (units::math::abs(heading_omega) < 0.05_rad_per_s) {
+    // heading_omega = 0_rad_per_s;
+    // }
+
     if (!lastXPressed && m_OI->GetDriverXButton()) {
         fastRotation = !fastRotation;
     }
@@ -141,6 +153,11 @@ void TeleopDrive::Execute() {
     frc::SmartDashboard::PutBoolean("TeleopDrive/Driver DPad Right", driverDPadRight);
     frc::SmartDashboard::PutNumber("TeleopDrive/Maximum Rotation Velocity", maximumRotationVelocity.value());
     frc::SmartDashboard::PutBoolean("TeleopDrive/Fast Rotation", fastRotation);
+    frc::SmartDashboard::PutNumber("TeleopDrive/Heading Omega", heading_omega.value());
+    frc::SmartDashboard::PutNumber("TeleopDrive/Heading", frc::AngleModulus(heading).value());
+    frc::SmartDashboard::PutNumber("Heading Delta", delta.value());
+    frc::SmartDashboard::PutNumber("TeleopDrive/RightX", rightX);
+
 
     // odometry centric drive
     if (fieldCentric) {
@@ -151,7 +168,7 @@ void TeleopDrive::Execute() {
             rotation = m_drivetrain->GetGyroHeading();
         }
 
-        speeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(vx, vy, omega, rotation);
+        speeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(vx, vy, heading_omega, rotation);
         m_drivetrain->SetChassisSpeeds(speeds);
     }
     else { // robot centric drive

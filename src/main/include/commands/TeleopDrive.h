@@ -63,6 +63,9 @@ private:
     static constexpr units::velocity::meters_per_second_t maximumLinearVelocity = 4.5_mps;
     static constexpr units::angular_velocity::radians_per_second_t maximumRotationVelocity = 2_rad_per_s * std::numbers::pi;
     
+    units::angle::radian_t heading;
+    frc::PIDController thetaController;
+
     units::time::second_t currentTime;
 
     // Used to flip the sign based on which alliance we are set for:
