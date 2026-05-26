@@ -42,8 +42,11 @@ class ShooterHood : public frc2::SubsystemBase {
   static constexpr double HoodToMotorGearRatio = (52.0 / 12.0) * (33.0 / 15.0) * (160.0 / 10.0);
   static constexpr auto CurrentLimit = units::current::ampere_t(25.0);
 
-  static constexpr units::angle::radian_t maxPosition = 69.0_deg;
-  static constexpr units::angle::radian_t minPosition = 42.0_deg;
+  // static constexpr units::angle::radian_t maxPosition = 69.0_deg;
+  // static constexpr units::angle::radian_t minPosition = 42.0_deg;
+
+  static constexpr units::angle::radian_t maxPosition = 100.0_deg;
+  static constexpr units::angle::radian_t minPosition = 0.0_deg;
   
   // The feedback for this subsystem provided as a struct.
   struct Feedback {
@@ -94,7 +97,7 @@ class ShooterHood : public frc2::SubsystemBase {
   bool _hardwareConfigured;
 
   // Stall detection
-  static constexpr units::current::ampere_t STALL_CURRENT_THRESHOLD = units::current::ampere_t(18.0);
+  static constexpr units::current::ampere_t STALL_CURRENT_THRESHOLD = units::current::ampere_t(9.0);
   static constexpr int STALL_COUNT_THRESHOLD = 15; // ~150ms at 100Hz loop rate
   int _stallCounter = 0;
   
