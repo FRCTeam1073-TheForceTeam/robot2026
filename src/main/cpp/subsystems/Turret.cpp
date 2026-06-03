@@ -110,6 +110,21 @@ void Turret::Periodic() {
   frc::SmartDashboard::PutBoolean("Turret/HaveZero", _feedback.haveZero);
   frc::SmartDashboard::PutBoolean("Turret/LinedUp", _feedback.locked);
 
+  // Stall detection: cut power if motor draws high current with a position command
+  units::current::ampere_t current = _rotaterCurrentSig.GetValue();
+  bool hasPositionCommand = std::holds_alternative<units::angle::radian_t>(_command);
+
+  if (hasPositionCommand && current > STALL_CURRENT_THRESHOLD) {
+    _stallCounter++;
+    if (_stallCounter >= STALL_COUNT_THRESHOLD) {
+      //_rotaterMotor.SetControl(controls::NeutralOut()); // Cut power
+      frc::SmartDashboard::PutBoolean("Turret/Stalled", true);
+      return; // Exit early, don't send command this cycle
+    }
+  } else {
+    _stallCounter = 0; // Reset if conditions no longer met
+    frc::SmartDashboard::PutBoolean("Turret/Stalled", false);
+  }
 
 }
 

@@ -76,7 +76,7 @@ void ShooterHood::Periodic() {
   if (hasPositionCommand && current > STALL_CURRENT_THRESHOLD) {
     _stallCounter++;
     if (_stallCounter >= STALL_COUNT_THRESHOLD) {
-      _hoodMotor.SetControl(controls::NeutralOut());
+      //_hoodMotor.SetControl(controls::NeutralOut());
       frc::SmartDashboard::PutBoolean("Hood/Stalled", true);
       return; // Exit early, don't send command this cycle
     }

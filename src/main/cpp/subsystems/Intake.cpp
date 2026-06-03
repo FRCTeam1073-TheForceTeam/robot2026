@@ -92,6 +92,24 @@ void Intake::Periodic() {
   frc::SmartDashboard::PutNumber("Intake/Position(rad)", _feedback.position.value());  
   frc::SmartDashboard::PutNumber("Intake/TargetPosition(rad)", _limiter.LastValue().value());  
   frc::SmartDashboard::PutNumber("Intake/Torque(Nm)", _feedback.torque.value());
+
+
+  // Stall detection: cut power if motor draws high current with a position command
+  units::current::ampere_t current = _intakeCurrentSig.GetValue();
+  bool hasPositionCommand = std::holds_alternative<units::angle::radian_t>(_command);
+
+  if (hasPositionCommand && current > STALL_CURRENT_THRESHOLD) {
+    _stallCounter++;
+    if (_stallCounter >= STALL_COUNT_THRESHOLD) {
+      //_leadMotor.SetControl(controls::NeutralOut()); // Cut power
+      //_followMotor.SetControl(controls::NeutralOut()); // Cut power
+     frc::SmartDashboard::PutBoolean("Intake/Stalled", true);
+      return; // Exit early, don't send command this cycle
+    }
+  } else {
+    _stallCounter = 0; // Reset if conditions no longer met
+    frc::SmartDashboard::PutBoolean("Intake/Stalled", false);
+  }
 }
 
 frc2::CommandPtr Intake::IntakeOut() {
