@@ -42,7 +42,7 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
 TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_ptr<OI>& oi) : 
     m_drivetrain(drivetrain), 
     m_OI(oi),
-    thetaController{7.0, 0.0, 0.02} {
+    thetaController{7.0, 0.0, 0.1} {
     allianceSign = 0;
     fieldCentric = true;
     // lastParkingBreakButton = false;
@@ -122,18 +122,26 @@ void TeleopDrive::Execute() {
 
     auto delta = omega * 0.02_s;
 
-    heading += frc::AngleModulus(delta);
-    auto heading_omega = std::clamp(thetaController.Calculate(m_localizer->getPose().Rotation().Radians().value(), heading.value()), -maximumRotationVelocity.value(), maximumRotationVelocity.value()) * 1_rad_per_s;
+    // heading += frc::AngleModulus(delta);
+    // auto heading_omega = std::clamp(thetaController.Calculate(m_localizer->getPose().Rotation().Radians().value(), heading.value()), -maximumRotationVelocity.value(), maximumRotationVelocity.value()) * 1_rad_per_s;
+
+    auto heading_omega = omega;
 
     // if (units::math::abs(heading_omega) < 0.05_rad_per_s) {
     // heading_omega = 0_rad_per_s;
     // }
 
-    if (!lastXPressed && m_OI->GetDriverXButton()) {
-        fastRotation = !fastRotation;
+    // if (!lastXPressed && m_OI->GetDriverXButton()) {
+    //     fastRotation = !fastRotation;
+    // }
+
+    if (m_OI->GetDriverXButton()) {
+        fastRotation = false;
+    } else {
+        fastRotation = true;
     }
 
-    if(!fastRotation) {
+    if(fastRotation == false) {
         omega *= 0.4;
     }
 
@@ -163,7 +171,7 @@ void TeleopDrive::Execute() {
     if (fieldCentric) {
         frc::Rotation2d rotation;
         if (m_localizer) {
-            rotation = m_localizer->getPose().Rotation();
+            rotation = m_drivetrain->GetGyroHeading();
         } else {
             rotation = m_drivetrain->GetGyroHeading();
         }
