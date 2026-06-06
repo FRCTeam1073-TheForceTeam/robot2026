@@ -148,6 +148,7 @@ void Drivetrain::Periodic()  {
     //frc::SmartDashboard::PutRaw("Drivetrain/SwerveModuleStates", _swerveModuleStates);  // TODO: swervemodulestates have structs, arrays of swervemodulestates do not
     //frc::SmartDashboard::PutBoolean("Drivetrain/SwerveModuleStates", _swerveModuleStates);
     frc::SmartDashboard::PutData("Field", &m_field);
+    m_field.SetRobotPose(_odometry.GetPose());
     //publisher.set(poseA);  // not working out
     //arrayPublisher.set(new Pose2d[] {poseA, poseB});
 
