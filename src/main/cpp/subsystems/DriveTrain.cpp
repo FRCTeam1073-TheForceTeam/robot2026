@@ -6,7 +6,6 @@
 #include <iostream>
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <networktables/NetworkTableInstance.h>
 
 
 using namespace ctre::phoenix6;
