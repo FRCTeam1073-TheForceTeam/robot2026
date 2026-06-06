@@ -6,6 +6,7 @@
 #include <iostream>
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <networktables/NetworkTableInstance.h>
 
 
 using namespace ctre::phoenix6;
@@ -81,7 +82,9 @@ Drivetrain::Drivetrain() :
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
     }
 
-    frc::SmartDashboard::PutBoolean("Drivetrain/Drivetrain - hardware_configured", _hardwareConfigured);
+    //nt::StructPublisher publisher = NetworkTableInstance.getDefault()
+    //    .getStructTopic("MyPose", Pose2d.struct).publish();
+    //frc::SmartDashboard::PutBoolean("Drivetrain/Drivetrain - hardware_configured", _hardwareConfigured); // TODO: yeah this isn't working out
 }
 
 void Drivetrain::Periodic()  {
@@ -132,8 +135,6 @@ void Drivetrain::Periodic()  {
             moduleCommands[ii].Optimize(_swerveModulePositions[ii].angle);
             // Pass along calculated feed-forward forces with commands to swerve modules.
             _swerveModules[ii].SetCommand(moduleCommands[ii], feedForwards.x[ii], feedForwards.y[ii]);
-    //frc::SmartDashboard::PutRaw("Drivetrain/SwerveModuleStates", _swerveModuleStates);  // TODO: swervemodulestates have structs, arrays of swervemodulestates do not
-    //frc::SmartDashboard::PutBoolean("Drivetrain/SwerveModuleStates", _swerveModuleStates);
         }
     }
 
@@ -142,6 +143,15 @@ void Drivetrain::Periodic()  {
      // We already sampled it above in this function.
     _previousUpdateTime = now;
     _yaw_angle = yaw_angle.Radians();
+
+    // smartdashboard stuff
+    //frc::SmartDashboard::PutRaw("Drivetrain/SwerveModuleStates", _swerveModuleStates);  // TODO: swervemodulestates have structs, arrays of swervemodulestates do not
+    //frc::SmartDashboard::PutBoolean("Drivetrain/SwerveModuleStates", _swerveModuleStates);
+    frc::SmartDashboard::PutData("Field", &m_field);
+    //publisher.set(poseA);  // not working out
+    //arrayPublisher.set(new Pose2d[] {poseA, poseB});
+
+
 }
 
 /// Reset the odometry to a specific pose on the field.
