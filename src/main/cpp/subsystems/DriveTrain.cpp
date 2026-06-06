@@ -82,9 +82,6 @@ Drivetrain::Drivetrain() :
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
     }
     frc::SmartDashboard::PutBoolean("Drivetrain/Drivetrain - hardware_configured", _hardwareConfigured);
-    //nt::StructPublisher publisher = NetworkTableInstance.getDefault()
-    //    .getStructTopic("MyPose", Pose2d.struct).publish();
-    //frc::SmartDashboard::PutBoolean("Drivetrain/Drivetrain - hardware_configured", _hardwareConfigured); // TODO: yeah this isn't working out
 }
 
 void Drivetrain::Periodic()  {
@@ -145,12 +142,8 @@ void Drivetrain::Periodic()  {
     _yaw_angle = yaw_angle.Radians();
 
     // smartdashboard stuff
-    //frc::SmartDashboard::PutRaw("Drivetrain/SwerveModuleStates", _swerveModuleStates);  // TODO: swervemodulestates have structs, arrays of swervemodulestates do not
-    //frc::SmartDashboard::PutBoolean("Drivetrain/SwerveModuleStates", _swerveModuleStates);
     frc::SmartDashboard::PutData("Field", &m_field);
     m_field.SetRobotPose(_odometry.GetPose());
-    //publisher.set(poseA);  // not working out
-    //arrayPublisher.set(new Pose2d[] {poseA, poseB});
 
 
 }
