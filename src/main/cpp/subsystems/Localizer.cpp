@@ -68,7 +68,6 @@ void Localizer::Periodic() {
     frc::SmartDashboard::PutNumber("Localizer/Vel(y)", _speeds.vy.value());
     frc::SmartDashboard::PutNumber("Localizer/Vel(q)", _speeds.omega.value());
     frc::SmartDashboard::PutNumber("Localizer/MC", measurementCounter);
-    //frc::SmartDashboard::PutRaw("Localizer/Estimator", _estimator);  // TODO: Pose2D. advantagescope should be able to read it
 
 }
 

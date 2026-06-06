@@ -12,7 +12,6 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/geometry/Pose2d.h>
-
 // "a wrapper around std:array that does compile time size checking"
 #include <wpi/array.h>
 
@@ -21,7 +20,6 @@
 
 //Network tables import
 #include <wpi/sendable/SendableBuilder.h>
-#include <networktables/StructTopic.h>
 #include <frc/smartdashboard/Field2d.h>
 
 #include "subsystems/SwerveModule.h"
@@ -45,7 +43,6 @@ class Drivetrain : public frc2::SubsystemBase {
 
   // void InitSendable(wpi::SendableBuilder& builder) override;
   frc::Field2d m_field;
-  //nt::StructPublisher publisher;  // not working out
 
   /// Set the debug mode
   void SetDebugMode(bool removeBug);

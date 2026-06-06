@@ -81,6 +81,7 @@ Drivetrain::Drivetrain() :
     if (!_hardwareConfigured) {
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
     }
+
     frc::SmartDashboard::PutBoolean("Drivetrain/Drivetrain - hardware_configured", _hardwareConfigured);
 }
 
