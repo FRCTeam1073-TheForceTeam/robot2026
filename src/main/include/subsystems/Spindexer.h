@@ -43,7 +43,7 @@ class Spindexer : public frc2::SubsystemBase {
 
 
   // Standard shot speed:
-  // static constexpr auto ShotSpeed = 3.2_mps;
+  // static constexpr auto ShotSpeed = 2.7_mps;
   static constexpr auto ShotSpeed = 3.7_mps;   // 6/6/2026 battlecry: made it spin faster
 
 
