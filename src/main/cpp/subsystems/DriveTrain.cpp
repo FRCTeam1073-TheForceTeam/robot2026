@@ -81,7 +81,7 @@ Drivetrain::Drivetrain() :
     if (!_hardwareConfigured) {
         std::cerr << "!! Drivetrain hardware configuration error !!" << std::endl;
     }
-
+    frc::SmartDashboard::PutBoolean("Drivetrain/Drivetrain - hardware_configured", _hardwareConfigured);
     //nt::StructPublisher publisher = NetworkTableInstance.getDefault()
     //    .getStructTopic("MyPose", Pose2d.struct).publish();
     //frc::SmartDashboard::PutBoolean("Drivetrain/Drivetrain - hardware_configured", _hardwareConfigured); // TODO: yeah this isn't working out
