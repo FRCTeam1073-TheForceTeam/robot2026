@@ -132,6 +132,8 @@ void Drivetrain::Periodic()  {
             moduleCommands[ii].Optimize(_swerveModulePositions[ii].angle);
             // Pass along calculated feed-forward forces with commands to swerve modules.
             _swerveModules[ii].SetCommand(moduleCommands[ii], feedForwards.x[ii], feedForwards.y[ii]);
+    //frc::SmartDashboard::PutRaw("Drivetrain/SwerveModuleStates", _swerveModuleStates);  // TODO: swervemodulestates have structs, arrays of swervemodulestates do not
+    //frc::SmartDashboard::PutBoolean("Drivetrain/SwerveModuleStates", _swerveModuleStates);
         }
     }
 
