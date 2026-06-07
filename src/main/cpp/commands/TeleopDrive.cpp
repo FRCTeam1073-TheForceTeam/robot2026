@@ -18,9 +18,9 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
     {
     allianceSign = 0;
     fieldCentric = true;
-    // lastParkingBreakButton = false;
+    lastParkingBreakButton = false;
     lastFieldCentricButton = true;
-    // parked = false;
+    parked = false;
     last_error = 0;
     last_snap_time = 0;
     
@@ -44,9 +44,9 @@ TeleopDrive::TeleopDrive(std::shared_ptr<Drivetrain>& drivetrain, std::shared_pt
         
     allianceSign = 0;
     fieldCentric = true;
-    // lastParkingBreakButton = false;
+    lastParkingBreakButton = false;
     lastFieldCentricButton = true;
-    // parked = false;
+    parked = false;
     last_error = 0;
     last_snap_time = 0;
     angle_tolerance = 0.05_rad;
@@ -89,6 +89,12 @@ void TeleopDrive::Execute() {
     // if (parked && !m_drivetrain->GetParkingBrake()) {
     //     m_drivetrain->SetParkingBrake(true);
     // }
+
+    if (m_OI->GetDriverBButton()) {
+        m_drivetrain->SetParkingBrake(true);
+    } else {
+        m_drivetrain->SetParkingBrake(false);
+    }
 
     // if (!parked && m_drivetrain->GetParkingBrake()) {
     //     m_drivetrain->SetParkingBrake(false);
